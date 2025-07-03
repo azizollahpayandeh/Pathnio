@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-// @ts-ignore
 import Swal from "sweetalert2";
+import api from "../api";
 
 const companyFields = [
   { label: "Company Name", name: "companyName", required: true, placeholder: "Enter company name" },
@@ -73,19 +73,13 @@ export default function LoginPage() {
       };
     }
     try {
-      const res = await fetch(
+      const res = await api.post(
         registerType === "company"
-          ? "http://localhost:8000/api/accounts/register/company/"
-          : "http://localhost:8000/api/accounts/register/driver/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
+          ? "accounts/register/company/"
+          : "accounts/register/driver/",
+        payload
       );
-      if (res.ok) {
+      if (res.status === 201 || res.status === 200) {
         Swal.fire({
           icon: "success",
           title: "Registration successful!",
@@ -97,19 +91,7 @@ export default function LoginPage() {
         });
         setTab("login");
       } else {
-        const error = await res.json();
-        let errorMsg = "";
-        if (typeof error === "object" && error !== null) {
-          for (const key in error) {
-            if (Array.isArray(error[key])) {
-              errorMsg += `${key}: ${error[key].join(", ")}\n`;
-            } else {
-              errorMsg += `${key}: ${error[key]}\n`;
-            }
-          }
-        } else {
-          errorMsg = error?.detail || "Registration failed. Please check your information.";
-        }
+        let errorMsg = res.data?.detail || "Registration failed. Please check your information.";
         Swal.fire({
           icon: "error",
           title: "Registration failed",
@@ -117,11 +99,15 @@ export default function LoginPage() {
           position: "top",
         });
       }
-    } catch (err) {
+    } catch (err: any) {
+      let errorMsg = "Registration failed. Please try again.";
+      if (err.response && err.response.data) {
+        errorMsg = JSON.stringify(err.response.data);
+      }
       Swal.fire({
         icon: "error",
         title: "Registration failed",
-        text: "Please try again.",
+        text: errorMsg,
         position: "top",
       });
     } finally {
@@ -139,16 +125,15 @@ export default function LoginPage() {
     const username = formData.get("login-username") as string;
     const password = formData.get("login-password") as string;
     try {
-      const res = await fetch("http://localhost:8000/api/auth/token/login/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        localStorage.setItem("token", data.auth_token);
+      const res = await api.post("auth/token/login/", { username, password });
+      if (res.status === 200) {
+        const token = res.data.auth_token;
+        localStorage.setItem("token", token);
+        // دریافت اطلاعات پروفایل کاربر
+        const profileRes = await api.get("auth/users/me/");
+        if (profileRes.status === 200) {
+          localStorage.setItem("user", JSON.stringify(profileRes.data));
+        }
         Swal.fire({
           icon: "success",
           title: "Login successful!",
@@ -158,22 +143,25 @@ export default function LoginPage() {
           showConfirmButton: false,
         });
         setTimeout(() => {
-          router.push("/");
+          router.push("/dashboard");
         }, 1500);
       } else {
-        const error = await res.json();
         Swal.fire({
           icon: "error",
           title: "Login failed",
-          text: error?.non_field_errors?.[0] || "Check your credentials.",
+          text: res.data?.non_field_errors?.[0] || "Check your credentials.",
           position: "top",
         });
       }
-    } catch (err) {
+    } catch (err: any) {
+      let errorMsg = "Login failed. Please try again.";
+      if (err.response && err.response.data) {
+        errorMsg = err.response.data?.non_field_errors?.[0] || JSON.stringify(err.response.data);
+      }
       Swal.fire({
         icon: "error",
         title: "Login failed",
-        text: "Please try again.",
+        text: errorMsg,
         position: "top",
       });
     } finally {

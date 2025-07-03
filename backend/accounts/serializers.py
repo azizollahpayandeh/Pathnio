@@ -1,12 +1,40 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Company, Driver
+from djoser.serializers import UserSerializer as DjoserUserSerializer
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'password')
         extra_kwargs = {'password': {'write_only': True}}
+
+# سریالایزر کاستوم برای Djoser
+class CustomDjoserUserSerializer(DjoserUserSerializer):
+    manager_full_name = serializers.SerializerMethodField()
+    full_name = serializers.SerializerMethodField()
+    company_name = serializers.SerializerMethodField()
+
+    class Meta(DjoserUserSerializer.Meta):
+        fields = DjoserUserSerializer.Meta.fields + ('manager_full_name', 'full_name', 'company_name')
+
+    def get_manager_full_name(self, obj):
+        try:
+            return obj.company_profile.manager_full_name
+        except Exception:
+            return None
+
+    def get_full_name(self, obj):
+        try:
+            return obj.driver.full_name
+        except Exception:
+            return None
+
+    def get_company_name(self, obj):
+        try:
+            return obj.company_profile.company_name
+        except Exception:
+            return None
 
 class CompanySerializer(serializers.ModelSerializer):
     user = UserSerializer()
