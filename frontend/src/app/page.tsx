@@ -24,8 +24,8 @@ export default function HomePage() {
           <nav className="space-x-6 text-white font-medium flex items-center">
             <a href="#" className="hover:text-blue-300 transition">Home</a>
             <a href="#features" className="hover:text-blue-300 transition">Features</a>
-            <a href="#about" className="hover:text-blue-300 transition">About Us</a>
-            <a href="#contact" className="hover:text-blue-300 transition">Contact</a>
+            <a href="/about" className="hover:text-blue-300 transition">About Us</a>
+            <a href="#contact" className="hover:text-blue-300 transition">Contact Us</a>
             <Link
               href="/login"
               className="ml-6 px-4 py-2 bg-white text-blue-800 font-semibold rounded-xl shadow hover:bg-blue-100 transition"
