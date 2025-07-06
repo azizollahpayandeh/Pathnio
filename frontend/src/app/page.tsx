@@ -23,8 +23,8 @@ export default function HomePage() {
           <h1 className="text-2xl font-extrabold text-white tracking-wide drop-shadow-lg">Pathnio</h1>
           <nav className="space-x-6 text-white font-medium flex items-center">
             <a href="#" className="hover:text-blue-300 transition">Home</a>
-            <a href="#about" className="hover:text-blue-300 transition">About</a>
             <a href="#features" className="hover:text-blue-300 transition">Features</a>
+            <a href="#about" className="hover:text-blue-300 transition">About Us</a>
             <a href="#contact" className="hover:text-blue-300 transition">Contact</a>
             <Link
               href="/login"
@@ -77,19 +77,21 @@ export default function HomePage() {
               gps: {
                 title: "Real-Time GPS",
                 icon: "📍",
-                desc: "Live tracking with accuracy across all routes."
+                desc: "Live tracking with accuracy across all routes.",
               },
               analytics: {
                 title: "Fleet Analytics",
                 icon: "📊",
-                desc: "Detailed performance metrics and reports."
+                desc: "Detailed performance metrics and reports.",
               },
               driver: {
                 title: "Driver Behavior",
                 icon: "🧑‍✈️",
-                desc: "Monitor and evaluate driver patterns easily."
-              }
-            }[type];
+                desc: "Monitor and evaluate driver patterns easily.",
+              },
+            }[type as "gps" | "analytics" | "driver"];
+
+            if (!content) return null;
 
             return (
               <div
@@ -104,6 +106,7 @@ export default function HomePage() {
           })}
         </div>
       </section>
+
 
       {/* Trusted Brands */}
       <section className="bg-white py-20 px-6 md:px-20 text-center">
@@ -121,6 +124,17 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      {/* CTA */}
+      <section className="bg-blue-100 py-20 px-6 text-center">
+        <h4 className="text-3xl font-bold text-blue-800 mb-4">Ready to transform your fleet?</h4>
+        <p className="text-gray-700 mb-8">Join hundreds of companies already optimizing their logistics with Pathnio.</p>
+        <Link href="/signup" className="px-6 py-3 bg-blue-700 text-white font-bold rounded-xl hover:bg-blue-800 transition shadow-lg">
+          Get Started Now
+        </Link>
+      </section>
+
+
 
       {/* Footer */}
       <footer id="contact" className="bg-blue-800 text-white py-16 px-6">
