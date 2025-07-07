@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 
 export default function HomePage() {
   const [showContent, setShowContent] = useState(false);
@@ -11,8 +11,8 @@ export default function HomePage() {
     const handleScroll = () => {
       if (window.scrollY > 100) setShowContent(true);
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
@@ -20,12 +20,22 @@ export default function HomePage() {
       {/* Header */}
       <header className="fixed top-0 w-full z-50 backdrop-blur-md bg-gradient-to-r from-blue-900/60 to-blue-600/60 shadow-md border-b border-white/10">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-extrabold text-white tracking-wide drop-shadow-lg">Pathnio</h1>
+          <h1 className="text-2xl font-extrabold text-white tracking-wide drop-shadow-lg">
+            Pathnio
+          </h1>
           <nav className="space-x-6 text-white font-medium flex items-center">
-            <a href="#" className="hover:text-blue-300 transition">Home</a>
-            <a href="#features" className="hover:text-blue-300 transition">Features</a>
-            <a href="/about" className="hover:text-blue-300 transition">About Us</a>
-            <a href="#contact" className="hover:text-blue-300 transition">Contact Us</a>
+            <a href="#" className="hover:text-blue-300 transition">
+              Home
+            </a>
+            <a href="/features" className="hover:text-blue-300 transition">
+              Features
+            </a>
+            <a href="/about" className="hover:text-blue-300 transition">
+              About Us
+            </a>
+            <a href="#contact" className="hover:text-blue-300 transition">
+              Contact Us
+            </a>
             <Link
               href="/login"
               className="ml-6 px-4 py-2 bg-white text-blue-800 font-semibold rounded-xl shadow hover:bg-blue-100 transition"
@@ -44,15 +54,16 @@ export default function HomePage() {
         <div className="relative z-10 text-center">
           <h2
             className="text-5xl md:text-6xl font-extrabold mb-6 drop-shadow-xl animate-text-fade-in"
-            style={{ animationDelay: "0.3s" }}
+            style={{ animationDelay: '0.3s' }}
           >
             Fleet Management, Redefined
           </h2>
           <p
             className="text-xl max-w-xl mx-auto text-gray-200 animate-text-fade-in"
-            style={{ animationDelay: "0.7s" }}
+            style={{ animationDelay: '0.7s' }}
           >
-            Track, manage, and optimize your transit company’s trucks in real-time — with Pathnio.
+            Track, manage, and optimize your transit company’s trucks in
+            real-time — with Pathnio.
           </p>
         </div>
       </section>
@@ -60,11 +71,20 @@ export default function HomePage() {
       {/* About */}
       <section id="about" className="py-24 px-6 md:px-20 bg-white">
         <div className="max-w-4xl mx-auto text-center">
-          <h3 className="text-4xl font-bold text-blue-700 mb-8 animate-text-fade-in" style={{ animationDelay: "1.5s" }}>
+          <h3
+            className="text-4xl font-bold text-blue-700 mb-8 animate-text-fade-in"
+            style={{ animationDelay: '1.5s' }}
+          >
             Why Choose Pathnio?
           </h3>
-          <p className="text-lg text-gray-600 leading-relaxed animate-text-fade-in" style={{ animationDelay: "2s" }}>
-            Pathnio is a smart solution for transit and logistics companies. We provide powerful tools to monitor, control, and analyze your truck fleet in real-time — making transportation more efficient, transparent, and profitable.
+          <p
+            className="text-lg text-gray-600 leading-relaxed animate-text-fade-in"
+            style={{ animationDelay: '2s' }}
+          >
+            Pathnio is a smart solution for transit and logistics companies. We
+            provide powerful tools to monitor, control, and analyze your truck
+            fleet in real-time — making transportation more efficient,
+            transparent, and profitable.
           </p>
         </div>
       </section>
@@ -72,24 +92,24 @@ export default function HomePage() {
       {/* Features */}
       <section id="features" className="bg-blue-50 py-24 px-6 md:px-20">
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-12">
-          {["gps", "analytics", "driver"].map((type, i) => {
+          {['gps', 'analytics', 'driver'].map((type, i) => {
             const content = {
               gps: {
-                title: "Real-Time GPS",
-                icon: "📍",
-                desc: "Live tracking with accuracy across all routes.",
+                title: 'Real-Time GPS',
+                icon: '📍',
+                desc: 'Live tracking with accuracy across all routes.',
               },
               analytics: {
-                title: "Fleet Analytics",
-                icon: "📊",
-                desc: "Detailed performance metrics and reports.",
+                title: 'Fleet Analytics',
+                icon: '📊',
+                desc: 'Detailed performance metrics and reports.',
               },
               driver: {
-                title: "Driver Behavior",
-                icon: "🧑‍✈️",
-                desc: "Monitor and evaluate driver patterns easily.",
+                title: 'Driver Behavior',
+                icon: '🧑‍✈️',
+                desc: 'Monitor and evaluate driver patterns easily.',
               },
-            }[type as "gps" | "analytics" | "driver"];
+            }[type as 'gps' | 'analytics' | 'driver'];
 
             if (!content) return null;
 
@@ -98,8 +118,12 @@ export default function HomePage() {
                 key={i}
                 className="group bg-white rounded-3xl shadow-lg p-8 transform transition hover:-translate-y-3 hover:shadow-2xl"
               >
-                <div className="text-5xl mb-6 transition group-hover:scale-110">{content.icon}</div>
-                <h4 className="text-2xl font-semibold text-blue-600 mb-2">{content.title}</h4>
+                <div className="text-5xl mb-6 transition group-hover:scale-110">
+                  {content.icon}
+                </div>
+                <h4 className="text-2xl font-semibold text-blue-600 mb-2">
+                  {content.title}
+                </h4>
                 <p className="text-gray-600 text-base">{content.desc}</p>
               </div>
             );
@@ -107,19 +131,28 @@ export default function HomePage() {
         </div>
       </section>
 
-
       {/* Trusted Brands */}
       <section className="bg-white py-20 px-6 md:px-20 text-center">
-        <h3 className="text-3xl font-semibold text-blue-800 mb-10">Trusted by Leading Companies</h3>
+        <h3 className="text-3xl font-semibold text-blue-800 mb-10">
+          Trusted by Leading Companies
+        </h3>
         <div className="flex flex-wrap justify-center items-center gap-10">
           {[
-            { src: "/logos/DHL.png", alt: "DHL" },
-            { src: "/logos/FEDEX.png", alt: "FedEx" },
-            { src: "/logos/MAERSK.png", alt: "Maersk" },
-            { src: "/logos/UPS.png", alt: "UPS" },
+            { src: '/logos/DHL.png', alt: 'DHL' },
+            { src: '/logos/FEDEX.png', alt: 'FedEx' },
+            { src: '/logos/MAERSK.png', alt: 'Maersk' },
+            { src: '/logos/UPS.png', alt: 'UPS' },
           ].map((logo, i) => (
-            <div key={i} className="w-32 h-16 relative grayscale hover:grayscale-0 transition">
-              <Image src={logo.src} alt={logo.alt} layout="fill" objectFit="contain" />
+            <div
+              key={i}
+              className="w-32 h-16 relative grayscale hover:grayscale-0 transition"
+            >
+              <Image
+                src={logo.src}
+                alt={logo.alt}
+                layout="fill"
+                objectFit="contain"
+              />
             </div>
           ))}
         </div>
@@ -127,14 +160,20 @@ export default function HomePage() {
 
       {/* CTA */}
       <section className="bg-blue-100 py-20 px-6 text-center">
-        <h4 className="text-3xl font-bold text-blue-800 mb-4">Ready to transform your fleet?</h4>
-        <p className="text-gray-700 mb-8">Join hundreds of companies already optimizing their logistics with Pathnio.</p>
-        <Link href="/signup" className="px-6 py-3 bg-blue-700 text-white font-bold rounded-xl hover:bg-blue-800 transition shadow-lg">
+        <h4 className="text-3xl font-bold text-blue-800 mb-4">
+          Ready to transform your fleet?
+        </h4>
+        <p className="text-gray-700 mb-8">
+          Join hundreds of companies already optimizing their logistics with
+          Pathnio.
+        </p>
+        <Link
+          href="/signup"
+          className="px-6 py-3 bg-blue-700 text-white font-bold rounded-xl hover:bg-blue-800 transition shadow-lg"
+        >
           Get Started Now
         </Link>
       </section>
-
-
 
       {/* Footer */}
       <footer id="contact" className="bg-blue-800 text-white py-16 px-6">
@@ -149,10 +188,26 @@ export default function HomePage() {
           <div>
             <h6 className="text-lg font-semibold mb-3">Quick Links</h6>
             <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:underline">Home</a></li>
-              <li><a href="#about" className="hover:underline">About</a></li>
-              <li><a href="#features" className="hover:underline">Features</a></li>
-              <li><a href="#contact" className="hover:underline">Contact</a></li>
+              <li>
+                <a href="#" className="hover:underline">
+                  Home
+                </a>
+              </li>
+              <li>
+                <a href="#about" className="hover:underline">
+                  About
+                </a>
+              </li>
+              <li>
+                <a href="#features" className="hover:underline">
+                  Features
+                </a>
+              </li>
+              <li>
+                <a href="#contact" className="hover:underline">
+                  Contact
+                </a>
+              </li>
             </ul>
           </div>
 
