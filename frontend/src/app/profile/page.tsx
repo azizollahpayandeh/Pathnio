@@ -1,7 +1,8 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
 import api from "../api";
-import { User, Lock, Bell, CheckCircle, XCircle, LogOut } from "lucide-react";
+import { User, Lock, Bell, LogOut } from "lucide-react";
+import FloatingAlert from "@/components/FloatingAlert";
 import { useRouter } from "next/navigation";
 
 const LANGUAGES = [
@@ -13,17 +14,6 @@ const TABS = [
   { key: "security", label: "Security", icon: <Lock className="w-5 h-5" /> },
   { key: "notifications", label: "Notifications", icon: <Bell className="w-5 h-5" /> },
 ];
-
-function FloatingAlert({ type, msg, onClose }: { type: "success" | "error"; msg: string; onClose: () => void }) {
-  return (
-    <div className={`fixed top-8 right-8 z-[9999] flex items-center gap-2 px-6 py-3 rounded-xl shadow-lg text-base font-semibold animate-fade-in ${type === "success" ? "bg-green-100 text-green-900" : "bg-red-100 text-red-900"}`}
-      style={{ minWidth: 260 }}>
-      {type === "success" ? <CheckCircle className="w-5 h-5 text-green-600" /> : <XCircle className="w-5 h-5 text-red-600" />}
-      <span>{msg}</span>
-      <button onClick={onClose} className="ml-2 text-xl text-gray-400 hover:text-gray-700">×</button>
-    </div>
-  );
-}
 
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);

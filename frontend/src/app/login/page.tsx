@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import Swal from "sweetalert2";
+import FloatingAlert from "@/components/FloatingAlert";
 import api from "../api";
 import { Lock } from "lucide-react";
 
@@ -20,6 +20,7 @@ export default function LoginPage() {
   const [loginLoading, setLoginLoading] = useState(false);
   const [registerMessage, setRegisterMessage] = useState("");
   const [loginMessage, setLoginMessage] = useState("");
+  const [alert, setAlert] = useState<{ type: "success" | "error"; msg: string } | null>(null);
   const router = useRouter();
 
   // Register
@@ -47,36 +48,18 @@ export default function LoginPage() {
     try {
       const res = await api.post("accounts/register/company/", payload);
       if (res.status === 201 || res.status === 200) {
-        Swal.fire({
-          icon: "success",
-          title: "Registration successful!",
-          text: "You can now log in.",
-          timer: 2000,
-          timerProgressBar: true,
-          position: "top",
-          showConfirmButton: false,
-        });
+        setAlert({ type: "success", msg: "Registration successful! You can now log in." });
         setTab("login");
       } else {
         let errorMsg = res.data?.detail || "Registration failed. Please check your information.";
-        Swal.fire({
-          icon: "error",
-          title: "Registration failed",
-          text: errorMsg,
-          position: "top",
-        });
+        setAlert({ type: "error", msg: errorMsg });
       }
     } catch (err: any) {
       let errorMsg = "Registration failed. Please try again.";
       if (err.response && err.response.data) {
         errorMsg = JSON.stringify(err.response.data);
       }
-      Swal.fire({
-        icon: "error",
-        title: "Registration failed",
-        text: errorMsg,
-        position: "top",
-      });
+      setAlert({ type: "error", msg: errorMsg });
     } finally {
       setRegisterLoading(false);
     }
@@ -101,40 +84,31 @@ export default function LoginPage() {
         if (profileRes.status === 200) {
           localStorage.setItem("user", JSON.stringify(profileRes.data));
         }
-        Swal.fire({
-          icon: "success",
-          title: "Login successful!",
-          timer: 1500,
-          timerProgressBar: true,
-          position: "top",
-          showConfirmButton: false,
-        });
+        setAlert({ type: "success", msg: "Login successful!" });
         setTimeout(() => {
           router.push("/dashboard");
         }, 1500);
       } else {
-        Swal.fire({
-          icon: "error",
-          title: "Login failed",
-          text: res.data?.non_field_errors?.[0] || "Check your credentials.",
-          position: "top",
-        });
+        setAlert({ type: "error", msg: res.data?.non_field_errors?.[0] || "Check your credentials." });
       }
     } catch (err: any) {
       let errorMsg = "Login failed. Please try again.";
       if (err.response && err.response.data) {
         errorMsg = err.response.data?.non_field_errors?.[0] || JSON.stringify(err.response.data);
       }
-      Swal.fire({
-        icon: "error",
-        title: "Login failed",
-        text: errorMsg,
-        position: "top",
-      });
+      setAlert({ type: "error", msg: errorMsg });
     } finally {
       setLoginLoading(false);
     }
   };
+
+  // Floating alert auto-close
+  React.useEffect(() => {
+    if (alert) {
+      const t = setTimeout(() => setAlert(null), 3500);
+      return () => clearTimeout(t);
+    }
+  }, [alert]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-300 relative overflow-hidden">
@@ -229,6 +203,8 @@ export default function LoginPage() {
           </>
         )}
       </div>
+      {/* Floating Alert */}
+      {alert && <FloatingAlert type={alert.type} msg={alert.msg} onClose={() => setAlert(null)} />}
     </div>
   );
 } 
