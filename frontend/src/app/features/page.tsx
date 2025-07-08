@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 export default function FeaturesPage() {
   const logoText = 'Pathnio';
@@ -9,9 +10,7 @@ export default function FeaturesPage() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setVisibleLetters((prev) =>
-        prev < logoText.length ? prev + 1 : prev
-      );
+      setVisibleLetters((prev) => (prev < logoText.length ? prev + 1 : prev));
     }, 150);
 
     return () => clearInterval(interval);
@@ -19,34 +18,8 @@ export default function FeaturesPage() {
 
   return (
     <div className="text-gray-800 font-sans bg-white min-h-screen flex flex-col">
-      {/* Header */}
-      <header className="fixed top-0 w-full z-50 backdrop-blur-md bg-gradient-to-r from-blue-900/60 to-blue-600/60 shadow-md border-b border-white/10">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-extrabold text-white tracking-wide drop-shadow-lg">
-            Pathnio
-          </h1>
-          <nav className="space-x-6 text-white font-medium flex items-center">
-            <Link href="/" className="hover:text-blue-300 transition">
-              Home
-            </Link>
-            <Link href="/features" className="text-blue-300 font-semibold">
-              Features
-            </Link>
-            <Link href="/about" className="hover:text-blue-300 transition">
-              About Us
-            </Link>
-            <Link href="/contact" className="hover:text-blue-300 transition">
-              Contact Us
-            </Link>
-            <Link
-              href="/login"
-              className="ml-6 px-4 py-2 bg-white text-blue-800 font-semibold rounded-xl shadow hover:bg-blue-100 transition"
-            >
-              Login
-            </Link>
-          </nav>
-        </div>
-      </header>
+      {/* استفاده از کامپوننت Header */}
+      <Header />
 
       {/* Features Section */}
       <main className="pt-20 pb-24 px-6 md:px-20 max-w-6xl mx-auto flex-grow">
@@ -60,7 +33,7 @@ export default function FeaturesPage() {
           </p>
         </section>
 
-        <section className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
+        <section className="grid md:grid-cols-2 lg:grid-cols-3 gap-12 pointer">
           {[
             {
               title: 'Real-Time Tracking',
@@ -107,7 +80,7 @@ export default function FeaturesPage() {
         </section>
       </main>
 
-      {/* Logo just above Footer */}
+      {/* Logo Animation Section */}
       <div className="py-16 bg-white text-center">
         <h1 className="text-6xl md:text-8xl font-extrabold text-blue-800 tracking-widest select-none">
           {logoText.split('').map((char, index) => (
@@ -124,19 +97,8 @@ export default function FeaturesPage() {
         </h1>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-blue-800 text-white py-16 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <h5 className="text-2xl font-semibold mb-4">Get in Touch</h5>
-          <p className="mb-4 text-gray-300">
-            For business inquiries, partnership proposals, or general questions,
-            feel free to contact our team.
-          </p>
-          <p className="text-sm text-gray-400">
-            &copy; {new Date().getFullYear()} Pathnio Inc. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      {/* استفاده از کامپوننت Footer */}
+      <Footer />
     </div>
   );
 }

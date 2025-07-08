@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import Header from '@/components/Header'; // مسیر درست به فایل Header.jsx/tsx
+import Footer from '@/components/Footer'; // مسیر درست به فایل Footer.jsx/tsx
 
 export default function HomePage() {
   const [showContent, setShowContent] = useState(false);
@@ -18,33 +20,7 @@ export default function HomePage() {
   return (
     <div className="text-gray-800 font-sans">
       {/* Header */}
-      <header className="fixed top-0 w-full z-50 backdrop-blur-md bg-gradient-to-r from-blue-900/60 to-blue-600/60 shadow-md border-b border-white/10">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-extrabold text-white tracking-wide drop-shadow-lg">
-            Pathnio
-          </h1>
-          <nav className="space-x-6 text-white font-medium flex items-center">
-            <a href="#" className="hover:text-blue-300 transition">
-              Home
-            </a>
-            <a href="/features" className="hover:text-blue-300 transition">
-              Features
-            </a>
-            <a href="/about" className="hover:text-blue-300 transition">
-              About Us
-            </a>
-            <a href="/contact" className="hover:text-blue-300 transition">
-              Contact Us
-            </a>
-            <Link
-              href="/login"
-              className="ml-6 px-4 py-2 bg-white text-blue-800 font-semibold rounded-xl shadow hover:bg-blue-100 transition"
-            >
-              Login
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <Header />
 
       {/* Hero */}
       <section className="relative h-screen flex items-center justify-center text-white">
@@ -91,7 +67,7 @@ export default function HomePage() {
 
       {/* Features */}
       <section id="features" className="bg-blue-50 py-24 px-6 md:px-20">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-12">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 pointer">
           {['gps', 'analytics', 'driver'].map((type, i) => {
             const content = {
               gps: {
@@ -176,52 +152,7 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer id="contact" className="bg-blue-800 text-white py-16 px-6">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
-          <div>
-            <h5 className="text-xl font-bold mb-4">Pathnio</h5>
-            <p className="text-gray-300 text-sm">
-              A modern solution to track, manage and optimize fleet operations.
-            </p>
-          </div>
-
-          <div>
-            <h6 className="text-lg font-semibold mb-3">Quick Links</h6>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <a href="#" className="hover:underline">
-                  Home
-                </a>
-              </li>
-              <li>
-                <a href="#about" className="hover:underline">
-                  About
-                </a>
-              </li>
-              <li>
-                <a href="#features" className="hover:underline">
-                  Features
-                </a>
-              </li>
-              <li>
-                <a href="#contact" className="hover:underline">
-                  Contact
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h6 className="text-lg font-semibold mb-3">Contact Us</h6>
-            <p className="text-sm text-gray-300">Email: support@pathnio.com</p>
-            <p className="text-sm text-gray-300">Phone: +1 800 123 4567</p>
-            <p className="text-sm text-gray-300">Address: 123 Fleet Ave, NY</p>
-          </div>
-        </div>
-        <div className="text-center text-xs text-gray-400 mt-10">
-          &copy; {new Date().getFullYear()} Pathnio Inc. All rights reserved.
-        </div>
-      </footer>
+      <Footer />
 
       {/* Animations */}
       <style jsx>{`
