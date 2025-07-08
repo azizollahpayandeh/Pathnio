@@ -57,11 +57,11 @@ export default function DashboardLayout({
   return (
     <div className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#f4f8fb] text-[#171717] flex min-h-screen`}>
       {/* Sidebar */}
-      <aside className="w-64 bg-white border-l border-gray-200 flex flex-col transition-all duration-200 shadow-lg z-20">
+      <aside className="w-64 bg-gradient-to-b from-white via-blue-50 to-blue-100 border-l border-gray-200 flex flex-col transition-all duration-200 shadow-xl z-20">
         <div className="flex items-center justify-between h-16 px-4 border-b">
-          <span className="font-bold text-xl text-blue-700">Pathnio</span>
+          <span className="font-extrabold text-2xl text-blue-800 tracking-widest select-none">Pathnio</span>
         </div>
-        <nav className="flex-1 py-4 px-2 space-y-2">
+        <nav className="flex-1 py-6 px-2 space-y-2">
           <SidebarLink href="/dashboard" label="Dashboard" icon="🏠" />
           <SidebarLink href="/dashboard/live-map" label="Live Map" icon="🗺️" />
           <SidebarLink href="/dashboard/drivers" label="Drivers" icon="🚗" />
@@ -81,18 +81,25 @@ export default function DashboardLayout({
         {/* Header */}
         <header className="h-16 bg-white border-b flex items-center justify-between px-6 shadow-sm z-10">
           <div className="flex items-center gap-4">
-            <span className="text-lg font-semibold text-blue-700">Fleet Management Dashboard</span>
+            <span className="text-lg font-extrabold text-blue-700 tracking-wide flex items-center gap-2">
+              <span className="inline-block w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
+              Fleet Management Dashboard
+            </span>
           </div>
           <div className="flex items-center gap-4">
-            <button className="relative">
-              <span className="material-icons text-blue-600">notifications</span>
+            <button className="relative group">
+              <span className="material-icons text-blue-600 text-2xl">notifications</span>
               <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full text-xs px-1">3</span>
+              <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-blue-100 p-4 z-50 hidden group-hover:block">
+                <div className="font-bold text-blue-700 mb-2">Notifications</div>
+                <div className="text-sm text-gray-700 mb-1">3 new alerts</div>
+                <div className="text-xs text-gray-400">(Demo notifications)</div>
+              </div>
             </button>
-            <div className="flex items-center gap-2 cursor-pointer" onClick={handleProfileClick}>
-              <img src={avatar} alt="User" className="w-8 h-8 rounded-full border" />
-              <span className="font-medium">{displayName}</span>
+            <div className="flex items-center gap-2 cursor-pointer hover:bg-blue-50 px-2 py-1 rounded-xl transition" onClick={handleProfileClick}>
+              <img src={avatar} alt="User" className="w-9 h-9 rounded-full border shadow" />
+              <span className="font-bold text-blue-800">{displayName}</span>
             </div>
-            <button className="text-gray-500 hover:text-red-600 font-bold">Logout</button>
           </div>
         </header>
         {/* Page Content */}

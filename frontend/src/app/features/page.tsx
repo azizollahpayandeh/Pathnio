@@ -17,8 +17,8 @@ export default function FeaturesPage() {
   }, []);
 
   return (
-    <div className="text-gray-800 font-sans bg-white min-h-screen flex flex-col">
-      {/* استفاده از کامپوننت Header */}
+    <div className="text-gray-800 bg-white min-h-screen flex flex-col">
+      {/* Header */}
       <Header />
 
       {/* Features Section */}
@@ -97,7 +97,7 @@ export default function FeaturesPage() {
         </h1>
       </div>
 
-      {/* استفاده از کامپوننت Footer */}
+      {/* Footer */}
       <Footer />
     </div>
   );

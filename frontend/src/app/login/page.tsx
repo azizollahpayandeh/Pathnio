@@ -1,8 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import Swal from "sweetalert2";
+import FloatingAlert from "@/components/FloatingAlert";
 import api from "../api";
+import { Lock } from "lucide-react";
 
 const companyFields = [
   { label: "Company Name", name: "companyName", required: true, placeholder: "Enter company name" },
@@ -13,27 +14,16 @@ const companyFields = [
   { label: "Head Office Address", name: "address", required: false, placeholder: "Enter head office address" },
 ];
 
-const driverFields = [
-  { label: "Full Name", name: "fullName", required: true, placeholder: "Enter your full name" },
-  { label: "Mobile Number", name: "mobile", required: true, placeholder: "Enter mobile number" },
-  { label: "Password", name: "password", required: true, placeholder: "Create a password", type: "password" },
-  { label: "Vehicle Plate Number", name: "plateNumber", required: true, placeholder: "Enter vehicle plate number" },
-  { label: "Vehicle Type", name: "vehicleType", required: false, placeholder: "Truck, Van, Motorcycle, ..." },
-  { label: "Profile Photo", name: "profilePhoto", required: false, type: "file" },
-  { label: "Company (if applicable)", name: "company", required: false, placeholder: "Select company if applicable" },
-];
-
 export default function LoginPage() {
   const [tab, setTab] = useState("login");
-  const [registerType, setRegisterType] = useState("company");
   const [registerLoading, setRegisterLoading] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
   const [registerMessage, setRegisterMessage] = useState("");
   const [loginMessage, setLoginMessage] = useState("");
-  const [loginType, setLoginType] = useState("company");
+  const [alert, setAlert] = useState<{ type: "success" | "error"; msg: string } | null>(null);
   const router = useRouter();
 
-  // ثبت‌نام
+  // Register
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setRegisterLoading(true);
@@ -44,78 +34,38 @@ export default function LoginPage() {
     formData.forEach((value, key) => {
       data[key] = value;
     });
-    let payload: any = {};
-    if (registerType === "company") {
-      payload = {
-        user: {
-          username: data.email,
-          email: data.email,
-          password: data.password,
-        },
-        company_name: data.companyName,
-        manager_full_name: data.fullName,
-        phone: data.phone,
-        address: data.address,
-      };
-    } else {
-      payload = {
-        user: {
-          username: data.mobile,
-          email: data.mobile + "@driver.com",
-          password: data.password,
-        },
-        full_name: data.fullName,
-        mobile: data.mobile,
-        plate_number: data.plateNumber,
-        vehicle_type: data.vehicleType,
-        ...(data.company ? { company: data.company } : {}),
-        // profile_photo: data.profilePhoto,
-      };
-    }
+    const payload = {
+      user: {
+        username: data.email,
+        email: data.email,
+        password: data.password,
+      },
+      company_name: data.companyName,
+      manager_full_name: data.fullName,
+      phone: data.phone,
+      address: data.address,
+    };
     try {
-      const res = await api.post(
-        registerType === "company"
-          ? "accounts/register/company/"
-          : "accounts/register/driver/",
-        payload
-      );
+      const res = await api.post("accounts/register/company/", payload);
       if (res.status === 201 || res.status === 200) {
-        Swal.fire({
-          icon: "success",
-          title: "Registration successful!",
-          text: "You can now log in.",
-          timer: 2000,
-          timerProgressBar: true,
-          position: "top",
-          showConfirmButton: false,
-        });
+        setAlert({ type: "success", msg: "Registration successful! You can now log in." });
         setTab("login");
       } else {
         let errorMsg = res.data?.detail || "Registration failed. Please check your information.";
-        Swal.fire({
-          icon: "error",
-          title: "Registration failed",
-          text: errorMsg,
-          position: "top",
-        });
+        setAlert({ type: "error", msg: errorMsg });
       }
     } catch (err: any) {
       let errorMsg = "Registration failed. Please try again.";
       if (err.response && err.response.data) {
         errorMsg = JSON.stringify(err.response.data);
       }
-      Swal.fire({
-        icon: "error",
-        title: "Registration failed",
-        text: errorMsg,
-        position: "top",
-      });
+      setAlert({ type: "error", msg: errorMsg });
     } finally {
       setRegisterLoading(false);
     }
   };
 
-  // لاگین
+  // Login
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoginLoading(true);
@@ -129,116 +79,93 @@ export default function LoginPage() {
       if (res.status === 200) {
         const token = res.data.auth_token;
         localStorage.setItem("token", token);
-        // دریافت اطلاعات پروفایل کاربر
+        // Get user profile
         const profileRes = await api.get("auth/users/me/");
         if (profileRes.status === 200) {
           localStorage.setItem("user", JSON.stringify(profileRes.data));
         }
-        Swal.fire({
-          icon: "success",
-          title: "Login successful!",
-          timer: 1500,
-          timerProgressBar: true,
-          position: "top",
-          showConfirmButton: false,
-        });
+        setAlert({ type: "success", msg: "Login successful!" });
         setTimeout(() => {
           router.push("/dashboard");
         }, 1500);
       } else {
-        Swal.fire({
-          icon: "error",
-          title: "Login failed",
-          text: res.data?.non_field_errors?.[0] || "Check your credentials.",
-          position: "top",
-        });
+        setAlert({ type: "error", msg: res.data?.non_field_errors?.[0] || "Check your credentials." });
       }
     } catch (err: any) {
       let errorMsg = "Login failed. Please try again.";
       if (err.response && err.response.data) {
         errorMsg = err.response.data?.non_field_errors?.[0] || JSON.stringify(err.response.data);
       }
-      Swal.fire({
-        icon: "error",
-        title: "Login failed",
-        text: errorMsg,
-        position: "top",
-      });
+      setAlert({ type: "error", msg: errorMsg });
     } finally {
       setLoginLoading(false);
     }
   };
 
+  // Floating alert auto-close
+  React.useEffect(() => {
+    if (alert) {
+      const t = setTimeout(() => setAlert(null), 3500);
+      return () => clearTimeout(t);
+    }
+  }, [alert]);
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-300 px-2">
-      <div className="w-full max-w-lg bg-white rounded-2xl shadow-lg p-6 md:p-10">
-        <div className="flex justify-center mb-8">
-          <button
-            className={`px-6 py-2 rounded-l-lg font-semibold transition-colors duration-200 cursor-pointer ${tab === "login" ? "bg-blue-600 text-white" : "bg-gray-100 text-blue-700"}`}
-            onClick={() => setTab("login")}
-          >
-            Login
-          </button>
-          <button
-            className={`px-6 py-2 rounded-r-lg font-semibold transition-colors duration-200 cursor-pointer ${tab === "register" ? "bg-blue-600 text-white" : "bg-gray-100 text-blue-700"}`}
-            onClick={() => setTab("register")}
-          >
-            Register
-          </button>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-300 relative overflow-hidden">
+      {/* Decorative blurred circles */}
+      <div className="absolute -top-32 -left-32 w-96 h-96 bg-blue-200 rounded-full filter blur-3xl opacity-40 z-0" />
+      <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-blue-400 rounded-full filter blur-3xl opacity-30 z-0" />
+      <div className="w-full max-w-lg bg-white/90 rounded-3xl shadow-2xl p-8 md:p-12 relative z-10 backdrop-blur-xl border border-blue-100">
+        <div className="flex flex-col items-center mb-8 gap-2">
+          <div className="bg-blue-100 rounded-full p-4 shadow-lg mb-2">
+            <Lock className="w-10 h-10 text-blue-700" />
+          </div>
+          <div className="flex justify-center w-full gap-2">
+            <button
+              className={`flex-1 px-6 py-2 rounded-l-xl font-semibold transition-colors duration-200 cursor-pointer text-lg ${tab === "login" ? "bg-blue-600 text-white shadow" : "bg-gray-100 text-blue-700"}`}
+              onClick={() => setTab("login")}
+            >
+              Login
+            </button>
+            <button
+              className={`flex-1 px-6 py-2 rounded-r-xl font-semibold transition-colors duration-200 cursor-pointer text-lg ${tab === "register" ? "bg-blue-600 text-white shadow" : "bg-gray-100 text-blue-700"}`}
+              onClick={() => setTab("register")}
+            >
+              Register
+            </button>
+          </div>
         </div>
         {tab === "login" ? (
           <>
-            <h2 className="text-2xl font-bold text-center text-blue-700 mb-6">Sign In</h2>
-            <div className="flex justify-center gap-4 mb-4">
-              <button
-                className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 cursor-pointer ${loginType === "company" ? "bg-blue-500 text-white" : "bg-gray-100 text-blue-700"}`}
-                onClick={() => setLoginType("company")}
-                type="button"
-              >
-                Company Owner
-              </button>
-              <button
-                className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 cursor-pointer ${loginType === "driver" ? "bg-blue-500 text-white" : "bg-gray-100 text-blue-700"}`}
-                onClick={() => setLoginType("driver")}
-                type="button"
-              >
-                Driver
-              </button>
-            </div>
-            <div className="mb-2 text-center text-gray-500 text-xs">
-              {loginType === "company"
-                ? "If you are a company owner, enter your email."
-                : "If you are a driver, enter your mobile number."}
-            </div>
-            {loginMessage && <div className="mb-4 text-center text-red-500">{loginMessage}</div>}
-            <form className="space-y-6" onSubmit={handleLogin}>
+            <h2 className="text-2xl font-extrabold text-center text-blue-700 mb-8 tracking-tight">Sign In to Pathnio</h2>
+            <form className="space-y-7" onSubmit={handleLogin}>
               <div>
-                <label htmlFor="login-username" className="block mb-2 text-sm font-medium text-gray-700">
-                  {loginType === "company" ? "Email" : "Mobile Number"}
+                <label htmlFor="login-username" className="block mb-2 text-sm font-semibold text-gray-700">
+                  Email
                 </label>
                 <input
-                  type={loginType === "company" ? "email" : "text"}
+                  type="email"
                   id="login-username"
                   name="login-username"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                  placeholder={loginType === "company" ? "Enter your email" : "Enter your mobile number"}
+                  className="w-full px-5 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50/60 placeholder:text-blue-300 text-blue-900 text-base shadow-sm"
+                  placeholder="Enter your email"
                   required
                 />
               </div>
               <div>
-                <label htmlFor="login-password" className="block mb-2 text-sm font-medium text-gray-700">Password</label>
+                <label htmlFor="login-password" className="block mb-2 text-sm font-semibold text-gray-700">Password</label>
                 <input
                   type="password"
                   id="login-password"
                   name="login-password"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full px-5 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50/60 placeholder:text-blue-300 text-blue-900 text-base shadow-sm"
                   placeholder="Enter your password"
                   required
                 />
               </div>
               <button
                 type="submit"
-                className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200 shadow-md cursor-pointer"
+                className="w-full py-3 px-4 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl transition duration-200 shadow-lg cursor-pointer mt-2 text-lg"
                 disabled={loginLoading}
               >
                 {loginLoading ? "Signing In..." : "Sign In"}
@@ -247,60 +174,27 @@ export default function LoginPage() {
           </>
         ) : (
           <>
-            <h2 className="text-2xl font-bold text-center text-blue-700 mb-6">Register</h2>
-            {registerMessage && <div className="mb-4 text-center text-green-600">{registerMessage}</div>}
-            <div className="flex justify-center gap-4 mb-6">
-              <button
-                className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 cursor-pointer ${registerType === "company" ? "bg-blue-500 text-white" : "bg-gray-100 text-blue-700"}`}
-                onClick={() => setRegisterType("company")}
-                type="button"
-              >
-                Company Owner
-              </button>
-              <button
-                className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 cursor-pointer ${registerType === "driver" ? "bg-blue-500 text-white" : "bg-gray-100 text-blue-700"}`}
-                onClick={() => setRegisterType("driver")}
-                type="button"
-              >
-                Driver
-              </button>
-            </div>
-            <form className="space-y-5" onSubmit={handleRegister}>
-              {(registerType === "company" ? companyFields : driverFields).map((field) => (
+            <h2 className="text-2xl font-extrabold text-center text-blue-700 mb-8 tracking-tight">Register Your Company</h2>
+            {registerMessage && <div className="mb-4 text-center text-green-600 font-semibold">{registerMessage}</div>}
+            <form className="space-y-6" onSubmit={handleRegister}>
+              {companyFields.map((field) => (
                 <div key={field.name}>
-                  <label htmlFor={field.name} className="block mb-2 text-sm font-medium text-gray-700">
+                  <label htmlFor={field.name} className="block mb-2 text-sm font-semibold text-gray-700">
                     {field.label}{field.required && <span className="text-red-500">*</span>}
                   </label>
-                  {field.type === "file" ? (
-                    <input
-                      type="file"
-                      id={field.name}
-                      name={field.name}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    />
-                  ) : field.name === "company" ? (
-                    <input
-                      type="text"
-                      id={field.name}
-                      name={field.name}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                      placeholder={field.placeholder}
-                    />
-                  ) : (
-                    <input
-                      type={field.type || "text"}
-                      id={field.name}
-                      name={field.name}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                      placeholder={field.placeholder}
-                      required={field.required}
-                    />
-                  )}
+                  <input
+                    type={field.type || "text"}
+                    id={field.name}
+                    name={field.name}
+                    className="w-full px-5 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50/60 placeholder:text-blue-300 text-blue-900 text-base shadow-sm"
+                    placeholder={field.placeholder}
+                    required={field.required}
+                  />
                 </div>
               ))}
               <button
                 type="submit"
-                className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200 shadow-md cursor-pointer"
+                className="w-full py-3 px-4 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl transition duration-200 shadow-lg cursor-pointer mt-2 text-lg"
                 disabled={registerLoading}
               >
                 {registerLoading ? "Registering..." : "Register"}
@@ -309,6 +203,8 @@ export default function LoginPage() {
           </>
         )}
       </div>
+      {/* Floating Alert */}
+      {alert && <FloatingAlert type={alert.type} msg={alert.msg} onClose={() => setAlert(null)} />}
     </div>
   );
 } 

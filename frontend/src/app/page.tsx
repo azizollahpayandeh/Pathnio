@@ -18,7 +18,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="text-gray-800 font-sans">
+    <div className="text-gray-800">
       {/* Header */}
       <Header />
 

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Link from 'next/link';
 
 export default function AboutPage() {
   const [scrollPercent, setScrollPercent] = useState(0);
@@ -20,7 +21,7 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <div className="text-gray-800 font-sans bg-white min-h-screen flex flex-col">
+    <div className="text-gray-800 bg-white min-h-screen flex flex-col">
       <Header />
 
       <main className="pt-32 pb-24 px-6 md:px-20 flex-grow flex items-center justify-center">

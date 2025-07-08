@@ -4,10 +4,13 @@ import { Mail, Phone, MapPin } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import axios from 'axios';
+import FloatingAlert from '@/components/FloatingAlert';
 
 export default function ContactUs() {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [scrollPercent, setScrollPercent] = useState(0);
+  const [alert, setAlert] = useState<{ type: 'success' | 'error'; msg: string } | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -15,11 +18,16 @@ export default function ContactUs() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', form);
-    alert('✅ Your message has been successfully sent!');
-    setForm({ name: '', email: '', message: '' });
+    setAlert(null);
+    try {
+      await axios.post('http://localhost:8000/api/accounts/contact/', form); // TODO: Make this configurable for production
+      setAlert({ type: 'success', msg: 'Your message has been sent successfully!' });
+      setForm({ name: '', email: '', message: '' });
+    } catch (err) {
+      setAlert({ type: 'error', msg: 'There was an error sending your message. Please try again.' });
+    }
   };
 
   useEffect(() => {
@@ -34,8 +42,16 @@ export default function ContactUs() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Floating alert auto-close
+  useEffect(() => {
+    if (alert) {
+      const t = setTimeout(() => setAlert(null), 3500);
+      return () => clearTimeout(t);
+    }
+  }, [alert]);
+
   return (
-    <div className="relative min-h-screen font-sans bg-gradient-to-br from-blue-100 to-white">
+    <div className="relative min-h-screen bg-gradient-to-br from-blue-100 to-white">
       <Header />
 
       {/* Background decorative shapes */}
@@ -133,6 +149,9 @@ export default function ContactUs() {
       >
         <Footer />
       </div>
+
+      {/* Floating Alert */}
+      {alert && <FloatingAlert type={alert.type} msg={alert.msg} onClose={() => setAlert(null)} />}
 
       {/* Animations */}
       <style jsx>{`
