@@ -21,7 +21,7 @@ export default function ContactUs() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f0f6ff] to-[#b3d6ff] px-4 md:px-10 py-16 font-sans relative">
+    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f0f6ff] to-[#b3d6ff] px-4 md:px-10 py-16 relative">
       {/* Success Popup */}
       <AnimatePresence>
         {showSuccess && (

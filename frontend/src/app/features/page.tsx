@@ -18,7 +18,7 @@ export default function FeaturesPage() {
   }, []);
 
   return (
-    <div className="text-gray-800 font-sans bg-white min-h-screen flex flex-col">
+    <div className="text-gray-800 bg-white min-h-screen flex flex-col">
       {/* Header */}
       <header className="fixed top-0 w-full z-50 backdrop-blur-md bg-gradient-to-r from-blue-900/60 to-blue-600/60 shadow-md border-b border-white/10">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">

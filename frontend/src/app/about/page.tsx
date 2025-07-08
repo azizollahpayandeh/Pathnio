@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function AboutPage() {
   return (
-    <div className="text-gray-800 font-sans">
+    <div className="text-gray-800">
       <header className="fixed top-0 w-full z-50 backdrop-blur-md bg-gradient-to-r from-blue-900/60 to-blue-600/60 shadow-md border-b border-white/10">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <h1 className="text-2xl font-extrabold text-white tracking-wide drop-shadow-lg">
