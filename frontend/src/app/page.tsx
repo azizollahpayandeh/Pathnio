@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import Header from '@/components/Header'; // مسیر درست به فایل Header.jsx/tsx
-import Footer from '@/components/Footer'; // مسیر درست به فایل Footer.jsx/tsx
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 export default function HomePage() {
   const [showContent, setShowContent] = useState(false);
@@ -22,12 +22,18 @@ export default function HomePage() {
       {/* Header */}
       <Header />
 
-      {/* Hero */}
-      <section className="relative h-screen flex items-center justify-center text-white">
-        <div className="absolute inset-0 bg-gradient-to-tr from-blue-900 to-blue-500">
-          <div className="absolute inset-0 bg-black opacity-50" />
-        </div>
-        <div className="relative z-10 text-center">
+      {/* Hero with Video Background */}
+      <section className="relative h-screen flex items-center justify-center text-white overflow-hidden">
+        <video
+          className="absolute inset-0 w-full h-full object-cover z-0"
+          src="/images/video.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+        <div className="absolute inset-0 bg-black/60 z-0" />
+        <div className="relative z-10 text-center px-4">
           <h2
             className="text-5xl md:text-6xl font-extrabold mb-6 drop-shadow-xl animate-text-fade-in"
             style={{ animationDelay: '0.3s' }}
@@ -38,8 +44,7 @@ export default function HomePage() {
             className="text-xl max-w-xl mx-auto text-gray-200 animate-text-fade-in"
             style={{ animationDelay: '0.7s' }}
           >
-            Track, manage, and optimize your transit company’s trucks in
-            real-time — with Pathnio.
+            Track, manage, and optimize your transit company’s trucks in real-time — with Pathnio.
           </p>
         </div>
       </section>
@@ -47,20 +52,11 @@ export default function HomePage() {
       {/* About */}
       <section id="about" className="py-24 px-6 md:px-20 bg-white">
         <div className="max-w-4xl mx-auto text-center">
-          <h3
-            className="text-4xl font-bold text-blue-700 mb-8 animate-text-fade-in"
-            style={{ animationDelay: '1.5s' }}
-          >
+          <h3 className="text-4xl font-bold text-blue-700 mb-8 animate-text-fade-in">
             Why Choose Pathnio?
           </h3>
-          <p
-            className="text-lg text-gray-600 leading-relaxed animate-text-fade-in"
-            style={{ animationDelay: '2s' }}
-          >
-            Pathnio is a smart solution for transit and logistics companies. We
-            provide powerful tools to monitor, control, and analyze your truck
-            fleet in real-time — making transportation more efficient,
-            transparent, and profitable.
+          <p className="text-lg text-gray-600 leading-relaxed animate-text-fade-in">
+            Pathnio is a smart solution for transit and logistics companies. We provide powerful tools to monitor, control, and analyze your truck fleet in real-time — making transportation more efficient, transparent, and profitable.
           </p>
         </div>
       </section>
@@ -140,8 +136,7 @@ export default function HomePage() {
           Ready to transform your fleet?
         </h4>
         <p className="text-gray-700 mb-8">
-          Join hundreds of companies already optimizing their logistics with
-          Pathnio.
+          Join hundreds of companies already optimizing their logistics with Pathnio.
         </p>
         <Link
           href="/signup"
