@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics, permissions
-from .models import Company, Driver
-from .serializers import CompanySerializer, DriverSerializer
+from .models import Company, Driver, ContactMessage
+from .serializers import CompanySerializer, DriverSerializer, ContactMessageSerializer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -15,6 +15,11 @@ class CompanyRegisterView(generics.CreateAPIView):
 class DriverRegisterView(generics.CreateAPIView):
     queryset = Driver.objects.all()
     serializer_class = DriverSerializer
+
+class ContactMessageCreateView(generics.CreateAPIView):
+    queryset = ContactMessage.objects.all()
+    serializer_class = ContactMessageSerializer
+    permission_classes = []
 
 class CompanyMeView(APIView):
     permission_classes = [permissions.IsAuthenticated]

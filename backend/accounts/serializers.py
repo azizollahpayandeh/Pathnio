@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Company, Driver
+from .models import Company, Driver, ContactMessage
 from djoser.serializers import UserSerializer as DjoserUserSerializer
 
 class UserSerializer(serializers.ModelSerializer):
@@ -59,3 +59,8 @@ class DriverSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**user_data)
         driver = Driver.objects.create(user=user, **validated_data)
         return driver 
+
+class ContactMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactMessage
+        fields = ('id', 'name', 'email', 'message', 'created_at') 
