@@ -20,7 +20,7 @@ export default function AboutPage() {
             <Link href="/about" className="text-blue-300 font-semibold">
               About Us
             </Link>
-            <Link href="#contact" className="hover:text-blue-300 transition">
+            <Link href="/contact" className="hover:text-blue-300 transition">
               Contact Us
             </Link>
             <Link

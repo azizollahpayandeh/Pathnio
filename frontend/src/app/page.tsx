@@ -33,7 +33,7 @@ export default function HomePage() {
             <a href="/about" className="hover:text-blue-300 transition">
               About Us
             </a>
-            <a href="#contact" className="hover:text-blue-300 transition">
+            <a href="/contact" className="hover:text-blue-300 transition">
               Contact Us
             </a>
             <Link

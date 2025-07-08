@@ -35,7 +35,7 @@ export default function FeaturesPage() {
             <Link href="/about" className="hover:text-blue-300 transition">
               About Us
             </Link>
-            <Link href="#contact" className="hover:text-blue-300 transition">
+            <Link href="/contact" className="hover:text-blue-300 transition">
               Contact Us
             </Link>
             <Link
@@ -47,8 +47,6 @@ export default function FeaturesPage() {
           </nav>
         </div>
       </header>
-
-      {/* Removed the Animated Logo below header */}
 
       {/* Features Section */}
       <main className="pt-20 pb-24 px-6 md:px-20 max-w-6xl mx-auto flex-grow">
