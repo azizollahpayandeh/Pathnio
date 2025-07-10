@@ -26,10 +26,37 @@ class Driver(models.Model):
         return self.full_name
 
 class ContactMessage(models.Model):
+    STATUS_CHOICES = [
+        ("open", "Open"),
+        ("answered", "Answered"),
+        ("closed", "Closed"),
+    ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="tickets", null=True, blank=True)
     name = models.CharField(max_length=255)
     email = models.EmailField()
+    subject = models.CharField(max_length=255, default="Support")
     message = models.TextField()
+    reply = models.TextField(blank=True, null=True)
+    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default="open")
     created_at = models.DateTimeField(auto_now_add=True)
+    answered_at = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.name} <{self.email}>"
+        return f"{self.name} <{self.email}> - {self.subject}"
+
+class SiteSettings(models.Model):
+    THEME_CHOICES = [
+        ("light", "Light"),
+        ("dark", "Dark"),
+    ]
+    LANGUAGE_CHOICES = [
+        ("en", "English"),
+        ("fa", "Farsi"),
+    ]
+    theme = models.CharField(max_length=10, choices=THEME_CHOICES, default="light")
+    language = models.CharField(max_length=5, choices=LANGUAGE_CHOICES, default="en")
+    primary_color = models.CharField(max_length=16, default="#2563eb")
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Settings ({self.language}, {self.theme})"

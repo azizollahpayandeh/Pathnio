@@ -1,7 +1,7 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
 import api from "../api";
-import { User, Lock, Bell, LogOut } from "lucide-react";
+import { User, Lock, Bell, LogOut, ArrowLeft } from "lucide-react";
 import FloatingAlert from "@/components/FloatingAlert";
 import { useRouter } from "next/navigation";
 import Swal from 'sweetalert2';
@@ -128,7 +128,15 @@ export default function ProfilePage() {
       setPwAlert({ type: "success", msg: "Password changed successfully!" });
       form.reset();
     } catch (err: any) {
-      setPwAlert({ type: "error", msg: err.response?.data?.current_password?.[0] || "Password change failed." });
+      let msg = "Password change failed.";
+      if (err.response?.data) {
+        if (typeof err.response.data === 'string') msg = err.response.data;
+        else if (err.response.data.current_password) msg = err.response.data.current_password[0];
+        else if (err.response.data.new_password) msg = err.response.data.new_password[0];
+        else if (err.response.data.non_field_errors) msg = err.response.data.non_field_errors[0];
+        else msg = JSON.stringify(err.response.data);
+      }
+      setPwAlert({ type: "error", msg });
     } finally {
       setPwLoading(false);
     }
@@ -180,6 +188,14 @@ export default function ProfilePage() {
       {/* Decorative blurred circles */}
       <div className="absolute -top-32 -left-32 w-96 h-96 bg-blue-200 rounded-full filter blur-3xl opacity-40 z-0" />
       <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-blue-400 rounded-full filter blur-3xl opacity-30 z-0" />
+      {/* Back to Dashboard Button */}
+      <button
+        onClick={() => router.push('/dashboard')}
+        className="absolute top-6 left-6 z-20 flex items-center gap-2 px-4 py-2 bg-white/90 hover:bg-white text-blue-700 font-bold rounded-xl shadow-lg border border-blue-200 hover:shadow-xl transition-all duration-200 backdrop-blur-sm"
+      >
+        <ArrowLeft className="w-5 h-5" />
+        Back to Dashboard
+      </button>
       {/* Floating Alerts */}
       {alert && <FloatingAlert type={alert.type} msg={alert.msg} onClose={() => setAlert(null)} />}
       {pwAlert && <FloatingAlert type={pwAlert.type} msg={pwAlert.msg} onClose={() => setPwAlert(null)} />}

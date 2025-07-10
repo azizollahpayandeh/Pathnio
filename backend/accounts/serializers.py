@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Company, Driver, ContactMessage
+from .models import Company, Driver, ContactMessage, SiteSettings
 from djoser.serializers import UserSerializer as DjoserUserSerializer
 
 class UserSerializer(serializers.ModelSerializer):
@@ -61,6 +61,14 @@ class DriverSerializer(serializers.ModelSerializer):
         return driver 
 
 class ContactMessageSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(read_only=True)
+    name = serializers.CharField(read_only=True)
+    email = serializers.EmailField(read_only=True)
     class Meta:
         model = ContactMessage
-        fields = ('id', 'name', 'email', 'message', 'created_at') 
+        fields = ('id', 'user', 'name', 'email', 'subject', 'message', 'reply', 'status', 'created_at', 'answered_at')
+
+class SiteSettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SiteSettings
+        fields = ("id", "theme", "language", "primary_color", "updated_at") 
