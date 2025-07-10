@@ -4,6 +4,7 @@ import api from "../api";
 import { User, Lock, Bell, LogOut } from "lucide-react";
 import FloatingAlert from "@/components/FloatingAlert";
 import { useRouter } from "next/navigation";
+import Swal from 'sweetalert2';
 
 const LANGUAGES = [
   { value: "en", label: "English" },
@@ -188,19 +189,38 @@ export default function ProfilePage() {
           {TABS.map((tab) => (
             <button
               key={tab.key}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg w-full md:w-auto text-blue-700 font-semibold transition-colors mb-2 md:mb-0 md:mt-2 md:mr-0 mr-2 ${activeTab === tab.key ? "bg-blue-100 shadow" : "hover:bg-blue-100"}`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg w-full md:w-auto text-blue-700 font-semibold transition-colors mb-2 md:mb-0 md:mt-2 md:mr-0 mr-2 ${activeTab === tab.key ? "bg-blue-100 shadow" : "hover:bg-blue-100"} cursor-pointer`}
               onClick={() => setActiveTab(tab.key)}
+              style={{ cursor: 'pointer' }}
             >
               <span>{tab.icon}</span>
               <span>{tab.label}</span>
             </button>
           ))}
           <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg w-full md:w-auto text-red-600 font-bold transition-colors mt-4 hover:bg-red-50 border border-red-200"
+            onClick={async () => {
+              const result = await Swal.fire({
+                title: 'Are you sure you want to logout?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#2563eb',
+                cancelButtonColor: '#d1d5db',
+                confirmButtonText: 'Yes, logout',
+                cancelButtonText: 'Cancel',
+                background: '#fff',
+                customClass: {
+                  popup: 'rounded-2xl shadow-lg',
+                  confirmButton: 'bg-blue-600 text-white rounded-lg px-6 py-2 font-bold',
+                  cancelButton: 'bg-gray-200 text-gray-700 rounded-lg px-6 py-2 font-bold',
+                },
+              });
+              if (result.isConfirmed) handleLogout();
+            }}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg w-full md:w-auto text-gray-500 font-semibold transition-colors mt-4 border border-blue-100 shadow-sm hover:bg-red-100 hover:text-red-600 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-200 cursor-pointer"
             title="Logout"
+            style={{ cursor: 'pointer' }}
           >
-            <LogOut className="w-5 h-5" />
+            <LogOut className="w-5 h-5 transition-colors duration-200 group-hover:text-red-600" />
             Logout
           </button>
         </aside>
@@ -327,15 +347,37 @@ export default function ProfilePage() {
           {activeTab === "notifications" && (
             <div>
               <h2 className="font-extrabold text-2xl text-blue-700 mb-8 tracking-tight">Notifications</h2>
-              <div className="flex flex-col gap-6 max-w-md">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={notif} onChange={handleNotifToggle} className="accent-blue-600 w-5 h-5" />
-                  <span className="text-gray-700">Email Notifications</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={twoFA} onChange={handle2FAToggle} className="accent-blue-600 w-5 h-5" />
-                  <span className="text-gray-700">2FA (Two-Factor Auth)</span>
-                </label>
+              <div className="flex flex-col gap-8 max-w-md">
+                {/* Modern toggle switch for Email Notifications */}
+                <div className="flex items-center justify-between bg-gradient-to-r from-blue-50 via-white to-blue-100 rounded-2xl shadow p-4 border border-blue-100">
+                  <span className="text-blue-900 font-semibold text-base">Email Notifications</span>
+                  <button
+                    className={`relative w-14 h-8 rounded-full transition-colors duration-300 focus:outline-none ${notif ? 'bg-blue-600' : 'bg-gray-300'}`}
+                    onClick={handleNotifToggle}
+                    aria-pressed={notif}
+                  >
+                    <span className={`absolute left-1 top-1 w-6 h-6 rounded-full bg-white shadow-md transition-transform duration-300 ${notif ? 'translate-x-6' : ''}`}></span>
+                  </button>
+                </div>
+                {/* Fake notifications list */}
+                <div className="flex flex-col gap-4 mt-2">
+                  <NotificationCard
+                    title="New login to your account"
+                    description="A new login to your account was detected from Chrome in Tehran."
+                    time="2 minutes ago"
+                    unread
+                  />
+                  <NotificationCard
+                    title="Payment Successful"
+                    description="Your monthly subscription payment was successful."
+                    time="1 hour ago"
+                  />
+                  <NotificationCard
+                    title="App Update"
+                    description="A new version of the app with more features is now available."
+                    time="Yesterday"
+                  />
+                </div>
               </div>
             </div>
           )}
@@ -350,6 +392,19 @@ export default function ProfilePage() {
           animation: fade-in 0.7s cubic-bezier(0.4,0,0.2,1) both;
         }
       `}</style>
+    </div>
+  );
+}
+
+function NotificationCard({ title, description, time, unread }: { title: string; description: string; time: string; unread?: boolean }) {
+  return (
+    <div className={`flex flex-col gap-1 p-4 rounded-2xl shadow-md border border-blue-100 bg-gradient-to-br from-blue-50 via-white to-blue-100 relative transition ${unread ? "ring-2 ring-blue-400" : ""}`}>
+      <div className="flex items-center gap-2 mb-1">
+        <span className="inline-block w-2 h-2 rounded-full bg-blue-500 animate-pulse" style={{visibility: unread ? 'visible' : 'hidden'}}></span>
+        <span className="font-bold text-blue-800 text-base">{title}</span>
+      </div>
+      <span className="text-gray-700 text-sm mb-1">{description}</span>
+      <span className="text-xs text-gray-400 self-end">{time}</span>
     </div>
   );
 } 
