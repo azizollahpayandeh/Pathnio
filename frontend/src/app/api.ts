@@ -7,10 +7,10 @@ const api = axios.create({
 // افزودن توکن به هدر در هر درخواست
 api.interceptors.request.use((config) => {
   if (typeof window !== "undefined") {
-    const token = localStorage.getItem("token");
-    if (token) {
+    const access = localStorage.getItem("access");
+    if (access) {
       config.headers = config.headers || {};
-      config.headers["Authorization"] = `Token ${token}`;
+      config.headers["Authorization"] = `Bearer ${access}`;
     }
   }
   return config;

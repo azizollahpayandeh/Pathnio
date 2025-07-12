@@ -1,0 +1,482 @@
+INFO 2025-07-12 11:34:55,996 autoreload 22636 12072 Watching for file changes with StatReloader
+INFO 2025-07-12 11:35:19,498 autoreload 22636 12072 C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py changed, reloading.
+INFO 2025-07-12 11:35:20,268 autoreload 6372 10952 Watching for file changes with StatReloader
+INFO 2025-07-12 11:35:44,735 autoreload 6372 10952 C:\Users\azizo\Desktop\Pathnio\backend\accounts\models.py changed, reloading.
+INFO 2025-07-12 11:35:45,473 autoreload 7140 21204 Watching for file changes with StatReloader
+INFO 2025-07-12 11:37:39,683 autoreload 7140 21204 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-12 11:37:40,983 autoreload 8684 5460 Watching for file changes with StatReloader
+INFO 2025-07-12 11:37:54,994 autoreload 8684 5460 C:\Users\azizo\Desktop\Pathnio\backend\accounts\urls.py changed, reloading.
+INFO 2025-07-12 11:37:55,854 autoreload 20528 19632 Watching for file changes with StatReloader
+INFO 2025-07-12 11:39:43,790 autoreload 20528 19632 C:\Users\azizo\Desktop\Pathnio\backend\backend\settings.py changed, reloading.
+INFO 2025-07-12 11:39:44,706 autoreload 16376 8068 Watching for file changes with StatReloader
+INFO 2025-07-12 11:40:10,120 autoreload 7568 10476 Watching for file changes with StatReloader
+INFO 2025-07-12 11:40:25,954 autoreload 6172 23904 Watching for file changes with StatReloader
+INFO 2025-07-12 11:42:46,818 autoreload 15816 20296 Watching for file changes with StatReloader
+INFO 2025-07-12 11:44:11,713 autoreload 19144 968 Watching for file changes with StatReloader
+INFO 2025-07-12 11:44:29,312 basehttp 19144 8648 "GET /admin/accounts/ HTTP/1.1" 200 7409
+INFO 2025-07-12 11:44:29,349 basehttp 19144 8648 "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:29,356 basehttp 19144 5952 "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:29,360 basehttp 19144 17252 "GET /static/admin/css/dashboard.css HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:29,361 basehttp 19144 5952 "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:29,362 basehttp 19144 14724 "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:29,363 basehttp 19144 8648 "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:29,412 basehttp 19144 8648 "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:29,422 basehttp 19144 14724 "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:29,424 basehttp 19144 8648 "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:30,430 basehttp 19144 8648 "GET /admin/accounts/ HTTP/1.1" 200 7409
+INFO 2025-07-12 11:44:32,782 basehttp 19144 8648 "GET /admin/accounts/contactmessage/ HTTP/1.1" 200 13202
+INFO 2025-07-12 11:44:32,809 basehttp 19144 8648 "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:32,818 basehttp 19144 17252 "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:32,819 basehttp 19144 14724 "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:32,819 basehttp 19144 5952 "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:32,821 basehttp 19144 17252 "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:32,828 basehttp 19144 8648 "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:32,829 basehttp 19144 2196 "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:32,830 basehttp 19144 5952 "GET /static/admin/js/core.js HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:32,831 basehttp 19144 5712 "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:32,847 basehttp 19144 14724 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-07-12 11:44:32,876 basehttp 19144 14724 "GET /static/admin/js/filters.js HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:32,912 basehttp 19144 14724 "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:35,463 basehttp 19144 4912 "GET /admin/auth/user/ HTTP/1.1" 200 20502
+INFO 2025-07-12 11:44:35,497 basehttp 19144 19580 "GET /static/admin/img/search.svg HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:35,513 basehttp 19144 11480 "GET /static/admin/img/icon-no.svg HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:35,517 basehttp 19144 4912 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-07-12 11:44:35,531 basehttp 19144 4912 "GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:35,596 basehttp 19144 4912 "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:35,597 basehttp 19144 11480 "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:45,901 basehttp 19144 14016 "GET /admin/auth/user/1/change/ HTTP/1.1" 200 27765
+INFO 2025-07-12 11:44:45,943 basehttp 19144 14016 "GET /static/admin/css/forms.css HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:45,947 basehttp 19144 14016 "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:45,961 basehttp 19144 19436 "GET /static/admin/js/calendar.js HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:45,976 basehttp 19144 19436 "GET /static/admin/css/widgets.css HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:45,992 basehttp 19144 5524 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-07-12 11:44:45,997 basehttp 19144 5524 "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:46,011 basehttp 19144 14408 "GET /static/admin/js/SelectBox.js HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:46,032 basehttp 19144 14408 "GET /static/admin/js/change_form.js HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:46,046 basehttp 19144 10020 "GET /static/admin/js/SelectFilter2.js HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:46,178 basehttp 19144 5524 "GET /static/admin/img/icon-clock.svg HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:46,178 basehttp 19144 14408 "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:46,178 basehttp 19144 10020 "GET /static/admin/img/selector-icons.svg HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:54,342 basehttp 19144 14408 "GET /admin/auth/user/1/password/ HTTP/1.1" 200 12089
+INFO 2025-07-12 11:44:54,374 basehttp 19144 14408 "GET /static/admin/css/unusable_password_field.css HTTP/1.1" 304 0
+INFO 2025-07-12 11:44:54,375 basehttp 19144 10020 "GET /static/admin/js/unusable_password_field.js HTTP/1.1" 304 0
+INFO 2025-07-12 11:45:07,463 basehttp 19144 9980 "POST /admin/auth/user/1/password/ HTTP/1.1" 302 0
+INFO 2025-07-12 11:45:07,526 basehttp 19144 9980 "GET /admin/auth/user/1/change/ HTTP/1.1" 200 27901
+INFO 2025-07-12 11:45:07,582 basehttp 19144 9980 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+WARNING 2025-07-12 11:45:37,216 log 19144 24552 Bad Request: /api/auth/token/login/
+WARNING 2025-07-12 11:45:37,216 basehttp 19144 24552 "POST /api/auth/token/login/ HTTP/1.1" 400 68
+ERROR 2025-07-12 11:45:52,453 log 19144 20096 Internal Server Error: /api/auth/token/login/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\djoser\utils.py", line 38, in post
+    return self._action(serializer)
+           ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\djoser\views.py", line 24, in _action
+    token = utils.login_user(self.request, serializer.user)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\djoser\utils.py", line 17, in login_user
+    token, _ = settings.TOKEN_MODEL.objects.get_or_create(user=user)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'objects'
+ERROR 2025-07-12 11:45:52,458 basehttp 19144 20096 "POST /api/auth/token/login/ HTTP/1.1" 500 109210
+ERROR 2025-07-12 11:46:12,737 log 19144 1952 Internal Server Error: /api/auth/token/login/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\djoser\utils.py", line 38, in post
+    return self._action(serializer)
+           ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\djoser\views.py", line 24, in _action
+    token = utils.login_user(self.request, serializer.user)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\djoser\utils.py", line 17, in login_user
+    token, _ = settings.TOKEN_MODEL.objects.get_or_create(user=user)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'objects'
+ERROR 2025-07-12 11:46:12,740 basehttp 19144 1952 "POST /api/auth/token/login/ HTTP/1.1" 500 109210
+INFO 2025-07-12 11:47:51,958 autoreload 19144 968 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-12 11:47:53,315 autoreload 18740 22472 Watching for file changes with StatReloader
+ERROR 2025-07-12 11:48:04,300 log 18740 22644 Internal Server Error: /api/auth/token/login/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\djoser\utils.py", line 38, in post
+    return self._action(serializer)
+           ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\djoser\views.py", line 24, in _action
+    token = utils.login_user(self.request, serializer.user)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\djoser\utils.py", line 17, in login_user
+    token, _ = settings.TOKEN_MODEL.objects.get_or_create(user=user)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'objects'
+ERROR 2025-07-12 11:48:04,304 basehttp 18740 22644 "POST /api/auth/token/login/ HTTP/1.1" 500 109210
+ERROR 2025-07-12 11:48:34,317 log 18740 9844 Internal Server Error: /api/auth/token/login/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\djoser\utils.py", line 38, in post
+    return self._action(serializer)
+           ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\djoser\views.py", line 24, in _action
+    token = utils.login_user(self.request, serializer.user)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\djoser\utils.py", line 17, in login_user
+    token, _ = settings.TOKEN_MODEL.objects.get_or_create(user=user)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'objects'
+ERROR 2025-07-12 11:48:34,319 basehttp 18740 9844 "POST /api/auth/token/login/ HTTP/1.1" 500 109205
+WARNING 2025-07-12 11:48:43,379 log 18740 9844 Bad Request: /api/auth/token/login/
+WARNING 2025-07-12 11:48:43,379 basehttp 18740 9844 "POST /api/auth/token/login/ HTTP/1.1" 400 68
+ERROR 2025-07-12 11:48:54,517 log 18740 9844 Internal Server Error: /api/auth/token/login/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\djoser\utils.py", line 38, in post
+    return self._action(serializer)
+           ~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\djoser\views.py", line 24, in _action
+    token = utils.login_user(self.request, serializer.user)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\djoser\utils.py", line 17, in login_user
+    token, _ = settings.TOKEN_MODEL.objects.get_or_create(user=user)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'objects'
+ERROR 2025-07-12 11:48:54,519 basehttp 18740 9844 "POST /api/auth/token/login/ HTTP/1.1" 500 109205
+INFO 2025-07-12 11:49:56,609 autoreload 18740 22472 C:\Users\azizo\Desktop\Pathnio\backend\backend\settings.py changed, reloading.
+INFO 2025-07-12 11:49:57,606 autoreload 8952 7144 Watching for file changes with StatReloader
+INFO 2025-07-12 11:50:07,301 autoreload 8952 7144 C:\Users\azizo\Desktop\Pathnio\backend\backend\urls.py changed, reloading.
+INFO 2025-07-12 11:50:08,011 autoreload 4092 20988 Watching for file changes with StatReloader
+INFO 2025-07-12 11:50:22,019 autoreload 4092 20988 C:\Users\azizo\Desktop\Pathnio\backend\backend\settings.py changed, reloading.
+INFO 2025-07-12 11:50:22,936 autoreload 5040 19452 Watching for file changes with StatReloader
+INFO 2025-07-12 11:50:36,999 autoreload 5040 19452 C:\Users\azizo\Desktop\Pathnio\backend\backend\urls.py changed, reloading.
+INFO 2025-07-12 11:50:37,967 autoreload 23296 17484 Watching for file changes with StatReloader
+INFO 2025-07-12 11:50:48,092 basehttp 23296 6564 "POST /api/auth/token/login/ HTTP/1.1" 200 486
+WARNING 2025-07-12 11:50:48,103 log 23296 6564 Unauthorized: /api/auth/users/me/
+WARNING 2025-07-12 11:50:48,103 basehttp 23296 6564 "GET /api/auth/users/me/ HTTP/1.1" 401 58
+WARNING 2025-07-12 11:50:57,562 log 23296 6564 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-12 11:50:57,562 basehttp 23296 6564 "POST /api/auth/token/login/ HTTP/1.1" 401 63
+INFO 2025-07-12 11:51:51,856 basehttp 23296 6564 "OPTIONS /api/accounts/register/company/ HTTP/1.1" 200 0
+WARNING 2025-07-12 11:51:51,927 log 23296 6564 Bad Request: /api/accounts/register/company/
+WARNING 2025-07-12 11:51:51,928 basehttp 23296 6564 "POST /api/accounts/register/company/ HTTP/1.1" 400 67
+WARNING 2025-07-12 11:52:00,372 log 23296 6564 Bad Request: /api/accounts/register/company/
+WARNING 2025-07-12 11:52:00,373 basehttp 23296 6564 "POST /api/accounts/register/company/ HTTP/1.1" 400 67
+INFO 2025-07-12 11:52:07,433 basehttp 23296 6564 "POST /api/accounts/register/company/ HTTP/1.1" 201 205
+INFO 2025-07-12 11:52:14,362 basehttp 23296 11660 "POST /api/auth/token/login/ HTTP/1.1" 200 486
+WARNING 2025-07-12 11:52:14,371 log 23296 11660 Unauthorized: /api/auth/users/me/
+WARNING 2025-07-12 11:52:14,371 basehttp 23296 11660 "GET /api/auth/users/me/ HTTP/1.1" 401 58
+INFO 2025-07-12 11:53:50,427 basehttp 23296 11648 "POST /api/auth/token/login/ HTTP/1.1" 200 486
+WARNING 2025-07-12 11:53:50,432 log 23296 11648 Unauthorized: /api/auth/users/me/
+WARNING 2025-07-12 11:53:50,432 basehttp 23296 11648 "GET /api/auth/users/me/ HTTP/1.1" 401 58
+INFO 2025-07-12 11:57:34,358 autoreload 23296 17484 C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py changed, reloading.
+INFO 2025-07-12 11:57:35,488 autoreload 12744 12012 Watching for file changes with StatReloader
+INFO 2025-07-12 11:57:44,204 autoreload 12744 12012 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-12 11:57:45,156 autoreload 4024 18732 Watching for file changes with StatReloader
+INFO 2025-07-12 11:57:53,999 autoreload 4024 18732 C:\Users\azizo\Desktop\Pathnio\backend\backend\urls.py changed, reloading.
+INFO 2025-07-12 11:57:54,762 autoreload 16656 7140 Watching for file changes with StatReloader
+INFO 2025-07-12 11:58:35,702 autoreload 16656 7140 C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py changed, reloading.
+INFO 2025-07-12 11:58:36,911 autoreload 16224 18196 Watching for file changes with StatReloader
+INFO 2025-07-12 11:58:53,100 basehttp 16224 22328 "POST /api/auth/token/login/ HTTP/1.1" 200 486
+INFO 2025-07-12 11:59:05,737 basehttp 16224 22328 - Broken pipe from ('127.0.0.1', 51188)
+INFO 2025-07-12 11:59:20,422 basehttp 16224 13492 "POST /api/auth/token/login/ HTTP/1.1" 200 486
+WARNING 2025-07-12 11:59:20,428 log 16224 13492 Unauthorized: /api/auth/users/me/
+WARNING 2025-07-12 11:59:20,428 basehttp 16224 13492 "GET /api/auth/users/me/ HTTP/1.1" 401 58
+INFO 2025-07-12 12:02:24,471 autoreload 16224 18196 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-12 12:02:26,518 autoreload 7780 5768 Watching for file changes with StatReloader
+INFO 2025-07-12 12:02:39,791 autoreload 7780 5768 C:\Users\azizo\Desktop\Pathnio\backend\backend\urls.py changed, reloading.
+INFO 2025-07-12 12:02:45,977 autoreload 22092 25128 Watching for file changes with StatReloader
+INFO 2025-07-12 12:03:14,737 basehttp 22092 22384 "POST /api/auth/token/login/ HTTP/1.1" 200 612
+WARNING 2025-07-12 12:03:14,744 log 22092 22384 Unauthorized: /api/auth/users/me/
+WARNING 2025-07-12 12:03:14,744 basehttp 22092 22384 "GET /api/auth/users/me/ HTTP/1.1" 401 58
+INFO 2025-07-12 12:03:36,816 basehttp 22092 16028 "POST /api/auth/token/login/ HTTP/1.1" 200 618
+WARNING 2025-07-12 12:03:36,820 log 22092 16028 Unauthorized: /api/auth/users/me/
+WARNING 2025-07-12 12:03:36,820 basehttp 22092 16028 "GET /api/auth/users/me/ HTTP/1.1" 401 58
+WARNING 2025-07-12 12:03:40,679 log 22092 10884 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-12 12:03:40,679 basehttp 22092 10884 "POST /api/auth/token/login/ HTTP/1.1" 401 118
+INFO 2025-07-12 12:03:49,048 basehttp 22092 10884 "POST /api/auth/token/login/ HTTP/1.1" 200 618
+WARNING 2025-07-12 12:03:49,052 log 22092 10884 Unauthorized: /api/auth/users/me/
+WARNING 2025-07-12 12:03:49,053 basehttp 22092 10884 "GET /api/auth/users/me/ HTTP/1.1" 401 58
+WARNING 2025-07-12 12:03:55,823 log 22092 10800 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-12 12:03:55,823 basehttp 22092 10800 "POST /api/auth/token/login/ HTTP/1.1" 401 93
+INFO 2025-07-12 12:04:00,302 basehttp 22092 10800 "POST /api/auth/token/login/ HTTP/1.1" 200 618
+WARNING 2025-07-12 12:04:00,305 log 22092 10800 Unauthorized: /api/auth/users/me/
+WARNING 2025-07-12 12:04:00,306 basehttp 22092 10800 "GET /api/auth/users/me/ HTTP/1.1" 401 58
+INFO 2025-07-12 12:04:07,149 basehttp 22092 10800 "POST /api/auth/token/login/ HTTP/1.1" 200 618
+WARNING 2025-07-12 12:04:07,152 log 22092 10800 Unauthorized: /api/auth/users/me/
+WARNING 2025-07-12 12:04:07,153 basehttp 22092 10800 "GET /api/auth/users/me/ HTTP/1.1" 401 58
+INFO 2025-07-12 12:05:57,952 autoreload 22092 25128 C:\Users\azizo\Desktop\Pathnio\backend\backend\settings.py changed, reloading.
+INFO 2025-07-12 12:05:58,797 autoreload 11688 15732 Watching for file changes with StatReloader
+INFO 2025-07-12 12:06:13,223 autoreload 15344 14732 Watching for file changes with StatReloader
+INFO 2025-07-12 12:06:20,718 autoreload 11688 15732 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-12 12:06:21,660 autoreload 13536 1232 Watching for file changes with StatReloader
+INFO 2025-07-12 12:06:29,540 autoreload 13536 1232 C:\Users\azizo\Desktop\Pathnio\backend\backend\urls.py changed, reloading.
+INFO 2025-07-12 12:06:30,504 autoreload 2892 7604 Watching for file changes with StatReloader
+INFO 2025-07-12 12:07:02,584 views 2892 15256 Login attempt with data: {'username': 'alirezarahmani@gmail.com', 'password': '123456alireza'}
+INFO 2025-07-12 12:07:03,193 views 2892 15256 Successful login for user: alirezarahmani@gmail.com
+INFO 2025-07-12 12:07:03,238 basehttp 2892 15256 "POST /api/auth/token/login/ HTTP/1.1" 200 612
+WARNING 2025-07-12 12:07:03,244 log 2892 15256 Unauthorized: /api/auth/users/me/
+WARNING 2025-07-12 12:07:03,245 basehttp 2892 15256 "GET /api/auth/users/me/ HTTP/1.1" 401 58
+INFO 2025-07-12 12:07:19,602 views 2892 15256 Login attempt with data: {'username': 'alirezarahmani@gmail.com', 'password': '123456alireza'}
+INFO 2025-07-12 12:07:20,227 views 2892 15256 Successful login for user: alirezarahmani@gmail.com
+INFO 2025-07-12 12:07:20,229 basehttp 2892 15256 "POST /api/auth/token/login/ HTTP/1.1" 200 612
+WARNING 2025-07-12 12:07:20,233 log 2892 15256 Unauthorized: /api/auth/users/me/
+WARNING 2025-07-12 12:07:20,233 basehttp 2892 15256 "GET /api/auth/users/me/ HTTP/1.1" 401 58
+INFO 2025-07-12 12:07:29,557 views 2892 15256 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386arsalan'}
+INFO 2025-07-12 12:07:30,344 views 2892 15256 Successful login for user: arsalanpayandeh44@gmail.com
+INFO 2025-07-12 12:07:30,346 basehttp 2892 15256 "POST /api/auth/token/login/ HTTP/1.1" 200 618
+WARNING 2025-07-12 12:07:30,350 log 2892 15256 Unauthorized: /api/auth/users/me/
+WARNING 2025-07-12 12:07:30,351 basehttp 2892 15256 "GET /api/auth/users/me/ HTTP/1.1" 401 58
+INFO 2025-07-12 12:07:54,166 autoreload 412 18412 Watching for file changes with StatReloader
+INFO 2025-07-12 12:08:02,790 views 412 2444 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386arsalan'}
+INFO 2025-07-12 12:08:03,401 views 412 2444 Successful login for user: arsalanpayandeh44@gmail.com
+INFO 2025-07-12 12:08:03,430 basehttp 412 2444 "POST /api/auth/token/login/ HTTP/1.1" 200 618
+WARNING 2025-07-12 12:08:03,435 log 412 2444 Unauthorized: /api/auth/users/me/
+WARNING 2025-07-12 12:08:03,435 basehttp 412 2444 "GET /api/auth/users/me/ HTTP/1.1" 401 58
+INFO 2025-07-12 12:08:34,361 autoreload 412 18412 C:\Users\azizo\Desktop\Pathnio\backend\backend\settings.py changed, reloading.
+INFO 2025-07-12 12:08:34,982 autoreload 22312 8068 Watching for file changes with StatReloader
+INFO 2025-07-12 12:10:51,582 views 22312 6244 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386arsalan'}
+INFO 2025-07-12 12:10:52,472 views 22312 6244 Successful login for user: arsalanpayandeh44@gmail.com
+INFO 2025-07-12 12:10:52,574 basehttp 22312 6244 "POST /api/auth/token/login/ HTTP/1.1" 200 618
+WARNING 2025-07-12 12:10:52,581 log 22312 6244 Unauthorized: /api/auth/users/me/
+WARNING 2025-07-12 12:10:52,581 basehttp 22312 6244 "GET /api/auth/users/me/ HTTP/1.1" 401 58
+INFO 2025-07-12 12:10:57,329 views 22312 6244 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386arsaland'}
+WARNING 2025-07-12 12:10:58,114 views 22312 6244 Failed login attempt for user: arsalanpayandeh44@gmail.com
+WARNING 2025-07-12 12:10:58,115 log 22312 6244 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-12 12:10:58,115 basehttp 22312 6244 "POST /api/auth/token/login/ HTTP/1.1" 401 118
+INFO 2025-07-12 12:11:04,050 views 22312 6244 Login attempt with data: {'username': 'arsalanpayandeh4d4@gmail.com', 'password': '13861386arsalan'}
+WARNING 2025-07-12 12:11:04,834 views 22312 6244 Login attempt with non-existent username: arsalanpayandeh4d4@gmail.com
+WARNING 2025-07-12 12:11:04,835 log 22312 6244 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-12 12:11:04,835 basehttp 22312 6244 "POST /api/auth/token/login/ HTTP/1.1" 401 93
+INFO 2025-07-12 12:11:15,308 views 22312 6244 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386arsalan'}
+INFO 2025-07-12 12:11:16,129 views 22312 6244 Successful login for user: arsalanpayandeh44@gmail.com
+INFO 2025-07-12 12:11:16,132 basehttp 22312 6244 "POST /api/auth/token/login/ HTTP/1.1" 200 618
+WARNING 2025-07-12 12:11:16,137 log 22312 6244 Unauthorized: /api/auth/users/me/
+WARNING 2025-07-12 12:11:16,137 basehttp 22312 6244 "GET /api/auth/users/me/ HTTP/1.1" 401 58
+INFO 2025-07-12 12:12:20,414 autoreload 22312 8068 C:\Users\azizo\Desktop\Pathnio\backend\accounts\middleware.py changed, reloading.
+INFO 2025-07-12 12:12:21,384 autoreload 10192 8300 Watching for file changes with StatReloader
+WARNING 2025-07-12 12:12:57,518 views 10192 14292 Failed login attempt for user: arsalanpayandeh44@gmail.com
+WARNING 2025-07-12 12:12:57,520 log 10192 14292 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-12 12:12:57,521 basehttp 10192 14292 "POST /api/auth/token/login/ HTTP/1.1" 401 118
+INFO 2025-07-12 12:13:05,583 views 10192 10452 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386arsalan'}
+INFO 2025-07-12 12:13:06,404 views 10192 10452 Successful login for user: arsalanpayandeh44@gmail.com
+INFO 2025-07-12 12:13:06,456 basehttp 10192 10452 "POST /api/auth/token/login/ HTTP/1.1" 200 618
+INFO 2025-07-12 12:13:06,468 basehttp 10192 10452 "GET /api/auth/users/me/ HTTP/1.1" 200 206
+INFO 2025-07-12 12:30:15,449 basehttp 10192 8340 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-12 12:30:15,530 basehttp 10192 8340 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-12 12:30:45,264 basehttp 10192 18832 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 52
+INFO 2025-07-12 12:30:45,365 basehttp 10192 18832 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 52
+INFO 2025-07-12 14:06:13,028 basehttp 10192 17504 "OPTIONS /api/auth/token/login/ HTTP/1.1" 200 0
+WARNING 2025-07-12 14:06:13,912 views 10192 17504 Failed login attempt for user: Majidlashipuldar2@gmail.com
+WARNING 2025-07-12 14:06:13,917 log 10192 17504 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-12 14:06:13,917 basehttp 10192 17504 "POST /api/auth/token/login/ HTTP/1.1" 401 118
+INFO 2025-07-12 14:06:23,446 views 10192 14520 Login attempt with data: {'username': 'Majidlashipuldar2@gmail.com', 'password': '123456majid'}
+INFO 2025-07-12 14:06:24,137 views 10192 14520 Successful login for user: Majidlashipuldar2@gmail.com
+INFO 2025-07-12 14:06:24,142 basehttp 10192 14520 "POST /api/auth/token/login/ HTTP/1.1" 200 614
+INFO 2025-07-12 14:06:24,146 basehttp 10192 14520 "OPTIONS /api/auth/users/me/ HTTP/1.1" 200 0
+INFO 2025-07-12 14:06:24,160 basehttp 10192 14520 "GET /api/auth/users/me/ HTTP/1.1" 200 200
+INFO 2025-07-12 14:06:44,356 views 10192 17184 Login attempt with data: {'username': 'Majidlashipuldar2@gmail.com', 'password': '123456majid'}
+INFO 2025-07-12 14:06:45,024 views 10192 17184 Successful login for user: Majidlashipuldar2@gmail.com
+INFO 2025-07-12 14:06:45,027 basehttp 10192 17184 "POST /api/auth/token/login/ HTTP/1.1" 200 614
+INFO 2025-07-12 14:06:45,038 basehttp 10192 17184 "GET /api/auth/users/me/ HTTP/1.1" 200 200
+INFO 2025-07-12 14:08:52,944 basehttp 10192 19980 "OPTIONS /api/accounts/drivers/ HTTP/1.1" 200 0
+INFO 2025-07-12 14:08:52,957 basehttp 10192 15436 "OPTIONS /api/accounts/drivers/ HTTP/1.1" 200 0
+INFO 2025-07-12 14:08:52,982 basehttp 10192 19980 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-12 14:08:53,025 basehttp 10192 19980 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-12 14:11:04,884 basehttp 10192 19980 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-12 14:11:52,592 basehttp 10192 19980 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-12 14:12:31,884 basehttp 10192 19980 "OPTIONS /api/accounts/support/tickets/ HTTP/1.1" 200 0
+INFO 2025-07-12 14:12:31,886 basehttp 10192 19980 "OPTIONS /api/accounts/support/tickets/ HTTP/1.1" 200 0
+INFO 2025-07-12 14:12:31,943 basehttp 10192 19980 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 52
+INFO 2025-07-12 14:12:31,962 basehttp 10192 19980 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 52
+INFO 2025-07-12 14:23:58,987 basehttp 10192 4472 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 52
+INFO 2025-07-12 14:24:08,129 basehttp 10192 15040 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 52
+INFO 2025-07-12 14:24:27,556 basehttp 10192 21852 "OPTIONS /api/accounts/site-settings/ HTTP/1.1" 200 0
+INFO 2025-07-12 14:24:27,664 basehttp 10192 21852 "GET /api/accounts/site-settings/ HTTP/1.1" 200 108
+INFO 2025-07-12 14:24:27,674 basehttp 10192 21852 "GET /api/accounts/site-settings/ HTTP/1.1" 200 108
+INFO 2025-07-12 14:26:22,130 basehttp 10192 13632 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 52
+INFO 2025-07-12 14:26:22,144 basehttp 10192 13632 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 52
+INFO 2025-07-12 14:26:41,179 basehttp 10192 1136 "PATCH /api/auth/users/me/ HTTP/1.1" 200 200
+INFO 2025-07-12 14:26:41,193 basehttp 10192 1136 "GET /api/auth/users/me/ HTTP/1.1" 200 200
+INFO 2025-07-12 14:44:40,662 autoreload 10192 8300 C:\Users\azizo\Desktop\Pathnio\backend\accounts\models.py changed, reloading.
+INFO 2025-07-12 14:44:49,131 autoreload 18476 14080 Watching for file changes with StatReloader
+INFO 2025-07-12 14:47:11,671 basehttp 18476 10420 "OPTIONS /api/accounts/company/me/ HTTP/1.1" 200 0
+INFO 2025-07-12 14:47:13,293 basehttp 18476 10420 "PATCH /api/accounts/company/me/ HTTP/1.1" 200 203
+INFO 2025-07-12 14:47:13,332 basehttp 18476 10420 "GET /api/accounts/company/me/ HTTP/1.1" 200 203
+INFO 2025-07-12 14:47:13,376 basehttp 18476 10420 "GET /api/auth/users/me/ HTTP/1.1" 200 200
+INFO 2025-07-12 14:47:35,586 basehttp 18476 18512 "PATCH /api/accounts/company/me/ HTTP/1.1" 200 203
+INFO 2025-07-12 14:47:35,607 basehttp 18476 18512 "GET /api/accounts/company/me/ HTTP/1.1" 200 203
+INFO 2025-07-12 14:47:35,621 basehttp 18476 18512 "GET /api/auth/users/me/ HTTP/1.1" 200 200
+INFO 2025-07-12 14:47:37,509 basehttp 18476 18512 "PATCH /api/accounts/company/me/ HTTP/1.1" 200 198
+INFO 2025-07-12 14:47:37,523 basehttp 18476 18512 "GET /api/auth/users/me/ HTTP/1.1" 200 200
+INFO 2025-07-12 14:47:40,577 basehttp 18476 25044 "PATCH /api/accounts/company/me/ HTTP/1.1" 200 198
+INFO 2025-07-12 14:47:40,591 basehttp 18476 25044 "GET /api/auth/users/me/ HTTP/1.1" 200 200
+INFO 2025-07-12 14:47:49,218 basehttp 18476 24932 "GET /admin/accounts/company/ HTTP/1.1" 200 14555
+INFO 2025-07-12 14:47:49,278 basehttp 18476 24932 "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:49,295 basehttp 18476 17008 "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:49,313 basehttp 18476 24932 "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:49,315 basehttp 18476 14004 "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:49,315 basehttp 18476 6300 "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:49,315 basehttp 18476 17008 "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:49,321 basehttp 18476 18148 "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:49,370 basehttp 18476 15540 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-07-12 14:47:49,432 basehttp 18476 24932 "GET /static/admin/js/core.js HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:49,438 basehttp 18476 14004 "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:49,439 basehttp 18476 6300 "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:49,439 basehttp 18476 17008 "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:49,440 basehttp 18476 18148 "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:49,441 basehttp 18476 15540 "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:49,444 basehttp 18476 24932 "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:49,772 basehttp 18476 24932 "GET /static/admin/js/filters.js HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:49,792 basehttp 18476 24932 "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:49,807 basehttp 18476 15540 "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:49,811 basehttp 18476 24932 "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:57,145 basehttp 18476 20564 "GET /admin/accounts/company/11/change/ HTTP/1.1" 200 16605
+INFO 2025-07-12 14:47:57,185 basehttp 18476 20564 "GET /static/admin/css/forms.css HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:57,190 basehttp 18476 18908 "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:57,196 basehttp 18476 12304 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-07-12 14:47:57,224 basehttp 18476 12304 "GET /static/admin/css/widgets.css HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:57,228 basehttp 18476 12304 "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:57,232 basehttp 18476 12304 "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:57,232 basehttp 18476 18908 "GET /static/admin/js/change_form.js HTTP/1.1" 304 0
+INFO 2025-07-12 14:47:58,734 basehttp 18476 18908 "GET /admin/accounts/company/ HTTP/1.1" 200 14555
+INFO 2025-07-12 14:48:02,641 basehttp 18476 10792 "GET /admin/accounts/company/4/change/ HTTP/1.1" 200 16613
+INFO 2025-07-12 14:48:02,678 basehttp 18476 10792 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-07-12 14:48:22,943 basehttp 18476 8632 "POST /admin/accounts/company/4/change/ HTTP/1.1" 302 0
+INFO 2025-07-12 14:48:22,969 basehttp 18476 8632 "GET /admin/accounts/company/4/change/ HTTP/1.1" 200 17151
+INFO 2025-07-12 14:48:23,015 basehttp 18476 8632 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-07-12 14:48:23,055 basehttp 18476 8632 "GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
+WARNING 2025-07-12 14:48:37,182 log 18476 9364 Not Found: /media/company_profiles/images.jpg
+WARNING 2025-07-12 14:48:37,184 basehttp 18476 9364 "GET /media/company_profiles/images.jpg HTTP/1.1" 404 3324
+INFO 2025-07-12 14:48:39,079 basehttp 18476 9364 "GET /admin/accounts/company/4/change/ HTTP/1.1" 200 16912
+INFO 2025-07-12 14:50:40,726 autoreload 18476 14080 C:\Users\azizo\Desktop\Pathnio\backend\backend\urls.py changed, reloading.
+INFO 2025-07-12 14:50:41,571 autoreload 11060 25492 Watching for file changes with StatReloader
+INFO 2025-07-12 14:51:21,698 basehttp 11060 18768 "PATCH /api/accounts/company/me/ HTTP/1.1" 200 270
+INFO 2025-07-12 14:51:21,722 basehttp 11060 18768 "GET /api/accounts/company/me/ HTTP/1.1" 200 270
+INFO 2025-07-12 14:51:21,736 basehttp 11060 18768 "GET /api/auth/users/me/ HTTP/1.1" 200 200
+INFO 2025-07-12 14:51:21,929 basehttp 11060 2864 "GET /media/company_profiles/photo_2024-12-25_23-39-37.jpg HTTP/1.1" 200 72819
+INFO 2025-07-12 14:51:31,765 basehttp 11060 14004 "PATCH /api/accounts/company/me/ HTTP/1.1" 200 270
+INFO 2025-07-12 14:51:31,777 basehttp 11060 14004 "GET /api/auth/users/me/ HTTP/1.1" 200 200
+INFO 2025-07-12 14:51:41,206 basehttp 11060 2160 "PATCH /api/accounts/company/me/ HTTP/1.1" 200 259
+INFO 2025-07-12 14:51:41,226 basehttp 11060 2160 "GET /api/accounts/company/me/ HTTP/1.1" 200 259
+INFO 2025-07-12 14:51:41,243 basehttp 11060 2160 "GET /api/auth/users/me/ HTTP/1.1" 200 200
+INFO 2025-07-12 14:51:41,259 basehttp 11060 22272 "GET /media/company_profiles/images_NRcDxOw.jpg HTTP/1.1" 200 4195
+INFO 2025-07-12 14:53:51,752 basehttp 11060 22020 "PATCH /api/accounts/company/me/ HTTP/1.1" 200 259
+INFO 2025-07-12 14:53:51,760 basehttp 11060 22020 "GET /api/auth/users/me/ HTTP/1.1" 200 200
+INFO 2025-07-12 14:53:51,773 basehttp 11060 22020 "GET /api/accounts/company/me/ HTTP/1.1" 200 259
+INFO 2025-07-12 14:54:07,030 basehttp 11060 13592 "PATCH /api/accounts/company/me/ HTTP/1.1" 200 270
+INFO 2025-07-12 14:54:07,050 basehttp 11060 13592 "GET /api/accounts/company/me/ HTTP/1.1" 200 270
+INFO 2025-07-12 14:54:07,064 basehttp 11060 13592 "GET /api/auth/users/me/ HTTP/1.1" 200 200
+INFO 2025-07-12 14:54:07,093 basehttp 11060 24212 "GET /media/company_profiles/photo_2025-03-08_08-53-56.jpg HTTP/1.1" 200 66739
+INFO 2025-07-12 14:54:08,170 basehttp 11060 13592 "PATCH /api/accounts/company/me/ HTTP/1.1" 200 270
+INFO 2025-07-12 14:54:08,184 basehttp 11060 13592 "GET /api/auth/users/me/ HTTP/1.1" 200 200
+INFO 2025-07-12 14:54:08,202 basehttp 11060 13592 "GET /api/accounts/company/me/ HTTP/1.1" 200 270
+INFO 2025-07-12 14:54:26,890 basehttp 11060 13656 "PATCH /api/accounts/company/me/ HTTP/1.1" 200 259
+INFO 2025-07-12 14:54:26,910 basehttp 11060 13656 "GET /api/accounts/company/me/ HTTP/1.1" 200 259
+INFO 2025-07-12 14:54:26,930 basehttp 11060 13656 "GET /api/auth/users/me/ HTTP/1.1" 200 200
+INFO 2025-07-12 14:54:26,942 basehttp 11060 25416 "GET /media/company_profiles/images_67ycFkY.jpg HTTP/1.1" 200 4195
+INFO 2025-07-12 14:57:52,239 basehttp 11060 21132 "GET /media/company_profiles/images_67ycFkY.jpg HTTP/1.1" 304 0
+INFO 2025-07-12 14:59:40,051 basehttp 11060 17208 "GET /media/company_profiles/images_67ycFkY.jpg HTTP/1.1" 304 0
+INFO 2025-07-12 15:02:55,657 basehttp 11060 15716 "GET /media/company_profiles/images_67ycFkY.jpg HTTP/1.1" 304 0
+INFO 2025-07-12 15:04:36,100 basehttp 11060 23776 "GET /media/company_profiles/images_67ycFkY.jpg HTTP/1.1" 304 0
+INFO 2025-07-12 15:06:30,693 basehttp 11060 22452 "PATCH /api/auth/users/me/ HTTP/1.1" 200 200
+INFO 2025-07-12 15:06:31,084 basehttp 11060 22452 "PATCH /api/auth/users/me/ HTTP/1.1" 200 200
+INFO 2025-07-12 15:06:33,012 basehttp 11060 23776 "GET /media/company_profiles/images_67ycFkY.jpg HTTP/1.1" 304 0
+INFO 2025-07-12 15:07:30,943 autoreload 11060 25492 C:\Users\azizo\Desktop\Pathnio\backend\accounts\models.py changed, reloading.
+INFO 2025-07-12 15:07:33,315 autoreload 16532 4588 Watching for file changes with StatReloader
+INFO 2025-07-12 15:08:41,360 autoreload 16532 4588 C:\Users\azizo\Desktop\Pathnio\backend\accounts\models.py changed, reloading.
+INFO 2025-07-12 15:08:43,415 autoreload 17800 7224 Watching for file changes with StatReloader
+INFO 2025-07-12 15:10:03,532 autoreload 17800 7224 C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py changed, reloading.
+INFO 2025-07-12 15:10:07,230 autoreload 20784 15932 Watching for file changes with StatReloader
+INFO 2025-07-12 15:11:25,491 basehttp 20784 9744 "GET /media/company_profiles/images_67ycFkY.jpg HTTP/1.1" 304 0
+INFO 2025-07-12 15:11:36,994 basehttp 20784 8960 "PATCH /api/accounts/company/me/ HTTP/1.1" 200 303
+INFO 2025-07-12 15:11:37,055 basehttp 20784 8960 "GET /api/auth/users/me/ HTTP/1.1" 200 200
+INFO 2025-07-12 15:11:37,096 basehttp 20784 8960 "GET /api/accounts/company/me/ HTTP/1.1" 200 303
+INFO 2025-07-12 15:12:16,996 views 20784 12628 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '3861386arsalan'}
+WARNING 2025-07-12 15:12:19,611 views 20784 12628 Failed login attempt for user: arsalanpayandeh44@gmail.com
+WARNING 2025-07-12 15:12:19,619 log 20784 12628 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-12 15:12:19,621 basehttp 20784 12628 "POST /api/auth/token/login/ HTTP/1.1" 401 118
+INFO 2025-07-12 15:12:26,993 views 20784 18564 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386arsalan'}
+INFO 2025-07-12 15:12:29,716 views 20784 18564 Successful login for user: arsalanpayandeh44@gmail.com
+INFO 2025-07-12 15:12:29,723 basehttp 20784 18564 "POST /api/auth/token/login/ HTTP/1.1" 200 618
+INFO 2025-07-12 15:12:29,740 basehttp 20784 18564 "GET /api/auth/users/me/ HTTP/1.1" 200 206
+INFO 2025-07-12 15:12:53,492 basehttp 20784 24888 "PATCH /api/accounts/company/me/ HTTP/1.1" 200 305
+INFO 2025-07-12 15:12:53,563 basehttp 20784 24888 "GET /api/accounts/company/me/ HTTP/1.1" 200 305
+INFO 2025-07-12 15:12:53,624 basehttp 20784 24888 "GET /api/auth/users/me/ HTTP/1.1" 200 206
+INFO 2025-07-12 15:12:54,129 basehttp 20784 15760 "GET /media/company_profiles/IMG_34000.JPG HTTP/1.1" 200 158075
+INFO 2025-07-12 15:15:32,227 basehttp 20784 18188 "GET /media/company_profiles/IMG_34000.JPG HTTP/1.1" 304 0

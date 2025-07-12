@@ -1,6 +1,8 @@
 "use client";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Loading from "../loading";
 
 const LiveMap = dynamic(() => import("../../components/LiveMapWidget"), { ssr: false });
 const Chart = dynamic(() => import("../../components/ChartWidget"), { ssr: false });
@@ -22,10 +24,23 @@ const FAKE_TRIPS = [
 export default function Dashboard() {
   const [fullscreen, setFullscreen] = useState(false);
   const [trips, setTrips] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
   
   useEffect(() => {
+    // Check if user is logged in
+    const access = localStorage.getItem('access');
+    const userData = localStorage.getItem('user');
+    
+    if (!access || !userData) {
+      // Redirect to login if not authenticated
+      router.push('/login');
+      return;
+    }
+    
+    setIsLoading(false);
     setTrips(FAKE_TRIPS);
-  }, []);
+  }, [router]);
 
   const toggleFullscreen = () => {
     if (!fullscreen) {
@@ -65,16 +80,73 @@ export default function Dashboard() {
     };
   }, []);
 
+  // Show loading while checking authentication
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <div className="animate-fadein">
       {!fullscreen && (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-10">
-            {/* Widgets */}
-            <Widget title="Active Drivers" value="12" icon="🟢" color="from-green-400 to-blue-500" />
-            <Widget title="Inactive Drivers" value="3" icon="🔴" color="from-red-400 to-pink-500" />
-            <Widget title="Online Vehicles" value="8" icon="🚗" color="from-blue-400 to-purple-500" />
-            <Widget title="Offline Vehicles" value="2" icon="🚙" color="from-gray-400 to-blue-200" />
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
+            {/* Professional Fleet Management Stats Cards */}
+            <StatsCard 
+              title="Active Drivers" 
+              value="12" 
+              change="+2" 
+              changeType="positive"
+              icon={
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              }
+              bgGradient="from-emerald-500 to-teal-600"
+              iconBg="bg-emerald-100"
+              iconColor="text-emerald-600"
+            />
+            <StatsCard 
+              title="Inactive Drivers" 
+              value="3" 
+              change="-1" 
+              changeType="negative"
+              icon={
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                </svg>
+              }
+              bgGradient="from-red-500 to-pink-600"
+              iconBg="bg-red-100"
+              iconColor="text-red-600"
+            />
+            <StatsCard 
+              title="Online Vehicles" 
+              value="8" 
+              change="+3" 
+              changeType="positive"
+              icon={
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              }
+              bgGradient="from-blue-500 to-indigo-600"
+              iconBg="bg-blue-100"
+              iconColor="text-blue-600"
+            />
+            <StatsCard 
+              title="Offline Vehicles" 
+              value="2" 
+              change="-2" 
+              changeType="positive"
+              icon={
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              }
+              bgGradient="from-gray-500 to-slate-600"
+              iconBg="bg-gray-100"
+              iconColor="text-gray-600"
+            />
           </div>
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
             <div className="relative col-span-2 bg-white/80 rounded-2xl shadow-2xl border border-blue-100 hover:shadow-blue-200 transition-shadow duration-300 p-0">
@@ -165,23 +237,63 @@ export default function Dashboard() {
   );
 }
 
-function Widget({
+function StatsCard({
   title,
   value,
+  change,
+  changeType,
   icon,
-  color,
+  bgGradient,
+  iconBg,
+  iconColor,
 }: {
   title: string;
   value: string;
-  icon: string;
-  color: string;
+  change: string;
+  changeType: "positive" | "negative";
+  icon: React.ReactNode;
+  bgGradient: string;
+  iconBg: string;
+  iconColor: string;
 }) {
   return (
-    <div className={`relative bg-gradient-to-br ${color} rounded-2xl shadow-xl flex flex-col items-center justify-center p-8 gap-2 border border-blue-100 hover:scale-105 hover:shadow-2xl transition-transform duration-300 animate-fadein`}>
-      <span className="text-4xl drop-shadow-lg">{icon}</span>
-      <span className="text-lg font-bold text-blue-900 drop-shadow">{title}</span>
-      <span className="text-3xl font-extrabold text-white drop-shadow-lg">{value}</span>
-      <div className="absolute -bottom-2 right-4 w-8 h-8 bg-white/30 rounded-full blur-2xl opacity-60"></div>
+    <div className="relative bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl border border-blue-100/50 hover:shadow-blue-200/50 hover:shadow-2xl transition-all duration-300 animate-fadein group overflow-hidden">
+      {/* Sophisticated gradient overlay */}
+      <div className={`absolute inset-0 bg-gradient-to-br ${bgGradient} opacity-5 group-hover:opacity-10 transition-opacity duration-300`}></div>
+      
+      {/* Rainbow-like border gradient */}
+      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-200/20 via-purple-200/20 to-pink-200/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      
+      {/* Background decorative elements */}
+      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100/30 to-purple-100/30 rounded-full -translate-y-16 translate-x-16 blur-xl"></div>
+      <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-br from-cyan-100/30 to-blue-100/30 rounded-full translate-y-12 -translate-x-12 blur-xl"></div>
+      
+      {/* Content */}
+      <div className="relative z-10 p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className={`p-3 rounded-xl ${iconBg} ${iconColor} shadow-lg backdrop-blur-sm border border-white/50`}>
+            {icon}
+          </div>
+          <div className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-sm border ${
+            changeType === 'positive' 
+              ? 'bg-green-50/80 text-green-700 border-green-200/50' 
+              : 'bg-red-50/80 text-red-700 border-red-200/50'
+          }`}>
+            <span className={changeType === 'positive' ? 'text-green-600' : 'text-red-600'}>
+              {changeType === 'positive' ? '↗' : '↘'}
+            </span>
+            {change}
+          </div>
+        </div>
+        
+        <div className="text-gray-800">
+          <h3 className="text-sm font-medium text-gray-600 mb-2">{title}</h3>
+          <div className="text-3xl font-bold tracking-tight bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">{value}</div>
+        </div>
+        
+        {/* Subtle hover effect overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-purple-50/20 to-pink-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
+      </div>
     </div>
   );
 } 

@@ -47,6 +47,18 @@ export default function ProfilePage() {
     }
   }, []);
 
+  // Debug function to log user state
+  const debugUserState = () => {
+    console.log("Current user state:", user);
+    console.log("Profile photo URL:", getProfilePhotoUrl(user?.profile_photo));
+    console.log("LocalStorage user:", localStorage.getItem("user"));
+  };
+
+  // Call debug function when user changes
+  useEffect(() => {
+    debugUserState();
+  }, [user]);
+
   // Profile update
   const handleEditChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setEditData({ ...editData, [e.target.name]: e.target.value });
@@ -78,10 +90,14 @@ export default function ProfilePage() {
     }
     if (!userError && !companyError) {
       setAlert({ type: "success", msg: "Profile updated successfully!" });
-      // Refresh user info
-      const res = await api.get("auth/users/me/");
-      localStorage.setItem("user", JSON.stringify(res.data));
-      setUser(res.data);
+      // Refresh both user and company data to keep the photo
+      const userRes = await api.get("auth/users/me/");
+      const companyRes = await api.get("accounts/company/me/");
+      
+      // Merge user and company data
+      const updatedUser = { ...userRes.data, ...companyRes.data };
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      setUser(updatedUser);
     } else {
       setAlert({ type: "error", msg: userError || companyError });
     }
@@ -94,12 +110,24 @@ export default function ProfilePage() {
     const formData = new FormData();
     formData.append("profile_photo", e.target.files[0]);
     try {
-      await api.patch("auth/users/me/", formData, { headers: { "Content-Type": "multipart/form-data" } });
+      // Update company profile photo
+      const response = await api.patch("accounts/company/me/", formData, { 
+        headers: { "Content-Type": "multipart/form-data" } 
+      });
+      console.log("Photo upload response:", response.data);
       setAlert({ type: "success", msg: "Profile photo updated!" });
-      const res = await api.get("auth/users/me/");
-      localStorage.setItem("user", JSON.stringify(res.data));
-      setUser(res.data);
-    } catch {
+      
+      // Refresh company data to get the new photo URL
+      const companyRes = await api.get("accounts/company/me/");
+      const userRes = await api.get("auth/users/me/");
+      
+      // Update localStorage with new data including the photo
+      const updatedUser = { ...userRes.data, ...companyRes.data };
+      console.log("Updated user data:", updatedUser);
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      setUser(updatedUser);
+    } catch (err) {
+      console.error("Photo upload error:", err);
       setAlert({ type: "error", msg: "Photo upload failed." });
     }
   };
@@ -169,6 +197,26 @@ export default function ProfilePage() {
   // Controlled input fix: always string
   const safe = (v: any) => (typeof v === "string" ? v : v === undefined || v === null ? "" : String(v));
 
+  const getProfilePhotoUrl = (photo: string | undefined) => {
+    console.log("Getting photo URL for:", photo);
+    if (!photo) {
+      console.log("No photo, using default");
+      return "/assets/images.png";
+    }
+    if (photo.startsWith("http")) {
+      console.log("Photo is already full URL:", photo);
+      return photo;
+    }
+    if (photo.startsWith("/media/")) {
+      const base = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const fullUrl = base + photo;
+      console.log("Built full URL:", fullUrl);
+      return fullUrl;
+    }
+    console.log("Photo is relative path:", photo);
+    return photo;
+  };
+
   // Floating alert auto-close
   useEffect(() => {
     if (alert) {
@@ -184,33 +232,42 @@ export default function ProfilePage() {
   }, [pwAlert]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-300 relative overflow-hidden py-10">
-      {/* Decorative blurred circles */}
-      <div className="absolute -top-32 -left-32 w-96 h-96 bg-blue-200 rounded-full filter blur-3xl opacity-40 z-0" />
-      <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-blue-400 rounded-full filter blur-3xl opacity-30 z-0" />
-      {/* Back to Dashboard Button */}
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 relative overflow-hidden py-4 md:py-8 px-4">
+      {/* Enhanced decorative elements */}
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-gradient-to-br from-blue-200 to-indigo-300 rounded-full filter blur-3xl opacity-30 animate-pulse" />
+      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-gradient-to-br from-purple-200 to-pink-300 rounded-full filter blur-3xl opacity-30 animate-pulse" />
+      <div className="absolute top-1/2 left-1/4 w-64 h-64 bg-gradient-to-br from-cyan-200 to-blue-300 rounded-full filter blur-2xl opacity-20 animate-bounce" style={{animationDuration: '3s'}} />
+      
+      {/* Back to Dashboard Button - Smaller and repositioned */}
       <button
         onClick={() => router.push('/dashboard')}
-        className="absolute top-6 left-6 z-20 flex items-center gap-2 px-4 py-2 bg-white/90 hover:bg-white text-blue-700 font-bold rounded-xl shadow-lg border border-blue-200 hover:shadow-xl transition-all duration-200 backdrop-blur-sm"
+        className="absolute top-4 left-4 z-20 flex items-center gap-2 px-4 py-2 bg-white/90 hover:bg-white text-blue-700 font-semibold rounded-xl shadow-lg border border-blue-200 hover:shadow-xl transition-all duration-300 backdrop-blur-sm hover:scale-105 text-sm cursor-pointer"
+        style={{ cursor: 'pointer' }}
       >
-        <ArrowLeft className="w-5 h-5" />
-        Back to Dashboard
+        <ArrowLeft className="w-4 h-4" />
+        Back
       </button>
+      
       {/* Floating Alerts */}
       {alert && <FloatingAlert type={alert.type} msg={alert.msg} onClose={() => setAlert(null)} />}
       {pwAlert && <FloatingAlert type={pwAlert.type} msg={pwAlert.msg} onClose={() => setPwAlert(null)} />}
-      <div className="w-full max-w-4xl bg-white/90 rounded-3xl shadow-2xl p-0 md:p-0 relative z-10 backdrop-blur-xl border border-blue-100 flex flex-col md:flex-row overflow-hidden">
-        {/* Sidebar */}
-        <aside className="w-full md:w-56 bg-blue-50 border-r border-blue-100 flex md:flex-col flex-row md:items-start items-center md:gap-0 gap-2 p-4 md:p-6">
+      
+      <div className="w-full max-w-7xl bg-white/95 rounded-3xl shadow-2xl p-0 relative z-10 backdrop-blur-xl border border-white/50 overflow-hidden flex flex-col lg:flex-row">
+        {/* Enhanced Sidebar */}
+        <aside className="w-full lg:w-80 bg-gradient-to-b from-blue-50 via-indigo-50 to-purple-50 border-r border-blue-100 flex flex-col p-6 md:p-8 lg:p-10">
           {TABS.map((tab) => (
             <button
               key={tab.key}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg w-full md:w-auto text-blue-700 font-semibold transition-colors mb-2 md:mb-0 md:mt-2 md:mr-0 mr-2 ${activeTab === tab.key ? "bg-blue-100 shadow" : "hover:bg-blue-100"} cursor-pointer`}
+              className={`flex items-center gap-3 px-4 md:px-6 py-3 md:py-4 rounded-2xl w-full text-blue-700 font-semibold transition-all duration-300 mb-2 md:mb-3 ${
+                activeTab === tab.key 
+                  ? "bg-gradient-to-r from-blue-100 to-indigo-100 shadow-lg border border-blue-200 transform scale-105" 
+                  : "hover:bg-blue-50 hover:shadow-md hover:scale-105"
+              } cursor-pointer`}
               onClick={() => setActiveTab(tab.key)}
               style={{ cursor: 'pointer' }}
             >
-              <span>{tab.icon}</span>
-              <span>{tab.label}</span>
+              <span className="text-lg md:text-xl">{tab.icon}</span>
+              <span className="text-base md:text-lg">{tab.label}</span>
             </button>
           ))}
           <button
@@ -232,34 +289,40 @@ export default function ProfilePage() {
               });
               if (result.isConfirmed) handleLogout();
             }}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg w-full md:w-auto text-gray-500 font-semibold transition-colors mt-4 border border-blue-100 shadow-sm hover:bg-red-100 hover:text-red-600 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-200 cursor-pointer"
+            className="flex items-center gap-3 px-4 md:px-6 py-3 md:py-4 rounded-2xl w-full text-gray-500 font-semibold transition-all duration-300 mt-4 md:mt-6 border border-red-200 shadow-md hover:bg-red-50 hover:text-red-600 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-200 cursor-pointer"
             title="Logout"
             style={{ cursor: 'pointer' }}
           >
-            <LogOut className="w-5 h-5 transition-colors duration-200 group-hover:text-red-600" />
-            Logout
+            <LogOut className="w-5 h-5 md:w-6 md:h-6 transition-colors duration-200" />
+            <span className="text-base md:text-lg">Logout</span>
           </button>
         </aside>
-        {/* Main Content */}
-        <main className="flex-1 p-6 md:p-10">
+        
+        {/* Enhanced Main Content */}
+        <main className="flex-1 p-6 md:p-8 lg:p-12">
           {activeTab === "profile" && (
-            <div>
-              <h2 className="font-extrabold text-2xl text-blue-700 mb-8 tracking-tight">Profile Information</h2>
-              <div className="flex flex-col md:flex-row gap-10 items-center md:items-start">
-                {/* Profile Photo */}
-                <div className="flex flex-col items-center">
-                  <div className="relative w-28 h-28 mb-2">
+            <div className="animate-fade-in">
+              <h2 className="font-extrabold text-3xl md:text-4xl text-blue-700 mb-8 md:mb-12 tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Profile Information
+              </h2>
+              <div className="flex flex-col lg:flex-row gap-8 md:gap-12 items-center lg:items-start">
+                {/* Enhanced Profile Photo Section */}
+                <div className="flex flex-col items-center bg-gradient-to-br from-blue-50 to-indigo-50 rounded-3xl p-6 md:p-8 shadow-xl border border-blue-100 w-full lg:min-w-[300px] lg:w-auto">
+                  <div className="relative w-32 h-32 md:w-40 md:h-40 mb-4 md:mb-6">
                     <img
-                      src={user?.profile_photo || "/assets/images.png"}
+                      src={getProfilePhotoUrl(user?.profile_photo)}
                       alt="Profile"
-                      className="w-28 h-28 rounded-full border-2 border-blue-300 object-cover shadow-lg"
+                      className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white shadow-2xl object-cover hover:scale-105 transition-transform duration-300"
                     />
                     <button
-                      className="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full p-1.5 shadow hover:bg-blue-700 border-2 border-white"
+                      className="absolute bottom-1 right-1 md:bottom-2 md:right-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full p-2 md:p-3 shadow-lg hover:shadow-xl border-2 border-white hover:scale-110 transition-all duration-300 cursor-pointer"
                       onClick={() => fileInput.current?.click()}
                       title="Upload photo"
+                      style={{ cursor: 'pointer' }}
                     >
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+                      <svg className="w-4 h-4 md:w-6 md:h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                      </svg>
                     </button>
                     <input
                       type="file"
@@ -269,114 +332,182 @@ export default function ProfilePage() {
                       onChange={handlePhotoChange}
                     />
                   </div>
-                  <div className="font-bold text-lg text-blue-700 mt-2">{user?.full_name || user?.manager_full_name || user?.fullName || "-"}</div>
-                  <div className="text-gray-500 text-sm">{user?.email}</div>
-                  <div className="text-gray-500 text-sm">{user?.phone || user?.mobile || "-"}</div>
-                  <div className="text-xs mt-1 px-2 py-1 bg-blue-50 text-blue-700 rounded">{user?.role || (user?.manager_full_name ? "Manager" : "Driver")}</div>
-                  <div className="text-xs text-gray-400 mt-1">Joined: {user?.date_joined ? new Date(user.date_joined).toLocaleDateString() : "-"}</div>
+                  <div className="text-center">
+                    <div className="font-bold text-xl md:text-2xl text-blue-700 mb-2">{user?.full_name || user?.manager_full_name || user?.fullName || "-"}</div>
+                    <div className="text-gray-600 text-base md:text-lg mb-2">{user?.email}</div>
+                    <div className="text-gray-500 text-sm md:text-base mb-3">{user?.phone || user?.mobile || "-"}</div>
+                    <div className="inline-block px-3 md:px-4 py-1 md:py-2 bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700 rounded-full font-semibold text-xs md:text-sm border border-blue-200">
+                      {user?.role || (user?.manager_full_name ? "Manager" : "Driver")}
+                    </div>
+                    <div className="text-xs text-gray-400 mt-2 md:mt-3">
+                      Joined: {user?.date_joined ? new Date(user.date_joined).toLocaleDateString('en-US', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                      }) : "-"}
+                    </div>
+                  </div>
                 </div>
-                {/* Editable Form */}
-                <form className="flex-1 space-y-6 w-full max-w-md" onSubmit={handleEditSubmit}>
+                
+                {/* Enhanced Editable Form */}
+                <form className="flex-1 space-y-6 md:space-y-8 w-full max-w-2xl" onSubmit={handleEditSubmit}>
+                  <div className="bg-gradient-to-br from-white to-blue-50 rounded-3xl p-6 md:p-8 shadow-xl border border-blue-100">
+                    <h3 className="font-bold text-xl md:text-2xl text-blue-700 mb-4 md:mb-6">Personal Information</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
+                        <label className="block text-base md:text-lg font-semibold text-gray-700 mb-2 md:mb-3">Full Name</label>
                     <input
                       type="text"
                       name="full_name"
                       value={safe(editData.full_name)}
                       onChange={handleEditChange}
-                      className="w-full border border-gray-200 rounded-xl px-5 py-3 focus:ring-2 focus:ring-blue-400 bg-blue-50/60 placeholder:text-blue-300 text-blue-900 text-base shadow-sm"
+                          className="w-full border-2 border-blue-200 rounded-2xl px-4 md:px-6 py-3 md:py-4 focus:ring-4 focus:ring-blue-300 focus:border-blue-500 bg-white text-blue-900 text-base md:text-lg shadow-sm transition-all duration-300"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Phone Number</label>
+                        <label className="block text-base md:text-lg font-semibold text-gray-700 mb-2 md:mb-3">Phone Number</label>
                     <input
                       type="text"
                       name="phone"
                       value={safe(editData.phone)}
                       onChange={handleEditChange}
-                      className="w-full border border-gray-200 rounded-xl px-5 py-3 focus:ring-2 focus:ring-blue-400 bg-blue-50/60 placeholder:text-blue-300 text-blue-900 text-base shadow-sm"
+                          className="w-full border-2 border-blue-200 rounded-2xl px-4 md:px-6 py-3 md:py-4 focus:ring-4 focus:ring-blue-300 focus:border-blue-500 bg-white text-blue-900 text-base md:text-lg shadow-sm transition-all duration-300"
                       required
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Address</label>
+                    </div>
+                    <div className="mt-4 md:mt-6">
+                      <label className="block text-base md:text-lg font-semibold text-gray-700 mb-2 md:mb-3">Address</label>
                     <input
                       type="text"
                       name="address"
                       value={safe(editData.address)}
                       onChange={handleEditChange}
-                      className="w-full border border-gray-200 rounded-xl px-5 py-3 focus:ring-2 focus:ring-blue-400 bg-blue-50/60 placeholder:text-blue-300 text-blue-900 text-base shadow-sm"
+                        className="w-full border-2 border-blue-200 rounded-2xl px-4 md:px-6 py-3 md:py-4 focus:ring-4 focus:ring-blue-300 focus:border-blue-500 bg-white text-blue-900 text-base md:text-lg shadow-sm transition-all duration-300"
                       placeholder="Optional"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1">Language</label>
+                    <div className="mt-4 md:mt-6">
+                      <label className="block text-base md:text-lg font-semibold text-gray-700 mb-2 md:mb-3">Language</label>
                     <select
                       name="language"
                       value={safe(editData.language)}
                       onChange={handleEditChange}
-                      className="w-full border border-gray-200 rounded-xl px-5 py-3 focus:ring-2 focus:ring-blue-400 bg-blue-50/60 text-blue-900 text-base shadow-sm"
+                        className="w-full border-2 border-blue-200 rounded-2xl px-4 md:px-6 py-3 md:py-4 focus:ring-4 focus:ring-blue-300 focus:border-blue-500 bg-white text-blue-900 text-base md:text-lg shadow-sm transition-all duration-300"
                     >
                       {LANGUAGES.map((lang) => (
                         <option key={lang.value} value={lang.value}>{lang.label}</option>
                       ))}
                     </select>
                   </div>
+                  </div>
+                  
                   <button
                     type="submit"
-                    className="w-full py-3 px-4 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl transition duration-200 shadow-lg cursor-pointer mt-2 text-lg"
+                    className="w-full py-3 md:py-4 px-4 md:px-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl cursor-pointer text-lg md:text-xl transform hover:scale-105"
                     disabled={loading}
                   >
-                    {loading ? "Saving..." : "Save Changes"}
+                    {loading ? (
+                      <div className="flex items-center justify-center gap-3">
+                        <div className="animate-spin rounded-full h-5 w-5 md:h-6 md:w-6 border-b-2 border-white"></div>
+                        Saving Changes...
+                      </div>
+                    ) : (
+                      "Save Changes"
+                    )}
                   </button>
                 </form>
               </div>
             </div>
           )}
+          
           {activeTab === "security" && (
+            <div className="animate-fade-in">
+              <h2 className="font-extrabold text-3xl md:text-4xl text-blue-700 mb-8 md:mb-12 tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Security Settings
+              </h2>
+              <div className="max-w-2xl">
+                <div className="bg-gradient-to-br from-white to-blue-50 rounded-3xl p-6 md:p-8 shadow-xl border border-blue-100">
+                  <h3 className="font-bold text-xl md:text-2xl text-blue-700 mb-4 md:mb-6">Change Password</h3>
+                  <form className="space-y-4 md:space-y-6" onSubmit={handlePasswordChange}>
             <div>
-              <h2 className="font-extrabold text-2xl text-blue-700 mb-8 tracking-tight">Security Settings</h2>
-              <form className="space-y-6 max-w-md" onSubmit={handlePasswordChange}>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">Current Password</label>
-                  <input type="password" name="current" className="w-full border border-gray-200 rounded-xl px-5 py-3 focus:ring-2 focus:ring-blue-400 bg-blue-50/60 text-blue-900 text-base shadow-sm" required />
+                      <label className="block text-base md:text-lg font-semibold text-gray-700 mb-2 md:mb-3">Current Password</label>
+                      <input 
+                        type="password" 
+                        name="current" 
+                        className="w-full border-2 border-blue-200 rounded-2xl px-4 md:px-6 py-3 md:py-4 focus:ring-4 focus:ring-blue-300 focus:border-blue-500 bg-white text-blue-900 text-base md:text-lg shadow-sm transition-all duration-300" 
+                        required 
+                      />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">New Password</label>
-                  <input type="password" name="new" className="w-full border border-gray-200 rounded-xl px-5 py-3 focus:ring-2 focus:ring-blue-400 bg-blue-50/60 text-blue-900 text-base shadow-sm" required />
+                      <label className="block text-base md:text-lg font-semibold text-gray-700 mb-2 md:mb-3">New Password</label>
+                      <input 
+                        type="password" 
+                        name="new" 
+                        className="w-full border-2 border-blue-200 rounded-2xl px-4 md:px-6 py-3 md:py-4 focus:ring-4 focus:ring-blue-300 focus:border-blue-500 bg-white text-blue-900 text-base md:text-lg shadow-sm transition-all duration-300" 
+                        required 
+                      />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">Confirm New Password</label>
-                  <input type="password" name="confirm" className="w-full border border-gray-200 rounded-xl px-5 py-3 focus:ring-2 focus:ring-blue-400 bg-blue-50/60 text-blue-900 text-base shadow-sm" required />
+                      <label className="block text-base md:text-lg font-semibold text-gray-700 mb-2 md:mb-3">Confirm New Password</label>
+                      <input 
+                        type="password" 
+                        name="confirm" 
+                        className="w-full border-2 border-blue-200 rounded-2xl px-4 md:px-6 py-3 md:py-4 focus:ring-4 focus:ring-blue-300 focus:border-blue-500 bg-white text-blue-900 text-base md:text-lg shadow-sm transition-all duration-300" 
+                        required 
+                      />
                 </div>
                 <button
                   type="submit"
-                  className="w-full py-3 px-4 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl transition duration-200 shadow-lg cursor-pointer mt-2 text-lg"
+                      className="w-full py-3 md:py-4 px-4 md:px-6 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-bold rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl cursor-pointer text-lg md:text-xl transform hover:scale-105"
                   disabled={pwLoading}
                 >
-                  {pwLoading ? "Changing..." : "Change Password"}
+                      {pwLoading ? (
+                        <div className="flex items-center justify-center gap-3">
+                          <div className="animate-spin rounded-full h-5 w-5 md:h-6 md:w-6 border-b-2 border-white"></div>
+                          Changing Password...
+                        </div>
+                      ) : (
+                        "Change Password"
+                      )}
                 </button>
               </form>
+                </div>
+              </div>
             </div>
           )}
+          
           {activeTab === "notifications" && (
+            <div className="animate-fade-in">
+              <h2 className="font-extrabold text-3xl md:text-4xl text-blue-700 mb-8 md:mb-12 tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Notifications
+              </h2>
+              <div className="max-w-4xl">
+                <div className="bg-gradient-to-br from-white to-blue-50 rounded-3xl p-6 md:p-8 shadow-xl border border-blue-100 mb-6 md:mb-8">
+                  <h3 className="font-bold text-xl md:text-2xl text-blue-700 mb-4 md:mb-6">Notification Settings</h3>
+                  <div className="flex items-center justify-between bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-4 md:p-6 border border-blue-200">
             <div>
-              <h2 className="font-extrabold text-2xl text-blue-700 mb-8 tracking-tight">Notifications</h2>
-              <div className="flex flex-col gap-8 max-w-md">
-                {/* Modern toggle switch for Email Notifications */}
-                <div className="flex items-center justify-between bg-gradient-to-r from-blue-50 via-white to-blue-100 rounded-2xl shadow p-4 border border-blue-100">
-                  <span className="text-blue-900 font-semibold text-base">Email Notifications</span>
+                      <span className="text-blue-900 font-semibold text-lg md:text-xl">Email Notifications</span>
+                      <p className="text-gray-600 mt-1 text-sm md:text-base">Receive important updates via email</p>
+                    </div>
                   <button
-                    className={`relative w-14 h-8 rounded-full transition-colors duration-300 focus:outline-none ${notif ? 'bg-blue-600' : 'bg-gray-300'}`}
+                      className={`relative w-14 h-8 md:w-16 md:h-10 rounded-full transition-colors duration-300 focus:outline-none shadow-lg ${
+                        notif ? 'bg-gradient-to-r from-blue-600 to-purple-600' : 'bg-gray-300'
+                      }`}
                     onClick={handleNotifToggle}
                     aria-pressed={notif}
                   >
-                    <span className={`absolute left-1 top-1 w-6 h-6 rounded-full bg-white shadow-md transition-transform duration-300 ${notif ? 'translate-x-6' : ''}`}></span>
+                      <span className={`absolute left-1 top-1 w-6 h-6 md:w-8 md:h-8 rounded-full bg-white shadow-md transition-transform duration-300 ${
+                        notif ? 'translate-x-6' : ''
+                      }`}></span>
                   </button>
+                  </div>
                 </div>
-                {/* Fake notifications list */}
-                <div className="flex flex-col gap-4 mt-2">
+                
+                <div className="bg-gradient-to-br from-white to-blue-50 rounded-3xl p-6 md:p-8 shadow-xl border border-blue-100">
+                  <h3 className="font-bold text-xl md:text-2xl text-blue-700 mb-4 md:mb-6">Recent Notifications</h3>
+                  <div className="space-y-3 md:space-y-4">
                   <NotificationCard
                     title="New login to your account"
                     description="A new login to your account was detected from Chrome in Tehran."
@@ -393,6 +524,7 @@ export default function ProfilePage() {
                     description="A new version of the app with more features is now available."
                     time="Yesterday"
                   />
+                  </div>
                 </div>
               </div>
             </div>
@@ -414,13 +546,22 @@ export default function ProfilePage() {
 
 function NotificationCard({ title, description, time, unread }: { title: string; description: string; time: string; unread?: boolean }) {
   return (
-    <div className={`flex flex-col gap-1 p-4 rounded-2xl shadow-md border border-blue-100 bg-gradient-to-br from-blue-50 via-white to-blue-100 relative transition ${unread ? "ring-2 ring-blue-400" : ""}`}>
-      <div className="flex items-center gap-2 mb-1">
-        <span className="inline-block w-2 h-2 rounded-full bg-blue-500 animate-pulse" style={{visibility: unread ? 'visible' : 'hidden'}}></span>
-        <span className="font-bold text-blue-800 text-base">{title}</span>
+    <div className={`flex flex-col gap-3 p-6 rounded-2xl shadow-lg border border-blue-200 bg-gradient-to-br from-white to-blue-50 relative transition-all duration-300 hover:shadow-xl hover:scale-105 ${
+      unread ? "ring-2 ring-blue-400 bg-gradient-to-br from-blue-50 to-indigo-50" : ""
+    }`}>
+      <div className="flex items-center gap-3 mb-2">
+        <span className={`inline-block w-3 h-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 animate-pulse shadow-lg ${
+          unread ? 'visible' : 'hidden'
+        }`}></span>
+        <span className="font-bold text-blue-800 text-lg">{title}</span>
+        {unread && (
+          <span className="ml-auto px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs font-bold rounded-full">
+            NEW
+          </span>
+        )}
       </div>
-      <span className="text-gray-700 text-sm mb-1">{description}</span>
-      <span className="text-xs text-gray-400 self-end">{time}</span>
+      <span className="text-gray-700 text-base leading-relaxed">{description}</span>
+      <span className="text-sm text-gray-500 self-end font-medium">{time}</span>
     </div>
   );
 } 

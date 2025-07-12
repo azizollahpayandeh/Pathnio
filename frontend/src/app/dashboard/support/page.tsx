@@ -22,9 +22,15 @@ export default function SupportPage() {
     setLoading(true);
     try {
       const res = await api.get("accounts/support/tickets/");
-      setTickets(res.data);
-    } catch {
+      console.log("Tickets API response:", res.data);
+      // Check if res.data is an array, if not, try to find the results
+      const ticketsData = Array.isArray(res.data) ? res.data : (res.data.results || res.data.tickets || []);
+      setTickets(ticketsData);
+      setError("");
+    } catch (err) {
+      console.error("Tickets API error:", err);
       setError("Failed to load tickets.");
+      setTickets([]);
     } finally {
       setLoading(false);
     }
@@ -75,6 +81,8 @@ export default function SupportPage() {
       <h2 className="font-bold text-2xl mb-4 text-blue-700">Your Tickets</h2>
       {loading ? (
         <div className="text-blue-400 animate-pulse text-lg">Loading tickets...</div>
+      ) : error ? (
+        <div className="text-red-500 font-bold text-center">{error}</div>
       ) : tickets.length === 0 ? (
         <div className="text-gray-400 text-lg">No tickets yet.</div>
       ) : (
