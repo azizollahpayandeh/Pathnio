@@ -44,7 +44,7 @@ export default function HomePage() {
             className="text-xl max-w-xl mx-auto text-gray-200 animate-text-fade-in"
             style={{ animationDelay: '0.7s' }}
           >
-            Track, manage, and optimize your transit company’s trucks in real-time — with Pathnio.
+            Track, manage, and optimize your transit company's trucks in real-time — with Pathnio.
           </p>
         </div>
       </section>
@@ -139,7 +139,7 @@ export default function HomePage() {
           Join hundreds of companies already optimizing their logistics with Pathnio.
         </p>
         <Link
-          href="/signup"
+          href="/login"
           className="px-6 py-3 bg-blue-700 text-white font-bold rounded-xl hover:bg-blue-800 transition shadow-lg"
         >
           Get Started Now

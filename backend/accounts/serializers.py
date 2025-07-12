@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from django.contrib.auth.password_validation import validate_password
 from .models import Company, Driver, ContactMessage, SiteSettings
-from djoser.serializers import UserSerializer as DjoserUserSerializer
+from djoser.serializers import UserSerializer as DjoserUserSerializer, UserCreateSerializer as DjoserUserCreateSerializer
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,9 +15,11 @@ class CustomDjoserUserSerializer(DjoserUserSerializer):
     manager_full_name = serializers.SerializerMethodField()
     full_name = serializers.SerializerMethodField()
     company_name = serializers.SerializerMethodField()
+    is_company = serializers.SerializerMethodField()
+    is_driver = serializers.SerializerMethodField()
 
     class Meta(DjoserUserSerializer.Meta):
-        fields = DjoserUserSerializer.Meta.fields + ('manager_full_name', 'full_name', 'company_name')
+        fields = DjoserUserSerializer.Meta.fields + ('manager_full_name', 'full_name', 'company_name', 'is_company', 'is_driver')
 
     def get_manager_full_name(self, obj):
         try:
@@ -26,7 +29,7 @@ class CustomDjoserUserSerializer(DjoserUserSerializer):
 
     def get_full_name(self, obj):
         try:
-            return obj.driver.full_name
+            return obj.driver_profile.full_name
         except Exception:
             return None
 
@@ -36,11 +39,41 @@ class CustomDjoserUserSerializer(DjoserUserSerializer):
         except Exception:
             return None
 
+    def get_is_company(self, obj):
+        try:
+            return hasattr(obj, 'company_profile')
+        except Exception:
+            return False
+
+    def get_is_driver(self, obj):
+        try:
+            return hasattr(obj, 'driver_profile')
+        except Exception:
+            return False
+
+# Custom User Create Serializer
+class CustomUserCreateSerializer(DjoserUserCreateSerializer):
+    password = serializers.CharField(write_only=True, validators=[validate_password])
+    password_retype = serializers.CharField(write_only=True)
+    
+    class Meta(DjoserUserCreateSerializer.Meta):
+        fields = ('id', 'username', 'email', 'password', 'password_retype')
+    
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password_retype']:
+            raise serializers.ValidationError({"password": "Password fields didn't match."})
+        return attrs
+    
+    def create(self, validated_data):
+        validated_data.pop('password_retype')
+        user = User.objects.create_user(**validated_data)
+        return user
+
 class CompanySerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
         model = Company
-        fields = ('id', 'user', 'company_name', 'manager_full_name', 'phone', 'address')
+        fields = ('id', 'user', 'company_name', 'manager_full_name', 'phone', 'address', 'profile_photo', 'date_joined')
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
@@ -71,4 +104,35 @@ class ContactMessageSerializer(serializers.ModelSerializer):
 class SiteSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = SiteSettings
-        fields = ("id", "theme", "language", "primary_color", "updated_at") 
+        fields = ("id", "theme", "language", "primary_color", "updated_at")
+
+# Login Serializer
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+
+# Password Change Serializer
+class PasswordChangeSerializer(serializers.Serializer):
+    old_password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True, validators=[validate_password])
+    new_password_retype = serializers.CharField(write_only=True)
+    
+    def validate(self, attrs):
+        if attrs['new_password'] != attrs['new_password_retype']:
+            raise serializers.ValidationError({"new_password": "Password fields didn't match."})
+        return attrs
+
+# User Profile Update Serializer
+class UserProfileUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name')
+        read_only_fields = ('username',)
+
+# Activity Log Serializer
+class ActivityLogSerializer(serializers.Serializer):
+    action = serializers.CharField()
+    timestamp = serializers.DateTimeField()
+    ip_address = serializers.IPAddressField()
+    user_agent = serializers.CharField()
+    details = serializers.JSONField(required=False) 

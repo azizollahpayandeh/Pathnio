@@ -122,7 +122,7 @@ export default function SubscriptionPage() {
                 <div className="text-2xl font-bold text-blue-700 mb-2">{selectedPlan.price.toLocaleString()} Toman</div>
               </div>
               <button
-                className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xl shadow-lg transition-all duration-200"
+                className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xl shadow-lg transition-all duration-200 cursor-pointer"
                 onClick={handleCheckout}
                 disabled={payment}
               >
@@ -149,7 +149,7 @@ export default function SubscriptionPage() {
                     {plan.features.map((f, i) => <li key={i}>{f}</li>)}
                   </ul>
                   <div className="text-2xl font-bold text-blue-700 mb-2">{plan.price.toLocaleString()} Toman</div>
-                  <button className="mt-4 px-6 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded-xl font-bold shadow transition">Select</button>
+                  <button className="mt-4 px-6 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded-xl font-bold shadow transition cursor-pointer">Select</button>
                 </div>
               ))}
             </div>
@@ -159,7 +159,7 @@ export default function SubscriptionPage() {
             <FaShoppingCart className="text-blue-400 text-7xl mb-6 animate-bounce" />
             <div className="text-2xl font-semibold text-blue-800 mb-4">No active subscription</div>
             <button
-              className={`flex items-center gap-2 px-8 py-4 rounded-2xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xl shadow-lg transition-all duration-200 ${action?.type === "buy" ? "opacity-60 cursor-wait" : ""}`}
+              className={`flex items-center gap-2 px-8 py-4 rounded-2xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xl shadow-lg transition-all duration-200 cursor-pointer ${action?.type === "buy" ? "opacity-60 cursor-wait" : ""}`}
               onClick={handleBuy}
               disabled={action?.type === "buy"}
             >
@@ -201,7 +201,7 @@ export default function SubscriptionPage() {
                   <td className="py-5 px-6 text-center flex gap-3 justify-center">
                     {sub.status !== "active" && (
                       <button
-                        className={`flex items-center gap-1 px-5 py-2 rounded-xl bg-green-500 hover:bg-green-600 text-white font-bold shadow transition text-base ${action?.type === "renew" && action?.id === sub.id ? "opacity-60 cursor-wait" : ""}`}
+                        className={`flex items-center gap-1 px-5 py-2 rounded-xl bg-green-500 hover:bg-green-600 text-white font-bold shadow transition text-base cursor-pointer ${action?.type === "renew" && action?.id === sub.id ? "opacity-60 cursor-wait" : ""}`}
                         onClick={() => handleRenew(sub.id)}
                         disabled={action?.type === "renew" && action?.id === sub.id}
                       >
@@ -211,7 +211,7 @@ export default function SubscriptionPage() {
                     )}
                     {sub.status === "active" && (
                       <button
-                        className={`flex items-center gap-1 px-5 py-2 rounded-xl bg-red-500 hover:bg-red-600 text-white font-bold shadow transition text-base ${action?.type === "cancel" && action?.id === sub.id ? "opacity-60 cursor-wait" : ""}`}
+                        className={`flex items-center gap-1 px-5 py-2 rounded-xl bg-red-500 hover:bg-red-600 text-white font-bold shadow transition text-base cursor-pointer ${action?.type === "cancel" && action?.id === sub.id ? "opacity-60 cursor-wait" : ""}`}
                         onClick={() => handleCancel(sub.id)}
                         disabled={action?.type === "cancel" && action?.id === sub.id}
                       >

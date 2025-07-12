@@ -77,10 +77,16 @@ export default function LoginPage() {
     try {
       const res = await api.post("auth/token/login/", { username, password });
       if (res.status === 200) {
-        const token = res.data.auth_token;
-        localStorage.setItem("token", token);
-        // Get user profile
-        const profileRes = await api.get("auth/users/me/");
+        const access = res.data.access;
+        const refresh = res.data.refresh;
+        localStorage.setItem("access", access);
+        localStorage.setItem("refresh", refresh);
+        // Get user profile with JWT
+        const profileRes = await api.get("auth/users/me/", {
+          headers: {
+            Authorization: `Bearer ${access}`,
+          },
+        });
         if (profileRes.status === 200) {
           localStorage.setItem("user", JSON.stringify(profileRes.data));
         }
@@ -89,12 +95,12 @@ export default function LoginPage() {
           router.push("/dashboard");
         }, 1500);
       } else {
-        setAlert({ type: "error", msg: res.data?.non_field_errors?.[0] || "Check your credentials." });
+        setAlert({ type: "error", msg: res.data?.detail || "Check your credentials." });
       }
     } catch (err: any) {
       let errorMsg = "Login failed. Please try again.";
       if (err.response && err.response.data) {
-        errorMsg = err.response.data?.non_field_errors?.[0] || JSON.stringify(err.response.data);
+        errorMsg = err.response.data?.detail || JSON.stringify(err.response.data);
       }
       setAlert({ type: "error", msg: errorMsg });
     } finally {

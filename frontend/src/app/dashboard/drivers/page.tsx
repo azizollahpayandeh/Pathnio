@@ -19,12 +19,20 @@ export default function DriversPage() {
 
   useEffect(() => {
     api.get("accounts/drivers/")
-      .then(res => setDrivers(res.data.map((d: any) => ({ ...d, origin: d.origin || "Tehran", destination: d.destination || "Isfahan" }))))
-      .catch(() => setError("Failed to load drivers."))
+      .then(res => {
+        console.log("Drivers API response:", res.data);
+        // Check if res.data is an array, if not, try to find the results
+        const driversData = Array.isArray(res.data) ? res.data : (res.data.results || res.data.drivers || []);
+        setDrivers(driversData.map((d: any) => ({ ...d, origin: d.origin || "Tehran", destination: d.destination || "Isfahan" })));
+        setError(null);
+      })
+      .catch((err) => {
+        console.error("Drivers API error:", err);
+        setError("Failed to load drivers.");
+        setDrivers([]);
+      })
       .finally(() => setLoading(false));
   }, []);
-
-  const showDrivers = drivers.length === 0 ? FAKE_DRIVERS : drivers;
 
   return (
     <div className="h-screen flex flex-col">
@@ -52,7 +60,7 @@ export default function DriversPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {(drivers.length === 0 ? FAKE_DRIVERS : drivers.slice(0, 10)).map((d, i) => (
+                    {(error || drivers.length === 0 ? FAKE_DRIVERS : drivers.slice(0, 10)).map((d, i) => (
                       <tr key={i} className="hover:bg-blue-50 transition border-b last:border-b-0 cursor-pointer">
                         <td className="py-2 md:py-3 lg:py-3 px-2 md:px-3 lg:px-4 font-bold text-blue-900 whitespace-nowrap">{d.full_name}</td>
                         <td className="py-2 md:py-3 lg:py-3 px-2 md:px-3 lg:px-4 whitespace-nowrap">{d.mobile}</td>
