@@ -22,15 +22,15 @@ export default function HomePage() {
       {/* Header */}
       <Header />
 
-      {/* Hero with Video Background */}
+      {/* Hero with Image Background */}
       <section className="relative h-screen flex items-center justify-center text-white overflow-hidden">
-        <video
-          className="absolute inset-0 w-full h-full object-cover z-0"
-          src="/images/video.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
+        <Image
+          src="/images/Pathnio2.png"
+          alt="Logistics cinematic background"
+          layout="fill"
+          objectFit="cover"
+          className="z-0"
+          priority
         />
         <div className="absolute inset-0 bg-black/60 z-0" />
         <div className="relative z-10 text-center px-4">
