@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -154,30 +155,12 @@ export default function FeaturesPage() {
 
         {/* Call to Action Button */}
         <div className="text-center mt-12 px-4 sm:px-0">
-          <button
-            className="
-              px-6
-              sm:px-8
-              py-3
-              sm:py-4
-              bg-blue-700
-              hover:bg-blue-800
-              text-white
-              text-base
-              sm:text-lg
-              font-semibold
-              rounded-full
-              shadow-lg
-              transition
-              focus:outline-none
-              focus:ring-4
-              focus:ring-blue-400
-              focus:ring-offset-2
-            "
-            aria-label="Get started with Pathnio now"
+          <Link
+            href="/login"
+            className="inline-block px-6 py-3 bg-blue-700 text-white font-bold rounded-xl hover:bg-blue-800 transition shadow-lg"
           >
             Get Started Now
-          </button>
+          </Link>
         </div>
       </main>
 

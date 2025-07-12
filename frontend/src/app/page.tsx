@@ -150,7 +150,7 @@ export default function HomePage() {
           Pathnio.
         </p>
         <Link
-          href="/signup"
+          href="/login"
           className="inline-block px-6 py-3 bg-blue-700 text-white font-bold rounded-xl hover:bg-blue-800 transition shadow-lg"
         >
           Get Started Now
