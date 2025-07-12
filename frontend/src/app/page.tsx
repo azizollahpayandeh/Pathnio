@@ -22,15 +22,15 @@ export default function HomePage() {
       {/* Header */}
       <Header />
 
-      {/* Hero with Video Background */}
+      {/* Hero with Image Background */}
       <section className="relative h-screen flex items-center justify-center text-white overflow-hidden">
-        <video
-          className="absolute inset-0 w-full h-full object-cover z-0"
-          src="/images/video.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
+        <Image
+          src="/images/Pathnio2.png" 
+          alt="Logistics cinematic background"
+          layout="fill"
+          objectFit="cover"
+          className="z-0"
+          priority
         />
         <div className="absolute inset-0 bg-black/60 z-0" />
         <div className="relative z-10 text-center px-4">
@@ -44,7 +44,8 @@ export default function HomePage() {
             className="text-xl max-w-xl mx-auto text-gray-200 animate-text-fade-in"
             style={{ animationDelay: '0.7s' }}
           >
-            Track, manage, and optimize your transit company’s trucks in real-time — with Pathnio.
+            Track, manage, and optimize your transit company’s trucks in
+            real-time — with Pathnio.
           </p>
         </div>
       </section>
@@ -56,7 +57,10 @@ export default function HomePage() {
             Why Choose Pathnio?
           </h3>
           <p className="text-lg text-gray-600 leading-relaxed animate-text-fade-in">
-            Pathnio is a smart solution for transit and logistics companies. We provide powerful tools to monitor, control, and analyze your truck fleet in real-time — making transportation more efficient, transparent, and profitable.
+            Pathnio is a smart solution for transit and logistics companies. We
+            provide powerful tools to monitor, control, and analyze your truck
+            fleet in real-time — making transportation more efficient,
+            transparent, and profitable.
           </p>
         </div>
       </section>
@@ -136,7 +140,8 @@ export default function HomePage() {
           Ready to transform your fleet?
         </h4>
         <p className="text-gray-700 mb-8">
-          Join hundreds of companies already optimizing their logistics with Pathnio.
+          Join hundreds of companies already optimizing their logistics with
+          Pathnio.
         </p>
         <Link
           href="/signup"
