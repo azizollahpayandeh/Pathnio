@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import Link from 'next/link';
 
 export default function AboutPage() {
   const [scrollPercent, setScrollPercent] = useState(0);
@@ -24,24 +23,28 @@ export default function AboutPage() {
     <div className="text-gray-800 bg-white min-h-screen flex flex-col">
       <Header />
 
-      <main className="pt-32 pb-24 px-6 md:px-20 flex-grow flex items-center justify-center">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-20">
+      <main className="pt-24 md:pt-32 pb-20 px-4 sm:px-10 md:px-20 flex-grow flex items-center justify-center">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12 md:gap-20">
           {/* عکس */}
-          <div className="flex-shrink-0 w-full md:w-[55%] h-[400px] md:h-[600px] rounded-3xl overflow-hidden shadow-xl">
+          <div className="flex-shrink-0 w-full md:w-7/12 h-64 sm:h-80 md:h-[600px] rounded-3xl overflow-hidden shadow-xl">
             <img
               src="/images/pathnio.png"
               alt="Our Team"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-center"
+              loading="lazy"
             />
           </div>
 
           {/* متن */}
-          <div className="w-full md:w-[45%]">
-            <h2 className="text-4xl font-extrabold text-blue-800 mb-6 animate-text-fade-in">
+          <div className="w-full md:w-5/12 text-center md:text-left">
+            <h2
+              className="text-3xl sm:text-4xl font-extrabold text-blue-800 mb-6 animate-text-fade-in"
+              style={{ animationDelay: '0s' }}
+            >
               About Pathnio
             </h2>
             <p
-              className="text-lg text-gray-600 leading-relaxed mb-4 animate-text-fade-in"
+              className="text-base sm:text-lg text-gray-600 leading-relaxed mb-4 animate-text-fade-in"
               style={{ animationDelay: '0.2s' }}
             >
               Pathnio is built by a team of engineers and designers passionate
@@ -49,7 +52,7 @@ export default function AboutPage() {
               management — and we decided to build the future.
             </p>
             <p
-              className="text-lg text-gray-600 leading-relaxed animate-text-fade-in"
+              className="text-base sm:text-lg text-gray-600 leading-relaxed animate-text-fade-in"
               style={{ animationDelay: '0.4s' }}
             >
               From intuitive dashboards to AI-based insights, everything at
@@ -60,7 +63,7 @@ export default function AboutPage() {
         </div>
       </main>
 
-      {/* فوتر همیشه هست ولی انیمیشن داره */}
+      {/* Footer with smooth slide-in on scroll */}
       <div
         className="transition-transform duration-500 ease-out"
         style={{

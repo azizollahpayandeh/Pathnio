@@ -17,23 +17,35 @@ export default function FeaturesPage() {
   }, []);
 
   return (
-    <div className="text-gray-800 bg-white min-h-screen flex flex-col">
+    <div className="text-gray-800 bg-white min-h-screen flex flex-col font-sans">
       {/* Header */}
       <Header />
 
       {/* Features Section */}
-      <main className="pt-20 pb-24 px-6 md:px-20 max-w-6xl mx-auto flex-grow">
-        <section className="text-center mb-20">
-          <h2 className="text-4xl font-extrabold text-blue-800 mb-6">
+      <main className="pt-16 md:pt-20 pb-24 px-4 sm:px-8 md:px-20 max-w-7xl mx-auto flex-grow">
+        <section className="text-center mb-16 md:mb-20 px-2 sm:px-6">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-blue-800 mb-4 sm:mb-6 leading-tight">
             Our Features
           </h2>
-          <p className="text-lg text-gray-600">
+          <p className="text-base sm:text-lg md:text-xl text-gray-800 max-w-3xl mx-auto leading-relaxed">
             Explore the powerful tools and features that make Pathnio your go-to
             solution for modern logistics.
           </p>
         </section>
 
-        <section className="grid md:grid-cols-2 lg:grid-cols-3 gap-12 pointer">
+        <section
+          className="
+            grid 
+            grid-cols-1 
+            sm:grid-cols-2 
+            lg:grid-cols-3 
+            gap-6 
+            sm:gap-8 
+            lg:gap-12
+            px-2
+            sm:px-0
+          "
+        >
           {[
             {
               title: 'Real-Time Tracking',
@@ -68,34 +80,106 @@ export default function FeaturesPage() {
           ].map(({ title, desc, icon }) => (
             <div
               key={title}
-              className="p-6 rounded-3xl shadow-lg bg-gray-50 hover:bg-blue-50 transition"
+              tabIndex={0}
+              className="
+                p-6
+                rounded-3xl
+                shadow-lg
+                bg-gray-50
+                hover:bg-blue-50
+                focus:bg-blue-100
+                focus:outline-none
+                focus:ring-4
+                focus:ring-blue-300
+                transition
+                cursor-pointer
+                flex
+                flex-col
+                items-start
+                sm:items-center
+                text-left
+                sm:text-center
+              "
             >
-              <div className="text-4xl mb-4">{icon}</div>
-              <h4 className="text-xl font-semibold text-blue-800 mb-2">
+              <div
+                className="text-5xl mb-4 sm:mb-6"
+                title={desc}
+                aria-label={title + ' icon'}
+                role="img"
+              >
+                {icon}
+              </div>
+              <h4 className="text-lg sm:text-xl font-semibold text-blue-800 mb-1 sm:mb-2">
                 {title}
               </h4>
-              <p className="text-gray-600">{desc}</p>
+              <p className="text-gray-800 text-sm sm:text-base leading-relaxed">
+                {desc}
+              </p>
             </div>
           ))}
         </section>
-      </main>
 
-      {/* Logo Animation Section */}
-      <div className="py-16 bg-white text-center">
-        <h1 className="text-6xl md:text-8xl font-extrabold text-blue-800 tracking-widest select-none">
-          {logoText.split('').map((char, index) => (
-            <span
-              key={index}
-              className={`inline-block transition-opacity duration-500 ${
-                index < visibleLetters ? 'opacity-100' : 'opacity-0'
-              }`}
-              style={{ transitionDelay: `${index * 150}ms` }}
-            >
-              {char}
-            </span>
-          ))}
-        </h1>
-      </div>
+        {/* Logo Animation Section */}
+        <div className="py-12 sm:py-16 bg-white text-center px-4 sm:px-0">
+          <h1
+            className="
+              text-5xl
+              sm:text-6xl
+              md:text-7xl
+              lg:text-8xl
+              font-extrabold
+              text-blue-800
+              tracking-widest
+              select-none
+              font-sans
+              flex
+              justify-center
+            "
+            aria-label="Pathnio logo animation"
+          >
+            {logoText.split('').map((char, index) => (
+              <span
+                key={index}
+                className={`inline-block transition-opacity duration-500 ${
+                  index < visibleLetters ? 'opacity-100' : 'opacity-0'
+                }`}
+                style={{ transitionDelay: `${index * 150}ms` }}
+                aria-hidden={index >= visibleLetters}
+              >
+                {char}
+              </span>
+            ))}
+          </h1>
+        </div>
+
+        {/* Call to Action Button */}
+        <div className="text-center mt-12 px-4 sm:px-0">
+          <button
+            className="
+              px-6
+              sm:px-8
+              py-3
+              sm:py-4
+              bg-blue-700
+              hover:bg-blue-800
+              text-white
+              text-base
+              sm:text-lg
+              font-semibold
+              rounded-full
+              shadow-lg
+              transition
+              focus:outline-none
+              focus:ring-4
+              focus:ring-blue-400
+              focus:ring-offset-2
+            "
+            aria-label="Get started with Pathnio now"
+          >
+            Get Started Now
+          </button>
+        </div>
+      </main>
 
       {/* Footer */}
       <Footer />
