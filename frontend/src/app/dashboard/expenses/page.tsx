@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const FAKE_EXPENSES = [
   { id: 1, date: "2024-07-01", category: "Fuel", amount: 1200000, description: "Fuel for trip", driver: "Amir", vehicle: "12A345-IR", status: "Approved" },
@@ -18,6 +19,7 @@ export default function ExpensesPage() {
   const [expenses, setExpenses] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   // در آینده: دریافت داده واقعی از API
   useEffect(() => {
@@ -26,6 +28,10 @@ export default function ExpensesPage() {
   }, []);
 
   const showExpenses = expenses.length >= 10 ? expenses.slice(0, 10) : [...expenses, ...FAKE_EXPENSES.slice(0, 10 - expenses.length)];
+
+  const handleViewExpense = (expenseId: number) => {
+    router.push(`/dashboard/expenses/${expenseId}`);
+  };
 
   return (
     <div className="h-screen flex flex-col">
@@ -70,7 +76,12 @@ export default function ExpensesPage() {
                         <td className="py-1.5 md:py-2 lg:py-2 px-1.5 md:px-2 lg:px-3 2xl:text-[19px] 2xl:py-[17px] whitespace-nowrap">{e.vehicle}</td>
                         <td className={`py-1.5 md:py-2 lg:py-2 px-1.5 md:px-2 lg:px-3 font-semibold whitespace-nowrap ${e.status === 'Approved' ? 'text-green-600' : e.status === 'Pending' ? 'text-yellow-500' : 'text-red-500'}`}>{e.status}</td>
                         <td className="py-1.5 md:py-2 lg:py-2 px-1.5 md:px-2 lg:px-3 whitespace-nowrap">
-                          <button className="bg-blue-100 text-blue-700 px-1 md:px-1.5 lg:px-2 py-0.5 md:py-1 rounded-lg shadow hover:bg-blue-200 transition text-xs 2xl:text-[17px] font-semibold cursor-pointer">View</button>
+                          <button 
+                            onClick={() => handleViewExpense(e.id)}
+                            className="bg-blue-100 text-blue-700 px-1 md:px-1.5 lg:px-2 py-0.5 md:py-1 rounded-lg shadow hover:bg-blue-200 transition text-xs 2xl:text-[17px] font-semibold cursor-pointer"
+                          >
+                            View
+                          </button>
                         </td>
                       </tr>
                     ))}

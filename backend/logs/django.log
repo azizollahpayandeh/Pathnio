@@ -524,3 +524,18 @@ WARNING 2025-07-13 20:00:13,159 basehttp 14180 24460 "GET /admin/accounts/ HTTP/
 WARNING 2025-07-13 20:00:16,972 log 14180 24460 Not Found: /favicon.ico
 WARNING 2025-07-13 20:00:16,973 basehttp 14180 24460 "GET /favicon.ico HTTP/1.1" 404 3427
 INFO 2025-07-13 20:23:53,828 autoreload 7816 13252 Watching for file changes with StatReloader
+INFO 2025-07-13 21:01:19,987 basehttp 7816 13988 "GET /media/company_profiles/IMG_34000_ukSq0zc.JPG HTTP/1.1" 304 0
+INFO 2025-07-13 21:03:25,600 basehttp 7816 20576 "OPTIONS /api/accounts/drivers/ HTTP/1.1" 200 0
+INFO 2025-07-13 21:03:25,669 basehttp 7816 24156 "OPTIONS /api/accounts/drivers/ HTTP/1.1" 200 0
+INFO 2025-07-13 21:03:27,512 basehttp 7816 20576 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-13 21:03:27,551 basehttp 7816 20576 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-13 21:16:54,874 basehttp 7816 11256 "OPTIONS /api/accounts/support/tickets/ HTTP/1.1" 200 0
+INFO 2025-07-13 21:16:54,877 basehttp 7816 9588 "OPTIONS /api/accounts/support/tickets/ HTTP/1.1" 200 0
+INFO 2025-07-13 21:16:54,985 basehttp 7816 9588 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 52
+INFO 2025-07-13 21:16:54,991 basehttp 7816 9588 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 52
+INFO 2025-07-13 21:16:58,210 basehttp 7816 9588 "OPTIONS /api/accounts/site-settings/ HTTP/1.1" 200 0
+INFO 2025-07-13 21:16:58,258 basehttp 7816 10792 "OPTIONS /api/accounts/site-settings/ HTTP/1.1" 200 0
+INFO 2025-07-13 21:16:58,311 basehttp 7816 9588 "GET /api/accounts/site-settings/ HTTP/1.1" 200 108
+INFO 2025-07-13 21:16:58,326 basehttp 7816 9588 "GET /api/accounts/site-settings/ HTTP/1.1" 200 108
+INFO 2025-07-13 21:17:40,492 basehttp 7816 2024 "GET /media/company_profiles/IMG_34000_ukSq0zc.JPG HTTP/1.1" 304 0
+INFO 2025-07-13 21:54:58,827 basehttp 7816 19532 "GET /media/company_profiles/IMG_34000_ukSq0zc.JPG HTTP/1.1" 304 0
