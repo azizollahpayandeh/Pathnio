@@ -129,12 +129,6 @@ export default function Header() {
               >
                 Dashboard
               </Link>
-              <button
-                onClick={handleLogout}
-                className="ml-4 px-5 py-2 bg-gradient-to-r from-red-600 to-red-400 rounded-xl shadow-lg hover:from-red-500 hover:to-red-300 transition-colors duration-300"
-              >
-                Logout
-              </button>
             </>
           ) : (
             <Link
@@ -193,12 +187,6 @@ export default function Header() {
             >
               Dashboard
             </Link>
-            <button
-              onClick={handleLogout}
-              className="mt-3 px-4 py-2 bg-gradient-to-r from-red-600 to-red-400 rounded-xl shadow-lg hover:from-red-500 hover:to-red-300 transition-colors duration-300"
-            >
-              Logout
-            </button>
           </>
         ) : (
           <Link

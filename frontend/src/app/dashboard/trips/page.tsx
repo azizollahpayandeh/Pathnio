@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const FAKE_TRIPS = [
   { id: 1, driver: "Amir", vehicle: "12A345-IR", origin: "Tehran", destination: "Isfahan", start: "2024-07-01 08:00", end: "2024-07-01 12:00", status: "Completed" },
@@ -18,6 +19,7 @@ export default function TripsPage() {
   const [trips, setTrips] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   // در آینده: دریافت داده واقعی از API
   useEffect(() => {
@@ -26,6 +28,10 @@ export default function TripsPage() {
   }, []);
 
   const showTrips = trips.length >= 10 ? trips.slice(0, 10) : [...trips, ...FAKE_TRIPS.slice(0, 10 - trips.length)];
+
+  const handleViewTrip = (tripId: number) => {
+    router.push(`/dashboard/trips/${tripId}`);
+  };
 
   return (
     <div className="h-screen flex flex-col">
@@ -65,7 +71,12 @@ export default function TripsPage() {
                         <td className="py-1.5 md:py-2 lg:py-2 px-1.5 md:px-2 lg:px-3 lg:py-[16px] whitespace-nowrap">{t.end}</td>
                         <td className={`py-1.5 md:py-2 lg:py-2 px-1.5 md:px-2 lg:px-3 font-semibold whitespace-nowrap ${t.status === 'Completed' ? 'text-green-600' : t.status === 'In Progress' ? 'text-yellow-500' : 'text-red-500'}`}>{t.status}</td>
                         <td className="py-1.5 md:py-2 lg:py-2 px-1.5 md:px-2 lg:px-3 whitespace-nowrap">
-                          <button className="bg-blue-100 text-blue-700 px-1 md:px-1.5 lg:px-2 py-0.5 md:py-1 rounded-lg shadow hover:bg-blue-200 transition 2xl:text-[17px] font-semibold cursor-pointer">View</button>
+                          <button 
+                            onClick={() => handleViewTrip(t.id)}
+                            className="bg-blue-100 text-blue-700 px-1 md:px-1.5 lg:px-2 py-0.5 md:py-1 rounded-lg shadow hover:bg-blue-200 transition 2xl:text-[17px] font-semibold cursor-pointer"
+                          >
+                            View
+                          </button>
                         </td>
                       </tr>
                     ))}

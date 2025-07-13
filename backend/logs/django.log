@@ -480,3 +480,47 @@ INFO 2025-07-12 15:12:53,563 basehttp 20784 24888 "GET /api/accounts/company/me/
 INFO 2025-07-12 15:12:53,624 basehttp 20784 24888 "GET /api/auth/users/me/ HTTP/1.1" 200 206
 INFO 2025-07-12 15:12:54,129 basehttp 20784 15760 "GET /media/company_profiles/IMG_34000.JPG HTTP/1.1" 200 158075
 INFO 2025-07-12 15:15:32,227 basehttp 20784 18188 "GET /media/company_profiles/IMG_34000.JPG HTTP/1.1" 304 0
+INFO 2025-07-12 15:43:37,615 basehttp 20784 20016 "GET /media/company_profiles/IMG_34000.JPG HTTP/1.1" 304 0
+INFO 2025-07-12 15:50:22,772 basehttp 20784 8740 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-12 15:50:22,794 basehttp 20784 3756 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-12 15:50:31,109 basehttp 20784 3756 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 52
+INFO 2025-07-12 15:50:31,153 basehttp 20784 8740 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 52
+INFO 2025-07-12 15:50:32,493 basehttp 20784 8740 "GET /api/accounts/site-settings/ HTTP/1.1" 200 108
+INFO 2025-07-12 15:50:32,519 basehttp 20784 3756 "GET /api/accounts/site-settings/ HTTP/1.1" 200 108
+INFO 2025-07-12 15:53:04,195 basehttp 20784 10744 "GET /media/company_profiles/IMG_34000.JPG HTTP/1.1" 304 0
+INFO 2025-07-12 15:55:36,141 basehttp 20784 20452 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-12 15:55:36,203 basehttp 20784 3560 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-12 15:55:42,772 basehttp 20784 1952 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 52
+INFO 2025-07-12 15:55:42,823 basehttp 20784 19148 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 52
+INFO 2025-07-12 15:55:43,697 basehttp 20784 19148 "GET /api/accounts/site-settings/ HTTP/1.1" 200 108
+INFO 2025-07-12 15:55:43,718 basehttp 20784 1952 "GET /api/accounts/site-settings/ HTTP/1.1" 200 108
+INFO 2025-07-12 15:57:35,923 basehttp 20784 4132 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 52
+INFO 2025-07-12 15:57:35,939 basehttp 20784 17684 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 52
+INFO 2025-07-12 15:57:57,344 views 20784 24392 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386arssalan'}
+WARNING 2025-07-12 15:57:57,921 views 20784 24392 Failed login attempt for user: arsalanpayandeh44@gmail.com
+WARNING 2025-07-12 15:57:57,925 log 20784 24392 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-12 15:57:57,925 basehttp 20784 24392 "POST /api/auth/token/login/ HTTP/1.1" 401 118
+WARNING 2025-07-12 15:58:04,262 views 20784 24392 Failed login attempt for user: arsalanpayandeh44@gmail.com
+WARNING 2025-07-12 15:58:04,262 log 20784 24392 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-12 15:58:04,262 basehttp 20784 24392 "POST /api/auth/token/login/ HTTP/1.1" 401 118
+INFO 2025-07-12 15:58:11,679 views 20784 21264 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386arsalan'}
+INFO 2025-07-12 15:58:12,262 views 20784 21264 Successful login for user: arsalanpayandeh44@gmail.com
+INFO 2025-07-12 15:58:12,268 basehttp 20784 21264 "POST /api/auth/token/login/ HTTP/1.1" 200 618
+INFO 2025-07-12 15:58:12,282 basehttp 20784 21264 "GET /api/auth/users/me/ HTTP/1.1" 200 206
+INFO 2025-07-13 19:47:49,301 autoreload 14180 22264 Watching for file changes with StatReloader
+INFO 2025-07-13 19:49:51,832 basehttp 14180 3168 "OPTIONS /api/accounts/company/me/ HTTP/1.1" 200 0
+INFO 2025-07-13 19:49:54,526 basehttp 14180 3168 "PATCH /api/accounts/company/me/ HTTP/1.1" 200 313
+INFO 2025-07-13 19:49:54,556 basehttp 14180 3168 "GET /api/accounts/company/me/ HTTP/1.1" 200 313
+INFO 2025-07-13 19:49:54,559 basehttp 14180 3168 "OPTIONS /api/auth/users/me/ HTTP/1.1" 200 0
+INFO 2025-07-13 19:49:54,573 basehttp 14180 3168 "GET /api/auth/users/me/ HTTP/1.1" 200 206
+INFO 2025-07-13 19:49:54,721 basehttp 14180 13404 "GET /media/company_profiles/IMG_34000_ukSq0zc.JPG HTTP/1.1" 200 158075
+INFO 2025-07-13 19:51:48,339 basehttp 14180 2132 "GET /media/company_profiles/IMG_34000_ukSq0zc.JPG HTTP/1.1" 304 0
+INFO 2025-07-13 19:51:53,990 basehttp 14180 5496 "OPTIONS /api/accounts/site-settings/ HTTP/1.1" 200 0
+INFO 2025-07-13 19:51:54,004 basehttp 14180 2652 "OPTIONS /api/accounts/site-settings/ HTTP/1.1" 200 0
+INFO 2025-07-13 19:51:54,015 basehttp 14180 5496 "GET /api/accounts/site-settings/ HTTP/1.1" 200 108
+INFO 2025-07-13 19:51:54,025 basehttp 14180 5496 "GET /api/accounts/site-settings/ HTTP/1.1" 200 108
+WARNING 2025-07-13 20:00:13,158 log 14180 24460 Unauthorized: /admin/accounts/
+WARNING 2025-07-13 20:00:13,159 basehttp 14180 24460 "GET /admin/accounts/ HTTP/1.1" 401 29
+WARNING 2025-07-13 20:00:16,972 log 14180 24460 Not Found: /favicon.ico
+WARNING 2025-07-13 20:00:16,973 basehttp 14180 24460 "GET /favicon.ico HTTP/1.1" 404 3427
+INFO 2025-07-13 20:23:53,828 autoreload 7816 13252 Watching for file changes with StatReloader
