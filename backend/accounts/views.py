@@ -94,7 +94,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         
         if not username or not password:
             return Response({
-                'detail': 'نام کاربری و رمز عبور الزامی است.',
+                'detail': 'Username and password is required.',
                 'code': 'missing_credentials',
             }, status=status.HTTP_400_BAD_REQUEST)
         
@@ -104,7 +104,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         # Check if user is locked out
         if check_login_attempts(username, ip_address):
             return Response({
-                'detail': 'اکانت شما به دلیل تلاش ناموفق زیاد، به مدت یک ساعت قفل شد. لطفاً بعداً دوباره تلاش کنید.',
+                'detail': 'Your account has been locked for one hour due to too many failed attempts. Please try again later.',
                 'code': 'too_many_attempts',
             }, status=status.HTTP_429_TOO_MANY_REQUESTS)
         
@@ -162,13 +162,13 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             if not user_obj:
                 logger.warning(f"Login attempt with non-existent username: {username}")
                 return Response({
-                    'detail': 'نام کاربری وارد شده وجود ندارد.',
+                    'detail': 'The entered username does not exist.',
                     'code': 'user_not_found',
                 }, status=status.HTTP_401_UNAUTHORIZED)
             else:
                 logger.warning(f"Failed login attempt for user: {username}")
                 return Response({
-                    'detail': 'رمز عبور اشتباه است. لطفاً دوباره تلاش کنید.',
+                    'detail': 'The password is incorrect. Please try again.',
                     'code': 'invalid_password',
                 }, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -253,12 +253,12 @@ class LoginView(APIView):
                 # Improved error message
                 if not user_obj:
                     return Response({
-                        'detail': 'نام کاربری وارد شده وجود ندارد.',
+                        'detail': 'The entered username does not exist.',
                         'code': 'user_not_found',
                     }, status=status.HTTP_401_UNAUTHORIZED)
                 else:
                     return Response({
-                        'detail': 'رمز عبور اشتباه است. لطفاً دوباره تلاش کنید.',
+                        'detail': 'The password is incorrect. Please try again.',
                         'code': 'invalid_password',
                     }, status=status.HTTP_401_UNAUTHORIZED)
         

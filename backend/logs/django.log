@@ -539,3 +539,138 @@ INFO 2025-07-13 21:16:58,311 basehttp 7816 9588 "GET /api/accounts/site-settings
 INFO 2025-07-13 21:16:58,326 basehttp 7816 9588 "GET /api/accounts/site-settings/ HTTP/1.1" 200 108
 INFO 2025-07-13 21:17:40,492 basehttp 7816 2024 "GET /media/company_profiles/IMG_34000_ukSq0zc.JPG HTTP/1.1" 304 0
 INFO 2025-07-13 21:54:58,827 basehttp 7816 19532 "GET /media/company_profiles/IMG_34000_ukSq0zc.JPG HTTP/1.1" 304 0
+INFO 2025-07-14 00:11:30,851 basehttp 7816 7124 "GET /admin/accounts/ HTTP/1.1" 302 0
+INFO 2025-07-14 00:11:31,471 basehttp 7816 7124 "GET /admin/login/?next=/admin/accounts/ HTTP/1.1" 200 4191
+INFO 2025-07-14 00:11:32,302 basehttp 7816 7124 "GET /static/admin/css/login.css HTTP/1.1" 200 951
+INFO 2025-07-14 00:11:43,815 basehttp 7816 26208 "POST /admin/login/?next=/admin/accounts/ HTTP/1.1" 200 4363
+INFO 2025-07-14 00:11:43,849 basehttp 7816 26208 "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2025-07-14 00:11:43,849 basehttp 7816 14472 "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2025-07-14 00:11:43,859 basehttp 7816 26208 "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2025-07-14 00:11:43,871 basehttp 7816 25040 "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2025-07-14 00:11:43,873 basehttp 7816 22268 "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2025-07-14 00:11:43,891 basehttp 7816 22268 "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2025-07-14 00:11:49,905 basehttp 7816 22268 "POST /admin/login/?next=/admin/accounts/ HTTP/1.1" 200 4363
+INFO 2025-07-14 00:12:01,344 basehttp 7816 26056 "POST /admin/login/?next=/admin/accounts/ HTTP/1.1" 200 4363
+INFO 2025-07-14 00:12:07,507 basehttp 7816 26056 "POST /admin/login/?next=/admin/accounts/ HTTP/1.1" 200 4363
+INFO 2025-07-14 00:12:12,527 basehttp 7816 21476 "POST /admin/login/?next=/admin/accounts/ HTTP/1.1" 200 4363
+INFO 2025-07-14 00:12:17,177 basehttp 7816 21476 "POST /admin/login/?next=/admin/accounts/ HTTP/1.1" 200 4363
+INFO 2025-07-14 14:22:11,951 autoreload 4912 12188 Watching for file changes with StatReloader
+INFO 2025-07-14 14:24:35,299 basehttp 4912 7132 "GET /media/company_profiles/IMG_34000_ukSq0zc.JPG HTTP/1.1" 304 0
+INFO 2025-07-14 14:24:38,711 basehttp 4912 7388 "OPTIONS /api/accounts/company/me/ HTTP/1.1" 200 0
+INFO 2025-07-14 14:24:41,590 basehttp 4912 7388 "PATCH /api/accounts/company/me/ HTTP/1.1" 200 329
+INFO 2025-07-14 14:24:41,609 basehttp 4912 7388 "GET /api/accounts/company/me/ HTTP/1.1" 200 329
+INFO 2025-07-14 14:24:41,614 basehttp 4912 7388 "OPTIONS /api/auth/users/me/ HTTP/1.1" 200 0
+INFO 2025-07-14 14:24:41,623 basehttp 4912 7388 "GET /api/auth/users/me/ HTTP/1.1" 200 206
+INFO 2025-07-14 14:24:41,798 basehttp 4912 9856 "GET /media/company_profiles/photo_2025-03-08_08-53-56_kdJEfAL.jpg HTTP/1.1" 200 66739
+INFO 2025-07-14 14:24:54,460 basehttp 4912 4464 "PATCH /api/auth/users/me/ HTTP/1.1" 200 206
+INFO 2025-07-14 14:24:54,964 basehttp 4912 4464 "PATCH /api/auth/users/me/ HTTP/1.1" 200 206
+INFO 2025-07-14 14:24:56,106 basehttp 4912 4464 "PATCH /api/auth/users/me/ HTTP/1.1" 200 206
+INFO 2025-07-14 14:24:56,826 basehttp 4912 25288 "PATCH /api/auth/users/me/ HTTP/1.1" 200 206
+INFO 2025-07-14 14:25:05,031 basehttp 4912 24564 "GET /media/company_profiles/photo_2025-03-08_08-53-56_kdJEfAL.jpg HTTP/1.1" 304 0
+INFO 2025-07-14 14:25:20,070 basehttp 4912 15732 "OPTIONS /api/accounts/drivers/ HTTP/1.1" 200 0
+INFO 2025-07-14 14:25:20,075 basehttp 4912 14792 "OPTIONS /api/accounts/drivers/ HTTP/1.1" 200 0
+INFO 2025-07-14 14:25:20,118 basehttp 4912 15732 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-14 14:25:20,140 basehttp 4912 15732 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-14 14:31:57,861 basehttp 4912 5820 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-14 14:31:57,884 basehttp 4912 5820 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-14 14:32:28,738 basehttp 4912 23536 "OPTIONS /api/auth/token/login/ HTTP/1.1" 200 0
+INFO 2025-07-14 14:32:28,750 views 4912 23536 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386arsalann'}
+WARNING 2025-07-14 14:32:29,593 views 4912 23536 Failed login attempt for user: arsalanpayandeh44@gmail.com
+WARNING 2025-07-14 14:32:29,609 log 4912 23536 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-14 14:32:29,610 basehttp 4912 23536 "POST /api/auth/token/login/ HTTP/1.1" 401 118
+INFO 2025-07-14 14:32:34,781 views 4912 23536 Login attempt with data: {'username': 'arsalanpayande4@gmail.com', 'password': '13861386arsalan'}
+WARNING 2025-07-14 14:32:35,670 views 4912 23536 Login attempt with non-existent username: arsalanpayande4@gmail.com
+WARNING 2025-07-14 14:32:35,670 log 4912 23536 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-14 14:32:35,670 basehttp 4912 23536 "POST /api/auth/token/login/ HTTP/1.1" 401 93
+INFO 2025-07-14 14:32:42,544 views 4912 23536 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386arsalan'}
+INFO 2025-07-14 14:32:43,322 views 4912 23536 Successful login for user: arsalanpayandeh44@gmail.com
+INFO 2025-07-14 14:32:43,325 basehttp 4912 23536 "POST /api/auth/token/login/ HTTP/1.1" 200 618
+INFO 2025-07-14 14:32:43,335 basehttp 4912 23536 "GET /api/auth/users/me/ HTTP/1.1" 200 206
+INFO 2025-07-14 14:33:56,833 autoreload 4912 12188 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-14 14:34:01,948 autoreload 21900 15208 Watching for file changes with StatReloader
+INFO 2025-07-14 14:34:09,838 autoreload 21900 15208 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-14 14:34:10,659 autoreload 2468 13548 Watching for file changes with StatReloader
+INFO 2025-07-14 14:34:19,170 autoreload 2468 13548 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-14 14:34:20,195 autoreload 18764 4712 Watching for file changes with StatReloader
+INFO 2025-07-14 14:34:24,589 autoreload 18764 4712 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-14 14:34:25,548 autoreload 11180 26384 Watching for file changes with StatReloader
+INFO 2025-07-14 14:34:30,592 autoreload 11180 26384 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-14 14:34:31,311 autoreload 9776 21016 Watching for file changes with StatReloader
+INFO 2025-07-14 14:34:39,548 autoreload 9776 21016 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-14 14:34:40,301 autoreload 19816 20956 Watching for file changes with StatReloader
+INFO 2025-07-14 14:34:42,174 autoreload 19816 20956 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-14 14:34:42,895 autoreload 27556 16796 Watching for file changes with StatReloader
+INFO 2025-07-14 14:34:47,962 autoreload 27556 16796 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-14 14:34:48,760 autoreload 2512 14596 Watching for file changes with StatReloader
+INFO 2025-07-14 14:34:57,116 autoreload 2512 14596 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-14 14:34:58,162 autoreload 1616 22304 Watching for file changes with StatReloader
+INFO 2025-07-14 14:35:05,273 autoreload 1616 22304 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-14 14:35:06,208 autoreload 21812 23280 Watching for file changes with StatReloader
+INFO 2025-07-14 14:35:09,545 autoreload 21812 23280 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-14 14:35:11,256 autoreload 6560 20344 Watching for file changes with StatReloader
+INFO 2025-07-14 14:35:26,554 autoreload 6560 20344 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-14 14:35:27,379 autoreload 14024 21024 Watching for file changes with StatReloader
+INFO 2025-07-14 14:35:43,959 autoreload 14024 21024 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-14 14:35:44,787 autoreload 14100 11560 Watching for file changes with StatReloader
+INFO 2025-07-14 14:35:49,111 autoreload 14100 11560 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-14 14:35:49,907 autoreload 23176 24480 Watching for file changes with StatReloader
+INFO 2025-07-14 14:35:57,116 autoreload 23176 24480 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-14 14:35:58,374 autoreload 4288 12884 Watching for file changes with StatReloader
+INFO 2025-07-14 14:36:16,731 autoreload 4288 12884 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-14 14:36:17,633 autoreload 24352 27292 Watching for file changes with StatReloader
+INFO 2025-07-14 14:36:23,755 autoreload 24352 27292 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-14 14:36:24,644 autoreload 7224 24700 Watching for file changes with StatReloader
+INFO 2025-07-14 14:36:27,956 autoreload 7224 24700 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-14 14:36:28,702 autoreload 18380 3456 Watching for file changes with StatReloader
+INFO 2025-07-14 14:36:37,192 autoreload 18380 3456 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-14 14:36:38,328 autoreload 8124 19340 Watching for file changes with StatReloader
+INFO 2025-07-14 14:36:41,222 autoreload 8124 19340 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-14 14:36:42,078 autoreload 2196 27264 Watching for file changes with StatReloader
+INFO 2025-07-14 14:36:50,239 autoreload 2196 27264 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-14 14:36:51,109 autoreload 3204 2236 Watching for file changes with StatReloader
+INFO 2025-07-14 14:36:54,915 autoreload 3204 2236 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-14 14:36:55,631 autoreload 8160 22036 Watching for file changes with StatReloader
+INFO 2025-07-14 14:37:31,613 views 8160 15272 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386arsala'}
+WARNING 2025-07-14 14:37:32,417 views 8160 15272 Failed login attempt for user: arsalanpayandeh44@gmail.com
+WARNING 2025-07-14 14:37:32,420 log 8160 15272 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-14 14:37:32,420 basehttp 8160 15272 "POST /api/auth/token/login/ HTTP/1.1" 401 83
+INFO 2025-07-14 14:37:38,596 views 8160 15160 Login attempt with data: {'username': 'arsalanpayande@gmail.com', 'password': '13861386arsalan'}
+WARNING 2025-07-14 14:37:39,307 views 8160 15160 Login attempt with non-existent username: arsalanpayande@gmail.com
+WARNING 2025-07-14 14:37:39,308 log 8160 15160 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-14 14:37:39,308 basehttp 8160 15160 "POST /api/auth/token/login/ HTTP/1.1" 401 73
+INFO 2025-07-14 14:37:52,133 views 8160 22988 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386arsaklan'}
+WARNING 2025-07-14 14:37:52,900 views 8160 22988 Failed login attempt for user: arsalanpayandeh44@gmail.com
+WARNING 2025-07-14 14:37:52,900 log 8160 22988 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-14 14:37:52,901 basehttp 8160 22988 "POST /api/auth/token/login/ HTTP/1.1" 401 83
+INFO 2025-07-14 14:37:57,900 views 8160 22988 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386arsalan'}
+INFO 2025-07-14 14:37:58,643 views 8160 22988 Successful login for user: arsalanpayandeh44@gmail.com
+INFO 2025-07-14 14:37:59,461 basehttp 8160 22988 "POST /api/auth/token/login/ HTTP/1.1" 200 618
+INFO 2025-07-14 14:37:59,470 basehttp 8160 22988 "GET /api/auth/users/me/ HTTP/1.1" 200 206
+INFO 2025-07-14 14:38:16,116 basehttp 8160 23664 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-14 14:38:16,148 basehttp 8160 23664 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-14 14:39:44,245 basehttp 8160 17236 "OPTIONS /api/accounts/site-settings/ HTTP/1.1" 200 0
+INFO 2025-07-14 14:39:44,258 basehttp 8160 21172 "OPTIONS /api/accounts/site-settings/ HTTP/1.1" 200 0
+INFO 2025-07-14 14:39:44,328 basehttp 8160 17236 "GET /api/accounts/site-settings/ HTTP/1.1" 200 108
+INFO 2025-07-14 14:39:44,340 basehttp 8160 17236 "GET /api/accounts/site-settings/ HTTP/1.1" 200 108
+INFO 2025-07-14 14:39:59,036 basehttp 8160 23100 "OPTIONS /api/accounts/support/tickets/ HTTP/1.1" 200 0
+INFO 2025-07-14 14:39:59,050 basehttp 8160 5744 "OPTIONS /api/accounts/support/tickets/ HTTP/1.1" 200 0
+INFO 2025-07-14 14:39:59,056 basehttp 8160 23100 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 52
+INFO 2025-07-14 14:39:59,070 basehttp 8160 23100 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 52
+INFO 2025-07-14 14:40:23,951 basehttp 8160 2776 "POST /api/accounts/support/tickets/ HTTP/1.1" 201 272
+INFO 2025-07-14 14:40:23,962 basehttp 8160 2776 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 324
+WARNING 2025-07-14 14:41:00,073 log 8160 11968 Not Found: /
+WARNING 2025-07-14 14:41:00,073 basehttp 8160 11968 "GET / HTTP/1.1" 404 3376
+WARNING 2025-07-14 14:41:01,737 log 8160 11968 Not Found: /favicon.ico
+WARNING 2025-07-14 14:41:01,738 basehttp 8160 11968 "GET /favicon.ico HTTP/1.1" 404 3427
+INFO 2025-07-14 14:41:02,740 basehttp 8160 11968 "GET /admin HTTP/1.1" 301 0
+INFO 2025-07-14 14:41:02,787 basehttp 8160 19544 "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-07-14 14:41:03,038 basehttp 8160 19544 "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4173
+INFO 2025-07-14 14:41:03,978 basehttp 8160 19544 "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2025-07-14 14:41:03,978 basehttp 8160 6492 "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2025-07-14 14:41:03,978 basehttp 8160 20900 "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2025-07-14 14:41:03,998 basehttp 8160 20900 "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2025-07-14 14:41:03,999 basehttp 8160 6492 "GET /static/admin/css/login.css HTTP/1.1" 304 0
+INFO 2025-07-14 14:41:04,000 basehttp 8160 19544 "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2025-07-14 14:41:04,015 basehttp 8160 19544 "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2025-07-14 14:41:11,790 basehttp 8160 19544 "POST /admin/login/?next=/admin/ HTTP/1.1" 200 4350
+INFO 2025-07-14 14:41:16,925 basehttp 8160 20876 "POST /admin/login/?next=/admin/ HTTP/1.1" 200 4350

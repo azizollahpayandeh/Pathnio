@@ -35,7 +35,7 @@ export default function ExpensesPage() {
 
   return (
     <div className="h-screen flex flex-col">
-      <div className="bg-white rounded-2xl shadow-2xl p-2 md:p-4 lg:p-6 max-w-[1100px] 2xl:max-w-7xl mx-auto w-full flex-1 flex flex-col overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-2xl p-2 md:p-4 lg:p-6 max-w-[1150px] 2xl:max-w-7xl mx-auto w-full flex-1 flex flex-col overflow-hidden">
         <h1 className="font-extrabold text-xl md:text-2xl lg:text-3xl mb-3 md:mb-4 lg:mb-6 text-blue-700 flex-shrink-0">Expenses Management</h1>
         {loading ? (
           <div className="text-blue-400 animate-pulse text-lg">Loading expenses...</div>
@@ -45,7 +45,7 @@ export default function ExpensesPage() {
           <div className="flex-1 overflow-hidden">
             <div className="h-full overflow-auto 2xl:overflow-x-hidden">
               <div className="min-w-full 2xl:w-full">
-                <table className="w-full bg-white rounded-xl shadow-md text-xs sm:text-sm md:text-base lg:text-base 2xl:text-[20px]">
+                <table className="w-full bg-white rounded-xl shadow-md text-xs sm:text-sm md:text-base lg:text-[18px] 2xl:text-[20px]">
                   <thead className="sticky top-0 z-10">
                     <tr className="bg-gradient-to-r from-blue-50 to-blue-100 text-blue-800">
                       <th className="py-1.5 md:py-2 lg:py-2 px-1.5 md:px-2 lg:px-3 text-left rounded-tl-xl whitespace-nowrap text-xs">
@@ -78,7 +78,7 @@ export default function ExpensesPage() {
                         <td className="py-1.5 md:py-2 lg:py-2 px-1.5 md:px-2 lg:px-3 whitespace-nowrap">
                           <button 
                             onClick={() => handleViewExpense(e.id)}
-                            className="bg-blue-100 text-blue-700 px-1 md:px-1.5 lg:px-2 py-0.5 md:py-1 rounded-lg shadow hover:bg-blue-200 transition text-xs 2xl:text-[17px] font-semibold cursor-pointer"
+                            className="bg-blue-100 text-blue-700 px-1 md:px-1.5 lg:px-[19px] lg:py-[9px] py-0.5 md:py-1 rounded-lg shadow hover:bg-blue-200 transition text-xs 2xl:text-[17px] font-semibold cursor-pointer"
                           >
                             View
                           </button>
