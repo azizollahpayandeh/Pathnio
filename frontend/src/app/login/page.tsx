@@ -29,22 +29,26 @@ export default function LoginPage() {
     setRegisterMessage("");
     const form = e.currentTarget;
     const formData = new FormData(form);
-    formData.forEach((value, key) => {
-      data[key as keyof CompanyData] = value;
-    });
-    const payload = {
-      user: {
-        username: data.email,
-        email: data.email,
-        password: data.password,
-      },
-      company_name: data.companyName,
-      manager_full_name: data.fullName,
-      phone: data.phone,
-      address: data.address,
+    const data: CompanyData = {
+      companyName: formData.get("companyName") as string,
+      fullName: formData.get("fullName") as string,
+      phone: formData.get("phone") as string,
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
+      address: formData.get("address") as string,
     };
     try {
-      const res = await api.post("accounts/register/company/", payload);
+      const res = await api.post("accounts/register/company/", {
+        user: {
+          username: data.email,
+          email: data.email,
+          password: data.password,
+        },
+        company_name: data.companyName,
+        manager_full_name: data.fullName,
+        phone: data.phone,
+        address: data.address,
+      });
       if (res.status === 201 || res.status === 200) {
         setAlert({ type: "success", msg: "Registration successful! You can now log in." });
         setTab("login");
@@ -52,10 +56,10 @@ export default function LoginPage() {
         let errorMsg = res.data?.detail || "Registration failed. Please check your information.";
         setAlert({ type: "error", msg: errorMsg });
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       let errorMsg = "Registration failed. Please try again.";
-      if (err.response && err.response.data) {
-        errorMsg = JSON.stringify(err.response.data);
+      if (err && typeof err === "object" && "response" in err && (err as any).response?.data?.detail) {
+        errorMsg = (err as any).response.data.detail;
       }
       setAlert({ type: "error", msg: errorMsg });
     } finally {
@@ -94,10 +98,10 @@ export default function LoginPage() {
       } else {
         setAlert({ type: "error", msg: res.data?.detail || "Check your credentials." });
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       let errorMsg = "Login failed. Please try again.";
-      if (err.response && err.response.data) {
-        errorMsg = err.response.data?.detail || JSON.stringify(err.response.data);
+      if (err && typeof err === "object" && "response" in err && (err as any).response?.data?.detail) {
+        errorMsg = (err as any).response.data.detail;
       }
       setAlert({ type: "error", msg: errorMsg });
     } finally {

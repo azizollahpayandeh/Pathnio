@@ -29,6 +29,14 @@ const FAKE_TRIPS = [
   { id: 10, driver: "Alireza", vehicle: "10J234-IR", origin: "Tehran", destination: "Shiraz", start: "2024-07-10 07:00", end: "2024-07-10 13:00", status: "Completed" },
 ];
 
+// تعریف type مناسب برای Fullscreen API
+interface DocumentWithFullscreen extends Document {
+  webkitRequestFullscreen?: () => Promise<void>;
+  msRequestFullscreen?: () => Promise<void>;
+  webkitExitFullscreen?: () => Promise<void>;
+  msExitFullscreen?: () => Promise<void>;
+}
+
 export default function Dashboard() {
   const [fullscreen, setFullscreen] = useState(false);
   const [trips, setTrips] = useState<Trip[]>([]);
@@ -54,19 +62,19 @@ export default function Dashboard() {
     if (!fullscreen) {
       if (document.documentElement.requestFullscreen) {
         document.documentElement.requestFullscreen();
-      } else if ((document.documentElement as any).webkitRequestFullscreen) {
-        (document.documentElement as any).webkitRequestFullscreen();
-      } else if ((document.documentElement as any).msRequestFullscreen) {
-        (document.documentElement as any).msRequestFullscreen();
+      } else if ((document.documentElement as DocumentWithFullscreen).webkitRequestFullscreen) {
+        (document.documentElement as DocumentWithFullscreen).webkitRequestFullscreen!();
+      } else if ((document.documentElement as DocumentWithFullscreen).msRequestFullscreen) {
+        (document.documentElement as DocumentWithFullscreen).msRequestFullscreen!();
       }
       setFullscreen(true);
     } else {
       if (document.exitFullscreen) {
         document.exitFullscreen();
-      } else if ((document as any).webkitExitFullscreen) {
-        (document as any).webkitExitFullscreen();
-      } else if ((document as any).msExitFullscreen) {
-        (document as any).msExitFullscreen();
+      } else if ((document as DocumentWithFullscreen).webkitExitFullscreen) {
+        (document as DocumentWithFullscreen).webkitExitFullscreen!();
+      } else if ((document as DocumentWithFullscreen).msExitFullscreen) {
+        (document as DocumentWithFullscreen).msExitFullscreen!();
       }
       setFullscreen(false);
     }

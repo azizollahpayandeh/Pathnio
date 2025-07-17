@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 import api from "../../api";
 import { FaPaperPlane, FaReply, FaCheckCircle, FaTimesCircle, FaRegClock } from "react-icons/fa";
 
-// Replace 'any' with a specific Ticket type
+// تعریف type مناسب برای Ticket
 interface Ticket {
-  id: string;
+  id: number;
   subject: string;
   status: string;
-  // Add more fields as needed
+  // سایر فیلدها در صورت نیاز
 }
 
 const statusMap = {
@@ -34,7 +34,6 @@ export default function SupportPage() {
       // Check if res.data is an array, if not, try to find the results
       const ticketsData = Array.isArray(res.data) ? res.data : (res.data.results || res.data.tickets || []);
       setTickets(ticketsData);
-      setError("");
     } catch (err) {
       console.error("Tickets API error:", err);
       setError("Failed to load tickets.");

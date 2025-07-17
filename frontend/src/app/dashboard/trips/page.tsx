@@ -2,13 +2,16 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-// Replace 'any' with a specific Trip type
+// تعریف type مناسب برای Trip
 interface Trip {
-  id: string;
+  id: number;
+  driver: string;
+  vehicle: string;
   origin: string;
   destination: string;
-  date: string;
-  // Add more fields as needed
+  start: string;
+  end: string;
+  status: string;
 }
 
 const FAKE_TRIPS = [
@@ -27,7 +30,6 @@ const FAKE_TRIPS = [
 export default function TripsPage() {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   // در آینده: دریافت داده واقعی از API
@@ -48,8 +50,6 @@ export default function TripsPage() {
         <h1 className="font-extrabold text-xl md:text-2xl lg:text-3xl mb-3 md:mb-4 lg:mb-6 text-blue-700 flex-shrink-0">Trips History</h1>
         {loading ? (
           <div className="text-blue-400 animate-pulse text-lg">Loading trips...</div>
-        ) : error ? (
-          <div className="text-red-500">{error}</div>
         ) : (
           <div className="flex-1 overflow-hidden">
             <div className="h-full overflow-auto lg:overflow-visible">

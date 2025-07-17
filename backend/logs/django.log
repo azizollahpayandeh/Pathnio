@@ -811,3 +811,9 @@ INFO 2025-07-17 13:06:11,908 basehttp 4212 5428 "GET /media/company_profiles/pho
 INFO 2025-07-17 13:14:00,827 basehttp 4212 7072 "GET /media/company_profiles/photo_2024-12-25_23-39-37_re89SFH.jpg HTTP/1.1" 200 72819
 INFO 2025-07-17 13:17:43,497 basehttp 4212 13108 "GET /media/company_profiles/photo_2024-12-25_23-39-37_re89SFH.jpg HTTP/1.1" 200 72819
 INFO 2025-07-17 13:18:44,692 basehttp 4212 15232 "GET /media/company_profiles/photo_2024-12-25_23-39-37_re89SFH.jpg HTTP/1.1" 200 72819
+INFO 2025-07-17 13:23:43,506 basehttp 4212 13536 "GET /media/company_profiles/photo_2024-12-25_23-39-37_re89SFH.jpg HTTP/1.1" 304 0
+INFO 2025-07-17 13:25:19,100 basehttp 4212 14836 "GET /media/company_profiles/photo_2024-12-25_23-39-37_re89SFH.jpg HTTP/1.1" 200 72819
+INFO 2025-07-17 13:27:06,318 basehttp 4212 11156 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 585
+INFO 2025-07-17 13:27:06,354 basehttp 4212 11156 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 585
+INFO 2025-07-17 13:27:11,352 basehttp 4212 11156 "GET /api/accounts/site-settings/ HTTP/1.1" 200 108
+INFO 2025-07-17 13:27:11,377 basehttp 4212 11156 "GET /api/accounts/site-settings/ HTTP/1.1" 200 108

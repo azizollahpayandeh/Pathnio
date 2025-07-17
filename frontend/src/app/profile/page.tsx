@@ -5,6 +5,7 @@ import { User, Lock, Bell, LogOut, ArrowLeft } from "lucide-react";
 import FloatingAlert from "@/components/FloatingAlert";
 import { useRouter } from "next/navigation";
 import Swal from 'sweetalert2';
+import Image from 'next/image';
 
 // Replace 'any' with a specific User type
 interface User {
@@ -29,6 +30,13 @@ const TABS = [
   { key: "security", label: "Security", icon: <Lock className="w-5 h-5" /> },
   { key: "notifications", label: "Notifications", icon: <Bell className="w-5 h-5" /> },
 ];
+
+// تعریف type مناسب برای خطاها و داده‌ها
+interface ApiError {
+  response?: {
+    data?: { detail?: string } | string;
+  };
+}
 
 export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(null);
@@ -88,8 +96,13 @@ export default function ProfilePage() {
       if (user?.email !== editData.email && editData.email) {
         await api.patch("auth/users/me/", { email: editData.email });
       }
-    } catch (err: any) {
-      userError = err.response?.data?.email?.[0] || "User update failed.";
+    } catch (err: unknown) {
+      let msg = "User update failed.";
+      if (typeof err === "object" && err && "response" in err && (err as ApiError).response?.data) {
+        if (typeof (err as ApiError).response?.data === "string") msg = (err as ApiError).response?.data as string;
+        else if (typeof (err as ApiError).response?.data === "object" && (err as ApiError).response?.data?.detail) msg = (err as ApiError).response?.data.detail!;
+      }
+      userError = msg;
     }
     try {
       // Update company profile
@@ -99,8 +112,13 @@ export default function ProfilePage() {
         phone: editData.phone,
         address: editData.address,
       });
-    } catch (err: any) {
-      companyError = err.response?.data?.detail || "Company update failed.";
+    } catch (err: unknown) {
+      let msg = "Company update failed.";
+      if (typeof err === "object" && err && "response" in err && (err as ApiError).response?.data) {
+        if (typeof (err as ApiError).response?.data === "string") msg = (err as ApiError).response?.data as string;
+        else if (typeof (err as ApiError).response?.data === "object" && (err as ApiError).response?.data?.detail) msg = (err as ApiError).response?.data.detail!;
+      }
+      companyError = msg;
     }
     if (!userError && !companyError) {
       setAlert({ type: "success", msg: "Profile updated successfully!" });
@@ -169,14 +187,11 @@ export default function ProfilePage() {
       await api.post("auth/users/set_password/", { current_password: current, new_password: newpw });
       setPwAlert({ type: "success", msg: "Password changed successfully!" });
       form.reset();
-    } catch (err: any) {
+    } catch (err: unknown) {
       let msg = "Password change failed.";
-      if (err.response?.data) {
-        if (typeof err.response.data === 'string') msg = err.response.data;
-        else if (err.response.data.current_password) msg = err.response.data.current_password[0];
-        else if (err.response.data.new_password) msg = err.response.data.new_password[0];
-        else if (err.response.data.non_field_errors) msg = err.response.data.non_field_errors[0];
-        else msg = JSON.stringify(err.response.data);
+      if (typeof err === "object" && err && "response" in err && (err as ApiError).response?.data) {
+        if (typeof (err as ApiError).response?.data === "string") msg = (err as ApiError).response?.data as string;
+        else if (typeof (err as ApiError).response?.data === "object" && (err as ApiError).response?.data?.detail) msg = (err as ApiError).response?.data.detail!;
       }
       setPwAlert({ type: "error", msg });
     } finally {
@@ -323,9 +338,11 @@ export default function ProfilePage() {
                 {/* Enhanced Profile Photo Section */}
                 <div className="flex flex-col items-center bg-gradient-to-br from-blue-50 to-indigo-50 rounded-3xl p-6 md:p-8 shadow-xl border border-blue-100 w-full lg:min-w-[300px] lg:w-auto">
                   <div className="relative w-32 h-32 md:w-40 md:h-40 mb-4 md:mb-6">
-                    <img
+                    <Image
                       src={getProfilePhotoUrl(user?.profile_photo)}
                       alt="Profile"
+                      width={128}
+                      height={128}
                       className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white shadow-2xl object-cover hover:scale-105 transition-transform duration-300"
                     />
                     <button

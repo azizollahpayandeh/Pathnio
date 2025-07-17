@@ -75,7 +75,6 @@ interface LiveMapWidgetProps {
 
 export default function LiveMapWidget({ fullscreen = false }: LiveMapWidgetProps) {
   const mapHeight = fullscreen ? '100vh' : '480px';
-  const containerHeight = fullscreen ? '100vh' : '480px';
 
   useEffect(() => {
     const mapContainers = document.getElementsByClassName('leaflet-container');

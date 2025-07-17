@@ -2,14 +2,12 @@
 import { useEffect, useState } from "react";
 import api from "../../api";
 
-// Replace 'any' with a specific Driver type
+// تعریف type مناسب برای Driver
 interface Driver {
-  id: string;
+  id: number;
   name: string;
   company: { company_name: string };
-  origin?: string;
-  destination?: string;
-  // Add more fields as needed
+  // سایر فیلدها در صورت نیاز
 }
 
 const FAKE_DRIVERS = Array.from({ length: 10 }).map((_, i) => ({

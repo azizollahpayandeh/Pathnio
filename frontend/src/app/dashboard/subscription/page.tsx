@@ -14,31 +14,31 @@ const fakeSubscriptions = [
   // },
 ];
 
-// Replace 'any' with a specific Plan type
+// تعریف type مناسب برای Plan
 interface Plan {
-  id: string;
+  id: number;
   name: string;
   price: number;
-  // Add more fields as needed
+  // سایر فیلدها در صورت نیاز
 }
 
 const plans: Plan[] = [
   {
-    id: "1",
+    id: 1,
     name: "Basic",
     price: 4900000,
     desc: "For small teams and startups. 1 vehicle, 5 drivers.",
     features: ["1 Vehicle", "5 Drivers", "Basic Reports"],
   },
   {
-    id: "2",
+    id: 2,
     name: "Pro",
     price: 9900000,
     desc: "For growing businesses. 5 vehicles, 20 drivers.",
     features: ["5 Vehicles", "20 Drivers", "Advanced Reports", "Priority Support"],
   },
   {
-    id: "3",
+    id: 3,
     name: "Enterprise",
     price: 19900000,
     desc: "For large fleets. Unlimited vehicles and drivers.",

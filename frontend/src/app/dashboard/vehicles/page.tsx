@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from 'next/link';
 
-// Replace 'any' with a specific Vehicle type
+// تعریف type مناسب برای Vehicle
 interface Vehicle {
   plate_number: string;
   vehicle_type: string;
@@ -11,7 +11,6 @@ interface Vehicle {
   status: string;
   capacity: string;
   color: string;
-  // Add more fields as needed
 }
 
 const FAKE_VEHICLES = [
@@ -30,7 +29,7 @@ const FAKE_VEHICLES = [
 export default function VehiclesPage() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // حذف setError اگر استفاده نشده
 
   // در آینده: دریافت داده واقعی از API
   useEffect(() => {
@@ -46,8 +45,6 @@ export default function VehiclesPage() {
         <h1 className="font-extrabold text-2xl md:text-3xl mb-4 md:mb-6 lg:mb-8 text-blue-700 flex-shrink-0">Vehicles Management</h1>
         {loading ? (
           <div className="text-blue-400 animate-pulse text-lg">Loading vehicles...</div>
-        ) : error ? (
-          <div className="text-red-500">{error}</div>
         ) : (
           <div className="flex-1 overflow-hidden">
             <div className="h-full overflow-auto lg:overflow-visible">

@@ -1,13 +1,16 @@
 "use client";
 import Link from 'next/link';
 
-// Replace 'any' with a specific Trip type
+// تعریف type مناسب برای Trip
 interface Trip {
-  id: string;
+  id: number;
+  driver: string;
+  vehicle: string;
   origin: string;
   destination: string;
-  date: string;
-  // Add more fields as needed
+  start: string;
+  end: string;
+  status: string;
 }
 
 export default function TripsThisWeekWidget({ trips }: { trips: Trip[] }) {

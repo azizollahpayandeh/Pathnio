@@ -3,11 +3,9 @@ import { useEffect, useState } from "react";
 import api from "../../api";
 import FloatingAlert from "@/components/FloatingAlert";
 
-// Replace 'any' with a specific Settings type
+// تعریف type مناسب برای Settings
 interface Settings {
-  theme: string;
-  language: string;
-  // Add more fields as needed
+  // فیلدهای مورد نیاز را اضافه کنید
 }
 
 const THEMES = [
