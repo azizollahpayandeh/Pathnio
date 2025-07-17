@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from 'next/link';
 
 // Replace 'any' with a specific Vehicle type
 interface Vehicle {
@@ -75,7 +76,9 @@ export default function VehiclesPage() {
                         <td className="py-3 md:py-4 px-3 md:px-6 whitespace-nowrap">{v.capacity}</td>
                         <td className="py-3 md:py-4 px-3 md:px-6 whitespace-nowrap">{v.color}</td>
                         <td className="py-3 md:py-4 px-3 md:px-6 whitespace-nowrap">
-                          <button className="bg-blue-100 text-blue-700 px-2 md:px-4 py-1 md:py-2 rounded-lg shadow hover:bg-blue-200 transition text-xs md:text-sm lg:text-base font-semibold cursor-pointer">View</button>
+                          <Link href={`/dashboard/vehicles/${encodeURIComponent(v.plate_number)}`} className="bg-blue-100 text-blue-700 px-2 md:px-4 py-1 md:py-2 rounded-lg shadow hover:bg-blue-200 transition text-xs md:text-sm lg:text-base font-semibold cursor-pointer">
+                            View
+                          </Link>
                         </td>
                       </tr>
                     ))}
