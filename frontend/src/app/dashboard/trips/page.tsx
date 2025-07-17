@@ -2,6 +2,15 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+// Replace 'any' with a specific Trip type
+interface Trip {
+  id: string;
+  origin: string;
+  destination: string;
+  date: string;
+  // Add more fields as needed
+}
+
 const FAKE_TRIPS = [
   { id: 1, driver: "Amir", vehicle: "12A345-IR", origin: "Tehran", destination: "Isfahan", start: "2024-07-01 08:00", end: "2024-07-01 12:00", status: "Completed" },
   { id: 2, driver: "Sara", vehicle: "22B456-IR", origin: "Shiraz", destination: "Tabriz", start: "2024-07-02 09:00", end: "2024-07-02 15:00", status: "Completed" },
@@ -16,7 +25,7 @@ const FAKE_TRIPS = [
 ];
 
 export default function TripsPage() {
-  const [trips, setTrips] = useState<any[]>([]);
+  const [trips, setTrips] = useState<Trip[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -72,7 +81,7 @@ export default function TripsPage() {
                         <td className={`py-1.5 md:py-2 lg:py-2 px-1.5 md:px-2 lg:px-3 font-semibold whitespace-nowrap ${t.status === 'Completed' ? 'text-green-600' : t.status === 'In Progress' ? 'text-yellow-500' : 'text-red-500'}`}>{t.status}</td>
                         <td className="py-1.5 md:py-2 lg:py-2 px-1.5 md:px-2 lg:px-3 whitespace-nowrap">
                           <button 
-                            onClick={() => handleViewTrip(t.id)}
+                            onClick={() => handleViewTrip(Number(t.id))}
                             className="bg-blue-100 text-blue-700 px-1 md:px-1.5 lg:px-2 py-0.5 md:py-1 rounded-lg shadow hover:bg-blue-200 transition 2xl:text-[17px] font-semibold cursor-pointer"
                           >
                             View

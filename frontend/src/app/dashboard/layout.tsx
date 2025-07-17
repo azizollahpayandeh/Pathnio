@@ -6,6 +6,7 @@ import "../../app/globals.css";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
+import Image from 'next/image';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,12 +18,24 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Replace 'any' with a specific User type
+interface User {
+  id: string;
+  username: string;
+  email: string;
+  company_name?: string;
+  company?: { company_name?: string; name?: string };
+  companyName?: string;
+  profile_photo?: string;
+  // Add more fields as needed
+}
+
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -169,7 +182,7 @@ export default function DashboardLayout({
               className="flex items-center gap-2 cursor-pointer bg-gradient-to-br from-blue-50 to-blue-100 px-3 py-1.5 rounded-xl shadow-md border border-blue-200 hover:scale-105 hover:shadow-xl transition-all duration-200 group"
               onClick={handleProfileClick}
             >
-              <img src={avatar} alt="User" className="w-8 h-8 rounded-full border-2 border-blue-300 object-cover shadow-lg group-hover:ring-2 group-hover:ring-blue-400 transition" />
+              <Image src={avatar} alt="User" width={32} height={32} className="w-8 h-8 rounded-full border-2 border-blue-300 object-cover shadow-lg group-hover:ring-2 group-hover:ring-blue-400 transition" />
               <span className="font-bold text-blue-800 text-base group-hover:text-blue-900 transition drop-shadow">{displayName}</span>
             </div>
           </div>

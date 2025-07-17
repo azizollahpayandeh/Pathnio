@@ -3,8 +3,10 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { useEffect } from 'react';
 import { FaCarSide, FaCheckCircle, FaRegClock, FaTimesCircle } from 'react-icons/fa';
+import Image from 'next/image';
 
-const vehicleIcons: any = {
+// Remove vehicleIcons as a string map, and use L.icon for each status
+const statusIcons: Record<string, L.Icon> = {
   moving: L.icon({
     iconUrl: 'https://cdn-icons-png.flaticon.com/512/854/854894.png',
     iconSize: [32, 32],
@@ -25,10 +27,10 @@ const vehicleIcons: any = {
   }),
 };
 
-const statusMap: any = {
-  moving: { label: 'Moving', color: 'text-green-600', icon: <FaCheckCircle className="inline mr-1 text-green-500" /> },
-  stopped: { label: 'Stopped', color: 'text-yellow-700', icon: <FaRegClock className="inline mr-1 text-yellow-500" /> },
-  offline: { label: 'Offline', color: 'text-red-600', icon: <FaTimesCircle className="inline mr-1 text-red-500" /> },
+const statusMap: Record<string, string> = {
+  moving: 'Moving',
+  stopped: 'Stopped',
+  offline: 'Offline',
 };
 
 const fakeVehicles = [
@@ -97,9 +99,9 @@ export default function LiveMapWidget({ fullscreen = false }: LiveMapWidgetProps
       </div>
       {/* Legend */}
       <div className="absolute bottom-4 left-4 z-[1000] bg-white/90 rounded-xl shadow px-4 py-2 flex gap-4 items-center border border-blue-100 text-sm">
-        <span className="flex items-center gap-1"><img src="https://cdn-icons-png.flaticon.com/512/854/854894.png" className="w-5 h-5" /> Moving</span>
-        <span className="flex items-center gap-1"><img src="https://cdn-icons-png.flaticon.com/512/854/854866.png" className="w-5 h-5" /> Stopped</span>
-        <span className="flex items-center gap-1"><img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" className="w-5 h-5" /> Offline</span>
+        <span className="flex items-center gap-1"><Image src="https://cdn-icons-png.flaticon.com/512/854/854894.png" width={20} height={20} alt="Moving" className="w-5 h-5" /> Moving</span>
+        <span className="flex items-center gap-1"><Image src="https://cdn-icons-png.flaticon.com/512/854/854866.png" width={20} height={20} alt="Stopped" className="w-5 h-5" /> Stopped</span>
+        <span className="flex items-center gap-1"><Image src="https://cdn-icons-png.flaticon.com/512/854/854878.png" width={20} height={20} alt="Offline" className="w-5 h-5" /> Offline</span>
       </div>
       <MapContainer center={[35.6892, 51.3890]} zoom={12} scrollWheelZoom={true} style={{ height: mapHeight, width: '100%' }}>
         <TileLayer
@@ -107,7 +109,7 @@ export default function LiveMapWidget({ fullscreen = false }: LiveMapWidgetProps
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {fakeVehicles.map((v) => (
-          <Marker key={v.id} position={[v.lat, v.lng]} icon={vehicleIcons[v.status]}>
+          <Marker key={v.id} position={[v.lat, v.lng]} icon={statusIcons[v.status]}>
             <Popup>
               <div className="font-bold text-blue-800 text-lg mb-1">{v.name}</div>
               <div className="text-blue-700 mb-1">Driver: <span className="font-semibold">{v.driver}</span></div>

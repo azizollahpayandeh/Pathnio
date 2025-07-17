@@ -6,6 +6,20 @@ import FloatingAlert from "@/components/FloatingAlert";
 import { useRouter } from "next/navigation";
 import Swal from 'sweetalert2';
 
+// Replace 'any' with a specific User type
+interface User {
+  id: string;
+  username: string;
+  email: string;
+  full_name?: string;
+  manager_full_name?: string;
+  phone?: string;
+  mobile?: string;
+  profile_photo?: string;
+  date_joined?: string;
+  // Add more fields as needed
+}
+
 const LANGUAGES = [
   { value: "en", label: "English" },
   { value: "fa", label: "فارسی" },
@@ -17,8 +31,8 @@ const TABS = [
 ];
 
 export default function ProfilePage() {
-  const [user, setUser] = useState<any>(null);
-  const [editData, setEditData] = useState<any>({ full_name: "", phone: "", address: "", language: "en" });
+  const [user, setUser] = useState<User | null>(null);
+  const [editData, setEditData] = useState<Partial<User>>({ full_name: "", phone: "", address: "", language: "en" });
   const [activeTab, setActiveTab] = useState("profile");
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState<{ type: "success" | "error"; msg: string } | null>(null);

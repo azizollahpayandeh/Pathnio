@@ -3,6 +3,14 @@ import { useEffect, useState } from "react";
 import api from "../../api";
 import { FaPaperPlane, FaReply, FaCheckCircle, FaTimesCircle, FaRegClock } from "react-icons/fa";
 
+// Replace 'any' with a specific Ticket type
+interface Ticket {
+  id: string;
+  subject: string;
+  status: string;
+  // Add more fields as needed
+}
+
 const statusMap = {
   open: { label: "Open", color: "text-yellow-700 bg-yellow-50 border-yellow-200", icon: <FaRegClock className="text-yellow-500 mr-1" /> },
   answered: { label: "Answered", color: "text-green-600 bg-green-50 border-green-200", icon: <FaCheckCircle className="text-green-500 mr-1" /> },
@@ -10,7 +18,7 @@ const statusMap = {
 };
 
 export default function SupportPage() {
-  const [tickets, setTickets] = useState<any[]>([]);
+  const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [subject, setSubject] = useState("");
@@ -40,7 +48,7 @@ export default function SupportPage() {
     fetchTickets();
   }, []);
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSending(true);
     setError("");

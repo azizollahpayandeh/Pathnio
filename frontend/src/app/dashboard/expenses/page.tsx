@@ -2,6 +2,15 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+// Replace 'any' with a specific Expense type
+interface Expense {
+  id: string;
+  amount: number;
+  description: string;
+  date: string;
+  // Add more fields as needed
+}
+
 const FAKE_EXPENSES = [
   { id: 1, date: "2024-07-01", category: "Fuel", amount: 1200000, description: "Fuel for trip", driver: "Amir", vehicle: "12A345-IR", status: "Approved" },
   { id: 2, date: "2024-07-02", category: "Maintenance", amount: 800000, description: "Oil change", driver: "Sara", vehicle: "22B456-IR", status: "Pending" },
@@ -16,7 +25,7 @@ const FAKE_EXPENSES = [
 ];
 
 export default function ExpensesPage() {
-  const [expenses, setExpenses] = useState<any[]>([]);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();

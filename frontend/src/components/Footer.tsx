@@ -1,6 +1,7 @@
 // components/Footer.tsx
 
 import React from 'react';
+import Link from 'next/link';
 
 export default function Footer() {
   return (
@@ -17,24 +18,24 @@ export default function Footer() {
           <h6 className="text-lg font-semibold mb-3">Quick Links</h6>
           <ul className="space-y-2 text-sm">
             <li>
-              <a href="/" className="hover:underline">
+              <Link href="/" className="hover:underline">
                 Home
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/features" className="hover:underline">
+              <Link href="/features" className="hover:underline">
                 Features
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/about" className="hover:underline">
+              <Link href="/about" className="hover:underline">
                 About Us
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/contact" className="hover:underline">
+              <Link href="/contact" className="hover:underline">
                 Contact Us
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

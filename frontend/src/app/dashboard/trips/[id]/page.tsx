@@ -100,10 +100,19 @@ const TRIP_DETAILS = {
   }
 };
 
+// Replace 'any' with a specific Trip type
+interface Trip {
+  id: string;
+  origin: string;
+  destination: string;
+  date: string;
+  // Add more fields as needed
+}
+
 export default function TripDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const [trip, setTrip] = useState<any>(null);
+  const [trip, setTrip] = useState<Trip | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

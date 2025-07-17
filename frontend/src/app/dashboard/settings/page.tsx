@@ -3,6 +3,13 @@ import { useEffect, useState } from "react";
 import api from "../../api";
 import FloatingAlert from "@/components/FloatingAlert";
 
+// Replace 'any' with a specific Settings type
+interface Settings {
+  theme: string;
+  language: string;
+  // Add more fields as needed
+}
+
 const THEMES = [
   { value: "light", label: "Light" },
   { value: "dark", label: "Dark" },
@@ -13,7 +20,7 @@ const LANGUAGES = [
 ];
 
 export default function SettingsPage() {
-  const [settings, setSettings] = useState<any>({ theme: "light", language: "en" });
+  const [settings, setSettings] = useState<Settings>({ theme: "light", language: "en" });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [alert, setAlert] = useState<{ type: "success" | "error"; msg: string } | null>(null);
@@ -25,11 +32,11 @@ export default function SettingsPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setSettings({ ...settings, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSaving(true);
     setAlert(null);

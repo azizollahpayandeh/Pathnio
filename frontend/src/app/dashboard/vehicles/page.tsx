@@ -1,6 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
 
+// Replace 'any' with a specific Vehicle type
+interface Vehicle {
+  plate_number: string;
+  vehicle_type: string;
+  driver: string;
+  company: string;
+  status: string;
+  capacity: string;
+  color: string;
+  // Add more fields as needed
+}
+
 const FAKE_VEHICLES = [
   { plate_number: "12A345-IR", vehicle_type: "Truck", driver: "Amir", company: "Demo Co.", status: "Active", capacity: "10t", color: "White" },
   { plate_number: "22B456-IR", vehicle_type: "Van", driver: "Sara", company: "Demo Co.", status: "Inactive", capacity: "2t", color: "Blue" },
@@ -15,7 +27,7 @@ const FAKE_VEHICLES = [
 ];
 
 export default function VehiclesPage() {
-  const [vehicles, setVehicles] = useState<any[]>([]);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

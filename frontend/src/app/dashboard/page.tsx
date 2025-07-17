@@ -3,10 +3,18 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Loading from "../loading";
+import Link from 'next/link';
 
 const LiveMap = dynamic(() => import("../../components/LiveMapWidget"), { ssr: false });
-const Chart = dynamic(() => import("../../components/ChartWidget"), { ssr: false });
-const TripsThisWeekWidget = dynamic(() => import("../../components/TripsThisWeekWidget"), { ssr: false });
+
+// Replace 'any' with a specific Trip type
+interface Trip {
+  id: string;
+  origin: string;
+  destination: string;
+  date: string;
+  // Add more fields as needed
+}
 
 const FAKE_TRIPS = [
   { id: 1, driver: "Amir", vehicle: "12A345-IR", origin: "Tehran", destination: "Isfahan", start: "2024-07-01 08:00", end: "2024-07-01 12:00", status: "Completed" },
@@ -23,7 +31,7 @@ const FAKE_TRIPS = [
 
 export default function Dashboard() {
   const [fullscreen, setFullscreen] = useState(false);
-  const [trips, setTrips] = useState<any[]>([]);
+  const [trips, setTrips] = useState<Trip[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   
@@ -196,7 +204,7 @@ export default function Dashboard() {
                   </table>
                 </div>
                 <div className="text-right mt-4">
-                  <a href="/dashboard/trips" className="text-blue-700 font-bold hover:underline">View All Trips &rarr;</a>
+                  <Link href="/dashboard/trips" className="text-blue-700 font-bold hover:underline">View All Trips &rarr;</Link>
                 </div>
               </div>
               <div className="bg-gradient-to-br from-blue-50 via-blue-100 to-purple-100 rounded-2xl shadow-xl p-8 border border-blue-100 flex flex-col gap-4">

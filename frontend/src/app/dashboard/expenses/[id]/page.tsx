@@ -167,10 +167,19 @@ const EXPENSE_DETAILS = {
   }
 };
 
+// Replace 'any' with a specific Expense type
+interface Expense {
+  id: string;
+  amount: number;
+  description: string;
+  date: string;
+  // Add more fields as needed
+}
+
 export default function ExpenseDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const [expense, setExpense] = useState<any>(null);
+  const [expense, setExpense] = useState<Expense | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

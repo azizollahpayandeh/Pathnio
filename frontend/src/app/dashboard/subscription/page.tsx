@@ -14,23 +14,31 @@ const fakeSubscriptions = [
   // },
 ];
 
-const plans = [
+// Replace 'any' with a specific Plan type
+interface Plan {
+  id: string;
+  name: string;
+  price: number;
+  // Add more fields as needed
+}
+
+const plans: Plan[] = [
   {
-    id: 1,
+    id: "1",
     name: "Basic",
     price: 4900000,
     desc: "For small teams and startups. 1 vehicle, 5 drivers.",
     features: ["1 Vehicle", "5 Drivers", "Basic Reports"],
   },
   {
-    id: 2,
+    id: "2",
     name: "Pro",
     price: 9900000,
     desc: "For growing businesses. 5 vehicles, 20 drivers.",
     features: ["5 Vehicles", "20 Drivers", "Advanced Reports", "Priority Support"],
   },
   {
-    id: 3,
+    id: "3",
     name: "Enterprise",
     price: 19900000,
     desc: "For large fleets. Unlimited vehicles and drivers.",
@@ -60,7 +68,7 @@ export default function SubscriptionPage() {
   const [subs, setSubs] = useState(fakeSubscriptions);
   const [action, setAction] = useState<{type: string, id?: number} | null>(null);
   const [showPlans, setShowPlans] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState<any>(null);
+  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
   const [checkout, setCheckout] = useState(false);
   const [payment, setPayment] = useState(false);
 
@@ -81,7 +89,7 @@ export default function SubscriptionPage() {
   const handleBuy = () => {
     setShowPlans(true);
   };
-  const handleSelectPlan = (plan: any) => {
+  const handleSelectPlan = (plan: Plan) => {
     setSelectedPlan(plan);
     setTimeout(() => setCheckout(true), 400);
   };
@@ -92,11 +100,11 @@ export default function SubscriptionPage() {
       setSubs([
         {
           id: 1,
-          plan: selectedPlan.name,
+          plan: selectedPlan?.name || "",
           status: "active",
           start: "2024-01-01",
           end: "2025-01-01",
-          price: selectedPlan.price,
+          price: selectedPlan?.price || 0,
         },
       ]);
       setPayment(false);

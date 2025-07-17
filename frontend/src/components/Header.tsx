@@ -4,9 +4,17 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+// Replace 'any' with a specific User type
+interface User {
+  id: string;
+  username: string;
+  email: string;
+  // Add more fields as needed
+}
+
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const router = useRouter();
@@ -21,16 +29,6 @@ export default function Header() {
     }
     setIsLoading(false);
   }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('access');
-    localStorage.removeItem('refresh');
-    localStorage.removeItem('user');
-    setIsLoggedIn(false);
-    setUser(null);
-    router.push('/');
-    setMenuOpen(false);
-  };
 
   const handleLinkClick = () => {
     setMenuOpen(false);

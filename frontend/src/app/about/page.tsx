@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Image from 'next/image';
 
 export default function AboutPage() {
   const [scrollPercent, setScrollPercent] = useState(0);
@@ -27,11 +28,12 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12 md:gap-20">
           {/* عکس */}
           <div className="flex-shrink-0 w-full md:w-7/12 h-64 sm:h-80 md:h-[600px] rounded-3xl overflow-hidden shadow-xl">
-            <img
+            <Image
               src="/images/pathnio.png"
               alt="Our Team"
               className="w-full h-full object-cover object-center"
-              loading="lazy"
+              width={1000}
+              height={600}
             />
           </div>
 

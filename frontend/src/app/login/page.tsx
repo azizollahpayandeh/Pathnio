@@ -19,7 +19,6 @@ export default function LoginPage() {
   const [registerLoading, setRegisterLoading] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
   const [registerMessage, setRegisterMessage] = useState("");
-  const [loginMessage, setLoginMessage] = useState("");
   const [alert, setAlert] = useState<{ type: "success" | "error"; msg: string } | null>(null);
   const router = useRouter();
 
@@ -30,9 +29,8 @@ export default function LoginPage() {
     setRegisterMessage("");
     const form = e.currentTarget;
     const formData = new FormData(form);
-    let data: any = {};
     formData.forEach((value, key) => {
-      data[key] = value;
+      data[key as keyof CompanyData] = value;
     });
     const payload = {
       user: {
@@ -69,7 +67,6 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoginLoading(true);
-    setLoginMessage("");
     const form = e.currentTarget;
     const formData = new FormData(form);
     const username = formData.get("login-username") as string;
