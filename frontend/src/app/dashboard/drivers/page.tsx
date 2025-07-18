@@ -2,6 +2,14 @@
 import { useEffect, useState } from "react";
 import api from "../../api";
 
+// تعریف type مناسب برای Driver
+interface Driver {
+  id: number;
+  name: string;
+  company: { company_name: string };
+  // سایر فیلدها در صورت نیاز
+}
+
 const FAKE_DRIVERS = Array.from({ length: 10 }).map((_, i) => ({
   full_name: `Driver ${i + 1}`,
   mobile: `0912${100000 + i}`,
@@ -13,7 +21,7 @@ const FAKE_DRIVERS = Array.from({ length: 10 }).map((_, i) => ({
 }));
 
 export default function DriversPage() {
-  const [drivers, setDrivers] = useState<any[]>([]);
+  const [drivers, setDrivers] = useState<Driver[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

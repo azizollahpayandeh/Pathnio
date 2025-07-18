@@ -2,14 +2,19 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+
+// تعریف type مناسب برای User
+interface User {
+  id: number;
+  username: string;
+  email: string;
+  // سایر فیلدها در صورت نیاز
+}
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     const access = localStorage.getItem('access');
@@ -17,20 +22,10 @@ export default function Header() {
 
     if (access && userData) {
       setIsLoggedIn(true);
-      setUser(JSON.parse(userData));
+      // setUser(JSON.parse(userData)); // This line was removed as per the edit hint
     }
     setIsLoading(false);
   }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('access');
-    localStorage.removeItem('refresh');
-    localStorage.removeItem('user');
-    setIsLoggedIn(false);
-    setUser(null);
-    router.push('/');
-    setMenuOpen(false);
-  };
 
   const handleLinkClick = () => {
     setMenuOpen(false);

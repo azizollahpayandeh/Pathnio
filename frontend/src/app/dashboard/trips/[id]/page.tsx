@@ -100,10 +100,22 @@ const TRIP_DETAILS = {
   }
 };
 
+// تعریف type مناسب برای Trip
+interface Trip {
+  id: number;
+  driver: string;
+  vehicle: string;
+  origin: string;
+  destination: string;
+  start: string;
+  end: string;
+  status: string;
+}
+
 export default function TripDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const [trip, setTrip] = useState<any>(null);
+  const [trip, setTrip] = useState<Trip | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

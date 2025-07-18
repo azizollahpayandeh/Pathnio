@@ -1,5 +1,17 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from 'next/link';
+
+// تعریف type مناسب برای Vehicle
+interface Vehicle {
+  plate_number: string;
+  vehicle_type: string;
+  driver: string;
+  company: string;
+  status: string;
+  capacity: string;
+  color: string;
+}
 
 const FAKE_VEHICLES = [
   { plate_number: "12A345-IR", vehicle_type: "Truck", driver: "Amir", company: "Demo Co.", status: "Active", capacity: "10t", color: "White" },
@@ -15,9 +27,9 @@ const FAKE_VEHICLES = [
 ];
 
 export default function VehiclesPage() {
-  const [vehicles, setVehicles] = useState<any[]>([]);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // حذف setError اگر استفاده نشده
 
   // در آینده: دریافت داده واقعی از API
   useEffect(() => {
@@ -33,8 +45,6 @@ export default function VehiclesPage() {
         <h1 className="font-extrabold text-2xl md:text-3xl mb-4 md:mb-6 lg:mb-8 text-blue-700 flex-shrink-0">Vehicles Management</h1>
         {loading ? (
           <div className="text-blue-400 animate-pulse text-lg">Loading vehicles...</div>
-        ) : error ? (
-          <div className="text-red-500">{error}</div>
         ) : (
           <div className="flex-1 overflow-hidden">
             <div className="h-full overflow-auto lg:overflow-visible">
@@ -63,7 +73,9 @@ export default function VehiclesPage() {
                         <td className="py-3 md:py-4 px-3 md:px-6 whitespace-nowrap">{v.capacity}</td>
                         <td className="py-3 md:py-4 px-3 md:px-6 whitespace-nowrap">{v.color}</td>
                         <td className="py-3 md:py-4 px-3 md:px-6 whitespace-nowrap">
-                          <button className="bg-blue-100 text-blue-700 px-2 md:px-4 py-1 md:py-2 rounded-lg shadow hover:bg-blue-200 transition text-xs md:text-sm lg:text-base font-semibold cursor-pointer">View</button>
+                          <Link href={`/dashboard/vehicles/${encodeURIComponent(v.plate_number)}`} className="bg-blue-100 text-blue-700 px-2 md:px-4 py-1 md:py-2 rounded-lg shadow hover:bg-blue-200 transition text-xs md:text-sm lg:text-base font-semibold cursor-pointer">
+                            View
+                          </Link>
                         </td>
                       </tr>
                     ))}

@@ -53,7 +53,7 @@ const BAR_DATA = {
 
 export default function ReportsPage() {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // حذف setError اگر استفاده نشده
 
   // در آینده: دریافت داده واقعی از API
   useEffect(() => {
@@ -66,8 +66,6 @@ export default function ReportsPage() {
         <h1 className="font-extrabold text-2xl md:text-3xl mb-4 md:mb-6 lg:mb-8 text-blue-700">Reports & Analytics</h1>
         {loading ? (
           <div className="text-blue-400 animate-pulse text-lg">Loading reports...</div>
-        ) : error ? (
-          <div className="text-red-500">{error}</div>
         ) : (
           <div className="flex-1 overflow-auto">
             <div className="flex flex-col gap-6 md:gap-8 lg:gap-10">

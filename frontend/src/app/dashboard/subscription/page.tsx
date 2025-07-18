@@ -14,7 +14,15 @@ const fakeSubscriptions = [
   // },
 ];
 
-const plans = [
+// تعریف type مناسب برای Plan
+interface Plan {
+  id: number;
+  name: string;
+  price: number;
+  // سایر فیلدها در صورت نیاز
+}
+
+const plans: Plan[] = [
   {
     id: 1,
     name: "Basic",
@@ -60,7 +68,7 @@ export default function SubscriptionPage() {
   const [subs, setSubs] = useState(fakeSubscriptions);
   const [action, setAction] = useState<{type: string, id?: number} | null>(null);
   const [showPlans, setShowPlans] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState<any>(null);
+  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
   const [checkout, setCheckout] = useState(false);
   const [payment, setPayment] = useState(false);
 
@@ -81,7 +89,7 @@ export default function SubscriptionPage() {
   const handleBuy = () => {
     setShowPlans(true);
   };
-  const handleSelectPlan = (plan: any) => {
+  const handleSelectPlan = (plan: Plan) => {
     setSelectedPlan(plan);
     setTimeout(() => setCheckout(true), 400);
   };
@@ -92,11 +100,11 @@ export default function SubscriptionPage() {
       setSubs([
         {
           id: 1,
-          plan: selectedPlan.name,
+          plan: selectedPlan?.name || "",
           status: "active",
           start: "2024-01-01",
           end: "2025-01-01",
-          price: selectedPlan.price,
+          price: selectedPlan?.price || 0,
         },
       ]);
       setPayment(false);

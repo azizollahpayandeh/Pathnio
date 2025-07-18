@@ -1,5 +1,19 @@
 "use client";
-export default function TripsThisWeekWidget({ trips }: { trips: any[] }) {
+import Link from 'next/link';
+
+// تعریف type مناسب برای Trip
+interface Trip {
+  id: number;
+  driver: string;
+  vehicle: string;
+  origin: string;
+  destination: string;
+  start: string;
+  end: string;
+  status: string;
+}
+
+export default function TripsThisWeekWidget({ trips }: { trips: Trip[] }) {
   return (
     <>
       <h2 className="font-extrabold mb-6 text-blue-700 text-xl flex items-center gap-2">
@@ -33,7 +47,7 @@ export default function TripsThisWeekWidget({ trips }: { trips: any[] }) {
         </table>
       </div>
       <div className="text-right mt-4">
-        <a href="/dashboard/trips" className="text-blue-700 font-bold hover:underline">View All Trips &rarr;</a>
+        <Link href="/dashboard/trips" className="text-blue-700 font-bold hover:underline">View All Trips &rarr;</Link>
       </div>
     </>
   );

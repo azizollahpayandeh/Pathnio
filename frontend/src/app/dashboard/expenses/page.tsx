@@ -2,6 +2,15 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+// تعریف type مناسب برای Expense
+interface Expense {
+  id: number;
+  amount: number;
+  description: string;
+  payment_method: string;
+  // سایر فیلدها در صورت نیاز
+}
+
 const FAKE_EXPENSES = [
   { id: 1, date: "2024-07-01", category: "Fuel", amount: 1200000, description: "Fuel for trip", driver: "Amir", vehicle: "12A345-IR", status: "Approved" },
   { id: 2, date: "2024-07-02", category: "Maintenance", amount: 800000, description: "Oil change", driver: "Sara", vehicle: "22B456-IR", status: "Pending" },
@@ -16,9 +25,8 @@ const FAKE_EXPENSES = [
 ];
 
 export default function ExpensesPage() {
-  const [expenses, setExpenses] = useState<any[]>([]);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   // در آینده: دریافت داده واقعی از API
@@ -39,8 +47,6 @@ export default function ExpensesPage() {
         <h1 className="font-extrabold text-xl md:text-2xl lg:text-3xl mb-3 md:mb-4 lg:mb-6 text-blue-700 flex-shrink-0">Expenses Management</h1>
         {loading ? (
           <div className="text-blue-400 animate-pulse text-lg">Loading expenses...</div>
-        ) : error ? (
-          <div className="text-red-500">{error}</div>
         ) : (
           <div className="flex-1 overflow-hidden">
             <div className="h-full overflow-auto 2xl:overflow-x-hidden">
