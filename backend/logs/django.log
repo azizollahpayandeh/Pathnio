@@ -873,3 +873,19 @@ INFO 2025-07-19 10:04:57,401 autoreload 7004 20624 C:\Users\azizo\Desktop\Pathni
 INFO 2025-07-19 10:04:58,560 autoreload 20444 9044 Watching for file changes with StatReloader
 INFO 2025-07-19 10:05:07,051 autoreload 20444 9044 C:\Users\azizo\Desktop\Pathnio\backend\accounts\urls.py changed, reloading.
 INFO 2025-07-19 10:05:07,895 autoreload 3980 2928 Watching for file changes with StatReloader
+INFO 2025-07-19 10:13:56,458 autoreload 105680 130384 Watching for file changes with StatReloader
+INFO 2025-07-19 10:14:02,148 basehttp 105680 131500 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:14:13,787 basehttp 105680 131500 "OPTIONS /api/accounts/drivers/%5Bid%5D/ HTTP/1.1" 200 0
+WARNING 2025-07-19 10:14:13,836 log 105680 131500 Not Found: /api/accounts/drivers/[id]/
+WARNING 2025-07-19 10:14:13,837 basehttp 105680 131500 "GET /api/accounts/drivers/%5Bid%5D/ HTTP/1.1" 404 8514
+WARNING 2025-07-19 10:14:23,908 log 105680 131500 Not Found: /api/accounts/drivers/[id]/
+WARNING 2025-07-19 10:14:23,909 basehttp 105680 131500 "GET /api/accounts/drivers/%5Bid%5D/ HTTP/1.1" 404 8514
+WARNING 2025-07-19 10:14:28,554 log 105680 131500 Not Found: /api/accounts/drivers/[id]/
+WARNING 2025-07-19 10:14:28,555 basehttp 105680 131500 "GET /api/accounts/drivers/%5Bid%5D/ HTTP/1.1" 404 8514
+INFO 2025-07-19 10:14:30,582 basehttp 105680 131500 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:14:30,601 basehttp 105680 131500 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:14:32,222 basehttp 105680 131512 "OPTIONS /api/accounts/drivers/1/ HTTP/1.1" 200 0
+INFO 2025-07-19 10:14:32,222 basehttp 105680 131500 "OPTIONS /api/accounts/drivers/1/ HTTP/1.1" 200 0
+INFO 2025-07-19 10:14:32,232 basehttp 105680 131500 "GET /api/accounts/drivers/1/ HTTP/1.1" 200 205
+INFO 2025-07-19 10:14:32,245 basehttp 105680 131500 "GET /api/accounts/drivers/1/ HTTP/1.1" 200 205
+INFO 2025-07-19 10:25:45,160 basehttp 105680 124172 "GET /api/accounts/drivers/1/ HTTP/1.1" 200 205
