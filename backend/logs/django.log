@@ -831,3 +831,10 @@ INFO 2025-07-18 21:35:37,325 basehttp 87500 99964 "GET /api/accounts/drivers/ HT
 INFO 2025-07-18 21:40:34,349 basehttp 87500 99964 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
 INFO 2025-07-18 21:40:34,377 basehttp 87500 99964 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
 INFO 2025-07-19 09:49:41,290 autoreload 112912 128544 Watching for file changes with StatReloader
+INFO 2025-07-19 09:50:46,578 basehttp 112912 129896 "OPTIONS /api/accounts/drivers/ HTTP/1.1" 200 0
+INFO 2025-07-19 09:50:46,579 basehttp 112912 127348 "OPTIONS /api/accounts/drivers/ HTTP/1.1" 200 0
+INFO 2025-07-19 09:50:47,913 basehttp 112912 129896 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 09:50:47,956 basehttp 112912 129896 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:00:20,806 autoreload 56896 85364 Watching for file changes with StatReloader
+INFO 2025-07-19 10:01:52,050 basehttp 56896 129904 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:01:52,098 basehttp 56896 129904 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
