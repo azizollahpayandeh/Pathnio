@@ -831,6 +831,10 @@ INFO 2025-07-18 21:35:37,325 basehttp 87500 99964 "GET /api/accounts/drivers/ HT
 INFO 2025-07-18 21:40:34,349 basehttp 87500 99964 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
 INFO 2025-07-18 21:40:34,377 basehttp 87500 99964 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
 INFO 2025-07-19 09:49:41,290 autoreload 112912 128544 Watching for file changes with StatReloader
+INFO 2025-07-19 09:50:46,578 basehttp 112912 129896 "OPTIONS /api/accounts/drivers/ HTTP/1.1" 200 0
+INFO 2025-07-19 09:50:46,579 basehttp 112912 127348 "OPTIONS /api/accounts/drivers/ HTTP/1.1" 200 0
+INFO 2025-07-19 09:50:47,913 basehttp 112912 129896 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 09:50:47,956 basehttp 112912 129896 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
 INFO 2025-07-19 09:58:16,278 autoreload 7004 20624 Watching for file changes with StatReloader
 INFO 2025-07-19 09:58:36,924 basehttp 7004 15880 "GET /media/company_profiles/photo_2024-12-25_23-39-37_re89SFH.jpg HTTP/1.1" 200 72819
 INFO 2025-07-19 09:58:41,885 basehttp 7004 18108 "OPTIONS /api/accounts/drivers/ HTTP/1.1" 200 0
@@ -839,6 +843,9 @@ INFO 2025-07-19 09:58:42,976 basehttp 7004 9160 "GET /api/accounts/drivers/ HTTP
 INFO 2025-07-19 09:58:42,992 basehttp 7004 9160 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
 INFO 2025-07-19 09:58:49,298 basehttp 7004 15432 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
 INFO 2025-07-19 09:58:49,319 basehttp 7004 15432 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:00:20,806 autoreload 56896 85364 Watching for file changes with StatReloader
+INFO 2025-07-19 10:01:52,050 basehttp 56896 129904 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:01:52,098 basehttp 56896 129904 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
 INFO 2025-07-19 10:02:33,995 basehttp 7004 9952 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
 INFO 2025-07-19 10:02:34,009 basehttp 7004 9952 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
 INFO 2025-07-19 10:02:37,533 basehttp 7004 9952 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
