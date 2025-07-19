@@ -68,7 +68,6 @@ export default function VehicleDetails() {
             <VehiclePerformanceChart />
           </div>
         </div>
-
       </div>
     </div>
   );
