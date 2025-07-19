@@ -817,6 +817,7 @@ INFO 2025-07-17 13:27:06,318 basehttp 4212 11156 "GET /api/accounts/support/tick
 INFO 2025-07-17 13:27:06,354 basehttp 4212 11156 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 585
 INFO 2025-07-17 13:27:11,352 basehttp 4212 11156 "GET /api/accounts/site-settings/ HTTP/1.1" 200 108
 INFO 2025-07-17 13:27:11,377 basehttp 4212 11156 "GET /api/accounts/site-settings/ HTTP/1.1" 200 108
+INFO 2025-07-17 15:05:01,096 basehttp 4212 12948 "GET /media/company_profiles/photo_2024-12-25_23-39-37_re89SFH.jpg HTTP/1.1" 200 72819
 INFO 2025-07-18 21:02:49,475 autoreload 87500 93040 Watching for file changes with StatReloader
 INFO 2025-07-18 21:11:54,670 basehttp 87500 102140 "OPTIONS /api/accounts/drivers/ HTTP/1.1" 200 0
 INFO 2025-07-18 21:11:54,672 basehttp 87500 101432 "OPTIONS /api/accounts/drivers/ HTTP/1.1" 200 0
