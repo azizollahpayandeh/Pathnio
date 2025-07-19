@@ -486,6 +486,11 @@ class DriverListView(generics.ListAPIView):
         })
         return super().get(request, *args, **kwargs)
 
+class DriverDetailView(generics.RetrieveAPIView):
+    queryset = Driver.objects.all()
+    serializer_class = DriverSerializer
+    permission_classes = [IsAuthenticated]
+
 class SiteSettingsView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     def get(self, request):

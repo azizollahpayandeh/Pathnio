@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import api from "../../api";
+import { useRouter } from "next/navigation";
 
 // تعریف type مناسب برای Driver
 interface Driver {
@@ -11,6 +12,7 @@ interface Driver {
 }
 
 const FAKE_DRIVERS = Array.from({ length: 10 }).map((_, i) => ({
+  id: i + 1, // اضافه کردن id فیک
   full_name: `Driver ${i + 1}`,
   mobile: `0912${100000 + i}`,
   plate_number: `12A${i}34-IR`,
@@ -24,6 +26,7 @@ export default function DriversPage() {
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     api.get("accounts/drivers/")
@@ -69,7 +72,7 @@ export default function DriversPage() {
                   </thead>
                   <tbody>
                     {(error || drivers.length === 0 ? FAKE_DRIVERS : drivers.slice(0, 10)).map((d, i) => (
-                      <tr key={i} className="hover:bg-blue-50 transition border-b last:border-b-0 cursor-pointer">
+                      <tr key={d.id || i} className="hover:bg-blue-50 transition border-b last:border-b-0 cursor-pointer">
                         <td className="py-2 md:py-3 lg:py-3 px-2 md:px-3 lg:px-4 font-bold text-blue-900 whitespace-nowrap">{d.full_name}</td>
                         <td className="py-2 md:py-3 lg:py-3 px-2 md:px-3 lg:px-4 whitespace-nowrap">{d.mobile}</td>
                         <td className="py-2 md:py-3 lg:py-3 px-2 md:px-3 lg:px-4 whitespace-nowrap">{d.plate_number}</td>
@@ -78,7 +81,12 @@ export default function DriversPage() {
                         <td className="py-2 md:py-3 lg:py-3 px-2 md:px-3 lg:px-4 whitespace-nowrap">{d.origin || '-'}</td>
                         <td className="py-2 md:py-3 lg:py-3 px-2 md:px-3 lg:px-4 whitespace-nowrap">{d.destination || '-'}</td>
                         <td className="py-2 md:py-3 lg:py-3 px-2 md:px-3 lg:px-4 whitespace-nowrap">
-                          <button className="bg-blue-100 text-blue-700 px-1 md:px-2 lg:px-3 py-1 md:py-1.5 rounded-lg shadow hover:bg-blue-200 transition text-xs lg:text-[17px] font-semibold cursor-pointer">View</button>
+                          <button
+                            className="bg-blue-100 text-blue-700 px-1 md:px-2 lg:px-3 py-1 md:py-1.5 rounded-lg shadow hover:bg-blue-200 transition text-xs lg:text-[17px] font-semibold cursor-pointer"
+                            onClick={() => router.push(`/dashboard/drivers/${d.id}`)}
+                          >
+                            View
+                          </button>
                         </td>
                       </tr>
                     ))}

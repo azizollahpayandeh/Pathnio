@@ -1,32 +1,49 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import api from '../../../api';
 import DriverPerformanceChart from './../../../../components/DriverPerformanceChart';
 
 const DriverCard = () => {
-  const driver = {
-    id: 12,
-    name: 'Amir Rezaei',
-    company: 'Demo Logistics',
-    status: 'Active',
-    license: 'B-Class',
-    phone: '+98 912 345 6789',
-    experience: '5 years',
-    tripsCompleted: 320,
-    rating: 4.6,
-    contractType: 'Full-Time',
-  };
+  const { id } = useParams();
+  const [driver, setDriver] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  // Fake performance data for now
   const performanceData = {
     labels: ['Punctuality', 'Safety', 'Customer', 'Efficiency', 'Maintenance'],
     datasets: [
       {
         label: 'Performance',
         data: [90, 85, 80, 88, 92],
-        backgroundColor: '#3B82F6', // Consistent blue
+        backgroundColor: '#3B82F6',
         borderRadius: 5,
       },
     ],
   };
+
+  useEffect(() => {
+    if (!id) return;
+    setLoading(true);
+    api.get(`accounts/drivers/${id}/`)
+      .then(res => {
+        setDriver(res.data);
+        setError(null);
+      })
+      .catch(err => {
+        setError('Failed to load driver data.');
+        setDriver(null);
+      })
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  if (loading) {
+    return <div className="flex items-center justify-center min-h-screen text-blue-500 text-xl">در حال بارگذاری اطلاعات راننده...</div>;
+  }
+  if (error || !driver) {
+    return <div className="flex items-center justify-center min-h-screen text-red-500 text-xl">{error || 'راننده پیدا نشد.'}</div>;
+  }
 
   return (
     <div className="bg-gradient-to-br from-gray-50 to-blue-100 flex items-center justify-center min-h-screen p-6">
@@ -35,11 +52,10 @@ const DriverCard = () => {
         <div className="flex-1 flex flex-col justify-center space-y-8 text-gray-800 border-b-2 md:border-b-0 md:border-r-2 border-blue-100 pb-8 md:pb-0 md:pr-12">
           <div className="text-center md:text-left">
             <h2 className="text-5xl font-extrabold text-blue-800 tracking-tight leading-tight">
-              {driver.name}
+              {driver.full_name || driver.name}
             </h2>
             <p className="text-lg text-gray-500 mt-2">
-              Driver ID:{' '}
-              <span className="font-bold text-blue-600">{driver.id}</span>
+              Driver ID: <span className="font-bold text-blue-600">{driver.id}</span>
             </p>
           </div>
 
@@ -47,53 +63,47 @@ const DriverCard = () => {
             <div>
               <div className="text-gray-500 font-semibold">Company</div>
               <div className="font-extrabold text-gray-900 mt-1">
-                {driver.company}
+                {driver.company?.company_name || '-'}
               </div>
             </div>
             <div>
               <div className="text-gray-500 font-semibold">Status</div>
-              <div
-                className={`font-extrabold mt-1 ${
-                  driver.status === 'Active' ? 'text-green-600' : 'text-red-500'
-                }`}
-              >
-                {driver.status}
-              </div>
+              <div className={`font-extrabold mt-1 text-green-600`}>Active</div>
             </div>
             <div>
               <div className="text-gray-500 font-semibold">License</div>
               <div className="font-extrabold text-gray-900 mt-1">
-                {driver.license}
+                {driver.license || '-'}
               </div>
             </div>
             <div>
               <div className="text-gray-500 font-semibold">Phone</div>
               <div className="font-extrabold text-gray-900 mt-1">
-                {driver.phone}
+                {driver.mobile || '-'}
               </div>
             </div>
             <div>
               <div className="text-gray-500 font-semibold">Experience</div>
               <div className="font-extrabold text-gray-900 mt-1">
-                {driver.experience}
+                -
               </div>
             </div>
             <div>
               <div className="text-gray-500 font-semibold">Trips Completed</div>
               <div className="font-extrabold text-gray-900 mt-1">
-                {driver.tripsCompleted}
+                -
               </div>
             </div>
             <div>
               <div className="text-gray-500 font-semibold">Contract Type</div>
               <div className="font-extrabold text-gray-900 mt-1">
-                {driver.contractType}
+                -
               </div>
             </div>
             <div>
               <div className="text-gray-500 font-semibold">Rating</div>
               <div className="font-extrabold text-yellow-500 mt-1">
-                {driver.rating} / 5 <span className="text-gray-400">⭐</span>
+                -
               </div>
             </div>
           </div>
@@ -105,13 +115,10 @@ const DriverCard = () => {
             Performance Chart
           </h3>
           <div className="w-full max-w-md">
-            {' '}
-            {/* Added max-w for better chart scaling */}
             <DriverPerformanceChart performanceData={performanceData} />
           </div>
           <p className="text-sm text-gray-500 text-center px-4">
-            This chart provides a comprehensive overview of the driver's
-            performance across various dimensions.
+            This chart provides a comprehensive overview of the driver's performance across various dimensions.
           </p>
         </div>
       </div>

@@ -831,3 +831,38 @@ INFO 2025-07-18 21:35:37,325 basehttp 87500 99964 "GET /api/accounts/drivers/ HT
 INFO 2025-07-18 21:40:34,349 basehttp 87500 99964 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
 INFO 2025-07-18 21:40:34,377 basehttp 87500 99964 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
 INFO 2025-07-19 09:49:41,290 autoreload 112912 128544 Watching for file changes with StatReloader
+INFO 2025-07-19 09:58:16,278 autoreload 7004 20624 Watching for file changes with StatReloader
+INFO 2025-07-19 09:58:36,924 basehttp 7004 15880 "GET /media/company_profiles/photo_2024-12-25_23-39-37_re89SFH.jpg HTTP/1.1" 200 72819
+INFO 2025-07-19 09:58:41,885 basehttp 7004 18108 "OPTIONS /api/accounts/drivers/ HTTP/1.1" 200 0
+INFO 2025-07-19 09:58:41,886 basehttp 7004 9160 "OPTIONS /api/accounts/drivers/ HTTP/1.1" 200 0
+INFO 2025-07-19 09:58:42,976 basehttp 7004 9160 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 09:58:42,992 basehttp 7004 9160 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 09:58:49,298 basehttp 7004 15432 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 09:58:49,319 basehttp 7004 15432 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:02:33,995 basehttp 7004 9952 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:02:34,009 basehttp 7004 9952 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:02:37,533 basehttp 7004 9952 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:02:37,587 basehttp 7004 9952 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:03:56,324 basehttp 7004 11916 "OPTIONS /api/accounts/drivers/3/ HTTP/1.1" 200 0
+WARNING 2025-07-19 10:03:56,443 log 7004 11916 Not Found: /api/accounts/drivers/3/
+WARNING 2025-07-19 10:03:56,444 basehttp 7004 11916 "GET /api/accounts/drivers/3/ HTTP/1.1" 404 8210
+INFO 2025-07-19 10:03:58,037 basehttp 7004 11916 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:03:58,066 basehttp 7004 11916 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:04:00,340 basehttp 7004 11916 "OPTIONS /api/accounts/drivers/1/ HTTP/1.1" 200 0
+INFO 2025-07-19 10:04:00,345 basehttp 7004 21332 "OPTIONS /api/accounts/drivers/1/ HTTP/1.1" 200 0
+WARNING 2025-07-19 10:04:00,415 log 7004 11916 Not Found: /api/accounts/drivers/1/
+WARNING 2025-07-19 10:04:00,416 basehttp 7004 11916 "GET /api/accounts/drivers/1/ HTTP/1.1" 404 8210
+WARNING 2025-07-19 10:04:00,506 log 7004 11916 Not Found: /api/accounts/drivers/1/
+WARNING 2025-07-19 10:04:00,515 basehttp 7004 11916 "GET /api/accounts/drivers/1/ HTTP/1.1" 404 8210
+INFO 2025-07-19 10:04:04,580 basehttp 7004 1740 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:04:04,601 basehttp 7004 1740 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:04:06,309 basehttp 7004 1740 "OPTIONS /api/accounts/drivers/4/ HTTP/1.1" 200 0
+INFO 2025-07-19 10:04:06,311 basehttp 7004 12960 "OPTIONS /api/accounts/drivers/4/ HTTP/1.1" 200 0
+WARNING 2025-07-19 10:04:06,337 log 7004 1740 Not Found: /api/accounts/drivers/4/
+WARNING 2025-07-19 10:04:06,338 basehttp 7004 1740 "GET /api/accounts/drivers/4/ HTTP/1.1" 404 8210
+WARNING 2025-07-19 10:04:06,351 log 7004 1740 Not Found: /api/accounts/drivers/4/
+WARNING 2025-07-19 10:04:06,352 basehttp 7004 1740 "GET /api/accounts/drivers/4/ HTTP/1.1" 404 8210
+INFO 2025-07-19 10:04:57,401 autoreload 7004 20624 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-19 10:04:58,560 autoreload 20444 9044 Watching for file changes with StatReloader
+INFO 2025-07-19 10:05:07,051 autoreload 20444 9044 C:\Users\azizo\Desktop\Pathnio\backend\accounts\urls.py changed, reloading.
+INFO 2025-07-19 10:05:07,895 autoreload 3980 2928 Watching for file changes with StatReloader

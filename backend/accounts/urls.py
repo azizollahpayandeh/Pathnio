@@ -4,7 +4,8 @@ from .views import (
     CompanyRegisterView, DriverRegisterView, DriverListView, SiteSettingsView,
     CompanyMeView, ContactMessageCreateView, SupportTicketListCreateView, 
     SupportTicketReplyView, LoginView, LogoutView, PasswordChangeView,
-    UserProfileView, ActivityLogView, SecurityStatusView, check_auth_status
+    UserProfileView, ActivityLogView, SecurityStatusView, check_auth_status,
+    DriverDetailView
 )
 
 urlpatterns = [
@@ -28,6 +29,7 @@ urlpatterns = [
     path('company/me/', CompanyMeView.as_view(), name='company-me'),
     path('contact/', ContactMessageCreateView.as_view(), name='contact-message'),
     path('drivers/', DriverListView.as_view(), name='drivers-list'),
+    path('drivers/<int:pk>/', DriverDetailView.as_view(), name='driver-detail'),
     path('site-settings/', SiteSettingsView.as_view(), name='site-settings'),
     
     # Support URLs
