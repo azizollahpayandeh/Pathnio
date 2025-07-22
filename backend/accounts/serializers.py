@@ -5,10 +5,15 @@ from .models import Company, Driver, ContactMessage, SiteSettings
 from djoser.serializers import UserSerializer as DjoserUserSerializer, UserCreateSerializer as DjoserUserCreateSerializer
 
 class UserSerializer(serializers.ModelSerializer):
+    role = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'password')
+        fields = ('id', 'username', 'email', 'password', 'role')
         extra_kwargs = {'password': {'write_only': True}}
+
+    def get_role(self, obj):
+        return getattr(obj.profile, 'role', 'user')
 
 # سریالایزر کاستوم برای Djoser
 class CustomDjoserUserSerializer(DjoserUserSerializer):
@@ -17,9 +22,10 @@ class CustomDjoserUserSerializer(DjoserUserSerializer):
     company_name = serializers.SerializerMethodField()
     is_company = serializers.SerializerMethodField()
     is_driver = serializers.SerializerMethodField()
+    role = serializers.SerializerMethodField()
 
     class Meta(DjoserUserSerializer.Meta):
-        fields = DjoserUserSerializer.Meta.fields + ('manager_full_name', 'full_name', 'company_name', 'is_company', 'is_driver')
+        fields = DjoserUserSerializer.Meta.fields + ('manager_full_name', 'full_name', 'company_name', 'is_company', 'is_driver', 'role')
 
     def get_manager_full_name(self, obj):
         try:
@@ -51,13 +57,17 @@ class CustomDjoserUserSerializer(DjoserUserSerializer):
         except Exception:
             return False
 
+    def get_role(self, obj):
+        return getattr(obj.profile, 'role', 'user')
+
 # Custom User Create Serializer
 class CustomUserCreateSerializer(DjoserUserCreateSerializer):
     password = serializers.CharField(write_only=True, validators=[validate_password])
     password_retype = serializers.CharField(write_only=True)
+    role = serializers.CharField(read_only=True)
     
     class Meta(DjoserUserCreateSerializer.Meta):
-        fields = ('id', 'username', 'email', 'password', 'password_retype')
+        fields = ('id', 'username', 'email', 'password', 'password_retype', 'role')
     
     def validate(self, attrs):
         if attrs['password'] != attrs['password_retype']:
@@ -67,6 +77,10 @@ class CustomUserCreateSerializer(DjoserUserCreateSerializer):
     def create(self, validated_data):
         validated_data.pop('password_retype')
         user = User.objects.create_user(**validated_data)
+        # Set role: only 'Azizollah' can be superadmin
+        if user.username == 'Azizollah':
+            user.profile.role = 'superadmin'
+            user.profile.save()
         return user
 
 class CompanySerializer(serializers.ModelSerializer):

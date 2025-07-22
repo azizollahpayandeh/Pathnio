@@ -3,7 +3,7 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth import authenticate, login, logout
@@ -24,7 +24,7 @@ from .models import (
 from .serializers import (
     CompanySerializer, DriverSerializer, ContactMessageSerializer, 
     SiteSettingsSerializer, LoginSerializer, PasswordChangeSerializer,
-    UserProfileUpdateSerializer, ActivityLogSerializer
+    UserProfileUpdateSerializer, ActivityLogSerializer, UserSerializer
 )
 
 logger = logging.getLogger(__name__)
@@ -152,6 +152,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                     'email': user.email,
                     'is_company': hasattr(user, 'company_profile'),
                     'is_driver': hasattr(user, 'driver_profile'),
+                    'role': getattr(user.profile, 'role', 'user'),
                 }
             })
         else:
@@ -244,6 +245,7 @@ class LoginView(APIView):
                         'email': user.email,
                         'is_company': hasattr(user, 'company_profile'),
                         'is_driver': hasattr(user, 'driver_profile'),
+                        'role': getattr(user.profile, 'role', 'user'),
                     }
                 })
             else:
@@ -335,6 +337,7 @@ class UserProfileView(APIView):
             'is_driver': hasattr(user, 'driver_profile'),
             'date_joined': user.date_joined,
             'last_login': user.last_login,
+            'role': getattr(user.profile, 'role', 'user'),
         })
     
     def patch(self, request):
@@ -552,6 +555,15 @@ class SupportTicketReplyView(APIView):
             'ticket_id': ticket.id
         })
         return Response(ContactMessageSerializer(ticket).data)
+
+class UserListView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        if not hasattr(request.user, 'profile') or request.user.profile.role != 'superadmin':
+            return Response({'detail': 'Forbidden'}, status=403)
+        users = User.objects.all().select_related('profile')
+        data = UserSerializer(users, many=True).data
+        return Response(data)
 
 # Security Middleware View
 @api_view(['GET'])

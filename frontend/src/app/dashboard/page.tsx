@@ -47,13 +47,16 @@ export default function Dashboard() {
     // Check if user is logged in
     const access = localStorage.getItem('access');
     const userData = localStorage.getItem('user');
-    
     if (!access || !userData) {
       // Redirect to login if not authenticated
       router.push('/login');
       return;
     }
-    
+    const user = JSON.parse(userData);
+    if (user.role === 'superadmin') {
+      router.push('/403'); // Or '/admin-dashboard' if you want to redirect to admin dashboard
+      return;
+    }
     setIsLoading(false);
     setTrips(FAKE_TRIPS);
   }, [router]);

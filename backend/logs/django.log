@@ -873,3 +873,1824 @@ INFO 2025-07-19 10:04:57,401 autoreload 7004 20624 C:\Users\azizo\Desktop\Pathni
 INFO 2025-07-19 10:04:58,560 autoreload 20444 9044 Watching for file changes with StatReloader
 INFO 2025-07-19 10:05:07,051 autoreload 20444 9044 C:\Users\azizo\Desktop\Pathnio\backend\accounts\urls.py changed, reloading.
 INFO 2025-07-19 10:05:07,895 autoreload 3980 2928 Watching for file changes with StatReloader
+INFO 2025-07-19 10:11:52,084 autoreload 8616 19436 Watching for file changes with StatReloader
+INFO 2025-07-19 10:11:54,913 basehttp 8616 8496 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:11:57,628 basehttp 8616 8496 "GET /api/accounts/drivers/3/ HTTP/1.1" 200 230
+INFO 2025-07-19 10:11:57,639 basehttp 8616 8496 "GET /api/accounts/drivers/3/ HTTP/1.1" 200 230
+INFO 2025-07-19 10:12:08,765 basehttp 8616 11056 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:12:08,796 basehttp 8616 11056 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:12:14,050 basehttp 8616 11056 "GET /api/accounts/drivers/1/ HTTP/1.1" 200 205
+INFO 2025-07-19 10:12:14,064 basehttp 8616 11056 "GET /api/accounts/drivers/1/ HTTP/1.1" 200 205
+INFO 2025-07-19 10:12:15,683 basehttp 8616 11056 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:12:15,698 basehttp 8616 18348 "GET /api/accounts/drivers/3/ HTTP/1.1" 200 230
+INFO 2025-07-19 10:12:15,729 basehttp 8616 18348 "GET /api/accounts/drivers/3/ HTTP/1.1" 200 230
+INFO 2025-07-19 10:12:15,734 basehttp 8616 11056 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:12:17,542 basehttp 8616 11056 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:12:17,565 basehttp 8616 11056 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:12:20,282 basehttp 8616 11056 "GET /api/accounts/drivers/1/ HTTP/1.1" 200 205
+INFO 2025-07-19 10:12:20,298 basehttp 8616 11056 "GET /api/accounts/drivers/1/ HTTP/1.1" 200 205
+INFO 2025-07-19 10:12:22,388 basehttp 8616 11056 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:12:22,464 basehttp 8616 11056 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:12:42,763 basehttp 8616 20680 "GET /api/accounts/drivers/1/ HTTP/1.1" 200 205
+INFO 2025-07-19 10:12:42,774 basehttp 8616 20680 "GET /api/accounts/drivers/1/ HTTP/1.1" 200 205
+INFO 2025-07-19 10:12:51,273 basehttp 8616 14416 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:12:51,288 basehttp 8616 14416 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:13:29,657 basehttp 8616 7952 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:13:29,673 basehttp 8616 7952 "GET /api/accounts/drivers/ HTTP/1.1" 200 920
+INFO 2025-07-19 10:13:54,997 basehttp 8616 22388 "GET /media/company_profiles/photo_2024-12-25_23-39-37_re89SFH.jpg HTTP/1.1" 200 72819
+INFO 2025-07-19 10:19:13,205 autoreload 8616 19436 C:\Users\azizo\Desktop\Pathnio\backend\accounts\models.py changed, reloading.
+INFO 2025-07-19 10:19:14,367 autoreload 1704 5364 Watching for file changes with StatReloader
+INFO 2025-07-19 10:19:21,403 autoreload 1704 5364 C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py changed, reloading.
+INFO 2025-07-19 10:19:22,571 autoreload 3712 11544 Watching for file changes with StatReloader
+INFO 2025-07-19 10:19:36,443 autoreload 3712 11544 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-19 10:19:38,271 autoreload 9348 15792 Watching for file changes with StatReloader
+INFO 2025-07-19 10:19:44,735 autoreload 9348 15792 C:\Users\azizo\Desktop\Pathnio\backend\accounts\admin.py changed, reloading.
+INFO 2025-07-19 10:19:45,491 autoreload 22708 7520 Watching for file changes with StatReloader
+INFO 2025-07-19 10:21:28,342 autoreload 22708 7520 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-19 10:21:29,911 autoreload 8564 18832 Watching for file changes with StatReloader
+INFO 2025-07-19 10:21:34,941 autoreload 8564 18832 C:\Users\azizo\Desktop\Pathnio\backend\accounts\urls.py changed, reloading.
+INFO 2025-07-19 10:21:36,326 autoreload 20240 1060 Watching for file changes with StatReloader
+INFO 2025-07-19 10:23:41,940 basehttp 20240 14920 "GET /media/company_profiles/photo_2024-12-25_23-39-37_re89SFH.jpg HTTP/1.1" 200 72819
+INFO 2025-07-19 10:24:00,957 basehttp 20240 12260 "OPTIONS /api/auth/token/login/ HTTP/1.1" 200 0
+WARNING 2025-07-19 10:24:02,020 views 20240 12260 Failed login attempt for user: arsalanpayandeh44@gmail.com
+WARNING 2025-07-19 10:24:02,024 log 20240 12260 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-19 10:24:02,025 basehttp 20240 12260 "POST /api/auth/token/login/ HTTP/1.1" 401 83
+INFO 2025-07-19 10:24:11,281 views 20240 12260 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386arsalan'}
+INFO 2025-07-19 10:24:12,117 views 20240 12260 Successful login for user: arsalanpayandeh44@gmail.com
+ERROR 2025-07-19 10:24:12,656 log 20240 12260 Internal Server Error: /api/auth/token/login/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 516, in __get__
+    rel_obj = self.related.get_cached_value(instance)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\fields\mixins.py", line 37, in get_cached_value
+    return instance._state.fields_cache[self.cache_name]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+KeyError: 'profile'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: accounts_userprofile
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py", line 155, in post
+    'role': getattr(user.profile, 'role', 'user'),
+                    ^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 523, in __get__
+    rel_obj = self.get_queryset(instance=instance).get(**filter_args)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 629, in get
+    num = len(clone)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 366, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such table: accounts_userprofile
+ERROR 2025-07-19 10:24:12,666 basehttp 20240 12260 "POST /api/auth/token/login/ HTTP/1.1" 500 183862
+INFO 2025-07-19 10:24:30,089 views 20240 12260 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386Arsalan'}
+WARNING 2025-07-19 10:24:30,910 views 20240 12260 Failed login attempt for user: arsalanpayandeh44@gmail.com
+WARNING 2025-07-19 10:24:30,911 log 20240 12260 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-19 10:24:30,911 basehttp 20240 12260 "POST /api/auth/token/login/ HTTP/1.1" 401 83
+INFO 2025-07-19 10:24:47,743 views 20240 12260 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386Arsalan'}
+WARNING 2025-07-19 10:24:48,624 views 20240 12260 Failed login attempt for user: arsalanpayandeh44@gmail.com
+WARNING 2025-07-19 10:24:48,625 log 20240 12260 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-19 10:24:48,625 basehttp 20240 12260 "POST /api/auth/token/login/ HTTP/1.1" 401 83
+INFO 2025-07-19 10:26:03,471 views 20240 21612 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386@Arsalan'}
+WARNING 2025-07-19 10:26:04,252 views 20240 21612 Failed login attempt for user: arsalanpayandeh44@gmail.com
+WARNING 2025-07-19 10:26:04,252 log 20240 21612 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-19 10:26:04,253 basehttp 20240 21612 "POST /api/auth/token/login/ HTTP/1.1" 401 83
+INFO 2025-07-19 10:26:16,664 views 20240 21612 Login attempt with data: {'username': 'Majidlashipuldar2@gmail.com', 'password': '123456majid'}
+INFO 2025-07-19 10:26:17,422 views 20240 21612 Successful login for user: Majidlashipuldar2@gmail.com
+ERROR 2025-07-19 10:26:17,474 log 20240 21612 Internal Server Error: /api/auth/token/login/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 516, in __get__
+    rel_obj = self.related.get_cached_value(instance)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\fields\mixins.py", line 37, in get_cached_value
+    return instance._state.fields_cache[self.cache_name]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+KeyError: 'profile'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: accounts_userprofile
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py", line 155, in post
+    'role': getattr(user.profile, 'role', 'user'),
+                    ^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 523, in __get__
+    rel_obj = self.get_queryset(instance=instance).get(**filter_args)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 629, in get
+    num = len(clone)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 366, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such table: accounts_userprofile
+ERROR 2025-07-19 10:26:17,481 basehttp 20240 21612 "POST /api/auth/token/login/ HTTP/1.1" 500 183844
+INFO 2025-07-19 10:28:26,662 views 20240 21612 Login attempt with data: {'username': 'Majidlashipuldar2@gmail.com', 'password': '123456majid'}
+INFO 2025-07-19 10:28:27,451 views 20240 21612 Successful login for user: Majidlashipuldar2@gmail.com
+ERROR 2025-07-19 10:28:27,490 log 20240 21612 Internal Server Error: /api/auth/token/login/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 516, in __get__
+    rel_obj = self.related.get_cached_value(instance)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\fields\mixins.py", line 37, in get_cached_value
+    return instance._state.fields_cache[self.cache_name]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+KeyError: 'profile'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: accounts_userprofile
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py", line 155, in post
+    'role': getattr(user.profile, 'role', 'user'),
+                    ^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 523, in __get__
+    rel_obj = self.get_queryset(instance=instance).get(**filter_args)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 629, in get
+    num = len(clone)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 366, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such table: accounts_userprofile
+ERROR 2025-07-19 10:28:27,495 basehttp 20240 21612 "POST /api/auth/token/login/ HTTP/1.1" 500 183844
+INFO 2025-07-19 14:48:07,220 basehttp 20240 16180 "OPTIONS /api/accounts/register/company/ HTTP/1.1" 200 0
+ERROR 2025-07-19 14:48:08,523 log 20240 16180 Internal Server Error: /api/accounts/register/company/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: accounts_userprofile
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\generics.py", line 194, in post
+    return self.create(request, *args, **kwargs)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\mixins.py", line 19, in create
+    self.perform_create(serializer)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py", line 421, in perform_create
+    company = serializer.save()
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\serializers.py", line 210, in save
+    self.instance = self.create(validated_data)
+                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py", line 94, in create
+    user = User.objects.create_user(**user_data)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\models.py", line 175, in create_user
+    return self._create_user(username, email, password, **extra_fields)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\models.py", line 163, in _create_user
+    user.save(using=self._db)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\base_user.py", line 65, in save
+    super().save(*args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1023, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\dispatch\dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\models.py", line 171, in create_or_update_user_profile
+    UserProfile.objects.create(user=instance)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\models.py", line 162, in save
+    super().save(*args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+        raw,
+    ...<4 lines>...
+        update_fields,
+    )
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+        cls._base_manager, using, fields, returning_fields, raw
+    )
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ~~~~~~~~~~~~~~~^
+        [self],
+        ^^^^^^^
+    ...<3 lines>...
+        raw=raw,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 1868, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1882, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such table: accounts_userprofile
+ERROR 2025-07-19 14:48:08,537 basehttp 20240 16180 "POST /api/accounts/register/company/ HTTP/1.1" 500 251918
+ERROR 2025-07-19 14:48:12,538 log 20240 16180 Internal Server Error: /api/accounts/register/company/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: accounts_userprofile
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\generics.py", line 194, in post
+    return self.create(request, *args, **kwargs)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\mixins.py", line 19, in create
+    self.perform_create(serializer)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py", line 421, in perform_create
+    company = serializer.save()
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\serializers.py", line 210, in save
+    self.instance = self.create(validated_data)
+                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py", line 94, in create
+    user = User.objects.create_user(**user_data)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\models.py", line 175, in create_user
+    return self._create_user(username, email, password, **extra_fields)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\models.py", line 163, in _create_user
+    user.save(using=self._db)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\base_user.py", line 65, in save
+    super().save(*args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1023, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\dispatch\dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\models.py", line 171, in create_or_update_user_profile
+    UserProfile.objects.create(user=instance)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\models.py", line 162, in save
+    super().save(*args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+        raw,
+    ...<4 lines>...
+        update_fields,
+    )
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+        cls._base_manager, using, fields, returning_fields, raw
+    )
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ~~~~~~~~~~~~~~~^
+        [self],
+        ^^^^^^^
+    ...<3 lines>...
+        raw=raw,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 1868, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1882, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such table: accounts_userprofile
+ERROR 2025-07-19 14:48:12,543 basehttp 20240 16180 "POST /api/accounts/register/company/ HTTP/1.1" 500 251834
+ERROR 2025-07-19 14:48:21,415 log 20240 16180 Internal Server Error: /api/accounts/register/company/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: accounts_userprofile
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\generics.py", line 194, in post
+    return self.create(request, *args, **kwargs)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\mixins.py", line 19, in create
+    self.perform_create(serializer)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py", line 421, in perform_create
+    company = serializer.save()
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\serializers.py", line 210, in save
+    self.instance = self.create(validated_data)
+                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py", line 94, in create
+    user = User.objects.create_user(**user_data)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\models.py", line 175, in create_user
+    return self._create_user(username, email, password, **extra_fields)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\models.py", line 163, in _create_user
+    user.save(using=self._db)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\base_user.py", line 65, in save
+    super().save(*args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1023, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\dispatch\dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\models.py", line 171, in create_or_update_user_profile
+    UserProfile.objects.create(user=instance)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\models.py", line 162, in save
+    super().save(*args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+        raw,
+    ...<4 lines>...
+        update_fields,
+    )
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+        cls._base_manager, using, fields, returning_fields, raw
+    )
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ~~~~~~~~~~~~~~~^
+        [self],
+        ^^^^^^^
+    ...<3 lines>...
+        raw=raw,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 1868, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1882, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such table: accounts_userprofile
+ERROR 2025-07-19 14:48:21,420 basehttp 20240 16180 "POST /api/accounts/register/company/ HTTP/1.1" 500 251834
+ERROR 2025-07-19 14:48:31,634 log 20240 16180 Internal Server Error: /api/accounts/register/company/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: accounts_userprofile
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\generics.py", line 194, in post
+    return self.create(request, *args, **kwargs)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\mixins.py", line 19, in create
+    self.perform_create(serializer)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py", line 421, in perform_create
+    company = serializer.save()
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\serializers.py", line 210, in save
+    self.instance = self.create(validated_data)
+                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py", line 94, in create
+    user = User.objects.create_user(**user_data)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\models.py", line 175, in create_user
+    return self._create_user(username, email, password, **extra_fields)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\models.py", line 163, in _create_user
+    user.save(using=self._db)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\base_user.py", line 65, in save
+    super().save(*args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1023, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\dispatch\dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\models.py", line 171, in create_or_update_user_profile
+    UserProfile.objects.create(user=instance)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\models.py", line 162, in save
+    super().save(*args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+        raw,
+    ...<4 lines>...
+        update_fields,
+    )
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+        cls._base_manager, using, fields, returning_fields, raw
+    )
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ~~~~~~~~~~~~~~~^
+        [self],
+        ^^^^^^^
+    ...<3 lines>...
+        raw=raw,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 1868, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1882, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such table: accounts_userprofile
+ERROR 2025-07-19 14:48:31,639 basehttp 20240 16180 "POST /api/accounts/register/company/ HTTP/1.1" 500 251864
+ERROR 2025-07-19 14:48:41,184 log 20240 16180 Internal Server Error: /api/accounts/register/company/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: accounts_userprofile
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\generics.py", line 194, in post
+    return self.create(request, *args, **kwargs)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\mixins.py", line 19, in create
+    self.perform_create(serializer)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py", line 421, in perform_create
+    company = serializer.save()
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\serializers.py", line 210, in save
+    self.instance = self.create(validated_data)
+                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py", line 94, in create
+    user = User.objects.create_user(**user_data)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\models.py", line 175, in create_user
+    return self._create_user(username, email, password, **extra_fields)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\models.py", line 163, in _create_user
+    user.save(using=self._db)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\base_user.py", line 65, in save
+    super().save(*args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1023, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\dispatch\dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\models.py", line 171, in create_or_update_user_profile
+    UserProfile.objects.create(user=instance)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\models.py", line 162, in save
+    super().save(*args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+        raw,
+    ...<4 lines>...
+        update_fields,
+    )
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+        cls._base_manager, using, fields, returning_fields, raw
+    )
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ~~~~~~~~~~~~~~~^
+        [self],
+        ^^^^^^^
+    ...<3 lines>...
+        raw=raw,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 1868, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1882, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such table: accounts_userprofile
+ERROR 2025-07-19 14:48:41,189 basehttp 20240 16180 "POST /api/accounts/register/company/ HTTP/1.1" 500 251913
+INFO 2025-07-19 14:49:10,054 autoreload 4264 12680 Watching for file changes with StatReloader
+ERROR 2025-07-19 14:49:15,486 log 4264 19044 Internal Server Error: /api/accounts/register/company/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: accounts_userprofile
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\generics.py", line 194, in post
+    return self.create(request, *args, **kwargs)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\mixins.py", line 19, in create
+    self.perform_create(serializer)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py", line 421, in perform_create
+    company = serializer.save()
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\serializers.py", line 210, in save
+    self.instance = self.create(validated_data)
+                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py", line 94, in create
+    user = User.objects.create_user(**user_data)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\models.py", line 175, in create_user
+    return self._create_user(username, email, password, **extra_fields)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\models.py", line 163, in _create_user
+    user.save(using=self._db)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\base_user.py", line 65, in save
+    super().save(*args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1023, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\dispatch\dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\models.py", line 171, in create_or_update_user_profile
+    UserProfile.objects.create(user=instance)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\models.py", line 162, in save
+    super().save(*args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+        raw,
+    ...<4 lines>...
+        update_fields,
+    )
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+        cls._base_manager, using, fields, returning_fields, raw
+    )
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ~~~~~~~~~~~~~~~^
+        [self],
+        ^^^^^^^
+    ...<3 lines>...
+        raw=raw,
+        ^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 1868, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1882, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such table: accounts_userprofile
+ERROR 2025-07-19 14:49:15,494 basehttp 4264 19044 "POST /api/accounts/register/company/ HTTP/1.1" 500 251913
+INFO 2025-07-19 14:49:28,007 basehttp 4264 20236 "OPTIONS /api/auth/token/login/ HTTP/1.1" 200 0
+INFO 2025-07-19 14:49:28,011 views 4264 20236 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386arsalan'}
+INFO 2025-07-19 14:49:28,625 views 4264 20236 Successful login for user: arsalanpayandeh44@gmail.com
+ERROR 2025-07-19 14:49:28,691 log 4264 20236 Internal Server Error: /api/auth/token/login/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 516, in __get__
+    rel_obj = self.related.get_cached_value(instance)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\fields\mixins.py", line 37, in get_cached_value
+    return instance._state.fields_cache[self.cache_name]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+KeyError: 'profile'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: accounts_userprofile
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py", line 155, in post
+    'role': getattr(user.profile, 'role', 'user'),
+                    ^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 523, in __get__
+    rel_obj = self.get_queryset(instance=instance).get(**filter_args)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 629, in get
+    num = len(clone)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 366, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\sql\compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\backends\sqlite3\base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such table: accounts_userprofile
+ERROR 2025-07-19 14:49:28,698 basehttp 4264 20236 "POST /api/auth/token/login/ HTTP/1.1" 500 183862
+INFO 2025-07-19 14:49:33,079 views 4264 20236 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386Arsalan'}
+WARNING 2025-07-19 14:49:33,706 views 4264 20236 Failed login attempt for user: arsalanpayandeh44@gmail.com
+WARNING 2025-07-19 14:49:33,707 log 4264 20236 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-19 14:49:33,707 basehttp 4264 20236 "POST /api/auth/token/login/ HTTP/1.1" 401 83
+INFO 2025-07-19 14:49:42,175 views 4264 24116 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386@Arsalan'}
+WARNING 2025-07-19 14:49:42,790 views 4264 24116 Failed login attempt for user: arsalanpayandeh44@gmail.com
+WARNING 2025-07-19 14:49:42,791 log 4264 24116 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-19 14:49:42,791 basehttp 4264 24116 "POST /api/auth/token/login/ HTTP/1.1" 401 83
+WARNING 2025-07-19 14:50:02,330 log 4264 8356 Unauthorized: /
+WARNING 2025-07-19 14:50:02,330 basehttp 4264 8356 "GET / HTTP/1.1" 401 29
+WARNING 2025-07-19 14:50:05,051 log 4264 8356 Not Found: /favicon.ico
+WARNING 2025-07-19 14:50:05,052 basehttp 4264 8356 "GET /favicon.ico HTTP/1.1" 404 3803
+WARNING 2025-07-19 14:50:26,914 log 4264 10280 Not Found: /
+WARNING 2025-07-19 14:50:26,915 basehttp 4264 10280 "GET / HTTP/1.1" 404 3752
+INFO 2025-07-19 14:50:30,379 basehttp 4264 10280 "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-07-19 14:50:30,598 basehttp 4264 10280 "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4173
+INFO 2025-07-19 14:50:30,638 basehttp 4264 10280 "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2025-07-19 14:50:30,641 basehttp 4264 13328 "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2025-07-19 14:50:30,660 basehttp 4264 10280 "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2025-07-19 14:50:30,663 basehttp 4264 13328 "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2025-07-19 14:50:30,674 basehttp 4264 12952 "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2025-07-19 14:50:30,678 basehttp 4264 10140 "GET /static/admin/css/login.css HTTP/1.1" 304 0
+INFO 2025-07-19 14:50:30,700 basehttp 4264 10140 "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2025-07-19 14:50:43,368 basehttp 4264 24368 "POST /admin/login/?next=/admin/ HTTP/1.1" 200 4345
+INFO 2025-07-19 14:50:50,885 basehttp 4264 6796 "POST /admin/login/?next=/admin/ HTTP/1.1" 200 4343
+INFO 2025-07-19 14:50:55,985 basehttp 4264 6796 "POST /admin/login/?next=/admin/ HTTP/1.1" 200 4343
+INFO 2025-07-19 14:51:06,204 basehttp 4264 6796 "POST /admin/login/?next=/admin/ HTTP/1.1" 200 4343
+INFO 2025-07-19 14:51:20,213 basehttp 4264 6796 "POST /admin/login/?next=/admin/ HTTP/1.1" 200 4343
+INFO 2025-07-19 14:51:26,872 basehttp 4264 6796 "POST /admin/login/?next=/admin/ HTTP/1.1" 200 4343
+INFO 2025-07-19 14:56:36,782 basehttp 4264 3852 "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2025-07-19 14:56:36,868 basehttp 4264 3852 "GET /admin/ HTTP/1.1" 200 10843
+INFO 2025-07-19 14:56:36,935 basehttp 4264 3852 "GET /static/admin/css/dashboard.css HTTP/1.1" 304 0
+INFO 2025-07-19 14:56:37,146 basehttp 4264 3852 "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 304 0
+INFO 2025-07-19 14:56:37,147 basehttp 4264 17976 "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 304 0
+INFO 2025-07-19 14:56:44,569 basehttp 4264 22080 "GET /admin/accounts/userprofile/ HTTP/1.1" 200 12397
+INFO 2025-07-19 14:56:44,639 basehttp 4264 10224 "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 304 0
+INFO 2025-07-19 14:56:44,640 basehttp 4264 22080 "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
+INFO 2025-07-19 14:56:44,649 basehttp 4264 10224 "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+INFO 2025-07-19 14:56:44,651 basehttp 4264 22080 "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 304 0
+INFO 2025-07-19 14:56:44,659 basehttp 4264 21400 "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+INFO 2025-07-19 14:56:44,668 basehttp 4264 20848 "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+INFO 2025-07-19 14:56:44,668 basehttp 4264 13280 "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+INFO 2025-07-19 14:56:44,669 basehttp 4264 1524 "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+INFO 2025-07-19 14:56:44,789 basehttp 4264 22080 "GET /static/admin/js/core.js HTTP/1.1" 304 0
+INFO 2025-07-19 14:56:44,854 basehttp 4264 10224 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-07-19 14:56:44,973 basehttp 4264 10224 "GET /static/admin/js/filters.js HTTP/1.1" 304 0
+INFO 2025-07-19 14:56:45,019 basehttp 4264 10224 "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 304 0
+INFO 2025-07-19 14:56:49,512 basehttp 4264 10224 "GET /admin/accounts/userprofile/ HTTP/1.1" 200 12397
+INFO 2025-07-19 14:56:49,572 basehttp 4264 10224 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-07-19 14:56:50,580 basehttp 4264 10224 "GET /admin/accounts/sitesettings/ HTTP/1.1" 200 12417
+INFO 2025-07-19 14:56:50,629 basehttp 4264 10224 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-07-19 14:56:52,112 basehttp 4264 156 "GET /admin/accounts/driver/ HTTP/1.1" 200 13114
+INFO 2025-07-19 14:56:52,159 basehttp 4264 156 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-07-19 14:56:56,009 basehttp 4264 156 "GET /admin/accounts/contactmessage/ HTTP/1.1" 200 14469
+INFO 2025-07-19 14:56:56,055 basehttp 4264 156 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-07-19 14:56:59,130 basehttp 4264 156 "GET /admin/auth/user/ HTTP/1.1" 200 22811
+INFO 2025-07-19 14:56:59,189 basehttp 4264 21492 "GET /static/admin/img/search.svg HTTP/1.1" 304 0
+INFO 2025-07-19 14:56:59,193 basehttp 4264 8452 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-07-19 14:56:59,215 basehttp 4264 8452 "GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
+INFO 2025-07-19 14:56:59,253 basehttp 4264 21492 "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 304 0
+INFO 2025-07-19 14:56:59,504 basehttp 4264 156 "GET /static/admin/img/icon-no.svg HTTP/1.1" 200 560
+INFO 2025-07-19 14:56:59,523 basehttp 4264 8452 "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+INFO 2025-07-19 14:57:25,567 basehttp 4264 14564 "GET /admin/auth/user/1/change/ HTTP/1.1" 200 28539
+INFO 2025-07-19 14:57:25,637 basehttp 4264 14564 "GET /static/admin/js/calendar.js HTTP/1.1" 200 9141
+INFO 2025-07-19 14:57:25,640 basehttp 4264 11080 "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 19319
+INFO 2025-07-19 14:57:25,641 basehttp 4264 20508 "GET /static/admin/css/forms.css HTTP/1.1" 304 0
+INFO 2025-07-19 14:57:25,692 basehttp 4264 13916 "GET /static/admin/js/SelectFilter2.js HTTP/1.1" 200 15845
+INFO 2025-07-19 14:57:25,692 basehttp 4264 8696 "GET /static/admin/js/SelectBox.js HTTP/1.1" 200 4530
+INFO 2025-07-19 14:57:25,701 basehttp 4264 8696 "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 304 0
+INFO 2025-07-19 14:57:25,707 basehttp 4264 12544 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-07-19 14:57:25,737 basehttp 4264 12544 "GET /static/admin/css/widgets.css HTTP/1.1" 304 0
+INFO 2025-07-19 14:57:25,783 basehttp 4264 12544 "GET /static/admin/js/change_form.js HTTP/1.1" 304 0
+INFO 2025-07-19 14:57:25,964 basehttp 4264 13916 "GET /static/admin/img/icon-clock.svg HTTP/1.1" 200 677
+INFO 2025-07-19 14:57:25,966 basehttp 4264 8696 "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1086
+INFO 2025-07-19 14:57:25,967 basehttp 4264 12544 "GET /static/admin/img/selector-icons.svg HTTP/1.1" 200 3291
+INFO 2025-07-19 14:57:32,992 basehttp 4264 12544 "GET /admin/auth/user/1/password/ HTTP/1.1" 200 12544
+INFO 2025-07-19 14:57:33,052 basehttp 4264 12544 "GET /static/admin/css/unusable_password_field.css HTTP/1.1" 200 663
+INFO 2025-07-19 14:57:33,063 basehttp 4264 8696 "GET /static/admin/js/unusable_password_field.js HTTP/1.1" 200 1480
+ERROR 2025-07-19 14:57:43,756 log 4264 8696 Internal Server Error: /admin/auth/user/1/password/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\utils\decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\utils\decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\admin\sites.py", line 246, in inner
+    return view(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\debug.py", line 143, in sensitive_post_parameters_wrapper
+    return view(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\admin.py", line 184, in user_change_password
+    user = form.save()
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\forms.py", line 599, in save
+    return self.set_password_and_save(self.user, commit=commit)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\forms.py", line 222, in set_password_and_save
+    user = super().set_password_and_save(user, **kwargs, commit=commit)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\forms.py", line 154, in set_password_and_save
+    user.save()
+    ~~~~~~~~~^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\base_user.py", line 65, in save
+    super().save(*args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1023, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\dispatch\dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\models.py", line 173, in create_or_update_user_profile
+    instance.profile.save()
+    ^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 534, in __get__
+    raise self.RelatedObjectDoesNotExist(
+    ...<2 lines>...
+    )
+django.contrib.auth.models.User.profile.RelatedObjectDoesNotExist: User has no profile.
+ERROR 2025-07-19 14:57:43,769 basehttp 4264 8696 "POST /admin/auth/user/1/password/ HTTP/1.1" 500 147778
+INFO 2025-07-19 14:58:02,556 basehttp 4264 8696 "GET /admin/auth/user/1/password/ HTTP/1.1" 200 12544
+INFO 2025-07-19 14:58:07,656 basehttp 4264 8696 "GET /static/admin/img/icon-alert.svg HTTP/1.1" 200 504
+ERROR 2025-07-19 14:58:13,250 log 4264 8696 Internal Server Error: /admin/auth/user/1/password/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\utils\decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\utils\decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\admin\sites.py", line 246, in inner
+    return view(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\debug.py", line 143, in sensitive_post_parameters_wrapper
+    return view(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\admin.py", line 184, in user_change_password
+    user = form.save()
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\forms.py", line 599, in save
+    return self.set_password_and_save(self.user, commit=commit)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\forms.py", line 226, in set_password_and_save
+    user.save()
+    ~~~~~~~~~^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\base_user.py", line 65, in save
+    super().save(*args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1023, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\dispatch\dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\models.py", line 173, in create_or_update_user_profile
+    instance.profile.save()
+    ^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 534, in __get__
+    raise self.RelatedObjectDoesNotExist(
+    ...<2 lines>...
+    )
+django.contrib.auth.models.User.profile.RelatedObjectDoesNotExist: User has no profile.
+ERROR 2025-07-19 14:58:13,253 basehttp 4264 8696 "POST /admin/auth/user/1/password/ HTTP/1.1" 500 143323
+INFO 2025-07-19 14:58:14,562 basehttp 4264 8696 "GET /admin/auth/user/1/password/ HTTP/1.1" 200 11760
+INFO 2025-07-19 14:58:20,339 basehttp 4264 8696 "GET /admin/auth/user/1/change/ HTTP/1.1" 200 28302
+INFO 2025-07-19 14:59:22,220 views 4264 3068 Login attempt with data: {'username': 'azizollahpayandeh1@gmail.com', 'password': '13861386aziz'}
+INFO 2025-07-19 14:59:22,999 views 4264 3068 Successful login for user: azizollahpayandeh1@gmail.com
+ERROR 2025-07-19 14:59:23,025 log 4264 3068 Internal Server Error: /api/auth/token/login/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py", line 155, in post
+    'role': getattr(user.profile, 'role', 'user'),
+                    ^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 534, in __get__
+    raise self.RelatedObjectDoesNotExist(
+    ...<2 lines>...
+    )
+django.contrib.auth.models.User.profile.RelatedObjectDoesNotExist: User has no profile.
+ERROR 2025-07-19 14:59:23,028 basehttp 4264 3068 "POST /api/auth/token/login/ HTTP/1.1" 500 108660
+INFO 2025-07-19 14:59:29,079 basehttp 4264 8696 "GET /admin/auth/user/1/password/ HTTP/1.1" 200 11760
+ERROR 2025-07-19 14:59:38,191 log 4264 2536 Internal Server Error: /admin/auth/user/1/password/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\utils\decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\utils\decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\admin\sites.py", line 246, in inner
+    return view(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\utils\decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\debug.py", line 143, in sensitive_post_parameters_wrapper
+    return view(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\admin.py", line 184, in user_change_password
+    user = form.save()
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\forms.py", line 599, in save
+    return self.set_password_and_save(self.user, commit=commit)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\forms.py", line 222, in set_password_and_save
+    user = super().set_password_and_save(user, **kwargs, commit=commit)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\forms.py", line 154, in set_password_and_save
+    user.save()
+    ~~~~~~~~~^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\contrib\auth\base_user.py", line 65, in save
+    super().save(*args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\base.py", line 1023, in save_base
+    post_save.send(
+    ~~~~~~~~~~~~~~^
+        sender=origin,
+        ^^^^^^^^^^^^^^
+    ...<4 lines>...
+        using=using,
+        ^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\dispatch\dispatcher.py", line 189, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\models.py", line 173, in create_or_update_user_profile
+    instance.profile.save()
+    ^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 534, in __get__
+    raise self.RelatedObjectDoesNotExist(
+    ...<2 lines>...
+    )
+django.contrib.auth.models.User.profile.RelatedObjectDoesNotExist: User has no profile.
+ERROR 2025-07-19 14:59:38,198 basehttp 4264 2536 "POST /admin/auth/user/1/password/ HTTP/1.1" 500 147596
+INFO 2025-07-19 15:00:13,431 views 4264 1704 Login attempt with data: {'username': 'azizollahpayandeh1@gmail.com', 'password': '13861386aziz'}
+INFO 2025-07-19 15:00:14,419 views 4264 1704 Successful login for user: azizollahpayandeh1@gmail.com
+ERROR 2025-07-19 15:00:14,445 log 4264 1704 Internal Server Error: /api/auth/token/login/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py", line 155, in post
+    'role': getattr(user.profile, 'role', 'user'),
+                    ^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 534, in __get__
+    raise self.RelatedObjectDoesNotExist(
+    ...<2 lines>...
+    )
+django.contrib.auth.models.User.profile.RelatedObjectDoesNotExist: User has no profile.
+ERROR 2025-07-19 15:00:14,448 basehttp 4264 1704 "POST /api/auth/token/login/ HTTP/1.1" 500 108660
+INFO 2025-07-19 15:00:32,045 basehttp 4264 11792 "GET /admin/auth/user/1/password/ HTTP/1.1" 200 12544
+INFO 2025-07-19 15:00:34,188 basehttp 4264 11792 "GET /admin/auth/user/1/change/ HTTP/1.1" 200 28539
+INFO 2025-07-19 15:01:10,223 views 4264 13432 Login attempt with data: {'username': 'Azizollahpayandeh1@gmail.com', 'password': 'pbkdf2_sha256'}
+WARNING 2025-07-19 15:01:10,876 views 4264 13432 Login attempt with non-existent username: Azizollahpayandeh1@gmail.com
+WARNING 2025-07-19 15:01:10,878 log 4264 13432 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-19 15:01:10,878 basehttp 4264 13432 "POST /api/auth/token/login/ HTTP/1.1" 401 73
+INFO 2025-07-19 15:01:18,023 views 4264 13324 Login attempt with data: {'username': 'Azizollahpayandeh1@gmail.com', 'password': '13861386aziz'}
+WARNING 2025-07-19 15:01:18,636 views 4264 13324 Login attempt with non-existent username: Azizollahpayandeh1@gmail.com
+WARNING 2025-07-19 15:01:18,636 log 4264 13324 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-19 15:01:18,637 basehttp 4264 13324 "POST /api/auth/token/login/ HTTP/1.1" 401 73
+INFO 2025-07-19 15:02:28,135 basehttp 4264 15184 "POST /api/accounts/register/company/ HTTP/1.1" 201 257
+INFO 2025-07-19 15:02:45,327 views 4264 15184 Login attempt with data: {'username': 'AzizVPN@gmail.com', 'password': '13861386arsalan'}
+INFO 2025-07-19 15:02:45,950 views 4264 15184 Successful login for user: AzizVPN@gmail.com
+INFO 2025-07-19 15:02:45,953 basehttp 4264 15184 "POST /api/auth/token/login/ HTTP/1.1" 200 612
+INFO 2025-07-19 15:02:45,959 basehttp 4264 15184 "OPTIONS /api/auth/users/me/ HTTP/1.1" 200 0
+INFO 2025-07-19 15:02:45,968 basehttp 4264 15184 "GET /api/auth/users/me/ HTTP/1.1" 200 193
+INFO 2025-07-19 15:03:40,681 basehttp 4264 15248 "GET /admin/auth/user/ HTTP/1.1" 200 23293
+INFO 2025-07-19 15:03:47,546 basehttp 4264 14712 "GET /admin/auth/user/17/change/ HTTP/1.1" 200 28496
+INFO 2025-07-19 15:03:47,597 basehttp 4264 14712 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-07-19 15:04:04,400 basehttp 4264 10792 "GET /admin/auth/user/ HTTP/1.1" 200 23293
+INFO 2025-07-19 15:04:12,149 basehttp 4264 2192 "GET /admin/auth/user/15/change/ HTTP/1.1" 200 28452
+INFO 2025-07-19 15:04:12,211 basehttp 4264 2192 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-07-19 15:04:14,570 basehttp 4264 2192 "GET /admin/auth/user/15/delete/ HTTP/1.1" 200 10967
+INFO 2025-07-19 15:04:14,642 basehttp 4264 2192 "GET /static/admin/js/cancel.js HTTP/1.1" 200 884
+INFO 2025-07-19 15:04:20,043 basehttp 4264 2192 "POST /admin/auth/user/15/delete/ HTTP/1.1" 302 0
+INFO 2025-07-19 15:04:20,077 basehttp 4264 2192 "GET /admin/auth/user/ HTTP/1.1" 200 23003
+INFO 2025-07-19 15:04:20,131 basehttp 4264 2192 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-07-19 15:04:36,792 basehttp 4264 10276 "GET /admin/auth/user/17/change/ HTTP/1.1" 200 28496
+INFO 2025-07-19 15:04:36,834 basehttp 4264 10276 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-07-19 15:05:36,861 basehttp 4264 10280 "POST /admin/auth/user/17/change/ HTTP/1.1" 302 0
+INFO 2025-07-19 15:05:36,903 basehttp 4264 10280 "GET /admin/auth/user/add/ HTTP/1.1" 200 15869
+INFO 2025-07-19 15:05:36,966 basehttp 4264 10280 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-07-19 15:05:39,047 basehttp 4264 10280 "GET /admin/auth/user/17/change/ HTTP/1.1" 200 28527
+INFO 2025-07-19 15:05:57,209 views 4264 21812 Login attempt with data: {'username': 'Alirezamarvi@gmail.com', 'password': '123456'}
+WARNING 2025-07-19 15:05:57,850 views 4264 21812 Login attempt with non-existent username: Alirezamarvi@gmail.com
+WARNING 2025-07-19 15:05:57,850 log 4264 21812 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-19 15:05:57,851 basehttp 4264 21812 "POST /api/auth/token/login/ HTTP/1.1" 401 73
+INFO 2025-07-19 15:06:01,215 views 4264 21812 Login attempt with data: {'username': 'Alirezamarvi@gmail.com', 'password': '123456'}
+WARNING 2025-07-19 15:06:01,850 views 4264 21812 Login attempt with non-existent username: Alirezamarvi@gmail.com
+WARNING 2025-07-19 15:06:01,850 log 4264 21812 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-19 15:06:01,851 basehttp 4264 21812 "POST /api/auth/token/login/ HTTP/1.1" 401 73
+INFO 2025-07-19 15:06:25,018 basehttp 4264 2168 "POST /admin/auth/user/17/change/ HTTP/1.1" 302 0
+INFO 2025-07-19 15:06:25,056 basehttp 4264 2168 "GET /admin/auth/user/ HTTP/1.1" 200 23078
+INFO 2025-07-19 15:06:25,109 basehttp 4264 2168 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-07-19 15:06:31,290 views 4264 18284 Login attempt with data: {'username': 'Alirezamarvi@gmail.com', 'password': '123456'}
+WARNING 2025-07-19 15:06:31,938 views 4264 18284 Login attempt with non-existent username: Alirezamarvi@gmail.com
+WARNING 2025-07-19 15:06:31,939 log 4264 18284 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-19 15:06:31,939 basehttp 4264 18284 "POST /api/auth/token/login/ HTTP/1.1" 401 73
+INFO 2025-07-19 15:35:34,900 views 4264 5892 Login attempt with data: {'username': 'admin@fake.com', 'password': 'Alirezaa'}
+WARNING 2025-07-19 15:35:35,523 views 4264 5892 Login attempt with non-existent username: admin@fake.com
+WARNING 2025-07-19 15:35:35,525 log 4264 5892 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-19 15:35:35,526 basehttp 4264 5892 "POST /api/auth/token/login/ HTTP/1.1" 401 73
+INFO 2025-07-19 15:44:28,668 autoreload 4264 12680 C:\Users\azizo\Desktop\Pathnio\backend\accounts\models.py changed, reloading.
+INFO 2025-07-19 15:44:33,500 autoreload 10948 10792 Watching for file changes with StatReloader
+INFO 2025-07-19 15:45:48,978 views 10948 23544 Login attempt with data: {'username': 'AzizVPN1@gmail.com', 'password': '13861386AzizVPN'}
+WARNING 2025-07-19 15:45:49,670 views 10948 23544 Login attempt with non-existent username: AzizVPN1@gmail.com
+WARNING 2025-07-19 15:45:49,673 log 10948 23544 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-19 15:45:49,674 basehttp 10948 23544 "POST /api/auth/token/login/ HTTP/1.1" 401 73
+INFO 2025-07-19 15:46:01,347 views 10948 2604 Login attempt with data: {'username': 'AzizVPN1@gmail.com', 'password': '13861386AzizVPN'}
+WARNING 2025-07-19 15:46:01,994 views 10948 2604 Login attempt with non-existent username: AzizVPN1@gmail.com
+WARNING 2025-07-19 15:46:01,995 log 10948 2604 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-19 15:46:01,995 basehttp 10948 2604 "POST /api/auth/token/login/ HTTP/1.1" 401 73
+INFO 2025-07-19 15:46:22,398 views 10948 22976 Login attempt with data: {'username': 'AzizVPN1@gmail.com', 'password': '13861386AzizVPN'}
+WARNING 2025-07-19 15:46:23,075 views 10948 22976 Login attempt with non-existent username: AzizVPN1@gmail.com
+WARNING 2025-07-19 15:46:23,075 log 10948 22976 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-19 15:46:23,076 basehttp 10948 22976 "POST /api/auth/token/login/ HTTP/1.1" 401 73
+INFO 2025-07-19 15:46:41,683 views 10948 16648 Login attempt with data: {'username': 'AzizVPN@gmail.com', 'password': '13861386aziz'}
+WARNING 2025-07-19 15:46:42,540 views 10948 16648 Failed login attempt for user: AzizVPN@gmail.com
+WARNING 2025-07-19 15:46:42,541 log 10948 16648 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-19 15:46:42,541 basehttp 10948 16648 "POST /api/auth/token/login/ HTTP/1.1" 401 83
+INFO 2025-07-19 15:46:46,538 views 10948 15204 Login attempt with data: {'username': 'AzizVPN@gmail.com', 'password': '13861386azizVPN'}
+WARNING 2025-07-19 15:46:47,448 views 10948 15204 Failed login attempt for user: AzizVPN@gmail.com
+WARNING 2025-07-19 15:46:47,448 log 10948 15204 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-19 15:46:47,448 basehttp 10948 15204 "POST /api/auth/token/login/ HTTP/1.1" 401 83
+INFO 2025-07-19 15:46:53,061 views 10948 15204 Login attempt with data: {'username': 'AzizVPN@gmail.com', 'password': '13861386AzizVPN'}
+WARNING 2025-07-19 15:46:53,904 views 10948 15204 Failed login attempt for user: AzizVPN@gmail.com
+WARNING 2025-07-19 15:46:53,904 log 10948 15204 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-19 15:46:53,905 basehttp 10948 15204 "POST /api/auth/token/login/ HTTP/1.1" 401 83
+INFO 2025-07-19 15:47:48,522 views 10948 16212 Login attempt with data: {'username': 'AzizVPN1@gmail.com', 'password': '13861386AzizVPN'}
+WARNING 2025-07-19 15:47:49,170 views 10948 16212 Login attempt with non-existent username: AzizVPN1@gmail.com
+WARNING 2025-07-19 15:47:49,171 log 10948 16212 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-19 15:47:49,171 basehttp 10948 16212 "POST /api/auth/token/login/ HTTP/1.1" 401 73
+INFO 2025-07-19 15:48:16,225 views 10948 16212 Login attempt with data: {'username': 'AzizVPN1@gmail.com', 'password': '13861386AzizVPN'}
+WARNING 2025-07-19 15:48:16,847 views 10948 16212 Login attempt with non-existent username: AzizVPN1@gmail.com
+WARNING 2025-07-19 15:48:16,847 log 10948 16212 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-19 15:48:16,847 basehttp 10948 16212 "POST /api/auth/token/login/ HTTP/1.1" 401 73
+INFO 2025-07-19 15:49:18,373 views 10948 4048 Login attempt with data: {'username': 'AzizVPN1@gmail.com', 'password': '13861386AzizVPN'}
+WARNING 2025-07-19 15:49:19,023 views 10948 4048 Login attempt with non-existent username: AzizVPN1@gmail.com
+WARNING 2025-07-19 15:49:19,024 log 10948 4048 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-19 15:49:19,024 basehttp 10948 4048 "POST /api/auth/token/login/ HTTP/1.1" 401 73
+INFO 2025-07-22 13:38:09,169 autoreload 13428 16036 Watching for file changes with StatReloader
+INFO 2025-07-22 13:39:09,920 basehttp 13428 5184 "OPTIONS /api/auth/token/login/ HTTP/1.1" 200 0
+INFO 2025-07-22 13:39:09,950 views 13428 5184 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386arsalan'}
+INFO 2025-07-22 13:39:10,542 views 13428 5184 Successful login for user: arsalanpayandeh44@gmail.com
+ERROR 2025-07-22 13:39:11,437 log 13428 5184 Internal Server Error: /api/auth/token/login/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py", line 155, in post
+    'role': getattr(user.profile, 'role', 'user'),
+                    ^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 534, in __get__
+    raise self.RelatedObjectDoesNotExist(
+    ...<2 lines>...
+    )
+django.contrib.auth.models.User.profile.RelatedObjectDoesNotExist: User has no profile.
+ERROR 2025-07-22 13:39:11,442 basehttp 13428 5184 "POST /api/auth/token/login/ HTTP/1.1" 500 108357
+INFO 2025-07-22 13:39:17,861 views 13428 5020 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386Arsalan'}
+WARNING 2025-07-22 13:39:18,429 views 13428 5020 Failed login attempt for user: arsalanpayandeh44@gmail.com
+WARNING 2025-07-22 13:39:18,429 log 13428 5020 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-22 13:39:18,429 basehttp 13428 5020 "POST /api/auth/token/login/ HTTP/1.1" 401 83
+INFO 2025-07-22 13:40:05,978 views 13428 8456 Login attempt with data: {'username': 'Majidlashipuldar2@gmail.com', 'password': '123456majid'}
+INFO 2025-07-22 13:40:06,561 views 13428 8456 Successful login for user: Majidlashipuldar2@gmail.com
+ERROR 2025-07-22 13:40:06,581 log 13428 8456 Internal Server Error: /api/auth/token/login/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py", line 155, in post
+    'role': getattr(user.profile, 'role', 'user'),
+                    ^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 534, in __get__
+    raise self.RelatedObjectDoesNotExist(
+    ...<2 lines>...
+    )
+django.contrib.auth.models.User.profile.RelatedObjectDoesNotExist: User has no profile.
+ERROR 2025-07-22 13:40:06,582 basehttp 13428 8456 "POST /api/auth/token/login/ HTTP/1.1" 500 108350
+INFO 2025-07-22 13:40:14,565 views 13428 5240 Login attempt with data: {'username': 'Majidlashipuldar2@gmail.com', 'password': '123456mmajid2'}
+WARNING 2025-07-22 13:40:15,141 views 13428 5240 Failed login attempt for user: Majidlashipuldar2@gmail.com
+WARNING 2025-07-22 13:40:15,141 log 13428 5240 Unauthorized: /api/auth/token/login/
+WARNING 2025-07-22 13:40:15,141 basehttp 13428 5240 "POST /api/auth/token/login/ HTTP/1.1" 401 83
+INFO 2025-07-22 13:41:15,262 basehttp 13428 6384 "OPTIONS /api/accounts/register/company/ HTTP/1.1" 200 0
+INFO 2025-07-22 13:41:15,917 basehttp 13428 6384 "POST /api/accounts/register/company/ HTTP/1.1" 201 271
+INFO 2025-07-22 13:41:33,871 views 13428 14660 Login attempt with data: {'username': 'arsalanpayandeh3@gmail.com', 'password': '13861386arsalan'}
+INFO 2025-07-22 13:41:34,458 views 13428 14660 Successful login for user: arsalanpayandeh3@gmail.com
+INFO 2025-07-22 13:41:34,461 basehttp 13428 14660 "POST /api/auth/token/login/ HTTP/1.1" 200 630
+INFO 2025-07-22 13:41:34,464 basehttp 13428 14660 "OPTIONS /api/auth/users/me/ HTTP/1.1" 200 0
+INFO 2025-07-22 13:41:34,472 basehttp 13428 14660 "GET /api/auth/users/me/ HTTP/1.1" 200 207
+INFO 2025-07-22 13:42:14,351 basehttp 13428 5876 "OPTIONS /api/accounts/support/tickets/ HTTP/1.1" 200 0
+INFO 2025-07-22 13:42:14,352 basehttp 13428 14136 "OPTIONS /api/accounts/support/tickets/ HTTP/1.1" 200 0
+INFO 2025-07-22 13:42:14,365 basehttp 13428 14136 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 52
+INFO 2025-07-22 13:42:14,371 basehttp 13428 14136 "GET /api/accounts/support/tickets/ HTTP/1.1" 200 52
+INFO 2025-07-22 13:42:36,417 basehttp 13428 9552 "OPTIONS /api/accounts/site-settings/ HTTP/1.1" 200 0
+INFO 2025-07-22 13:42:36,418 basehttp 13428 8692 "OPTIONS /api/accounts/site-settings/ HTTP/1.1" 200 0
+INFO 2025-07-22 13:42:36,428 basehttp 13428 8692 "GET /api/accounts/site-settings/ HTTP/1.1" 200 108
+INFO 2025-07-22 13:42:36,433 basehttp 13428 8692 "GET /api/accounts/site-settings/ HTTP/1.1" 200 108
