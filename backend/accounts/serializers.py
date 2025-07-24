@@ -99,7 +99,9 @@ class CompanyUserSerializer(serializers.ModelSerializer):
             return None
 
 class CompanySerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = UserSerializer(read_only=True)
+    phone = serializers.CharField(source='user.company_profile.phone', read_only=True)
+    date_joined = serializers.DateTimeField(source='user.date_joined', read_only=True)
     class Meta:
         model = Company
         fields = ('id', 'user', 'company_name', 'manager_full_name', 'phone', 'address', 'profile_photo', 'date_joined')

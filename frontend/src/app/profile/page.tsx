@@ -18,6 +18,11 @@ interface User {
   mobile?: string;
   profile_photo?: string;
   date_joined?: string;
+  is_manager?: boolean;
+  is_staff?: boolean;
+  address?: string;
+  language?: string;
+  company_name?: string; // ← Added to fix the error
   // Add more fields as needed
 }
 
@@ -98,25 +103,41 @@ export default function ProfilePage() {
       }
     } catch (err: unknown) {
       let msg = "User update failed.";
-      if (typeof err === "object" && err && "response" in err && (err as ApiError).response?.data) {
-        if (typeof (err as ApiError).response?.data === "string") msg = (err as ApiError).response?.data as string;
-        else if (typeof (err as ApiError).response?.data === "object" && (err as ApiError).response?.data?.detail) msg = (err as ApiError).response?.data.detail!;
+      if (
+        typeof err === "object" &&
+        err !== null &&
+        "response" in err &&
+        (err as ApiError).response?.data
+      ) {
+        const data = (err as ApiError).response?.data;
+        if (typeof data === "string") msg = data as string;
+        else if (typeof data === "object" && data !== null && "detail" in data && (data as any).detail) {
+          msg = (data as any).detail;
+        }
       }
       userError = msg;
     }
     try {
       // Update company profile
       await api.patch("accounts/company/me/", {
-        company_name: editData.company_name,
-        manager_full_name: editData.full_name,
-        phone: editData.phone,
-        address: editData.address,
+        company_name: editData.company_name ?? "",
+        manager_full_name: editData.full_name ?? "",
+        phone: editData.phone ?? "",
+        address: editData.address ?? "",
       });
     } catch (err: unknown) {
       let msg = "Company update failed.";
-      if (typeof err === "object" && err && "response" in err && (err as ApiError).response?.data) {
-        if (typeof (err as ApiError).response?.data === "string") msg = (err as ApiError).response?.data as string;
-        else if (typeof (err as ApiError).response?.data === "object" && (err as ApiError).response?.data?.detail) msg = (err as ApiError).response?.data.detail!;
+      if (
+        typeof err === "object" &&
+        err !== null &&
+        "response" in err &&
+        (err as ApiError).response?.data
+      ) {
+        const data = (err as ApiError).response?.data;
+        if (typeof data === "string") msg = data as string;
+        else if (typeof data === "object" && data !== null && "detail" in data && (data as any).detail) {
+          msg = (data as any).detail;
+        }
       }
       companyError = msg;
     }
@@ -130,14 +151,16 @@ export default function ProfilePage() {
       const updatedUser = {
         ...userRes.data,
         profile_photo: companyRes.data.profile_photo || userRes.data.profile_photo,
-        company_name: companyRes.data.company_name,
-        manager_full_name: companyRes.data.manager_full_name,
-        address: companyRes.data.address,
+        company_name: companyRes.data.company_name || userRes.data.company_name,
+        manager_full_name: companyRes.data.manager_full_name || userRes.data.manager_full_name,
+        address: companyRes.data.address || userRes.data.address,
+        phone: companyRes.data.phone ?? userRes.data.phone,
+        date_joined: companyRes.data.date_joined ?? userRes.data.date_joined,
       };
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setUser(updatedUser);
     } else {
-      setAlert({ type: "error", msg: userError || companyError });
+      setAlert({ type: "error", msg: userError || companyError || "" });
     }
     setLoading(false);
   };
@@ -162,10 +185,12 @@ export default function ProfilePage() {
       // Update localStorage with new data including the photo
       const updatedUser = {
         ...userRes.data,
-        ...companyRes.data,
-        is_manager: userRes.data.is_manager,
-        is_staff: userRes.data.is_staff,
-        date_joined: userRes.data.date_joined,
+        profile_photo: companyRes.data.profile_photo || userRes.data.profile_photo,
+        company_name: companyRes.data.company_name || userRes.data.company_name,
+        manager_full_name: companyRes.data.manager_full_name || userRes.data.manager_full_name,
+        address: companyRes.data.address || userRes.data.address,
+        phone: companyRes.data.phone ?? userRes.data.phone,
+        date_joined: companyRes.data.date_joined ?? userRes.data.date_joined,
       };
       console.log("Updated user data:", updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
@@ -201,11 +226,19 @@ export default function ProfilePage() {
       form.reset();
     } catch (err: unknown) {
       let msg = "Password change failed.";
-      if (typeof err === "object" && err && "response" in err && (err as ApiError).response?.data) {
-        if (typeof (err as ApiError).response?.data === "string") msg = (err as ApiError).response?.data as string;
-        else if (typeof (err as ApiError).response?.data === "object" && (err as ApiError).response?.data?.detail) msg = (err as ApiError).response?.data.detail!;
+      if (
+        typeof err === "object" &&
+        err !== null &&
+        "response" in err &&
+        (err as ApiError).response?.data
+      ) {
+        const data = (err as ApiError).response?.data;
+        if (typeof data === "string") msg = data as string;
+        else if (typeof data === "object" && data !== null && "detail" in data && (data as any).detail) {
+          msg = (data as any).detail;
+        }
       }
-      setPwAlert({ type: "error", msg });
+      setPwAlert({ type: "error", msg: msg || "" });
     } finally {
       setPwLoading(false);
     }
@@ -376,7 +409,7 @@ export default function ProfilePage() {
                     />
                   </div>
                   <div className="text-center">
-                    <div className="font-bold text-xl md:text-2xl text-blue-700 mb-2">{user?.full_name || user?.manager_full_name || user?.fullName || "-"}</div>
+                    <div className="font-bold text-xl md:text-2xl text-blue-700 mb-2">{user?.full_name || user?.manager_full_name || "-"}</div>
                     <div className="text-gray-600 text-base md:text-lg mb-2">{user?.email}</div>
                     <div className="text-gray-500 text-sm md:text-base mb-3">{user?.phone || user?.mobile || "-"}</div>
                     <div className="inline-block px-3 md:px-4 py-1 md:py-2 bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700 rounded-full font-semibold text-xs md:text-sm border border-blue-200">
@@ -385,8 +418,8 @@ export default function ProfilePage() {
                     <div className="text-xs text-gray-400 mt-2 md:mt-3">
                       Joined: {user?.date_joined
                         ? new Date(user.date_joined).toLocaleString('fa-IR', {
-                            year: 'numeric',
-                            month: 'long',
+                        year: 'numeric', 
+                        month: 'long', 
                             day: 'numeric',
                             hour: '2-digit',
                             minute: '2-digit',
