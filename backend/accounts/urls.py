@@ -5,7 +5,7 @@ from .views import (
     CompanyMeView, ContactMessageCreateView, SupportTicketListCreateView, 
     SupportTicketReplyView, LoginView, LogoutView, PasswordChangeView,
     UserProfileView, ActivityLogView, SecurityStatusView, check_auth_status,
-    DriverDetailView
+    DriverDetailView, UserListView, UserRoleUpdateView, AllMessagesView
 )
 
 urlpatterns = [
@@ -35,4 +35,7 @@ urlpatterns = [
     # Support URLs
     path('support/tickets/', SupportTicketListCreateView.as_view(), name='support-tickets'),
     path('support/tickets/<int:pk>/reply/', SupportTicketReplyView.as_view(), name='support-ticket-reply'),
+    path('users/all/', UserListView.as_view(), name='user-list'),
+    path('users/<int:user_id>/role/', UserRoleUpdateView.as_view(), name='user-role-update'),
+    path('admin/messages/', AllMessagesView.as_view(), name='all-messages'),
 ] 

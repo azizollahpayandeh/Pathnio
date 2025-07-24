@@ -16,6 +16,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 import json
 import logging
+from rest_framework.decorators import action
+from rest_framework import viewsets
+from rest_framework.permissions import IsAdminUser
 
 from .models import (
     Company, Driver, ContactMessage, SiteSettings, 
@@ -152,6 +155,8 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                     'email': user.email,
                     'is_company': hasattr(user, 'company_profile'),
                     'is_driver': hasattr(user, 'driver_profile'),
+                    'is_manager': user.is_staff or user.is_superuser,
+                    'is_staff': user.is_staff,
                 }
             })
         else:
@@ -244,6 +249,8 @@ class LoginView(APIView):
                         'email': user.email,
                         'is_company': hasattr(user, 'company_profile'),
                         'is_driver': hasattr(user, 'driver_profile'),
+                        'is_manager': user.is_staff or user.is_superuser,
+                        'is_staff': user.is_staff,
                     }
                 })
             else:
@@ -333,6 +340,8 @@ class UserProfileView(APIView):
             'last_name': user.last_name,
             'is_company': hasattr(user, 'company_profile'),
             'is_driver': hasattr(user, 'driver_profile'),
+            'is_manager': user.is_staff or user.is_superuser,
+            'is_staff': user.is_staff,
             'date_joined': user.date_joined,
             'last_login': user.last_login,
         })
@@ -568,3 +577,57 @@ def check_auth_status(request):
         'session_valid': request.session and request.session.session_key,
         'timestamp': timezone.now().isoformat()
     })
+
+class UserListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        # فقط ادمین یا مدیر (کسی که company_profile دارد)
+        if not (user.is_staff or hasattr(user, 'company_profile')):
+            return Response({'detail': 'Permission denied.'}, status=403)
+        users = User.objects.all().order_by('-date_joined')
+        data = []
+        for u in users:
+            data.append({
+                'id': u.id,
+                'username': u.username,
+                'email': u.email,
+                'is_staff': u.is_staff,
+                'is_superuser': u.is_superuser,
+                'is_manager': hasattr(u, 'company_profile'),
+                'date_joined': u.date_joined,
+            })
+        return Response(data)
+
+class UserRoleUpdateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, user_id):
+        user = request.user
+        if not (user.is_staff or hasattr(user, 'company_profile')):
+            return Response({'detail': 'Permission denied.'}, status=403)
+        target = User.objects.filter(id=user_id).first()
+        if not target:
+            return Response({'detail': 'User not found.'}, status=404)
+        role = request.data.get('role')
+        if role == 'admin':
+            target.is_staff = True
+        elif role == 'user':
+            target.is_staff = False
+        target.save()
+        return Response({'detail': 'Role updated.'})
+
+class AllMessagesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        if not (user.is_staff or hasattr(user, 'company_profile')):
+            return Response({'detail': 'Permission denied.'}, status=403)
+        contacts = ContactMessage.objects.all().order_by('-created_at')
+        tickets = ContactMessage.objects.all().order_by('-created_at')
+        # اگر مدل ticket جداست، آن را هم اضافه کن
+        contact_data = ContactMessageSerializer(contacts, many=True).data
+        # فرض بر این است که ticketها هم همین مدل هستند
+        return Response({'contacts': contact_data, 'tickets': contact_data})

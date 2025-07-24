@@ -127,7 +127,13 @@ export default function ProfilePage() {
       const companyRes = await api.get("accounts/company/me/");
       
       // Merge user and company data
-      const updatedUser = { ...userRes.data, ...companyRes.data };
+      const updatedUser = {
+        ...userRes.data,
+        ...companyRes.data,
+        is_manager: !!companyRes.data.id,
+        is_staff: userRes.data.is_staff,
+        date_joined: userRes.data.date_joined,
+      };
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setUser(updatedUser);
     } else {
@@ -368,14 +374,19 @@ export default function ProfilePage() {
                     <div className="text-gray-600 text-base md:text-lg mb-2">{user?.email}</div>
                     <div className="text-gray-500 text-sm md:text-base mb-3">{user?.phone || user?.mobile || "-"}</div>
                     <div className="inline-block px-3 md:px-4 py-1 md:py-2 bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700 rounded-full font-semibold text-xs md:text-sm border border-blue-200">
-                      {user?.role || (user?.manager_full_name ? "Manager" : "Driver")}
+                      {user?.is_manager || user?.is_staff ? "Manager" : "User"}
                     </div>
                     <div className="text-xs text-gray-400 mt-2 md:mt-3">
-                      Joined: {user?.date_joined ? new Date(user.date_joined).toLocaleDateString('en-US', { 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric' 
-                      }) : "-"}
+                      Joined: {user?.date_joined
+                        ? new Date(user.date_joined).toLocaleString('fa-IR', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit',
+                          })
+                        : "-"}
                     </div>
                   </div>
                 </div>

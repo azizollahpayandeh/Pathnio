@@ -27,6 +27,8 @@ interface User {
   company?: { company_name?: string; name?: string };
   companyName?: string;
   profile_photo?: string;
+  is_staff?: boolean;
+  is_manager?: boolean;
   // Add more fields as needed
 }
 
@@ -83,7 +85,7 @@ export default function DashboardLayout({
     console.log("Dashboard - Photo is relative path:", photo);
     return photo;
   };
-  const avatar = getProfilePhotoUrl(user?.profile_photo || user?.avatar);
+  const avatar = getProfilePhotoUrl(user?.profile_photo);
   const handleProfileClick = () => {
     router.push("/profile");
   };
@@ -154,6 +156,14 @@ export default function DashboardLayout({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           } />
+          {/* دکمه داشبورد ادمین کنار گزینه‌های پایین */}
+          {user && (user.is_manager || user.is_staff) && (
+            <SidebarLink href="/dashboard/admin" label="Admin Dashboard" icon={
+              <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 11c0-1.104.896-2 2-2s2 .896 2 2-.896 2-2 2-2-.896-2-2zm0 0V7m0 4v4m0 0c0 1.104-.896 2-2 2s-2-.896-2-2 .896-2 2-2 2 .896 2 2z" />
+              </svg>
+            } />
+          )}
         </nav>
       </aside>
       {/* Main Content */}

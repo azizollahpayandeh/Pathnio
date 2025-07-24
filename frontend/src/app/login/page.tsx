@@ -82,6 +82,10 @@ export default function LoginPage() {
         const refresh = res.data.refresh;
         localStorage.setItem("access", access);
         localStorage.setItem("refresh", refresh);
+        // ذخیره user با نقش‌ها از پاسخ لاگین
+        if (res.data.user) {
+          localStorage.setItem("user", JSON.stringify(res.data.user));
+        }
         // Get user profile with JWT
         const profileRes = await api.get("auth/users/me/", {
           headers: {
@@ -89,7 +93,9 @@ export default function LoginPage() {
           },
         });
         if (profileRes.status === 200) {
-          localStorage.setItem("user", JSON.stringify(profileRes.data));
+          // مرج user و profileRes برای اطمینان از وجود نقش‌ها
+          const mergedUser = { ...profileRes.data, ...res.data.user };
+          localStorage.setItem("user", JSON.stringify(mergedUser));
         }
         setAlert({ type: "success", msg: "Login successful!" });
         setTimeout(() => {
