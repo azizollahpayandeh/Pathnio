@@ -42,3 +42,4 @@ INFO 2025-07-24 22:42:58,777 basehttp 15764 6672 "OPTIONS /api/accounts/register
 INFO 2025-07-24 22:42:59,201 basehttp 15764 4232 "OPTIONS /api/accounts/register/company/ HTTP/1.1" 200 0
 INFO 2025-07-24 22:44:33,418 autoreload 15764 13636 C:\Users\azizo\Desktop\Pathnio\backend\backend\settings.py changed, reloading.
 INFO 2025-07-24 22:44:38,832 autoreload 3248 18904 Watching for file changes with StatReloader
+INFO 2025-07-24 22:55:44,950 autoreload 3248 18904 C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py changed, reloading.

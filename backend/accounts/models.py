@@ -1,8 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 # Create your models here.
 
@@ -143,44 +141,3 @@ class LoginAttempt(models.Model):
     def __str__(self):
         status = "Success" if self.success else "Failed"
         return f"{self.username} - {status} - {self.timestamp}"
-
-class UserProfile(models.Model):
-    ROLE_CHOICES = [
-        ('user', 'User'),
-        ('superadmin', 'Super Admin'),
-    ]
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user')
-
-    def save(self, *args, **kwargs):
-        # Ensure only one superadmin exists and only for username 'Azizollah'
-        if self.role == 'superadmin':
-            if self.user.username != 'Azizollah':
-                self.role = 'user'
-            elif UserProfile.objects.filter(role='superadmin').exclude(user=self.user).exists():
-                raise ValueError('There can only be one superadmin (Azizollah).')
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.user.username} - {self.role}"
-
-# Automatically create or update UserProfile when User is saved
-@receiver(post_save, sender=User)
-def create_or_update_user_profile(sender, instance, created, **kwargs):
-    if created:
-        UserProfile.objects.create(user=instance)
-    else:
-        instance.profile.save()
-
-# Utility for shell: set Azizollah as superadmin and update email
-if __name__ == "__main__":
-    from django.contrib.auth.models import User
-    from accounts.models import UserProfile
-    user = User.objects.get(username='Azizollah')
-    user.email = 'AzizVPN1@gmail.com'
-    user.set_password('13861386AzizVPN')
-    user.save()
-    profile = user.profile
-    profile.role = 'superadmin'
-    profile.save()
-    print('User Azizollah updated as superadmin with requested email and password.')

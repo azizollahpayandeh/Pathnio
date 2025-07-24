@@ -1,9 +1,7 @@
-'use client'
-// DriverPerformanceChart.tsx
-import React from "react";
-import {
-  Bar
-} from "react-chartjs-2";
+'use client';
+
+import React from 'react';
+import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,7 +10,7 @@ import {
   Title,
   Tooltip,
   Legend,
-} from "chart.js";
+} from 'chart.js';
 
 ChartJS.register(
   CategoryScale,
@@ -46,11 +44,11 @@ const options = {
     },
     title: {
       display: true,
-      text: "Driver Performance",
+      text: 'Driver Performance',
       font: {
         size: 18,
       },
-      color: "#2563EB", // آبی Tailwind
+      color: '#2563EB',
     },
   },
   scales: {
@@ -61,7 +59,9 @@ const options = {
   },
 };
 
-export default function DriverPerformanceChart({ performanceData }: DriverPerformanceChartProps) {
+export default function DriverPerformanceChart({
+  performanceData,
+}: DriverPerformanceChartProps) {
   return (
     <div className="w-full h-64">
       <Bar options={options} data={performanceData} />
