@@ -126,13 +126,13 @@ export default function ProfilePage() {
       const userRes = await api.get("auth/users/me/");
       const companyRes = await api.get("accounts/company/me/");
       
-      // Merge user and company data
+      // Merge user and company data (only company fields overwrite user)
       const updatedUser = {
         ...userRes.data,
-        ...companyRes.data,
-        is_manager: !!companyRes.data.id,
-        is_staff: userRes.data.is_staff,
-        date_joined: userRes.data.date_joined,
+        profile_photo: companyRes.data.profile_photo || userRes.data.profile_photo,
+        company_name: companyRes.data.company_name,
+        manager_full_name: companyRes.data.manager_full_name,
+        address: companyRes.data.address,
       };
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setUser(updatedUser);
@@ -160,7 +160,13 @@ export default function ProfilePage() {
       const userRes = await api.get("auth/users/me/");
       
       // Update localStorage with new data including the photo
-      const updatedUser = { ...userRes.data, ...companyRes.data };
+      const updatedUser = {
+        ...userRes.data,
+        ...companyRes.data,
+        is_manager: userRes.data.is_manager,
+        is_staff: userRes.data.is_staff,
+        date_joined: userRes.data.date_joined,
+      };
       console.log("Updated user data:", updatedUser);
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setUser(updatedUser);

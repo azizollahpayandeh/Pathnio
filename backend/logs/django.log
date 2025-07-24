@@ -1,0 +1,217 @@
+INFO 2025-07-25 00:27:21,028 autoreload 3176 6880 Watching for file changes with StatReloader
+INFO 2025-07-25 00:27:44,691 basehttp 3176 1104 "GET /admin/auth/user/ HTTP/1.1" 200 16327
+INFO 2025-07-25 00:28:19,916 basehttp 3176 21720 "PATCH /api/accounts/company/me/ HTTP/1.1" 200 329
+INFO 2025-07-25 00:28:19,936 basehttp 3176 21720 "GET /api/accounts/company/me/ HTTP/1.1" 200 329
+INFO 2025-07-25 00:28:19,949 basehttp 3176 21720 "GET /api/auth/users/me/ HTTP/1.1" 200 206
+INFO 2025-07-25 00:28:20,118 basehttp 3176 17680 "GET /media/company_profiles/photo_2024-12-25_23-39-37_KIO69vO.jpg HTTP/1.1" 200 72819
+INFO 2025-07-25 00:28:25,197 basehttp 3176 10984 "GET /media/company_profiles/photo_2024-12-25_23-39-37_KIO69vO.jpg HTTP/1.1" 200 72819
+INFO 2025-07-25 00:28:47,366 views 3176 9548 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386arsalan'}
+INFO 2025-07-25 00:28:48,138 views 3176 9548 Successful login for user: arsalanpayandeh44@gmail.com
+INFO 2025-07-25 00:28:48,140 basehttp 3176 9548 "POST /api/auth/token/login/ HTTP/1.1" 200 652
+INFO 2025-07-25 00:28:48,149 basehttp 3176 9548 "GET /api/auth/users/me/ HTTP/1.1" 200 206
+INFO 2025-07-25 00:31:56,722 basehttp 3176 3444 "PATCH /api/accounts/company/me/ HTTP/1.1" 200 329
+INFO 2025-07-25 00:31:56,758 basehttp 3176 3444 "GET /api/accounts/company/me/ HTTP/1.1" 200 329
+INFO 2025-07-25 00:31:56,779 basehttp 3176 3444 "GET /api/auth/users/me/ HTTP/1.1" 200 206
+INFO 2025-07-25 00:31:56,832 basehttp 3176 24960 "GET /media/company_profiles/photo_2024-12-25_23-39-37_rD2fxbG.jpg HTTP/1.1" 200 72819
+INFO 2025-07-25 00:32:02,208 basehttp 3176 2844 "GET /media/company_profiles/photo_2024-12-25_23-39-37_rD2fxbG.jpg HTTP/1.1" 200 72819
+INFO 2025-07-25 00:32:14,676 views 3176 14276 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386arsalan'}
+INFO 2025-07-25 00:32:15,538 views 3176 14276 Successful login for user: arsalanpayandeh44@gmail.com
+INFO 2025-07-25 00:32:15,540 basehttp 3176 14276 "POST /api/auth/token/login/ HTTP/1.1" 200 652
+INFO 2025-07-25 00:32:15,550 basehttp 3176 14276 "GET /api/auth/users/me/ HTTP/1.1" 200 206
+INFO 2025-07-25 00:36:41,537 autoreload 3176 6880 C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py changed, reloading.
+INFO 2025-07-25 00:36:43,350 autoreload 3272 24960 Watching for file changes with StatReloader
+INFO 2025-07-25 00:36:50,878 autoreload 3272 24960 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-25 00:36:51,696 autoreload 23620 2372 Watching for file changes with StatReloader
+INFO 2025-07-25 00:38:43,217 basehttp 23620 6800 "GET /admin/auth/user/2/change/ HTTP/1.1" 200 27819
+INFO 2025-07-25 00:38:43,323 basehttp 23620 6800 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-07-25 00:39:07,223 views 23620 9748 Login attempt with data: {'username': 'arsalanpayandeh4@gmail.com', 'password': '123456arsalan4'}
+INFO 2025-07-25 00:39:08,080 views 23620 9748 Successful login for user: arsalanpayandeh4@gmail.com
+INFO 2025-07-25 00:39:08,179 basehttp 23620 9748 "POST /api/auth/token/login/ HTTP/1.1" 200 648
+INFO 2025-07-25 00:39:08,190 basehttp 23620 9748 "GET /api/auth/users/me/ HTTP/1.1" 200 190
+ERROR 2025-07-25 00:39:48,756 log 23620 20700 Internal Server Error: /api/accounts/register/company/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\generics.py", line 194, in post
+    return self.create(request, *args, **kwargs)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\mixins.py", line 19, in create
+    self.perform_create(serializer)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py", line 427, in perform_create
+    company = serializer.save()
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\serializers.py", line 210, in save
+    self.instance = self.create(validated_data)
+                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py", line 108, in create
+    user_data = validated_data.pop('user')
+KeyError: 'user'
+ERROR 2025-07-25 00:39:48,761 basehttp 23620 20700 "POST /api/accounts/register/company/ HTTP/1.1" 500 125047
+ERROR 2025-07-25 00:40:30,191 log 23620 16172 Internal Server Error: /api/accounts/register/company/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\generics.py", line 194, in post
+    return self.create(request, *args, **kwargs)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\mixins.py", line 19, in create
+    self.perform_create(serializer)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py", line 427, in perform_create
+    company = serializer.save()
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\serializers.py", line 210, in save
+    self.instance = self.create(validated_data)
+                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py", line 108, in create
+    user_data = validated_data.pop('user')
+KeyError: 'user'
+ERROR 2025-07-25 00:40:30,193 basehttp 23620 16172 "POST /api/accounts/register/company/ HTTP/1.1" 500 124821
+INFO 2025-07-25 00:41:20,419 views 23620 3272 Login attempt with data: {'username': 'arsalanpayandeh44@gmail.com', 'password': '13861386arsalan'}
+INFO 2025-07-25 00:41:21,120 views 23620 3272 Successful login for user: arsalanpayandeh44@gmail.com
+INFO 2025-07-25 00:41:21,122 basehttp 23620 3272 "POST /api/auth/token/login/ HTTP/1.1" 200 652
+INFO 2025-07-25 00:41:21,134 basehttp 23620 3272 "GET /api/auth/users/me/ HTTP/1.1" 200 206
+INFO 2025-07-25 00:41:28,960 basehttp 23620 7560 "GET /api/accounts/users/all/ HTTP/1.1" 200 704
+INFO 2025-07-25 00:41:29,021 basehttp 23620 7560 "GET /api/accounts/users/all/ HTTP/1.1" 200 704
+INFO 2025-07-25 00:42:18,822 basehttp 23620 4880 "GET /admin/auth/user/ HTTP/1.1" 200 16327
+INFO 2025-07-25 00:42:59,280 autoreload 23620 2372 C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py changed, reloading.
+INFO 2025-07-25 00:43:00,879 autoreload 9876 20340 Watching for file changes with StatReloader
+ERROR 2025-07-25 00:43:53,608 log 9876 8476 Internal Server Error: /api/accounts/register/company/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\generics.py", line 194, in post
+    return self.create(request, *args, **kwargs)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\mixins.py", line 19, in create
+    self.perform_create(serializer)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py", line 427, in perform_create
+    company = serializer.save()
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\serializers.py", line 210, in save
+    self.instance = self.create(validated_data)
+                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py", line 108, in create
+    user_data = validated_data.pop('user')
+KeyError: 'user'
+ERROR 2025-07-25 00:43:53,614 basehttp 9876 8476 "POST /api/accounts/register/company/ HTTP/1.1" 500 125054
+ERROR 2025-07-25 00:43:57,787 log 9876 6200 Internal Server Error: /api/accounts/register/company/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\generics.py", line 194, in post
+    return self.create(request, *args, **kwargs)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\mixins.py", line 19, in create
+    self.perform_create(serializer)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py", line 427, in perform_create
+    company = serializer.save()
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\serializers.py", line 210, in save
+    self.instance = self.create(validated_data)
+                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py", line 108, in create
+    user_data = validated_data.pop('user')
+KeyError: 'user'
+ERROR 2025-07-25 00:43:57,789 basehttp 9876 6200 "POST /api/accounts/register/company/ HTTP/1.1" 500 125138
+ERROR 2025-07-25 00:44:02,794 log 9876 6200 Internal Server Error: /api/accounts/register/company/
+Traceback (most recent call last):
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\decorators\csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\django\views\generic\base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\generics.py", line 194, in post
+    return self.create(request, *args, **kwargs)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\mixins.py", line 19, in create
+    self.perform_create(serializer)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py", line 427, in perform_create
+    company = serializer.save()
+  File "C:\Users\azizo\Desktop\Pathnio\backend\env\Lib\site-packages\rest_framework\serializers.py", line 210, in save
+    self.instance = self.create(validated_data)
+                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py", line 108, in create
+    user_data = validated_data.pop('user')
+KeyError: 'user'
+ERROR 2025-07-25 00:44:02,797 basehttp 9876 6200 "POST /api/accounts/register/company/ HTTP/1.1" 500 125138
+INFO 2025-07-25 00:47:24,037 autoreload 9808 13936 Watching for file changes with StatReloader
+INFO 2025-07-25 00:48:32,282 autoreload 9808 13936 C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py changed, reloading.
+INFO 2025-07-25 00:48:33,153 autoreload 19120 1672 Watching for file changes with StatReloader

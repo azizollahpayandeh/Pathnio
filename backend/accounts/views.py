@@ -25,7 +25,7 @@ from .models import (
     ActivityLog, UserSession, SecuritySettings, LoginAttempt
 )
 from .serializers import (
-    CompanySerializer, DriverSerializer, ContactMessageSerializer, 
+    CompanySerializer, CompanyUserSerializer, DriverSerializer, ContactMessageSerializer, 
     SiteSettingsSerializer, LoginSerializer, PasswordChangeSerializer,
     UserProfileUpdateSerializer, ActivityLogSerializer
 )

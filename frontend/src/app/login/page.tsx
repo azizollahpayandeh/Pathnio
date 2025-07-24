@@ -43,6 +43,7 @@ export default function LoginPage() {
           username: data.email,
           email: data.email,
           password: data.password,
+          password_retype: data.password,
         },
         company_name: data.companyName,
         manager_full_name: data.fullName,

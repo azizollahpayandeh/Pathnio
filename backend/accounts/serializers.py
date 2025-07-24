@@ -69,6 +69,35 @@ class CustomUserCreateSerializer(DjoserUserCreateSerializer):
         user = User.objects.create_user(**validated_data)
         return user
 
+class CompanyUserSerializer(serializers.ModelSerializer):
+    is_manager = serializers.SerializerMethodField()
+    is_staff = serializers.SerializerMethodField()
+    date_joined = serializers.DateTimeField(format="%Y-%m-%dT%H:%M:%S%z")
+    phone = serializers.SerializerMethodField()
+    profile_photo = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'is_manager', 'is_staff', 'date_joined', 'phone', 'profile_photo')
+
+    def get_is_manager(self, obj):
+        return obj.is_staff or obj.is_superuser
+
+    def get_is_staff(self, obj):
+        return obj.is_staff
+
+    def get_phone(self, obj):
+        try:
+            return obj.company_profile.phone
+        except Exception:
+            return None
+
+    def get_profile_photo(self, obj):
+        try:
+            return obj.company_profile.profile_photo.url if obj.company_profile.profile_photo else None
+        except Exception:
+            return None
+
 class CompanySerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
@@ -77,6 +106,8 @@ class CompanySerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
+        # Remove password_retype if present
+        user_data.pop('password_retype', None)
         user = User.objects.create_user(**user_data)
         company = Company.objects.create(user=user, **validated_data)
         return company
