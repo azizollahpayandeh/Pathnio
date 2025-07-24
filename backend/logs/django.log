@@ -215,3 +215,11 @@ ERROR 2025-07-25 00:44:02,797 basehttp 9876 6200 "POST /api/accounts/register/co
 INFO 2025-07-25 00:47:24,037 autoreload 9808 13936 Watching for file changes with StatReloader
 INFO 2025-07-25 00:48:32,282 autoreload 9808 13936 C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py changed, reloading.
 INFO 2025-07-25 00:48:33,153 autoreload 19120 1672 Watching for file changes with StatReloader
+INFO 2025-07-25 00:52:53,189 autoreload 3760 23420 Watching for file changes with StatReloader
+INFO 2025-07-25 00:52:59,907 basehttp 3760 15200 "POST /api/accounts/register/company/ HTTP/1.1" 201 226
+INFO 2025-07-25 00:53:06,569 views 3760 15200 Login attempt with data: {'username': 'asd@gmail.com', 'password': 'asdasdasd'}
+INFO 2025-07-25 00:53:09,342 views 3760 15200 Successful login for user: asd@gmail.com
+INFO 2025-07-25 00:53:09,347 basehttp 3760 15200 "POST /api/auth/token/login/ HTTP/1.1" 200 626
+INFO 2025-07-25 00:53:09,369 basehttp 3760 15200 "GET /api/auth/users/me/ HTTP/1.1" 200 162
+INFO 2025-07-25 00:59:05,467 basehttp 3760 21068 "GET /api/accounts/site-settings/ HTTP/1.1" 200 108
+INFO 2025-07-25 00:59:05,480 basehttp 3760 21068 "GET /api/accounts/site-settings/ HTTP/1.1" 200 108
