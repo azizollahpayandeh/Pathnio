@@ -98,16 +98,16 @@ export default function SupportPage() {
             <div key={t.id} className="bg-blue-50/60 rounded-2xl p-6 shadow flex flex-col gap-2 border border-blue-100">
               <div className="flex items-center gap-3 mb-1">
                 <span className={`font-bold text-base px-3 py-1 rounded-xl border ${statusMap[t.status]?.color || ''} flex items-center gap-1`}>{statusMap[t.status]?.icon}{statusMap[t.status]?.label || t.status}</span>
-                <span className="text-blue-900 font-semibold text-lg">{t.subject}</span>
+                <span className="text-blue-900 font-semibold text-lg break-words overflow-hidden flex-1 min-w-0">{t.subject}</span>
                 <span className="text-gray-400 text-xs ml-auto">{new Date(t.created_at).toLocaleString()}</span>
               </div>
-              <div className="text-blue-900 whitespace-pre-line mb-2">{t.message}</div>
+              <div className="text-blue-900 whitespace-pre-line mb-2 break-words overflow-hidden">{t.message}</div>
               {t.reply && (
                 <div className="bg-green-50 border border-green-200 rounded-xl p-4 mt-2 flex items-start gap-2">
                   <FaReply className="text-green-600 mt-1" />
                   <div>
                     <div className="font-bold text-green-700 mb-1">Admin Reply:</div>
-                    <div className="text-green-900 whitespace-pre-line">{t.reply}</div>
+                    <div className="text-green-900 whitespace-pre-line break-words overflow-hidden">{t.reply}</div>
                   </div>
                 </div>
               )}
