@@ -5,7 +5,8 @@ from .views import (
     CompanyMeView, ContactMessageCreateView, SupportTicketListCreateView, 
     SupportTicketReplyView, LoginView, LogoutView, PasswordChangeView,
     UserProfileView, ActivityLogView, SecurityStatusView, check_auth_status,
-    DriverDetailView, UserListView, UserRoleUpdateView, AllMessagesView
+    DriverDetailView, UserListView, UserRoleUpdateView, AllMessagesView, ProfileAPIView,
+    UserCreateView, UserUpdateView, UserDeleteView
 )
 
 urlpatterns = [
@@ -38,4 +39,12 @@ urlpatterns = [
     path('users/all/', UserListView.as_view(), name='user-list'),
     path('users/<int:user_id>/role/', UserRoleUpdateView.as_view(), name='user-role-update'),
     path('admin/messages/', AllMessagesView.as_view(), name='all-messages'),
+    
+    # New User Management URLs
+    path('users/', UserCreateView.as_view(), name='user-create'),
+    path('users/<int:user_id>/', UserUpdateView.as_view(), name='user-update'),
+    path('users/<int:user_id>/delete/', UserDeleteView.as_view(), name='user-delete'),
+] 
+urlpatterns += [
+    path('profile/', ProfileAPIView.as_view(), name='profile'),
 ] 

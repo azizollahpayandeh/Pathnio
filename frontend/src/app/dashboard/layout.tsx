@@ -1,35 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { Geist, Geist_Mono } from "next/font/google";
-import "../../app/globals.css";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import Image from 'next/image';
+import api from "../api";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-// Replace 'any' with a specific User type
 interface User {
   id: string;
-  username: string;
-  email: string;
+  username?: string;
+  email?: string;
   company_name?: string;
   company?: { company_name?: string; name?: string };
   companyName?: string;
   profile_photo?: string;
+  full_name?: string;
   is_staff?: boolean;
   is_manager?: boolean;
-  // Add more fields as needed
 }
 
 export default function DashboardLayout({
@@ -39,7 +27,31 @@ export default function DashboardLayout({
 }) {
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
+
   useEffect(() => {
+    async function fetchAndSyncProfile() {
+      try {
+        const res = await api.get("/accounts/profile/");
+        console.log("Dashboard - Fetched profile data:", res.data);
+        setUser((prev) => {
+          const updated = {
+            ...prev,
+            full_name: res.data.full_name,
+            company_name: res.data.company_name,
+            profile_photo: res.data.profile_photo || "/assets/images.png",
+            phone: res.data.phone,
+          } as User;
+          console.log("Dashboard - Updated user object:", updated);
+          if (typeof window !== "undefined") {
+            localStorage.setItem("user", JSON.stringify(updated));
+          }
+          return updated;
+        });
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    }
+
     if (typeof window !== "undefined") {
       const userStr = localStorage.getItem("user");
       if (userStr) {
@@ -47,7 +59,6 @@ export default function DashboardLayout({
           const parsedUser = JSON.parse(userStr);
           setUser(parsedUser);
           if (!parsedUser.company_name) {
-            // لاگ برای دیباگ
             console.log("[DEBUG] user object:", parsedUser);
           }
         } catch (e) {
@@ -56,16 +67,18 @@ export default function DashboardLayout({
       } else {
         console.log("[DEBUG] user not found in localStorage");
       }
+      // Always fetch fresh profile from backend
+      fetchAndSyncProfile();
     }
   }, []);
-  // نمایش نام شرکت اگر وجود داشت، وگرنه نام کامل کاربر
+
   const displayName =
     user?.company_name ||
     user?.company?.company_name ||
-    user?.companyName ||
-    user?.company?.name ||
+    user?.full_name ||
+    user?.username ||
     "No Name";
-  // آواتار پیش‌فرض غیرانسانی (مثلاً animal)
+
   const getProfilePhotoUrl = (photo: string | undefined) => {
     console.log("Dashboard - Getting photo URL for:", photo);
     if (!photo) {
@@ -85,19 +98,21 @@ export default function DashboardLayout({
     console.log("Dashboard - Photo is relative path:", photo);
     return photo;
   };
+
   const avatar = getProfilePhotoUrl(user?.profile_photo);
   const handleProfileClick = () => {
     router.push("/profile");
   };
+
   return (
-    <div className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#f4f8fb] text-[#171717] flex min-h-screen`}>
-      {/* Sidebar */}
+    <div className="antialiased bg-[#f4f8fb] text-[#171717] flex min-h-screen">
       <aside className="w-64 bg-gradient-to-b from-white via-blue-50 to-blue-100 border-l border-gray-200 flex flex-col transition-all duration-200 shadow-xl z-20">
         <div className="flex items-center justify-center h-16 px-4 border-b">
           <Link href="/" className="font-extrabold text-2xl text-blue-800 tracking-widest select-none hover:text-blue-600 transition-colors cursor-pointer">
             Pathnio
           </Link>
         </div>
+        
         <nav className="flex-1 py-6 px-2 space-y-2">
           <SidebarLink href="/dashboard" label="Dashboard" icon={
             <svg className="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -156,7 +171,6 @@ export default function DashboardLayout({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           } />
-          {/* دکمه داشبورد ادمین کنار گزینه‌های پایین */}
           {user && (user.is_manager || user.is_staff) && (
             <SidebarLink href="/dashboard/admin" label="Admin Dashboard" icon={
               <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -166,9 +180,9 @@ export default function DashboardLayout({
           )}
         </nav>
       </aside>
+
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        {/* Header */}
         <header className="h-16 bg-white shadow-xl border-b flex items-center justify-between px-6 z-30 sticky top-0 left-0 right-0 transition-all duration-200">
           <div className="flex items-center gap-4">
             <span className="text-xl font-extrabold text-blue-800 tracking-wide flex items-center gap-3 drop-shadow-lg select-none">
@@ -197,7 +211,6 @@ export default function DashboardLayout({
             </div>
           </div>
         </header>
-        {/* Page Content */}
         <main className="flex-1 p-6 bg-[#f4f8fb]">{children}</main>
       </div>
     </div>

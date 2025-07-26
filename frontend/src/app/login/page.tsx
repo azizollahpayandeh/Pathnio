@@ -77,7 +77,7 @@ export default function LoginPage() {
     const username = formData.get("login-username") as string;
     const password = formData.get("login-password") as string;
     try {
-      const res = await api.post("auth/token/login/", { username, password });
+      const res = await api.post("accounts/auth/login/", { username, password });
       if (res.status === 200) {
         const access = res.data.access;
         const refresh = res.data.refresh;
@@ -86,17 +86,6 @@ export default function LoginPage() {
         // ذخیره user با نقش‌ها از پاسخ لاگین
         if (res.data.user) {
           localStorage.setItem("user", JSON.stringify(res.data.user));
-        }
-        // Get user profile with JWT
-        const profileRes = await api.get("auth/users/me/", {
-          headers: {
-            Authorization: `Bearer ${access}`,
-          },
-        });
-        if (profileRes.status === 200) {
-          // مرج user و profileRes برای اطمینان از وجود نقش‌ها
-          const mergedUser = { ...profileRes.data, ...res.data.user };
-          localStorage.setItem("user", JSON.stringify(mergedUser));
         }
         setAlert({ type: "success", msg: "Login successful!" });
         setTimeout(() => {

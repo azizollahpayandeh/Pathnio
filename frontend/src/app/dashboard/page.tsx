@@ -9,11 +9,15 @@ const LiveMap = dynamic(() => import("../../components/LiveMapWidget"), { ssr: f
 
 // Replace 'any' with a specific Trip type
 interface Trip {
-  id: string;
+  id: number;
+  driver: string;
+  vehicle: string;
   origin: string;
   destination: string;
+  start: string;
+  end: string;
+  status: string;
   date: string;
-  // Add more fields as needed
 }
 
 const FAKE_TRIPS = [
@@ -55,17 +59,17 @@ export default function Dashboard() {
     }
     
     setIsLoading(false);
-    setTrips(FAKE_TRIPS);
+    setTrips(FAKE_TRIPS.map(t => ({ ...t, date: t.start })));
   }, [router]);
 
   const toggleFullscreen = () => {
     if (!fullscreen) {
       if (document.documentElement.requestFullscreen) {
         document.documentElement.requestFullscreen();
-      } else if ((document.documentElement as DocumentWithFullscreen).webkitRequestFullscreen) {
-        (document.documentElement as DocumentWithFullscreen).webkitRequestFullscreen!();
-      } else if ((document.documentElement as DocumentWithFullscreen).msRequestFullscreen) {
-        (document.documentElement as DocumentWithFullscreen).msRequestFullscreen!();
+      } else if ((document.documentElement as unknown as DocumentWithFullscreen).webkitRequestFullscreen) {
+        (document.documentElement as unknown as DocumentWithFullscreen).webkitRequestFullscreen!();
+      } else if ((document.documentElement as unknown as DocumentWithFullscreen).msRequestFullscreen) {
+        (document.documentElement as unknown as DocumentWithFullscreen).msRequestFullscreen!();
       }
       setFullscreen(true);
     } else {

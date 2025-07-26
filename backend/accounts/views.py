@@ -192,6 +192,7 @@ class LoginView(APIView):
     permission_classes = [AllowAny]
     
     def post(self, request):
+        print(f"LoginView - Login attempt with data: {request.data}")
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             username = serializer.validated_data['username']
@@ -199,18 +200,34 @@ class LoginView(APIView):
             ip_address = get_client_ip(request)
             user_agent = request.META.get('HTTP_USER_AGENT', '')
             
+            print(f"LoginView - Attempting login for username: {username}")
+            
             # Check if user is locked out
             if check_login_attempts(username, ip_address):
+                print(f"LoginView - User {username} is locked out")
                 return Response({
                     'detail': 'اکانت شما به دلیل تلاش ناموفق زیاد، به مدت یک ساعت قفل شد. لطفاً بعداً دوباره تلاش کنید.',
                     'code': 'too_many_attempts',
                 }, status=status.HTTP_429_TOO_MANY_REQUESTS)
             
-            # Try to get user object
+            # Try to get user object - check both username and email
             user_obj = User.objects.filter(username=username).first()
+            if not user_obj:
+                # If not found by username, try email
+                user_obj = User.objects.filter(email=username).first()
+                if user_obj:
+                    print(f"LoginView - User found by email: {user_obj.username}")
+                    username = user_obj.username  # Use the actual username for authentication
+            
+            print(f"LoginView - User object found: {user_obj is not None}")
+            if user_obj:
+                print(f"LoginView - User ID: {user_obj.id}, Username: {user_obj.username}, Email: {user_obj.email}, Is active: {user_obj.is_active}")
+            
             user = authenticate(username=username, password=password)
+            print(f"LoginView - Authentication result: {user is not None}")
             
             if user is not None:
+                print(f"LoginView - Login successful for user: {username}")
                 # Record successful login
                 record_login_attempt(username, ip_address, user_agent, True, user)
                 
@@ -254,21 +271,25 @@ class LoginView(APIView):
                     }
                 })
             else:
+                print(f"LoginView - Login failed for user: {username}")
                 # Record failed login attempt (even if user does not exist)
                 record_login_attempt(username, ip_address, user_agent, False, user_obj)
                 
                 # Improved error message
                 if not user_obj:
+                    print(f"LoginView - User {username} does not exist")
                     return Response({
                         'detail': 'The entered username does not exist.',
                         'code': 'user_not_found',
                     }, status=status.HTTP_401_UNAUTHORIZED)
                 else:
+                    print(f"LoginView - Password incorrect for user {username}")
                     return Response({
                         'detail': 'The password is incorrect. Please try again.',
                         'code': 'invalid_password',
                     }, status=status.HTTP_401_UNAUTHORIZED)
         
+        print(f"LoginView - Serializer errors: {serializer.errors}")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LogoutView(APIView):
@@ -296,21 +317,31 @@ class PasswordChangeView(APIView):
     permission_classes = [IsAuthenticated]
     
     def post(self, request):
+        print(f"PasswordChangeView - Request from user: {request.user.username}")
+        print(f"PasswordChangeView - Request data: {request.data}")
+        
         serializer = PasswordChangeSerializer(data=request.data)
         if serializer.is_valid():
             user = request.user
             old_password = serializer.validated_data['old_password']
             new_password = serializer.validated_data['new_password']
             
+            print(f"PasswordChangeView - Validated data: old_password={'***' if old_password else 'None'}, new_password={'***' if new_password else 'None'}")
+            
             # Check old password
             if not user.check_password(old_password):
+                print(f"PasswordChangeView - Old password check failed for user: {user.username}")
                 return Response({
                     'detail': 'Current password is incorrect.'
                 }, status=status.HTTP_400_BAD_REQUEST)
             
+            print(f"PasswordChangeView - Old password check passed, changing password...")
+            
             # Change password
             user.set_password(new_password)
             user.save()
+            
+            print(f"PasswordChangeView - Password changed successfully for user: {user.username}")
             
             # Update security settings
             security_settings, created = SecuritySettings.objects.get_or_create(user=user)
@@ -323,6 +354,8 @@ class PasswordChangeView(APIView):
             })
             
             return Response({'detail': 'Password changed successfully.'})
+        else:
+            print(f"PasswordChangeView - Serializer errors: {serializer.errors}")
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -583,21 +616,44 @@ class UserListView(APIView):
 
     def get(self, request):
         user = request.user
+        print(f"UserListView - Request from user: {user.username}")
+        
         # فقط ادمین یا مدیر (کسی که company_profile دارد)
         if not (user.is_staff or hasattr(user, 'company_profile')):
+            print(f"UserListView - Permission denied for user: {user.username}")
             return Response({'detail': 'Permission denied.'}, status=403)
+        
         users = User.objects.all().order_by('-date_joined')
+        print(f"UserListView - Found {users.count()} users in database")
+        
         data = []
         for u in users:
-            data.append({
+            company = getattr(u, 'company_profile', None)
+            
+            # Get full_name from company profile first, then from user's first_name + last_name
+            full_name = None
+            if company and company.manager_full_name:
+                full_name = company.manager_full_name
+            else:
+                full_name = f"{u.first_name} {u.last_name}".strip() or u.username
+            
+            user_data = {
                 'id': u.id,
                 'username': u.username,
                 'email': u.email,
+                'full_name': full_name,
+                'phone': getattr(company, 'phone', '') if company else '',
+                'company_name': getattr(company, 'company_name', '') if company else '',
                 'is_staff': u.is_staff,
                 'is_superuser': u.is_superuser,
-                'is_manager': hasattr(u, 'company_profile'),
+                'is_manager': company is not None,
                 'date_joined': u.date_joined,
-            })
+                'profile_photo': company.profile_photo.url if company and company.profile_photo else None,
+            }
+            data.append(user_data)
+            print(f"UserListView - User {u.id}: {u.username} - {full_name} - Company: {getattr(company, 'company_name', 'None')}")
+        
+        print(f"UserListView - Returning {len(data)} users")
         return Response(data)
 
 class UserRoleUpdateView(APIView):
@@ -631,3 +687,283 @@ class AllMessagesView(APIView):
         contact_data = ContactMessageSerializer(contacts, many=True).data
         # فرض بر این است که ticketها هم همین مدل هستند
         return Response({'contacts': contact_data, 'tickets': contact_data})
+
+class ProfileAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        user = request.user
+        # اگر شرکت دارد، اطلاعات شرکت را هم بگیر
+        company = getattr(user, 'company_profile', None)
+        
+        # Debug logging
+        print(f"ProfileAPIView - User: {user.username}")
+        print(f"ProfileAPIView - Company: {company}")
+        if company:
+            print(f"ProfileAPIView - Company profile_photo: {company.profile_photo}")
+            print(f"ProfileAPIView - Company profile_photo.url: {company.profile_photo.url if company.profile_photo else 'None'}")
+        
+        profile_photo = None
+        if company and company.profile_photo:
+            profile_photo = company.profile_photo.url
+            print(f"ProfileAPIView - Final profile_photo URL: {profile_photo}")
+        
+        response_data = {
+            'full_name': getattr(company, 'manager_full_name', None) or user.get_full_name() or user.username,
+            'email': user.email,
+            'phone': getattr(company, 'phone', None) or getattr(user, 'phone', None) or getattr(user, 'mobile', None) or '',
+            'date_joined': getattr(company, 'date_joined', None) or user.date_joined,
+            'role': 'Manager' if user.is_staff or user.is_superuser else 'User',
+            'profile_photo': profile_photo,
+        }
+        
+        print(f"ProfileAPIView - Response data: {response_data}")
+        return Response(response_data)
+
+class UserCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        user = request.user
+        print(f"UserCreateView - Request from user: {user.username}")
+        print(f"UserCreateView - Request data: {request.data}")
+        
+        # فقط ادمین یا مدیر می‌تواند کاربر جدید ایجاد کند
+        if not (user.is_staff or hasattr(user, 'company_profile')):
+            print(f"UserCreateView - Permission denied for user: {user.username}")
+            return Response({'detail': 'Permission denied.'}, status=403)
+        
+        try:
+            username = request.data.get('username')
+            email = request.data.get('email')
+            password = request.data.get('password')
+            full_name = request.data.get('full_name', '')
+            phone = request.data.get('phone', '')
+            company_name = request.data.get('company_name', '')
+            
+            print(f"UserCreateView - Extracted data: username={username}, email={email}, password={'***' if password else 'None'}, full_name={full_name}, phone={phone}, company_name={company_name}")
+            
+            # بررسی وجود فیلدهای اجباری
+            if not username or not email or not password:
+                print(f"UserCreateView - Missing required fields: username={bool(username)}, email={bool(email)}, password={bool(password)}")
+                return Response({
+                    'detail': 'Username, email and password are required.'
+                }, status=400)
+            
+            # بررسی تکراری نبودن username و email
+            if User.objects.filter(username=username).exists():
+                print(f"UserCreateView - Username already exists: {username}")
+                return Response({
+                    'detail': 'Username already exists.'
+                }, status=400)
+            
+            if User.objects.filter(email=email).exists():
+                print(f"UserCreateView - Email already exists: {email}")
+                return Response({
+                    'detail': 'Email already exists.'
+                }, status=400)
+            
+            print(f"UserCreateView - Creating new user: {username}")
+            
+            # ایجاد کاربر جدید
+            new_user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password,
+                first_name=full_name.split()[0] if full_name else '',
+                last_name=' '.join(full_name.split()[1:]) if full_name and len(full_name.split()) > 1 else ''
+            )
+            
+            print(f"UserCreateView - User created successfully: {new_user.id}")
+            
+            # Verify user was actually saved
+            try:
+                saved_user = User.objects.get(id=new_user.id)
+                print(f"UserCreateView - User verification: ID={saved_user.id}, Username={saved_user.username}, Email={saved_user.email}, Active={saved_user.is_active}")
+                
+                # Test authentication
+                test_auth = authenticate(username=saved_user.username, password=password)
+                print(f"UserCreateView - Authentication test: {test_auth is not None}")
+                if test_auth:
+                    print(f"UserCreateView - Test auth successful for: {test_auth.username}")
+                else:
+                    print(f"UserCreateView - Test auth failed for: {saved_user.username}")
+                    
+            except User.DoesNotExist:
+                print(f"UserCreateView - ERROR: User {new_user.id} was not found in database after creation!")
+            except Exception as e:
+                print(f"UserCreateView - Error during verification: {e}")
+            
+            # اگر company_name داده شده، Company Profile ایجاد کن
+            company = None
+            if company_name and company_name.strip():
+                print(f"UserCreateView - Creating company profile: {company_name}")
+                company = Company.objects.create(
+                    user=new_user,
+                    company_name=company_name,
+                    manager_full_name=full_name,
+                    phone=phone
+                )
+                print(f"UserCreateView - Company profile created: {company.id}")
+            
+            # لاگ فعالیت
+            log_activity(request, 'user_created', {
+                'created_user_id': new_user.id,
+                'created_user_username': new_user.username
+            })
+            
+            response_data = {
+                'id': new_user.id,
+                'username': new_user.username,
+                'email': new_user.email,
+                'full_name': full_name,
+                'phone': phone,
+                'company_name': company_name,
+                'is_staff': new_user.is_staff,
+                'is_superuser': new_user.is_superuser,
+                'is_manager': company is not None,
+                'date_joined': new_user.date_joined,
+                'profile_photo': getattr(company, 'profile_photo.url', None) if company else None,
+            }
+            
+            print(f"UserCreateView - Returning response: {response_data}")
+            return Response(response_data, status=201)
+            
+        except Exception as e:
+            print(f"UserCreateView - Error creating user: {e}")
+            logger.error(f"Error creating user: {e}")
+            return Response({
+                'detail': 'Failed to create user. Please try again.'
+            }, status=500)
+
+class UserUpdateView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def patch(self, request, user_id):
+        user = request.user
+        # فقط ادمین یا مدیر می‌تواند کاربران را ویرایش کند
+        if not (user.is_staff or hasattr(user, 'company_profile')):
+            return Response({'detail': 'Permission denied.'}, status=403)
+        
+        try:
+            target_user = User.objects.get(id=user_id)
+            
+            # بروزرسانی فیلدهای کاربر
+            if 'username' in request.data:
+                new_username = request.data['username']
+                if User.objects.filter(username=new_username).exclude(id=user_id).exists():
+                    return Response({
+                        'detail': 'Username already exists.'
+                    }, status=400)
+                target_user.username = new_username
+            
+            if 'email' in request.data:
+                new_email = request.data['email']
+                if User.objects.filter(email=new_email).exclude(id=user_id).exists():
+                    return Response({
+                        'detail': 'Email already exists.'
+                    }, status=400)
+                target_user.email = new_email
+            
+            if 'full_name' in request.data:
+                full_name = request.data['full_name']
+                target_user.first_name = full_name.split()[0] if full_name else ''
+                target_user.last_name = ' '.join(full_name.split()[1:]) if full_name and len(full_name.split()) > 1 else ''
+            
+            target_user.save()
+            
+            # بروزرسانی Company Profile اگر وجود دارد
+            company = getattr(target_user, 'company_profile', None)
+            if company:
+                if 'phone' in request.data:
+                    company.phone = request.data['phone']
+                if 'company_name' in request.data:
+                    company.company_name = request.data['company_name']
+                if 'full_name' in request.data:
+                    company.manager_full_name = request.data['full_name']
+                company.save()
+            elif 'company_name' in request.data and request.data['company_name'].strip():
+                # ایجاد Company Profile جدید
+                company = Company.objects.create(
+                    user=target_user,
+                    company_name=request.data['company_name'],
+                    manager_full_name=request.data.get('full_name', ''),
+                    phone=request.data.get('phone', '')
+                )
+            
+            # تغییر پسورد اگر داده شده
+            if 'password' in request.data and request.data['password']:
+                target_user.set_password(request.data['password'])
+                target_user.save()
+            
+            # لاگ فعالیت
+            log_activity(request, 'user_updated', {
+                'updated_user_id': target_user.id,
+                'updated_user_username': target_user.username
+            })
+            
+            # بروزرسانی company reference بعد از تغییرات
+            company = getattr(target_user, 'company_profile', None)
+            
+            return Response({
+                'id': target_user.id,
+                'username': target_user.username,
+                'email': target_user.email,
+                'full_name': f"{target_user.first_name} {target_user.last_name}".strip(),
+                'phone': getattr(company, 'phone', '') if company else '',
+                'company_name': getattr(company, 'company_name', '') if company else '',
+                'is_staff': target_user.is_staff,
+                'is_superuser': target_user.is_superuser,
+                'is_manager': company is not None,
+                'date_joined': target_user.date_joined,
+                'profile_photo': getattr(company, 'profile_photo.url', None) if company else None,
+            })
+            
+        except User.DoesNotExist:
+            return Response({
+                'detail': 'User not found.'
+            }, status=404)
+        except Exception as e:
+            logger.error(f"Error updating user: {e}")
+            return Response({
+                'detail': 'Failed to update user. Please try again.'
+            }, status=500)
+
+class UserDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def delete(self, request, user_id):
+        user = request.user
+        # فقط ادمین یا مدیر می‌تواند کاربران را حذف کند
+        if not (user.is_staff or hasattr(user, 'company_profile')):
+            return Response({'detail': 'Permission denied.'}, status=403)
+        
+        try:
+            target_user = User.objects.get(id=user_id)
+            
+            # جلوگیری از حذف خود کاربر
+            if target_user.id == user.id:
+                return Response({
+                    'detail': 'You cannot delete your own account.'
+                }, status=400)
+            
+            # لاگ فعالیت قبل از حذف
+            log_activity(request, 'user_deleted', {
+                'deleted_user_id': target_user.id,
+                'deleted_user_username': target_user.username
+            })
+            
+            target_user.delete()
+            
+            return Response({
+                'detail': 'User deleted successfully.'
+            })
+            
+        except User.DoesNotExist:
+            return Response({
+                'detail': 'User not found.'
+            }, status=404)
+        except Exception as e:
+            logger.error(f"Error deleting user: {e}")
+            return Response({
+                'detail': 'Failed to delete user. Please try again.'
+            }, status=500)

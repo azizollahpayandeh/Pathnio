@@ -141,19 +141,13 @@ class SiteSettingsSerializer(serializers.ModelSerializer):
 
 # Login Serializer
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    username = serializers.CharField(help_text="Enter your username or email address")
     password = serializers.CharField(write_only=True)
 
 # Password Change Serializer
 class PasswordChangeSerializer(serializers.Serializer):
     old_password = serializers.CharField(write_only=True)
     new_password = serializers.CharField(write_only=True, validators=[validate_password])
-    new_password_retype = serializers.CharField(write_only=True)
-    
-    def validate(self, attrs):
-        if attrs['new_password'] != attrs['new_password_retype']:
-            raise serializers.ValidationError({"new_password": "Password fields didn't match."})
-        return attrs
 
 # User Profile Update Serializer
 class UserProfileUpdateSerializer(serializers.ModelSerializer):
