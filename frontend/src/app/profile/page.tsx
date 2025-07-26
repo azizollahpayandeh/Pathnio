@@ -187,12 +187,12 @@ export default function ProfilePage() {
         await api.post("accounts/auth/logout/");
         localStorage.removeItem('token');
         localStorage.removeItem('refreshToken');
-        router.push('/login');
+        router.push('/');
       } catch (error) {
         // Even if logout API fails, clear local storage and redirect
         localStorage.removeItem('token');
         localStorage.removeItem('refreshToken');
-        router.push('/login');
+        router.push('/');
       }
     }
   };
