@@ -8,7 +8,11 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'password')
-        extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'username': {'required': True},
+            'email': {'required': True}
+        }
 
 # سریالایزر کاستوم برای Djoser
 class CustomDjoserUserSerializer(DjoserUserSerializer):
@@ -99,20 +103,69 @@ class CompanyUserSerializer(serializers.ModelSerializer):
             return None
 
 class CompanySerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
+    user = UserSerializer(write_only=True)  # Changed to write_only for creation
     phone = serializers.CharField(source='user.company_profile.phone', read_only=True)
     date_joined = serializers.DateTimeField(source='user.date_joined', read_only=True)
+    
     class Meta:
         model = Company
         fields = ('id', 'user', 'company_name', 'manager_full_name', 'phone', 'address', 'profile_photo', 'date_joined')
 
+    def validate(self, attrs):
+        # Validate user data
+        user_data = attrs.get('user', {})
+        
+        # Check required fields
+        if not user_data.get('username'):
+            raise serializers.ValidationError({'user': {'username': 'Username is required.'}})
+        
+        if not user_data.get('email'):
+            raise serializers.ValidationError({'user': {'email': 'Email is required.'}})
+        
+        if not user_data.get('password'):
+            raise serializers.ValidationError({'user': {'password': 'Password is required.'}})
+        
+        # Check if username already exists
+        if User.objects.filter(username=user_data['username']).exists():
+            raise serializers.ValidationError({'user': {'username': 'A user with this username already exists.'}})
+        
+        # Check if email already exists
+        if User.objects.filter(email=user_data['email']).exists():
+            raise serializers.ValidationError({'user': {'email': 'A user with this email already exists.'}})
+        
+        return attrs
+
     def create(self, validated_data):
+        # Extract user data
         user_data = validated_data.pop('user')
+        
         # Remove password_retype if present
         user_data.pop('password_retype', None)
-        user = User.objects.create_user(**user_data)
-        company = Company.objects.create(user=user, **validated_data)
-        return company
+        
+        try:
+            # Create the user first
+            user = User.objects.create_user(**user_data)
+            
+            # Create the company profile
+            company = Company.objects.create(user=user, **validated_data)
+            
+            return company
+        except Exception as e:
+            # If user was created but company creation failed, delete the user
+            if 'user' in locals():
+                user.delete()
+            raise serializers.ValidationError(f'Failed to create company: {str(e)}')
+
+    def to_representation(self, instance):
+        """Custom representation for the response"""
+        representation = super().to_representation(instance)
+        # Add user information to the response
+        representation['user'] = {
+            'id': instance.user.id,
+            'username': instance.user.username,
+            'email': instance.user.email,
+        }
+        return representation
 
 class DriverSerializer(serializers.ModelSerializer):
     user = UserSerializer()

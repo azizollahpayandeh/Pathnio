@@ -59,8 +59,29 @@ export default function LoginPage() {
       }
     } catch (err: unknown) {
       let errorMsg = "Registration failed. Please try again.";
-      if (err && typeof err === "object" && "response" in err && (err as any).response?.data?.detail) {
-        errorMsg = (err as any).response.data.detail;
+      if (err && typeof err === "object" && "response" in err) {
+        const response = (err as any).response;
+        if (response?.data?.detail) {
+          errorMsg = response.data.detail;
+        } else if (response?.data?.errors) {
+          // Handle nested validation errors
+          const errors = response.data.errors;
+          if (errors.user) {
+            if (typeof errors.user === 'string') {
+              errorMsg = errors.user;
+            } else if (errors.user.username) {
+              errorMsg = errors.user.username[0];
+            } else if (errors.user.email) {
+              errorMsg = errors.user.email[0];
+            }
+          } else if (errors.company_name) {
+            errorMsg = errors.company_name[0];
+          } else if (errors.manager_full_name) {
+            errorMsg = errors.manager_full_name[0];
+          } else if (errors.phone) {
+            errorMsg = errors.phone[0];
+          }
+        }
       }
       setAlert({ type: "error", msg: errorMsg });
     } finally {

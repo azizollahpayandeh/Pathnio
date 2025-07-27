@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions, status, serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
@@ -185,6 +185,22 @@ class TestLoginView(APIView):
         return Response({
             'message': 'Login endpoint is working',
             'data': request.data
+        })
+
+# Test view for company registration
+class TestCompanyRegistrationView(APIView):
+    permission_classes = [AllowAny]
+    
+    def post(self, request):
+        logger.info(f"Test registration endpoint called with data: {request.data}")
+        return Response({
+            'message': 'Company registration endpoint is accessible',
+            'received_data': request.data,
+            'data_structure': {
+                'has_user': 'user' in request.data,
+                'user_fields': list(request.data.get('user', {}).keys()) if 'user' in request.data else [],
+                'company_fields': [k for k in request.data.keys() if k != 'user']
+            }
         })
 
 # Authentication Views
@@ -455,13 +471,49 @@ class CompanyRegisterView(generics.CreateAPIView):
     serializer_class = CompanySerializer
     permission_classes = [AllowAny]
     
-    def perform_create(self, serializer):
-        with transaction.atomic():
-            company = serializer.save()
-            log_activity(self.request, 'register', {
-                'user_type': 'company',
-                'company_name': company.company_name
-            }, company.user)
+    def create(self, request, *args, **kwargs):
+        try:
+            # Log the incoming request data for debugging
+            logger.info(f"Company registration attempt with data: {request.data}")
+            
+            # Create the company using the serializer
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            
+            with transaction.atomic():
+                company = serializer.save()
+                
+                # Log the successful registration
+                log_activity(request, 'register', {
+                    'user_type': 'company',
+                    'company_name': company.company_name,
+                    'user_id': company.user.id
+                }, company.user)
+                
+                logger.info(f"Company registration successful: {company.company_name} (User ID: {company.user.id})")
+                
+                return Response({
+                    'detail': 'Company registered successfully.',
+                    'company': {
+                        'id': company.id,
+                        'company_name': company.company_name,
+                        'manager_full_name': company.manager_full_name,
+                        'user_id': company.user.id
+                    }
+                }, status=status.HTTP_201_CREATED)
+                
+        except serializers.ValidationError as e:
+            logger.error(f"Company registration validation error: {e}")
+            return Response({
+                'detail': 'Validation failed.',
+                'errors': e.detail
+            }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            logger.error(f"Company registration error: {e}")
+            return Response({
+                'detail': 'Registration failed. Please try again.',
+                'code': 'registration_failed'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class DriverRegisterView(generics.CreateAPIView):
     queryset = Driver.objects.all()

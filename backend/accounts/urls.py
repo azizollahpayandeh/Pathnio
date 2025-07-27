@@ -6,7 +6,7 @@ from .views import (
     SupportTicketReplyView, LoginView, LogoutView, PasswordChangeView,
     UserProfileView, ActivityLogView, SecurityStatusView, check_auth_status,
     DriverDetailView, UserListView, UserRoleUpdateView, AllMessagesView, ProfileAPIView,
-    UserCreateView, UserUpdateView, UserDeleteView
+    UserCreateView, UserUpdateView, UserDeleteView, TestCompanyRegistrationView
 )
 
 urlpatterns = [
@@ -24,6 +24,7 @@ urlpatterns = [
     
     # Registration URLs
     path('register/company/', CompanyRegisterView.as_view(), name='register-company'),
+    path('register/company/test/', TestCompanyRegistrationView.as_view(), name='test-register-company'),
     path('register/driver/', DriverRegisterView.as_view(), name='register-driver'),
     
     # Profile URLs
