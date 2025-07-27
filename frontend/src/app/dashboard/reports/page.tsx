@@ -1,100 +1,510 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Bar, Pie } from "react-chartjs-2";
+import { Bar, Pie, Line, Doughnut } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   BarElement,
+  LineElement,
+  PointElement,
   Title,
   Tooltip,
   Legend,
   ArcElement,
+  Filler,
 } from "chart.js";
+import {
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+  Car,
+  User,
+  Calendar,
+  Activity,
+  BarChart3,
+  PieChart,
+} from "lucide-react";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
+ChartJS.register(
+  CategoryScale, 
+  LinearScale, 
+  BarElement, 
+  LineElement,
+  PointElement,
+  Title, 
+  Tooltip, 
+  Legend, 
+  ArcElement,
+  Filler
+);
 
 const SUMMARY = [
-  { label: "Total Trips", value: 120 },
-  { label: "Total Expenses", value: "12,500,000 Toman" },
-  { label: "Active Drivers", value: 8 },
-  { label: "Active Vehicles", value: 6 },
+  { 
+    label: "Total Trips", 
+    value: "1,247", 
+    change: "+12.5%", 
+    trend: "up",
+    icon: Car,
+    color: "from-blue-500 to-indigo-600"
+  },
+  { 
+    label: "Total Revenue", 
+    value: "₺2.4M", 
+    change: "+8.3%", 
+    trend: "up",
+    icon: DollarSign,
+    color: "from-green-500 to-emerald-600"
+  },
+  { 
+    label: "Active Drivers", 
+    value: "24", 
+    change: "+2", 
+    trend: "up",
+    icon: User,
+    color: "from-purple-500 to-violet-600"
+  },
+  { 
+    label: "Active Vehicles", 
+    value: "18", 
+    change: "-1", 
+    trend: "down",
+    icon: Car,
+    color: "from-orange-500 to-amber-600"
+  },
 ];
 
-const PIE_DATA = {
-  labels: ["Fuel", "Maintenance", "Toll", "Repair", "Insurance"],
+const EXPENSES_DATA = {
+  labels: ["Fuel", "Maintenance", "Toll", "Repair", "Insurance", "Other"],
   datasets: [
     {
-      label: "Expenses",
-      data: [4500000, 2500000, 800000, 1200000, 2000000],
+      label: "Expenses (₺)",
+      data: [4500000, 2500000, 800000, 1200000, 2000000, 500000],
       backgroundColor: [
-        "#2563eb",
-        "#818cf8",
-        "#fbbf24",
-        "#f87171",
-        "#34d399",
+        "rgba(59, 130, 246, 0.8)",
+        "rgba(168, 85, 247, 0.8)",
+        "rgba(245, 158, 11, 0.8)",
+        "rgba(239, 68, 68, 0.8)",
+        "rgba(34, 197, 94, 0.8)",
+        "rgba(107, 114, 128, 0.8)",
       ],
-      borderWidth: 1,
+      borderColor: [
+        "rgba(59, 130, 246, 1)",
+        "rgba(168, 85, 247, 1)",
+        "rgba(245, 158, 11, 1)",
+        "rgba(239, 68, 68, 1)",
+        "rgba(34, 197, 94, 1)",
+        "rgba(107, 114, 128, 1)",
+      ],
+      borderWidth: 2,
+      hoverOffset: 4,
     },
   ],
 };
 
-const BAR_DATA = {
-  labels: ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"],
+const TRIPS_DATA = {
+  labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
   datasets: [
     {
-      label: "Trips per Day",
-      data: [12, 19, 8, 15, 10, 7, 14],
-      backgroundColor: "#2563eb",
+      label: "Trips Completed",
+      data: [45, 52, 38, 61, 48, 35, 42],
+      backgroundColor: "rgba(59, 130, 246, 0.8)",
+      borderColor: "rgba(59, 130, 246, 1)",
+      borderWidth: 2,
       borderRadius: 8,
+      borderSkipped: false,
+    },
+    {
+      label: "Trips Planned",
+      data: [50, 55, 42, 65, 52, 40, 48],
+      backgroundColor: "rgba(168, 85, 247, 0.6)",
+      borderColor: "rgba(168, 85, 247, 1)",
+      borderWidth: 2,
+      borderRadius: 8,
+      borderSkipped: false,
+    },
+  ],
+};
+
+const REVENUE_DATA = {
+  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+  datasets: [
+    {
+      label: "Monthly Revenue (₺)",
+      data: [180000, 220000, 195000, 280000, 320000, 290000, 350000, 380000, 420000, 450000, 480000, 520000],
+      borderColor: "rgba(34, 197, 94, 1)",
+      backgroundColor: "rgba(34, 197, 94, 0.1)",
+      borderWidth: 3,
+      fill: true,
+      tension: 0.4,
+      pointBackgroundColor: "rgba(34, 197, 94, 1)",
+      pointBorderColor: "#ffffff",
+      pointBorderWidth: 2,
+      pointRadius: 6,
+      pointHoverRadius: 8,
+    },
+  ],
+};
+
+const EFFICIENCY_DATA = {
+  labels: ["Fuel Efficiency", "Route Optimization", "Driver Performance", "Vehicle Maintenance", "Time Management"],
+  datasets: [
+    {
+      label: "Efficiency Score (%)",
+      data: [85, 92, 78, 88, 95],
+      backgroundColor: [
+        "rgba(59, 130, 246, 0.8)",
+        "rgba(34, 197, 94, 0.8)",
+        "rgba(168, 85, 247, 0.8)",
+        "rgba(245, 158, 11, 0.8)",
+        "rgba(239, 68, 68, 0.8)",
+      ],
+      borderColor: [
+        "rgba(59, 130, 246, 1)",
+        "rgba(34, 197, 94, 1)",
+        "rgba(168, 85, 247, 1)",
+        "rgba(245, 158, 11, 1)",
+        "rgba(239, 68, 68, 1)",
+      ],
+      borderWidth: 2,
+      borderRadius: 8,
+      borderSkipped: false,
     },
   ],
 };
 
 export default function ReportsPage() {
   const [loading, setLoading] = useState(false);
-  // حذف setError اگر استفاده نشده
 
-  // در آینده: دریافت داده واقعی از API
   useEffect(() => {
     setLoading(false);
   }, []);
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="bg-white rounded-2xl shadow-2xl p-4 md:p-6 lg:p-8 max-w-7xl mx-auto w-full h-full flex flex-col">
-        <h1 className="font-extrabold text-2xl md:text-3xl mb-4 md:mb-6 lg:mb-8 text-blue-700">Reports & Analytics</h1>
-        {loading ? (
-          <div className="text-blue-400 animate-pulse text-lg">Loading reports...</div>
-        ) : (
-          <div className="flex-1 overflow-auto">
-            <div className="flex flex-col gap-6 md:gap-8 lg:gap-10">
-              {/* Summary Table */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                {SUMMARY.map((item, i) => (
-                  <div key={i} className="bg-gradient-to-br from-blue-50 via-white to-blue-100 rounded-2xl shadow p-4 md:p-6 flex flex-col items-center justify-center">
-                    <span className="text-blue-700 font-bold text-sm md:text-base lg:text-lg mb-2 text-center">{item.label}</span>
-                    <span className="text-lg md:text-xl lg:text-2xl font-extrabold text-blue-900 text-center">{item.value}</span>
-                  </div>
-                ))}
-              </div>
-              {/* Charts */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-10">
-                <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6 flex flex-col items-center">
-                  <h2 className="font-bold text-blue-700 mb-4 text-sm md:text-base lg:text-lg">Expenses Breakdown</h2>
-                  <div className="w-full max-w-xs">
-                    <Pie data={PIE_DATA} />
-                  </div>
-                </div>
-                <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6 flex flex-col items-center">
-                  <h2 className="font-bold text-blue-700 mb-4 text-sm md:text-base lg:text-lg">Trips per Day</h2>
-                  <div className="w-full max-w-xs">
-                    <Bar data={BAR_DATA} />
-                  </div>
-                </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4 sm:p-6 lg:p-8">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Header */}
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-4xl font-bold text-gray-900 mb-2">Reports & Analytics</h1>
+              <p className="text-gray-600 text-lg">Comprehensive insights into your fleet performance</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <BarChart3 className="w-6 h-6 text-white" />
               </div>
             </div>
           </div>
+        </div>
+
+        {loading ? (
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20 text-center">
+            <div className="text-blue-600 animate-pulse text-xl">Loading reports...</div>
+          </div>
+        ) : (
+          <>
+            {/* Summary Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {SUMMARY.map((item, i) => {
+                const Icon = item.icon;
+                return (
+                  <div key={i} className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className={`w-12 h-12 bg-gradient-to-br ${item.color} rounded-2xl flex items-center justify-center shadow-lg`}>
+                        <Icon className="w-6 h-6 text-white" />
+                      </div>
+                      <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${
+                        item.trend === 'up' 
+                          ? 'bg-green-100 text-green-700' 
+                          : 'bg-red-100 text-red-700'
+                      }`}>
+                        {item.trend === 'up' ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                        {item.change}
+                      </div>
+                    </div>
+                    <div className="text-3xl font-bold text-gray-900 mb-1">{item.value}</div>
+                    <div className="text-sm text-gray-600">{item.label}</div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Main Charts Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Expenses Breakdown */}
+              <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Expenses Breakdown</h3>
+                    <p className="text-gray-600">Distribution of operational costs</p>
+                  </div>
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <PieChart className="w-6 h-6 text-white" />
+                  </div>
+                </div>
+                <div className="h-80 w-full">
+                  <Doughnut
+                    data={EXPENSES_DATA}
+                    options={{
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      plugins: {
+                        legend: {
+                          position: 'bottom' as const,
+                          labels: {
+                            usePointStyle: true,
+                            padding: 20,
+                            font: {
+                              size: 12,
+                              weight: '600',
+                            },
+                          },
+                        },
+                        tooltip: {
+                          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                          titleColor: '#ffffff',
+                          bodyColor: '#ffffff',
+                          borderColor: 'rgba(59, 130, 246, 0.5)',
+                          borderWidth: 1,
+                          cornerRadius: 12,
+                          callbacks: {
+                            label: function(context) {
+                              const value = context.parsed;
+                              const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
+                              const percentage = ((value / total) * 100).toFixed(1);
+                              return `${context.label}: ₺${value.toLocaleString()} (${percentage}%)`;
+                            }
+                          }
+                        },
+                      },
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Trips per Day */}
+              <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Weekly Trip Analysis</h3>
+                    <p className="text-gray-600">Completed vs planned trips</p>
+                  </div>
+                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <Activity className="w-6 h-6 text-white" />
+                  </div>
+                </div>
+                <div className="h-80 w-full">
+                  <Bar
+                    data={TRIPS_DATA}
+                    options={{
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      plugins: {
+                        legend: {
+                          position: 'top' as const,
+                          labels: {
+                            usePointStyle: true,
+                            padding: 20,
+                            font: {
+                              size: 12,
+                              weight: '600',
+                            },
+                          },
+                        },
+                        tooltip: {
+                          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                          titleColor: '#ffffff',
+                          bodyColor: '#ffffff',
+                          borderColor: 'rgba(59, 130, 246, 0.5)',
+                          borderWidth: 1,
+                          cornerRadius: 12,
+                        },
+                      },
+                      scales: {
+                        y: {
+                          beginAtZero: true,
+                          grid: {
+                            color: 'rgba(0, 0, 0, 0.05)',
+                            drawBorder: false,
+                          },
+                          ticks: {
+                            color: '#6b7280',
+                            font: {
+                              size: 12,
+                              weight: '500',
+                            },
+                          },
+                        },
+                        x: {
+                          grid: {
+                            display: false,
+                          },
+                          ticks: {
+                            color: '#6b7280',
+                            font: {
+                              size: 12,
+                              weight: '500',
+                            },
+                          },
+                        },
+                      },
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Additional Charts */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Revenue Trends */}
+              <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Revenue Trends</h3>
+                    <p className="text-gray-600">Monthly revenue performance</p>
+                  </div>
+                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <TrendingUp className="w-6 h-6 text-white" />
+                  </div>
+                </div>
+                <div className="h-80 w-full">
+                  <Line
+                    data={REVENUE_DATA}
+                    options={{
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      plugins: {
+                        legend: {
+                          display: false,
+                        },
+                        tooltip: {
+                          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                          titleColor: '#ffffff',
+                          bodyColor: '#ffffff',
+                          borderColor: 'rgba(34, 197, 94, 0.5)',
+                          borderWidth: 1,
+                          cornerRadius: 12,
+                          callbacks: {
+                            label: function(context) {
+                              return `Revenue: ₺${context.parsed.y.toLocaleString()}`;
+                            }
+                          }
+                        },
+                      },
+                      scales: {
+                        y: {
+                          beginAtZero: true,
+                          grid: {
+                            color: 'rgba(0, 0, 0, 0.05)',
+                            drawBorder: false,
+                          },
+                          ticks: {
+                            color: '#6b7280',
+                            font: {
+                              size: 12,
+                              weight: '500',
+                            },
+                            callback: function(value) {
+                              return '₺' + (value as number / 1000) + 'K';
+                            }
+                          },
+                        },
+                        x: {
+                          grid: {
+                            display: false,
+                          },
+                          ticks: {
+                            color: '#6b7280',
+                            font: {
+                              size: 12,
+                              weight: '500',
+                            },
+                          },
+                        },
+                      },
+                      elements: {
+                        point: {
+                          hoverRadius: 8,
+                        },
+                      },
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Efficiency Metrics */}
+              <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Efficiency Metrics</h3>
+                    <p className="text-gray-600">Performance across key areas</p>
+                  </div>
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-violet-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <BarChart3 className="w-6 h-6 text-white" />
+                  </div>
+                </div>
+                <div className="h-80 w-full">
+                  <Bar
+                    data={EFFICIENCY_DATA}
+                    options={{
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      indexAxis: 'y' as const,
+                      plugins: {
+                        legend: {
+                          display: false,
+                        },
+                        tooltip: {
+                          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                          titleColor: '#ffffff',
+                          bodyColor: '#ffffff',
+                          borderColor: 'rgba(59, 130, 246, 0.5)',
+                          borderWidth: 1,
+                          cornerRadius: 12,
+                          callbacks: {
+                            label: function(context) {
+                              return `Efficiency: ${context.parsed.x}%`;
+                            }
+                          }
+                        },
+                      },
+                      scales: {
+                        x: {
+                          beginAtZero: true,
+                          max: 100,
+                          grid: {
+                            color: 'rgba(0, 0, 0, 0.05)',
+                            drawBorder: false,
+                          },
+                          ticks: {
+                            color: '#6b7280',
+                            font: {
+                              size: 12,
+                              weight: '500',
+                            },
+                            stepSize: 20,
+                          },
+                        },
+                        y: {
+                          grid: {
+                            display: false,
+                          },
+                          ticks: {
+                            color: '#6b7280',
+                            font: {
+                              size: 12,
+                              weight: '500',
+                            },
+                          },
+                        },
+                      },
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </>
         )}
       </div>
     </div>

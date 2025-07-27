@@ -35,8 +35,13 @@ const DriverCard = () => {
         setDriver(res.data); // Set driver data
         setError(null); // Clear any previous errors
       })
-      .catch(() => {
-        setError('Failed to load driver data.'); // Set error message on failure
+      .catch((err) => {
+        console.error('Driver detail API error:', err);
+        if (err.response?.status === 404) {
+          setError('Driver not found. The requested driver does not exist.'); // More specific error for 404
+        } else {
+          setError('Failed to load driver data. Please try again later.'); // Generic error for other issues
+        }
         setDriver(null); // Clear driver data
       })
       .finally(() => setLoading(false)); // Set loading state to false regardless of success or failure
@@ -46,7 +51,7 @@ const DriverCard = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen text-blue-500 text-xl">
-        در حال بارگذاری اطلاعات راننده...
+        Loading driver information...
       </div>
     );
   }
