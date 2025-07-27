@@ -167,6 +167,55 @@ class CompanySerializer(serializers.ModelSerializer):
         }
         return representation
 
+class CompanyUpdateSerializer(serializers.ModelSerializer):
+    """Serializer for updating existing company profiles"""
+    
+    # Add language field for frontend compatibility
+    language = serializers.CharField(required=False, write_only=True)
+    
+    class Meta:
+        model = Company
+        fields = ('company_name', 'manager_full_name', 'phone', 'address', 'profile_photo', 'language')
+        # Remove profile_photo from read_only_fields to allow updates
+
+    def validate_phone(self, value):
+        """Validate phone number format"""
+        if value and len(value) < 10:
+            raise serializers.ValidationError("Phone number must be at least 10 digits.")
+        return value
+
+    def validate_company_name(self, value):
+        """Validate company name"""
+        if not value or len(value.strip()) < 2:
+            raise serializers.ValidationError("Company name must be at least 2 characters long.")
+        return value.strip()
+
+    def validate_manager_full_name(self, value):
+        """Validate manager full name"""
+        if not value or len(value.strip()) < 2:
+            raise serializers.ValidationError("Manager full name must be at least 2 characters long.")
+        return value.strip()
+
+    def update(self, instance, validated_data):
+        """Custom update method to handle language field"""
+        # Remove language from validated_data as it's not a model field
+        validated_data.pop('language', None)
+        
+        # Update the instance
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        
+        instance.save()
+        return instance
+
+    def to_representation(self, instance):
+        """Custom representation for the response"""
+        representation = super().to_representation(instance)
+        # Add profile_photo URL if it exists
+        if instance.profile_photo:
+            representation['profile_photo'] = instance.profile_photo.url
+        return representation
+
 class DriverSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:

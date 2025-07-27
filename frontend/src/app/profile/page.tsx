@@ -105,8 +105,22 @@ export default function ProfilePage() {
           } catch {}
         }
       }
-    } catch {
-      setAlert({ type: "error", msg: "Profile update failed." });
+    } catch (error: any) {
+      console.error("Profile update error:", error);
+      let errorMsg = "Profile update failed.";
+      if (error?.response?.data?.detail) {
+        errorMsg = error.response.data.detail;
+      } else if (error?.response?.data?.errors) {
+        const errors = error.response.data.errors;
+        if (errors.manager_full_name) {
+          errorMsg = errors.manager_full_name[0];
+        } else if (errors.phone) {
+          errorMsg = errors.phone[0];
+        } else if (errors.address) {
+          errorMsg = errors.address[0];
+        }
+      }
+      setAlert({ type: "error", msg: errorMsg });
     }
     setLoading(false);
   };
@@ -116,25 +130,76 @@ export default function ProfilePage() {
     const formData = new FormData();
     formData.append("profile_photo", e.target.files[0]);
     try {
-      await api.patch("accounts/company/me/", formData, {
+      const uploadRes = await api.patch("accounts/company/me/", formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
-      // Fetch fresh profile data to get the new photo URL
-      const res = await api.get("accounts/profile/");
-      setProfile(res.data);
+      
+      console.log("Photo upload response:", uploadRes.data);
+      
+      // Update profile with the response data
+      if (uploadRes.data && uploadRes.data.profile_photo) {
+        console.log("Updating profile with new photo:", uploadRes.data.profile_photo);
+        setProfile(prev => ({
+          ...prev!,
+          profile_photo: uploadRes.data.profile_photo
+        }));
+      } else {
+        console.log("No profile_photo in response, fetching fresh data...");
+        // If no photo in response, fetch fresh profile data
+        const res = await api.get("accounts/profile/");
+        setProfile(res.data);
+      }
+      
+      // Also update localStorage
+      if (typeof window !== "undefined") {
+        const userStr = localStorage.getItem("user");
+        if (userStr) {
+          try {
+            const userObj = JSON.parse(userStr);
+            const updatedUser = {
+              ...userObj,
+              profile_photo: uploadRes.data.profile_photo || "/assets/images.png",
+            };
+            localStorage.setItem("user", JSON.stringify(updatedUser));
+          } catch {}
+        }
+      }
+      
       setAlert({ type: "success", msg: "Profile photo updated!" });
-    } catch {
-      setAlert({ type: "error", msg: "Photo upload failed." });
+    } catch (error: any) {
+      console.error("Photo upload error:", error);
+      let errorMsg = "Photo upload failed.";
+      if (error?.response?.data?.detail) {
+        errorMsg = error.response.data.detail;
+      }
+      setAlert({ type: "error", msg: errorMsg });
     }
   };
 
   const getProfilePhotoUrl = (photo: string | undefined) => {
-    if (!photo) return "/assets/images.png";
-    if (photo.startsWith("http")) return photo;
+    console.log("Getting profile photo URL for:", photo);
+    if (!photo) {
+      console.log("No photo, using default");
+      return "/assets/images.png";
+    }
+    if (photo.startsWith("http")) {
+      console.log("Photo is already full URL:", photo);
+      return photo;
+    }
     if (photo.startsWith("/media/")) {
       const base = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-      return base + photo;
+      const fullUrl = base + photo;
+      console.log("Built full URL:", fullUrl);
+      return fullUrl;
     }
+    // If it's a relative path without /media/, assume it's from the API
+    if (photo && !photo.startsWith("/")) {
+      const base = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const fullUrl = base + "/media/" + photo;
+      console.log("Built media URL:", fullUrl);
+      return fullUrl;
+    }
+    console.log("Photo is relative path:", photo);
     return photo;
   };
 
@@ -187,22 +252,22 @@ export default function ProfilePage() {
 
   const handleLogout = async () => {
     const result = await Swal.fire({
-      title: 'خروج از حساب کاربری',
-      text: 'آیا مطمئن هستید که می‌خواهید از حساب کاربری خود خارج شوید؟',
+      title: 'Logout',
+      text: 'Are you sure you want to logout?',
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#dc2626',
       cancelButtonColor: '#6b7280',
-      confirmButtonText: 'بله، خروج',
-      cancelButtonText: 'انصراف',
+      confirmButtonText: 'Yes, logout',
+      cancelButtonText: 'Cancel',
       reverseButtons: true
     });
 
     if (result.isConfirmed) {
       // Show loading state
       Swal.fire({
-        title: 'در حال خروج...',
-        text: 'لطفاً صبر کنید',
+        title: 'Logging out...',
+        text: 'Please wait',
         allowOutsideClick: false,
         allowEscapeKey: false,
         showConfirmButton: false,
@@ -232,11 +297,11 @@ export default function ProfilePage() {
 
         // Show success message
         Swal.fire({
-          title: 'خروج موفقیت‌آمیز',
-          text: 'شما با موفقیت از حساب کاربری خود خارج شدید',
+          title: 'Logout Successful',
+          text: 'You have been successfully logged out',
           icon: 'success',
           confirmButtonColor: '#059669',
-          confirmButtonText: 'باشه'
+          confirmButtonText: 'OK'
         }).then(() => {
           // Redirect to home page
           router.push('/');
@@ -255,11 +320,11 @@ export default function ProfilePage() {
 
         // Show success message even if API fails
         Swal.fire({
-          title: 'خروج انجام شد',
-          text: 'شما از حساب کاربری خود خارج شدید',
+          title: 'Logout Complete',
+          text: 'You have been logged out',
           icon: 'info',
           confirmButtonColor: '#3b82f6',
-          confirmButtonText: 'باشه'
+          confirmButtonText: 'OK'
         }).then(() => {
           // Redirect to home page
           router.push('/');

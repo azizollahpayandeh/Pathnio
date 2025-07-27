@@ -25,7 +25,7 @@ from .models import (
     ActivityLog, UserSession, SecuritySettings, LoginAttempt
 )
 from .serializers import (
-    CompanySerializer, CompanyUserSerializer, DriverSerializer, ContactMessageSerializer, 
+    CompanySerializer, CompanyUpdateSerializer, CompanyUserSerializer, DriverSerializer, ContactMessageSerializer, 
     SiteSettingsSerializer, LoginSerializer, PasswordChangeSerializer,
     UserProfileUpdateSerializer, ActivityLogSerializer
 )
@@ -201,6 +201,20 @@ class TestCompanyRegistrationView(APIView):
                 'user_fields': list(request.data.get('user', {}).keys()) if 'user' in request.data else [],
                 'company_fields': [k for k in request.data.keys() if k != 'user']
             }
+        })
+
+# Test view for profile photo upload
+class TestPhotoUploadView(APIView):
+    permission_classes = [AllowAny]
+    
+    def post(self, request):
+        logger.info(f"Test photo upload endpoint called")
+        logger.info(f"Files: {request.FILES}")
+        logger.info(f"Data: {request.data}")
+        return Response({
+            'message': 'Photo upload test endpoint',
+            'files': list(request.FILES.keys()) if request.FILES else [],
+            'data': request.data
         })
 
 # Authentication Views
@@ -559,15 +573,38 @@ class CompanyMeView(APIView):
             company = request.user.company_profile
         except Company.DoesNotExist:
             return Response({'detail': 'Company profile not found.'}, status=status.HTTP_404_NOT_FOUND)
-        serializer = CompanySerializer(company, data=request.data, partial=True)
+        
+        # Log the incoming request data for debugging
+        logger.info(f"Company profile update attempt with data: {request.data}")
+        logger.info(f"Files in request: {request.FILES}")
+        
+        # Use the update serializer for PATCH requests
+        serializer = CompanyUpdateSerializer(company, data=request.data, partial=True)
+        
         if serializer.is_valid():
-            serializer.save()
-            log_activity(request, 'profile_update', {
-                'section': 'company_profile',
-                'updated_fields': list(request.data.keys())
-            })
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                serializer.save()
+                log_activity(request, 'profile_update', {
+                    'section': 'company_profile',
+                    'updated_fields': list(request.data.keys())
+                })
+                
+                # Return the updated data using the update serializer for consistent response format
+                response_serializer = CompanyUpdateSerializer(company)
+                return Response(response_serializer.data)
+                
+            except Exception as e:
+                logger.error(f"Error saving company profile: {e}")
+                return Response({
+                    'detail': 'Failed to update profile. Please try again.',
+                    'error': str(e)
+                }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            logger.error(f"Company profile update validation errors: {serializer.errors}")
+            return Response({
+                'detail': 'Validation failed.',
+                'errors': serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 class DriverListView(generics.ListAPIView):
     queryset = Driver.objects.all()

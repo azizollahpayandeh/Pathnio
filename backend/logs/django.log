@@ -271,3 +271,57 @@ INFO 2025-07-27 09:29:20,154 autoreload 9480 4336 C:\Users\azizo\Desktop\Pathnio
 INFO 2025-07-27 09:29:20,869 autoreload 6916 14164 Watching for file changes with StatReloader
 INFO 2025-07-27 09:29:32,369 autoreload 6916 14164 C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py changed, reloading.
 INFO 2025-07-27 09:29:33,068 autoreload 21536 23200 Watching for file changes with StatReloader
+INFO 2025-07-27 09:29:53,249 views 21536 13492 Company registration attempt with data: {'user': {'username': 'AzizVPNN@gmail.com', 'email': 'AzizVPNN@gmail.com', 'password': '13861386aziz', 'password_retype': '13861386aziz'}, 'company_name': 'Devspace2', 'manager_full_name': 'AzizVPN', 'phone': '09056114254', 'address': ''}
+INFO 2025-07-27 09:29:53,899 views 21536 13492 Company registration successful: Devspace2 (User ID: 23)
+INFO 2025-07-27 09:29:53,903 basehttp 21536 13492 "POST /api/accounts/register/company/ HTTP/1.1" 201 135
+INFO 2025-07-27 09:30:04,241 basehttp 21536 22228 "POST /api/accounts/auth/login/ HTTP/1.1" 200 636
+INFO 2025-07-27 09:30:06,222 basehttp 21536 22228 "GET /api/accounts/profile/ HTTP/1.1" 200 142
+INFO 2025-07-27 09:30:06,334 basehttp 21536 22228 "GET /api/accounts/profile/ HTTP/1.1" 200 142
+INFO 2025-07-27 09:30:08,522 basehttp 21536 8232 "GET /api/accounts/profile/ HTTP/1.1" 200 142
+INFO 2025-07-27 09:30:08,548 basehttp 21536 8232 "GET /api/accounts/profile/ HTTP/1.1" 200 142
+INFO 2025-07-27 09:31:25,562 basehttp 21536 17780 "OPTIONS /api/accounts/company/me/ HTTP/1.1" 200 0
+WARNING 2025-07-27 09:31:25,573 log 21536 17780 Bad Request: /api/accounts/company/me/
+WARNING 2025-07-27 09:31:25,574 basehttp 21536 17780 "PATCH /api/accounts/company/me/ HTTP/1.1" 400 45
+WARNING 2025-07-27 09:31:36,603 log 21536 8504 Bad Request: /api/accounts/company/me/
+WARNING 2025-07-27 09:31:36,604 basehttp 21536 8504 "PATCH /api/accounts/company/me/ HTTP/1.1" 400 45
+INFO 2025-07-27 09:33:48,734 basehttp 21536 13100 "GET /api/accounts/profile/ HTTP/1.1" 200 142
+INFO 2025-07-27 09:33:48,805 basehttp 21536 13100 "GET /api/accounts/profile/ HTTP/1.1" 200 142
+INFO 2025-07-27 09:33:49,478 basehttp 21536 13100 "GET /api/accounts/profile/ HTTP/1.1" 200 142
+INFO 2025-07-27 09:33:49,487 basehttp 21536 13100 "GET /api/accounts/profile/ HTTP/1.1" 200 142
+WARNING 2025-07-27 09:34:02,760 log 21536 5288 Bad Request: /api/accounts/company/me/
+WARNING 2025-07-27 09:34:02,760 basehttp 21536 5288 "PATCH /api/accounts/company/me/ HTTP/1.1" 400 45
+INFO 2025-07-27 09:35:26,134 autoreload 21536 23200 C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py changed, reloading.
+INFO 2025-07-27 09:35:27,817 autoreload 16628 3792 Watching for file changes with StatReloader
+INFO 2025-07-27 09:35:36,572 autoreload 16628 3792 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-27 09:35:37,391 autoreload 10420 12272 Watching for file changes with StatReloader
+INFO 2025-07-27 09:35:47,060 autoreload 10420 12272 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-27 09:35:47,954 autoreload 21872 15996 Watching for file changes with StatReloader
+INFO 2025-07-27 09:36:04,722 autoreload 21872 15996 C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py changed, reloading.
+INFO 2025-07-27 09:36:05,709 autoreload 22332 23400 Watching for file changes with StatReloader
+INFO 2025-07-27 09:36:32,105 views 22332 22280 Company profile update attempt with data: {'manager_full_name': 'AzizVPN', 'phone': '09015053378', 'address': '', 'language': 'en'}
+INFO 2025-07-27 09:36:32,148 basehttp 22332 22280 "PATCH /api/accounts/company/me/ HTTP/1.1" 200 244
+INFO 2025-07-27 09:36:32,159 basehttp 22332 22280 "GET /api/accounts/profile/ HTTP/1.1" 200 153
+INFO 2025-07-27 09:36:34,679 basehttp 22332 22280 "GET /api/accounts/profile/ HTTP/1.1" 200 153
+INFO 2025-07-27 09:36:34,689 basehttp 22332 22280 "GET /api/accounts/profile/ HTTP/1.1" 200 153
+INFO 2025-07-27 09:36:36,615 basehttp 22332 22280 "GET /api/accounts/profile/ HTTP/1.1" 200 153
+INFO 2025-07-27 09:36:36,628 basehttp 22332 22280 "GET /api/accounts/profile/ HTTP/1.1" 200 153
+INFO 2025-07-27 09:36:44,585 views 22332 13568 Company profile update attempt with data: <QueryDict: {'profile_photo': [<InMemoryUploadedFile: images.jpg (image/jpeg)>]}>
+INFO 2025-07-27 09:36:44,600 basehttp 22332 13568 "PATCH /api/accounts/company/me/ HTTP/1.1" 200 244
+INFO 2025-07-27 09:36:44,613 basehttp 22332 13568 "GET /api/accounts/profile/ HTTP/1.1" 200 153
+INFO 2025-07-27 09:37:03,313 views 22332 9932 Company profile update attempt with data: <QueryDict: {'profile_photo': [<InMemoryUploadedFile: photo_2025-03-08_08-53-56.jpg (image/jpeg)>]}>
+INFO 2025-07-27 09:37:03,328 basehttp 22332 9932 "PATCH /api/accounts/company/me/ HTTP/1.1" 200 244
+INFO 2025-07-27 09:37:03,340 basehttp 22332 9932 "GET /api/accounts/profile/ HTTP/1.1" 200 153
+INFO 2025-07-27 09:38:00,658 autoreload 22332 23400 C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py changed, reloading.
+INFO 2025-07-27 09:38:01,596 autoreload 680 4880 Watching for file changes with StatReloader
+INFO 2025-07-27 09:38:09,103 autoreload 680 4880 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-27 09:38:09,905 autoreload 12024 8064 Watching for file changes with StatReloader
+INFO 2025-07-27 09:38:26,630 autoreload 12024 8064 C:\Users\azizo\Desktop\Pathnio\backend\accounts\serializers.py changed, reloading.
+INFO 2025-07-27 09:38:27,555 autoreload 20616 12992 Watching for file changes with StatReloader
+INFO 2025-07-27 09:39:03,315 autoreload 20616 12992 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-27 09:39:04,189 autoreload 15804 9772 Watching for file changes with StatReloader
+INFO 2025-07-27 09:39:13,894 autoreload 15804 9772 C:\Users\azizo\Desktop\Pathnio\backend\accounts\views.py changed, reloading.
+INFO 2025-07-27 09:39:14,717 autoreload 560 15148 Watching for file changes with StatReloader
+INFO 2025-07-27 09:39:29,353 autoreload 560 15148 C:\Users\azizo\Desktop\Pathnio\backend\accounts\urls.py changed, reloading.
+INFO 2025-07-27 09:39:30,295 autoreload 16976 18136 Watching for file changes with StatReloader
+INFO 2025-07-27 09:39:36,497 autoreload 16976 18136 C:\Users\azizo\Desktop\Pathnio\backend\accounts\urls.py changed, reloading.
+INFO 2025-07-27 09:39:37,125 autoreload 14896 25460 Watching for file changes with StatReloader
