@@ -15,22 +15,52 @@ export default function FeaturesPage() {
     }, 150);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [logoText.length]);
+
+  const features = [
+    {
+      title: 'Real-Time Tracking',
+      desc: 'Monitor your fleet and shipments live with pinpoint GPS precision.',
+      icon: '🛰️',
+    },
+    {
+      title: 'Smart Analytics',
+      desc: 'Make informed decisions using powerful AI-driven data insights.',
+      icon: '📊',
+    },
+    {
+      title: 'Driver App',
+      desc: 'Equip your drivers with a user-friendly app for efficient delivery management.',
+      icon: '📱',
+    },
+    {
+      title: 'Custom Alerts',
+      desc: 'Receive instant notifications on key events and anomalies to stay ahead.',
+      icon: '🔔',
+    },
+    {
+      title: 'Route Optimization',
+      desc: 'Automatically find the fastest and most fuel-efficient delivery paths.',
+      icon: '🗺️',
+    },
+    {
+      title: 'Secure Access',
+      desc: 'Protect your data with enterprise-grade security and role-based permissions.',
+      icon: '🔐',
+    },
+  ];
 
   return (
-    <div className="text-gray-800 bg-white min-h-screen flex flex-col font-sans">
-      {/* Header */}
+    <div className="text-gray-900 bg-gray-50 min-h-screen flex flex-col font-sans antialiased">
       <Header />
 
-      {/* Features Section */}
-      <main className="pt-16 md:pt-20 pb-24 px-4 sm:px-8 md:px-20 max-w-7xl mx-auto flex-grow">
-        <section className="text-center mb-16 md:mb-20 px-2 sm:px-6">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-blue-800 mb-4 sm:mb-6 leading-tight">
-            Our Features
-          </h2>
-          <p className="text-base sm:text-lg md:text-xl text-gray-800 max-w-3xl mx-auto leading-relaxed">
-            Explore the powerful tools and features that make Pathnio your go-to
-            solution for modern logistics.
+      <main className="pt-20 sm:pt-24 md:pt-28 pb-16 px-4 sm:px-8 md:px-20 max-w-7xl mx-auto flex-grow">
+        <section className="text-center mb-12 md:mb-16 px-2 sm:px-6 animate-fadeInUp">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-blue-700 mb-3 sm:mb-4 leading-tight tracking-tight">
+            Unleash the Power of Pathnio
+          </h1>
+          <p className="text-sm sm:text-base md:text-lg text-gray-700 max-w-4xl mx-auto leading-relaxed">
+            Discover a suite of powerful features meticulously crafted to streamline your logistics, from real-time tracking to intelligent analytics.
           </p>
         </section>
 
@@ -47,94 +77,66 @@ export default function FeaturesPage() {
             sm:px-0
           "
         >
-          {[
-            {
-              title: 'Real-Time Tracking',
-              desc: 'Monitor your fleet and shipments live with GPS precision.',
-              icon: '🛰️',
-            },
-            {
-              title: 'Smart Analytics',
-              desc: 'Make informed decisions using AI-driven data insights.',
-              icon: '📊',
-            },
-            {
-              title: 'Driver App',
-              desc: 'Equip your drivers with a user-friendly app to manage deliveries efficiently.',
-              icon: '📱',
-            },
-            {
-              title: 'Custom Alerts',
-              desc: 'Receive instant notifications on key events and anomalies.',
-              icon: '🔔',
-            },
-            {
-              title: 'Route Optimization',
-              desc: 'Automatically find the fastest and most efficient delivery paths.',
-              icon: '🗺️',
-            },
-            {
-              title: 'Secure Access',
-              desc: 'Enterprise-grade security and role-based permissions.',
-              icon: '🔐',
-            },
-          ].map(({ title, desc, icon }) => (
+          {features.map(({ title, desc, icon }, index) => (
             <div
               key={title}
               tabIndex={0}
               className="
                 p-6
                 rounded-3xl
-                shadow-lg
-                bg-gray-50
+                shadow-2xl
+                bg-white
                 hover:bg-blue-50
-                focus:bg-blue-100
+                hover:scale-105
+                focus:scale-105
                 focus:outline-none
                 focus:ring-4
                 focus:ring-blue-300
-                transition
-                cursor-pointer
+                transform
+                transition-all
+                duration-300
+                ease-in-out
                 flex
                 flex-col
-                items-start
-                sm:items-center
-                text-left
-                sm:text-center
+                items-center
+                text-center
+                group
+                animate-fade-in
               "
+              style={{ animationDelay: `${index * 100}ms` }}
             >
               <div
-                className="text-5xl mb-4 sm:mb-6"
+                className="text-4xl mb-4 transform transition-transform duration-300 group-hover:scale-110"
                 title={desc}
                 aria-label={title + ' icon'}
                 role="img"
               >
                 {icon}
               </div>
-              <h4 className="text-lg sm:text-xl font-semibold text-blue-800 mb-1 sm:mb-2">
+              <h3 className="text-lg sm:text-xl font-bold text-blue-800 mb-2">
                 {title}
-              </h4>
-              <p className="text-gray-800 text-sm sm:text-base leading-relaxed">
+              </h3>
+              <p className="text-sm text-gray-600 leading-snug">
                 {desc}
               </p>
             </div>
           ))}
         </section>
 
-        {/* Logo Animation Section */}
-        <div className="py-12 sm:py-16 bg-white text-center px-4 sm:px-0">
-          <h1
+        <div className="py-12 sm:py-16 text-center px-4 sm:px-0">
+          <h2
             className="
               text-5xl
               sm:text-6xl
               md:text-7xl
               lg:text-8xl
-              font-extrabold
+              font-black
               text-blue-800
               tracking-widest
               select-none
-              font-sans
               flex
               justify-center
+              animate-fade-in
             "
             aria-label="Pathnio logo animation"
           >
@@ -150,21 +152,19 @@ export default function FeaturesPage() {
                 {char}
               </span>
             ))}
-          </h1>
+          </h2>
         </div>
 
-        {/* Call to Action Button */}
-        <div className="text-center mt-12 px-4 sm:px-0">
+        <div className="text-center mt-12 px-4 sm:px-0 animate-fadeInUp">
           <Link
             href="/login"
-            className="inline-block px-6 py-3 bg-blue-700 text-white font-bold rounded-xl hover:bg-blue-800 transition shadow-lg"
+            className="inline-block px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold rounded-full text-base shadow-xl hover:from-blue-700 hover:to-blue-900 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl"
           >
             Get Started Now
           </Link>
         </div>
       </main>
 
-      {/* Footer */}
       <Footer />
     </div>
   );
