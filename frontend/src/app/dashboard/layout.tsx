@@ -30,6 +30,16 @@ export default function DashboardLayout({
 
   useEffect(() => {
     async function fetchAndSyncProfile() {
+      // Check if user is authenticated
+      if (typeof window !== "undefined") {
+        const access = localStorage.getItem("access");
+        if (!access) {
+          console.log("No access token found, redirecting to login");
+          router.push("/login");
+          return;
+        }
+      }
+
       try {
         const res = await api.get("/accounts/profile/");
         console.log("Dashboard - Fetched profile data:", res.data);
@@ -49,6 +59,10 @@ export default function DashboardLayout({
         });
       } catch (error) {
         console.error("Error fetching profile:", error);
+        // If there's an authentication error, redirect to login
+        if (error && typeof error === "object" && "response" in error && (error as any).response?.status === 401) {
+          router.push("/login");
+        }
       }
     }
 

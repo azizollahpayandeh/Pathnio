@@ -33,17 +33,32 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const fetchProfile = async () => {
+      // Check if user is authenticated
+      if (typeof window !== "undefined") {
+        const access = localStorage.getItem("access");
+        if (!access) {
+          console.log("No access token found, redirecting to login");
+          router.push("/login");
+          return;
+        }
+      }
+
       try {
         const res = await api.get("accounts/profile/");
         setProfile(res.data);
-      } catch {
+      } catch (error) {
+        console.error("Error fetching profile:", error);
         setProfile(null);
+        // If there's an authentication error, redirect to login
+        if (error && typeof error === "object" && "response" in error && (error as any).response?.status === 401) {
+          router.push("/login");
+        }
       } finally {
         setLoading(false);
       }
     };
     fetchProfile();
-  }, []);
+  }, [router]);
 
   // Floating alert auto-close
   useEffect(() => {
@@ -172,27 +187,83 @@ export default function ProfilePage() {
 
   const handleLogout = async () => {
     const result = await Swal.fire({
-      title: 'Logout',
-      text: 'Are you sure you want to logout?',
+      title: 'خروج از حساب کاربری',
+      text: 'آیا مطمئن هستید که می‌خواهید از حساب کاربری خود خارج شوید؟',
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, logout!',
-      cancelButtonText: 'Cancel'
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'بله، خروج',
+      cancelButtonText: 'انصراف',
+      reverseButtons: true
     });
 
     if (result.isConfirmed) {
+      // Show loading state
+      Swal.fire({
+        title: 'در حال خروج...',
+        text: 'لطفاً صبر کنید',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+
       try {
+        // Try to call logout API
         await api.post("accounts/auth/logout/");
-        localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
-        router.push('/');
+        
+        // Clear all authentication data
+        if (typeof window !== "undefined") {
+          localStorage.removeItem('access');
+          localStorage.removeItem('refresh');
+          localStorage.removeItem('user');
+          
+          // Clear any other potential auth-related data
+          sessionStorage.clear();
+          
+          // Clear any cookies if they exist
+          document.cookie.split(";").forEach(function(c) { 
+            document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+          });
+        }
+
+        // Show success message
+        Swal.fire({
+          title: 'خروج موفقیت‌آمیز',
+          text: 'شما با موفقیت از حساب کاربری خود خارج شدید',
+          icon: 'success',
+          confirmButtonColor: '#059669',
+          confirmButtonText: 'باشه'
+        }).then(() => {
+          // Redirect to home page
+          router.push('/');
+        });
+
       } catch (error) {
+        console.error('Logout error:', error);
+        
         // Even if logout API fails, clear local storage and redirect
-        localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
-        router.push('/');
+        if (typeof window !== "undefined") {
+          localStorage.removeItem('access');
+          localStorage.removeItem('refresh');
+          localStorage.removeItem('user');
+          sessionStorage.clear();
+        }
+
+        // Show success message even if API fails
+        Swal.fire({
+          title: 'خروج انجام شد',
+          text: 'شما از حساب کاربری خود خارج شدید',
+          icon: 'info',
+          confirmButtonColor: '#3b82f6',
+          confirmButtonText: 'باشه'
+        }).then(() => {
+          // Redirect to home page
+          router.push('/');
+        });
       }
     }
   };
