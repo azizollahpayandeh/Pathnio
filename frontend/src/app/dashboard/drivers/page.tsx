@@ -20,11 +20,9 @@ import {
   AlertCircle,
   XCircle,
   User,
-  UserX as UserXIcon,
-  UserCheck as UserCheckIcon,
 } from "lucide-react";
+import AddDriverModal from "@/components/AddDriverModal"; // Import the new modal component
 
-// تعریف type مناسب برای Driver
 interface Driver {
   id: number;
   name?: string;
@@ -65,9 +63,11 @@ export default function DriversPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [selectedVehicleType, setSelectedVehicleType] = useState("all");
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
   const router = useRouter();
 
-  useEffect(() => {
+  const fetchDrivers = () => {
+    setLoading(true);
     api.get("accounts/drivers/")
       .then(res => {
         console.log("Drivers API response:", res.data);
@@ -90,7 +90,26 @@ export default function DriversPage() {
         setDrivers([]);
       })
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchDrivers();
   }, []);
+
+  const handleAddDriver = async (newDriverData: Omit<Driver, 'id'>) => {
+    try {
+      // Assuming your API expects 'name' instead of 'full_name' for creation
+      const payload = { ...newDriverData, name: newDriverData.full_name };
+      const res = await api.post("accounts/drivers/", payload);
+      console.log("Add Driver API response:", res.data);
+      // Re-fetch drivers to include the newly added one
+      fetchDrivers(); 
+      setIsModalOpen(false); // Close the modal
+    } catch (err) {
+      console.error("Failed to add driver:", err);
+      // You might want to show an error message to the user
+    }
+  };
 
   const statusConfig = {
     active: { label: "Active", color: "bg-green-100 text-green-700", icon: CheckCircle },
@@ -139,7 +158,10 @@ export default function DriversPage() {
                 <Download className="w-4 h-4" />
                 Export
               </button>
-              <button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:shadow-lg transition-all duration-200">
+              <button 
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:shadow-lg transition-all duration-200"
+                onClick={() => setIsModalOpen(true)} // Open modal on click
+              >
                 <Plus className="w-4 h-4" />
                 Add Driver
               </button>
@@ -299,7 +321,7 @@ export default function DriversPage() {
 
                   {/* Action Button */}
                   <div className="flex justify-between items-center">
-                            <button
+                      <button
                       className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
                         !error && drivers.length > 0 && driver.id
                           ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
@@ -318,7 +340,7 @@ export default function DriversPage() {
                     </button>
                     <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-all duration-200">
                       <MoreVertical className="w-4 h-4" />
-                            </button>
+                    </button>
                   </div>
                 </div>
               );
@@ -333,14 +355,26 @@ export default function DriversPage() {
               <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-900 mb-2">No Drivers Found</h3>
               <p className="text-gray-600 mb-6">Try adjusting your search or filter criteria</p>
-              <button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:shadow-lg transition-all duration-200 mx-auto">
+              <button 
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:shadow-lg transition-all duration-200 mx-auto"
+                onClick={() => setIsModalOpen(true)} // Open modal on click
+              >
                 <Plus className="w-4 h-4" />
                 Add New Driver
-                            </button>
+              </button>
             </div>
           </div>
         )}
       </div>
+
+      {/* Add Driver Modal */}
+      {isModalOpen && (
+        <AddDriverModal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          onAddDriver={handleAddDriver} 
+        />
+      )}
     </div>
   );
-} 
+}

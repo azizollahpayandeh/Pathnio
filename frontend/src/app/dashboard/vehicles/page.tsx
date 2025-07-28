@@ -17,6 +17,7 @@ import {
   Palette,
   Weight,
 } from 'lucide-react';
+import AddVehicleModal from '@/components/AddVehicleModal';
 
 // تعریف type مناسب برای Vehicle
 interface Vehicle {
@@ -183,6 +184,7 @@ export default function VehiclesPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [selectedType, setSelectedType] = useState('all');
+  const [showAddModal, setShowAddModal] = useState(false);
 
   // در آینده: دریافت داده واقعی از API
   useEffect(() => {
@@ -255,7 +257,10 @@ export default function VehiclesPage() {
                 <Download className="w-4 h-4" />
                 Export
               </button>
-              <button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-600 text-white rounded-xl hover:shadow-lg transition-all duration-200">
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-600 text-white rounded-xl hover:shadow-lg transition-all duration-200"
+              >
                 <Plus className="w-4 h-4" />
                 Add Vehicle
               </button>
@@ -514,6 +519,17 @@ export default function VehiclesPage() {
           </div>
         )}
       </div>
+
+      {showAddModal && (
+        <AddVehicleModal
+          isOpen={showAddModal}
+          onClose={() => setShowAddModal(false)}
+          onAddVehicle={(newVehicle) => {
+            setVehicles([...vehicles, newVehicle]);
+            setShowAddModal(false);
+          }}
+        />
+      )}
     </div>
   );
 }
