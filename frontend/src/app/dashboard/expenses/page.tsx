@@ -1,15 +1,15 @@
-"use client";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { 
-  DollarSign, 
-  Search, 
-  Plus, 
-  Eye, 
-  User, 
-  Car, 
-  Calendar, 
-  Download, 
+'use client';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import {
+  DollarSign,
+  Search,
+  Plus,
+  Eye,
+  User,
+  Car,
+  Calendar,
+  Download,
   CheckCircle,
   XCircle,
   Clock,
@@ -19,7 +19,7 @@ import {
   Shield,
   Route,
   Receipt,
-} from "lucide-react";
+} from 'lucide-react';
 
 // تعریف type مناسب برای Expense
 interface Expense {
@@ -37,24 +37,134 @@ interface Expense {
 }
 
 const FAKE_EXPENSES = [
-  { id: 1, date: "2024-07-01", category: "Fuel", amount: 1200000, description: "Fuel for trip", driver: "Amir", vehicle: "12A345-IR", status: "Approved", receipt_url: "/receipts/1.pdf", notes: "Regular fuel purchase" },
-  { id: 2, date: "2024-07-02", category: "Maintenance", amount: 800000, description: "Oil change", driver: "Sara", vehicle: "22B456-IR", status: "Pending", receipt_url: "/receipts/2.pdf", notes: "Scheduled maintenance" },
-  { id: 3, date: "2024-07-03", category: "Toll", amount: 50000, description: "Highway toll", driver: "Mohammad", vehicle: "33C567-IR", status: "Approved", receipt_url: "/receipts/3.pdf", notes: "Highway toll payment" },
-  { id: 4, date: "2024-07-04", category: "Repair", amount: 300000, description: "Brake repair", driver: "Reza", vehicle: "44D678-IR", status: "Rejected", receipt_url: "/receipts/4.pdf", notes: "Emergency repair needed" },
-  { id: 5, date: "2024-07-05", category: "Fuel", amount: 1100000, description: "Fuel for trip", driver: "Fatemeh", vehicle: "55E789-IR", status: "Approved", receipt_url: "/receipts/5.pdf", notes: "Long distance trip fuel" },
-  { id: 6, date: "2024-07-06", category: "Insurance", amount: 2000000, description: "Annual insurance", driver: "Hossein", vehicle: "66F890-IR", status: "Approved", receipt_url: "/receipts/6.pdf", notes: "Annual vehicle insurance" },
-  { id: 7, date: "2024-07-07", category: "Toll", amount: 60000, description: "Highway toll", driver: "Maryam", vehicle: "77G901-IR", status: "Pending", receipt_url: "/receipts/7.pdf", notes: "Return trip toll" },
-  { id: 8, date: "2024-07-08", category: "Fuel", amount: 1300000, description: "Fuel for trip", driver: "Ali", vehicle: "88H012-IR", status: "Approved", receipt_url: "/receipts/8.pdf", notes: "Premium fuel purchase" },
-  { id: 9, date: "2024-07-09", category: "Repair", amount: 400000, description: "Engine repair", driver: "Zahra", vehicle: "99I123-IR", status: "Pending", receipt_url: "/receipts/9.pdf", notes: "Engine diagnostic and repair" },
-  { id: 10, date: "2024-07-10", category: "Maintenance", amount: 900000, description: "Tire change", driver: "Alireza", vehicle: "10J234-IR", status: "Approved", receipt_url: "/receipts/10.pdf", notes: "Scheduled tire replacement" },
+  {
+    id: 1,
+    date: '2024-07-01',
+    category: 'Fuel',
+    amount: 1200000,
+    description: 'Fuel for trip',
+    driver: 'Amir',
+    vehicle: '12A345-IR',
+    status: 'Approved',
+    receipt_url: '/receipts/1.pdf',
+    notes: 'Regular fuel purchase',
+  },
+  {
+    id: 2,
+    date: '2024-07-02',
+    category: 'Maintenance',
+    amount: 800000,
+    description: 'Oil change',
+    driver: 'Sara',
+    vehicle: '22B456-IR',
+    status: 'Pending',
+    receipt_url: '/receipts/2.pdf',
+    notes: 'Scheduled maintenance',
+  },
+  {
+    id: 3,
+    date: '2024-07-03',
+    category: 'Toll',
+    amount: 50000,
+    description: 'Highway toll',
+    driver: 'Mohammad',
+    vehicle: '33C567-IR',
+    status: 'Approved',
+    receipt_url: '/receipts/3.pdf',
+    notes: 'Highway toll payment',
+  },
+  {
+    id: 4,
+    date: '2024-07-04',
+    category: 'Repair',
+    amount: 300000,
+    description: 'Brake repair',
+    driver: 'Reza',
+    vehicle: '44D678-IR',
+    status: 'Rejected',
+    receipt_url: '/receipts/4.pdf',
+    notes: 'Emergency repair needed',
+  },
+  {
+    id: 5,
+    date: '2024-07-05',
+    category: 'Fuel',
+    amount: 1100000,
+    description: 'Fuel for trip',
+    driver: 'Fatemeh',
+    vehicle: '55E789-IR',
+    status: 'Approved',
+    receipt_url: '/receipts/5.pdf',
+    notes: 'Long distance trip fuel',
+  },
+  {
+    id: 6,
+    date: '2024-07-06',
+    category: 'Insurance',
+    amount: 2000000,
+    description: 'Annual insurance',
+    driver: 'Hossein',
+    vehicle: '66F890-IR',
+    status: 'Approved',
+    receipt_url: '/receipts/6.pdf',
+    notes: 'Annual vehicle insurance',
+  },
+  {
+    id: 7,
+    date: '2024-07-07',
+    category: 'Toll',
+    amount: 60000,
+    description: 'Highway toll',
+    driver: 'Maryam',
+    vehicle: '77G901-IR',
+    status: 'Pending',
+    receipt_url: '/receipts/7.pdf',
+    notes: 'Return trip toll',
+  },
+  {
+    id: 8,
+    date: '2024-07-08',
+    category: 'Fuel',
+    amount: 1300000,
+    description: 'Fuel for trip',
+    driver: 'Ali',
+    vehicle: '88H012-IR',
+    status: 'Approved',
+    receipt_url: '/receipts/8.pdf',
+    notes: 'Premium fuel purchase',
+  },
+  {
+    id: 9,
+    date: '2024-07-09',
+    category: 'Repair',
+    amount: 400000,
+    description: 'Engine repair',
+    driver: 'Zahra',
+    vehicle: '99I123-IR',
+    status: 'Pending',
+    receipt_url: '/receipts/9.pdf',
+    notes: 'Engine diagnostic and repair',
+  },
+  {
+    id: 10,
+    date: '2024-07-10',
+    category: 'Maintenance',
+    amount: 900000,
+    description: 'Tire change',
+    driver: 'Alireza',
+    vehicle: '10J234-IR',
+    status: 'Approved',
+    receipt_url: '/receipts/10.pdf',
+    notes: 'Scheduled tire replacement',
+  },
 ];
 
 export default function ExpensesPage() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState("all");
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const router = useRouter();
 
   // در آینده: دریافت داده واقعی از API
@@ -63,34 +173,47 @@ export default function ExpensesPage() {
     setExpenses([]); // اگر داده واقعی داشتی اینجا set کن
   }, []);
 
-  const showExpenses = expenses.length >= 10 ? expenses.slice(0, 10) : [...expenses, ...FAKE_EXPENSES.slice(0, 10 - expenses.length)];
+  const showExpenses =
+    expenses.length >= 10
+      ? expenses.slice(0, 10)
+      : [...expenses, ...FAKE_EXPENSES.slice(0, 10 - expenses.length)];
 
-  const filteredExpenses = showExpenses.filter(expense => 
-    expense.description.toLowerCase().includes(searchTerm.toLowerCase()) &&
-    (selectedStatus === "all" || expense.status === selectedStatus) &&
-    (selectedCategory === "all" || expense.category === selectedCategory)
+  const filteredExpenses = showExpenses.filter(
+    (expense) =>
+      expense.description.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (selectedStatus === 'all' || expense.status === selectedStatus) &&
+      (selectedCategory === 'all' || expense.category === selectedCategory)
   );
 
   const stats = {
     total: filteredExpenses.length,
-    approved: filteredExpenses.filter(e => e.status === "Approved").length,
-    pending: filteredExpenses.filter(e => e.status === "Pending").length,
-    rejected: filteredExpenses.filter(e => e.status === "Rejected").length,
+    approved: filteredExpenses.filter((e) => e.status === 'Approved').length,
+    pending: filteredExpenses.filter((e) => e.status === 'Pending').length,
+    rejected: filteredExpenses.filter((e) => e.status === 'Rejected').length,
     totalAmount: filteredExpenses.reduce((sum, e) => sum + e.amount, 0),
   };
 
   const statusConfig = {
-    Approved: { color: "bg-green-100 text-green-700 border-green-200", icon: CheckCircle },
-    Pending: { color: "bg-yellow-100 text-yellow-700 border-yellow-200", icon: Clock },
-    Rejected: { color: "bg-red-100 text-red-700 border-red-200", icon: XCircle },
+    Approved: {
+      color: 'bg-green-50 text-green-700 border-green-200',
+      icon: CheckCircle,
+    },
+    Pending: {
+      color: 'bg-yellow-100 text-yellow-700 border-yellow-200',
+      icon: Clock,
+    },
+    Rejected: {
+      color: 'bg-red-100 text-red-700 border-red-200',
+      icon: XCircle,
+    },
   };
 
   const categoryConfig = {
-    Fuel: { color: "bg-blue-100 text-blue-700", icon: Fuel },
-    Maintenance: { color: "bg-purple-100 text-purple-700", icon: Wrench },
-    Toll: { color: "bg-orange-100 text-orange-700", icon: Route },
-    Repair: { color: "bg-red-100 text-red-700", icon: Wrench },
-    Insurance: { color: "bg-indigo-100 text-indigo-700", icon: Shield },
+    Fuel: { color: 'bg-blue-100 text-blue-700', icon: Fuel },
+    Maintenance: { color: 'bg-purple-100 text-purple-700', icon: Wrench },
+    Toll: { color: 'bg-orange-100 text-orange-700', icon: Route },
+    Repair: { color: 'bg-red-100 text-red-700', icon: Wrench },
+    Insurance: { color: 'bg-indigo-100 text-indigo-700', icon: Shield },
   };
 
   const handleViewExpense = (expenseId: number) => {
@@ -104,12 +227,16 @@ export default function ExpensesPage() {
         <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-600 rounded-3xl flex items-center justify-center shadow-lg">
+              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-3xl flex items-center justify-center shadow-lg">
                 <DollarSign className="w-8 h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold text-gray-900 mb-2">Expenses Management</h1>
-                <p className="text-gray-600 text-lg">Track and manage your fleet expenses</p>
+                <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                  Expenses Management
+                </h1>
+                <p className="text-gray-600 text-lg">
+                  Track and manage your fleet expenses
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -117,7 +244,7 @@ export default function ExpensesPage() {
                 <Download className="w-4 h-4" />
                 Export
               </button>
-              <button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-xl hover:shadow-lg transition-all duration-200">
+              <button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-600 to-green-600 text-white rounded-xl hover:shadow-lg transition-all duration-200">
                 <Plus className="w-4 h-4" />
                 Add Expense
               </button>
@@ -127,21 +254,53 @@ export default function ExpensesPage() {
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-6">
             {[
-              { label: "Total Expenses", value: stats.total, icon: Receipt, color: "from-orange-500 to-red-600" },
-              { label: "Total Amount", value: `${(stats.totalAmount / 1000000).toFixed(1)}M`, icon: DollarSign, color: "from-green-500 to-emerald-600" },
-              { label: "Approved", value: stats.approved, icon: CheckCircle, color: "from-blue-500 to-indigo-600" },
-              { label: "Pending", value: stats.pending, icon: Clock, color: "from-yellow-500 to-orange-600" },
-              { label: "Rejected", value: stats.rejected, icon: XCircle, color: "from-red-500 to-pink-600" },
+              {
+                label: 'Total Expenses',
+                value: stats.total,
+                icon: Receipt,
+                color: 'from-green-500 to-green-600',
+              },
+              {
+                label: 'Total Amount',
+                value: `${(stats.totalAmount / 1000000).toFixed(1)}M`,
+                icon: DollarSign,
+                color: 'from-green-700 to-green-700',
+              },
+              {
+                label: 'Approved',
+                value: stats.approved,
+                icon: CheckCircle,
+                color: 'from-green-700 to-green-700',
+              },
+              {
+                label: 'Pending',
+                value: stats.pending,
+                icon: Clock,
+                color: 'from-yellow-500 to-orange-600',
+              },
+              {
+                label: 'Rejected',
+                value: stats.rejected,
+                icon: XCircle,
+                color: 'from-red-500 to-pink-600',
+              },
             ].map((stat, index) => {
               const Icon = stat.icon;
               return (
-                <div key={index} className="bg-gradient-to-r from-gray-50 to-orange-50 rounded-3xl p-6 border border-gray-200 hover:shadow-lg transition-all duration-300">
+                <div
+                  key={index}
+                  className="bg-gradient-to-r from-gray-50 to-orange-50 rounded-3xl p-6 border border-gray-200 hover:shadow-lg transition-all duration-300"
+                >
                   <div className="flex items-center justify-between mb-4">
-                    <div className={`w-12 h-12 bg-gradient-to-br ${stat.color} rounded-2xl flex items-center justify-center`}>
+                    <div
+                      className={`w-12 h-12 bg-gradient-to-br ${stat.color} rounded-2xl flex items-center justify-center`}
+                    >
                       <Icon className="w-6 h-6 text-white" />
                     </div>
                     <div className="text-right">
-                      <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
+                      <div className="text-2xl font-bold text-gray-900">
+                        {stat.value}
+                      </div>
                       <div className="text-sm text-gray-600">{stat.label}</div>
                     </div>
                   </div>
@@ -192,23 +351,30 @@ export default function ExpensesPage() {
           <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
             <div className="flex items-center justify-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
-              <span className="ml-3 text-lg text-gray-600">Loading expenses...</span>
+              <span className="ml-3 text-lg text-gray-600">
+                Loading expenses...
+              </span>
             </div>
           </div>
         ) : (
           <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 overflow-hidden">
             <div className="p-6 border-b border-gray-100">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                <DollarSign className="w-6 h-6 text-orange-500" />
+                <DollarSign className="w-6 h-6 text-green-500" />
                 Expense Records ({filteredExpenses.length})
               </h2>
             </div>
-            
+
             <div className="divide-y divide-gray-100">
               {filteredExpenses.map((expense, index) => {
-                const StatusIcon = statusConfig[expense.status as keyof typeof statusConfig]?.icon || CheckCircle;
-                const CategoryIcon = categoryConfig[expense.category as keyof typeof categoryConfig]?.icon || Receipt;
-                
+                const StatusIcon =
+                  statusConfig[expense.status as keyof typeof statusConfig]
+                    ?.icon || CheckCircle;
+                const CategoryIcon =
+                  categoryConfig[
+                    expense.category as keyof typeof categoryConfig
+                  ]?.icon || Receipt;
+
                 return (
                   <div
                     key={index}
@@ -219,24 +385,38 @@ export default function ExpensesPage() {
                       {/* Expense Info */}
                       <div className="flex items-center gap-6 flex-1">
                         {/* Expense Icon */}
-                        <div className="w-16 h-16 bg-gradient-to-br from-orange-100 to-red-100 rounded-2xl flex items-center justify-center">
-                          <CategoryIcon className="w-8 h-8 text-orange-600" />
+                        <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-100 rounded-2xl flex items-center justify-center">
+                          <CategoryIcon className="w-8 h-8 text-green-600" />
                         </div>
-                        
+
                         {/* Main Details */}
                         <div className="flex-1">
                           <div className="flex items-center gap-4 mb-3">
-                            <h3 className="text-xl font-bold text-gray-900">Expense #{expense.id}</h3>
-                            <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold border ${statusConfig[expense.status as keyof typeof statusConfig]?.color}`}>
+                            <h3 className="text-xl font-bold text-gray-900">
+                              Expense #{expense.id}
+                            </h3>
+                            <div
+                              className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold border ${
+                                statusConfig[
+                                  expense.status as keyof typeof statusConfig
+                                ]?.color
+                              }`}
+                            >
                               <StatusIcon className="w-4 h-4" />
                               {expense.status}
                             </div>
-                            <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold ${categoryConfig[expense.category as keyof typeof categoryConfig]?.color}`}>
+                            <div
+                              className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold ${
+                                categoryConfig[
+                                  expense.category as keyof typeof categoryConfig
+                                ]?.color
+                              }`}
+                            >
                               <CategoryIcon className="w-4 h-4" />
                               {expense.category}
                             </div>
                           </div>
-                          
+
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600 mb-3">
                             <div className="flex items-center gap-2">
                               <Calendar className="w-4 h-4" />
@@ -252,15 +432,21 @@ export default function ExpensesPage() {
                             </div>
                             <div className="flex items-center gap-2">
                               <DollarSign className="w-4 h-4" />
-                              <span className="font-semibold text-gray-900">{expense.amount.toLocaleString()} Toman</span>
+                              <span className="font-semibold text-gray-900">
+                                {expense.amount.toLocaleString()} Toman
+                              </span>
                             </div>
                           </div>
 
                           {/* Description and Notes */}
                           <div className="text-sm text-gray-600">
-                            <div className="font-medium text-gray-900 mb-1">{expense.description}</div>
+                            <div className="font-medium text-gray-900 mb-1">
+                              {expense.description}
+                            </div>
                             {expense.notes && (
-                              <div className="text-gray-500 italic">{expense.notes}</div>
+                              <div className="text-gray-500 italic">
+                                {expense.notes}
+                              </div>
                             )}
                           </div>
                         </div>
@@ -269,7 +455,7 @@ export default function ExpensesPage() {
                       {/* Actions */}
                       <div className="flex items-center gap-3 ml-6">
                         {expense.receipt_url && (
-                          <button 
+                          <button
                             onClick={(e) => {
                               e.stopPropagation();
                               window.open(expense.receipt_url, '_blank');
@@ -280,12 +466,12 @@ export default function ExpensesPage() {
                             Receipt
                           </button>
                         )}
-                        <button 
+                        <button
                           onClick={(e) => {
                             e.stopPropagation();
                             handleViewExpense(expense.id);
                           }}
-                          className="flex items-center gap-2 px-4 py-2 bg-orange-100 text-orange-700 rounded-xl hover:bg-orange-200 transition-all duration-200"
+                          className="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-xl hover:bg-orange-200 transition-all duration-200"
                         >
                           <Eye className="w-4 h-4" />
                           View
@@ -304,8 +490,12 @@ export default function ExpensesPage() {
             {filteredExpenses.length === 0 && (
               <div className="text-center py-12">
                 <DollarSign className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">No Expenses Found</h3>
-                <p className="text-gray-600 mb-6">Try adjusting your search or filter criteria</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  No Expenses Found
+                </h3>
+                <p className="text-gray-600 mb-6">
+                  Try adjusting your search or filter criteria
+                </p>
                 <button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-xl hover:shadow-lg transition-all duration-200 mx-auto">
                   <Plus className="w-4 h-4" />
                   Add New Expense
@@ -317,4 +507,4 @@ export default function ExpensesPage() {
       </div>
     </div>
   );
-} 
+}

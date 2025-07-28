@@ -1,12 +1,12 @@
-"use client";
-import { useState, useEffect } from "react";
-import { 
-  CreditCard, 
-  CheckCircle, 
-  XCircle, 
-  Clock, 
-  ShoppingCart, 
-  ChevronRight, 
+'use client';
+import { useState, useEffect } from 'react';
+import {
+  CreditCard,
+  CheckCircle,
+  XCircle,
+  Clock,
+  ShoppingCart,
+  ChevronRight,
   Star,
   Zap,
   Shield,
@@ -28,8 +28,8 @@ import {
   Database,
   Lock,
   Bell,
-  Gift
-} from "lucide-react";
+  Gift,
+} from 'lucide-react';
 
 interface Plan {
   id: number;
@@ -49,7 +49,7 @@ interface Plan {
 interface Subscription {
   id: number;
   plan: string;
-  status: "active" | "expired" | "cancelled" | "pending";
+  status: 'active' | 'expired' | 'cancelled' | 'pending';
   start: string;
   end: string;
   price: number;
@@ -60,114 +60,116 @@ interface Subscription {
 const plans: Plan[] = [
   {
     id: 1,
-    name: "Starter",
+    name: 'Starter',
     price: 4900000,
     originalPrice: 5900000,
-    desc: "Perfect for small teams and startups",
+    desc: 'Perfect for small teams and startups',
     features: [
-      "Up to 3 Vehicles",
-      "Up to 10 Drivers", 
-      "Basic Analytics & Reports",
-      "Email Support",
-      "Mobile App Access",
-      "Basic Route Optimization"
+      'Up to 3 Vehicles',
+      'Up to 10 Drivers',
+      'Basic Analytics & Reports',
+      'Email Support',
+      'Mobile App Access',
+      'Basic Route Optimization',
     ],
     icon: Car,
-    color: "from-blue-500 to-indigo-600",
-    gradient: "from-blue-50 to-indigo-50",
-    badge: "Most Popular"
+    color: 'from-blue-500 to-indigo-600',
+    gradient: 'from-blue-50 to-indigo-50',
+    badge: 'Most Popular',
   },
   {
     id: 2,
-    name: "Professional",
+    name: 'Professional',
     price: 9900000,
     originalPrice: 11900000,
-    desc: "Ideal for growing businesses",
+    desc: 'Ideal for growing businesses',
     features: [
-      "Up to 15 Vehicles",
-      "Up to 50 Drivers",
-      "Advanced Analytics & Reports",
-      "Priority Support",
-      "Custom Integrations",
-      "Advanced Route Optimization",
-      "Driver Performance Tracking",
-      "Fuel Management"
+      'Up to 15 Vehicles',
+      'Up to 50 Drivers',
+      'Advanced Analytics & Reports',
+      'Priority Support',
+      'Custom Integrations',
+      'Advanced Route Optimization',
+      'Driver Performance Tracking',
+      'Fuel Management',
     ],
     popular: true,
     recommended: true,
     icon: Zap,
-    color: "from-purple-500 to-pink-600",
-    gradient: "from-purple-50 to-pink-50",
-    badge: "Recommended"
+    color: 'from-purple-500 to-pink-600',
+    gradient: 'from-purple-50 to-pink-50',
+    badge: 'Recommended',
   },
   {
     id: 3,
-    name: "Enterprise",
+    name: 'Enterprise',
     price: 19900000,
     originalPrice: 24900000,
-    desc: "For large fleets and corporations",
+    desc: 'For large fleets and corporations',
     features: [
-      "Unlimited Vehicles",
-      "Unlimited Drivers",
-      "Custom Analytics & Reports",
-      "24/7 Dedicated Support",
-      "API Access",
-      "Advanced AI Features",
-      "White-label Solutions",
-      "Custom Development",
-      "On-premise Deployment",
-      "SLA Guarantee"
+      'Unlimited Vehicles',
+      'Unlimited Drivers',
+      'Custom Analytics & Reports',
+      '24/7 Dedicated Support',
+      'API Access',
+      'Advanced AI Features',
+      'White-label Solutions',
+      'Custom Development',
+      'On-premise Deployment',
+      'SLA Guarantee',
     ],
     icon: Crown,
-    color: "from-orange-500 to-red-600",
-    gradient: "from-orange-50 to-red-50",
-    badge: "Enterprise"
+    color: 'from-orange-500 to-red-600',
+    gradient: 'from-orange-50 to-red-50',
+    badge: 'Enterprise',
   },
 ];
 
 const fakeSubscriptions: Subscription[] = [
   {
     id: 1,
-    plan: "Professional",
-    status: "active",
-    start: "2024-01-01",
-    end: "2025-01-01",
+    plan: 'Professional',
+    status: 'active',
+    start: '2024-01-01',
+    end: '2025-01-01',
     price: 9900000,
-    nextBilling: "2025-01-01",
+    nextBilling: '2025-01-01',
     autoRenew: true,
   },
 ];
 
 const statusConfig = {
   active: {
-    label: "Active",
-    color: "text-green-700 bg-green-100 border-green-200",
+    label: 'Active',
+    color: 'text-green-700 bg-green-100 border-green-200',
     icon: CheckCircle,
-    iconColor: "text-green-500",
+    iconColor: 'text-green-500',
   },
   expired: {
-    label: "Expired",
-    color: "text-yellow-700 bg-yellow-100 border-yellow-200",
+    label: 'Expired',
+    color: 'text-yellow-700 bg-yellow-100 border-yellow-200',
     icon: Clock,
-    iconColor: "text-yellow-500",
+    iconColor: 'text-yellow-500',
   },
   cancelled: {
-    label: "Cancelled",
-    color: "text-red-700 bg-red-100 border-red-200",
+    label: 'Cancelled',
+    color: 'text-red-700 bg-red-100 border-red-200',
     icon: XCircle,
-    iconColor: "text-red-500",
+    iconColor: 'text-red-500',
   },
   pending: {
-    label: "Pending",
-    color: "text-blue-700 bg-blue-100 border-blue-200",
+    label: 'Pending',
+    color: 'text-blue-700 bg-blue-100 border-blue-200',
     icon: Clock,
-    iconColor: "text-blue-500",
+    iconColor: 'text-blue-500',
   },
 };
 
 export default function SubscriptionPage() {
   const [subs, setSubs] = useState<Subscription[]>(fakeSubscriptions);
-  const [action, setAction] = useState<{type: string, id?: number} | null>(null);
+  const [action, setAction] = useState<{ type: string; id?: number } | null>(
+    null
+  );
   const [showPlans, setShowPlans] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
   const [checkout, setCheckout] = useState(false);
@@ -175,17 +177,21 @@ export default function SubscriptionPage() {
   const [currentStep, setCurrentStep] = useState(1);
 
   const handleRenew = (id: number) => {
-    setAction({type: "renew", id});
+    setAction({ type: 'renew', id });
     setTimeout(() => {
-      setSubs((prev) => prev.map(s => s.id === id ? { ...s, status: "active" } : s));
+      setSubs((prev) =>
+        prev.map((s) => (s.id === id ? { ...s, status: 'active' } : s))
+      );
       setAction(null);
     }, 1200);
   };
 
   const handleCancel = (id: number) => {
-    setAction({type: "cancel", id});
+    setAction({ type: 'cancel', id });
     setTimeout(() => {
-      setSubs((prev) => prev.map(s => s.id === id ? { ...s, status: "cancelled" } : s));
+      setSubs((prev) =>
+        prev.map((s) => (s.id === id ? { ...s, status: 'cancelled' } : s))
+      );
       setAction(null);
     }, 1200);
   };
@@ -206,12 +212,12 @@ export default function SubscriptionPage() {
       setSubs([
         {
           id: 1,
-          plan: selectedPlan?.name || "",
-          status: "active",
-          start: "2024-01-01",
-          end: "2025-01-01",
+          plan: selectedPlan?.name || '',
+          status: 'active',
+          start: '2024-01-01',
+          end: '2025-01-01',
           price: selectedPlan?.price || 0,
-          nextBilling: "2025-01-01",
+          nextBilling: '2025-01-01',
           autoRenew: true,
         },
       ]);
@@ -244,14 +250,20 @@ export default function SubscriptionPage() {
                 <CreditCard className="w-8 h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold text-gray-900 mb-2">Subscription Management</h1>
-                <p className="text-gray-600 text-lg">Manage your Pathnio subscription and billing</p>
+                <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                  Subscription Management
+                </h1>
+                <p className="text-gray-600 text-lg">
+                  Manage your Pathnio subscription and billing
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2 px-4 py-2 bg-green-100 rounded-full">
                 <CheckCircle className="w-4 h-4 text-green-600" />
-                <span className="text-sm font-semibold text-green-700">Active Plan</span>
+                <span className="text-sm font-semibold text-green-700">
+                  Active Plan
+                </span>
               </div>
               <button className="w-12 h-12 bg-white rounded-2xl shadow-lg flex items-center justify-center hover:shadow-xl transition-all duration-200">
                 <Settings className="w-5 h-5 text-gray-600" />
@@ -260,7 +272,7 @@ export default function SubscriptionPage() {
           </div>
 
           {/* Current Plan Summary */}
-          {subs.length > 0 && subs[0].status === "active" && (
+          {subs.length > 0 && subs[0].status === 'active' && (
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl p-6 border border-blue-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -268,49 +280,73 @@ export default function SubscriptionPage() {
                     <Crown className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-gray-900">{subs[0].plan} Plan</h3>
+                    <h3 className="text-xl font-bold text-gray-900">
+                      {subs[0].plan} Plan
+                    </h3>
                     <p className="text-gray-600">Active until {subs[0].end}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-2xl font-bold text-gray-900">{formatPrice(subs[0].price)} تومان</div>
-                  <div className="text-sm text-gray-600">Next billing: {subs[0].nextBilling}</div>
+                  <div className="text-2xl font-bold text-gray-900">
+                    {formatPrice(subs[0].price)} تومان
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    Next billing: {subs[0].nextBilling}
+                  </div>
                 </div>
               </div>
             </div>
           )}
         </div>
 
-      {subs.length === 0 ? (
-        showPlans ? (
-          checkout && selectedPlan ? (
+        {subs.length === 0 ? (
+          showPlans ? (
+            checkout && selectedPlan ? (
               <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
                 <div className="max-w-2xl mx-auto">
                   <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-2">Complete Your Purchase</h2>
-                    <p className="text-gray-600">Review your plan details and proceed to payment</p>
+                    <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                      Complete Your Purchase
+                    </h2>
+                    <p className="text-gray-600">
+                      Review your plan details and proceed to payment
+                    </p>
                   </div>
-                  
+
                   <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl p-8 border border-blue-200 mb-8">
                     <div className="flex items-center justify-between mb-6">
                       <div className="flex items-center gap-4">
-                        <div className={`w-16 h-16 bg-gradient-to-br ${selectedPlan.color} rounded-3xl flex items-center justify-center`}>
+                        <div
+                          className={`w-16 h-16 bg-gradient-to-br ${selectedPlan.color} rounded-3xl flex items-center justify-center`}
+                        >
                           <selectedPlan.icon className="w-8 h-8 text-white" />
                         </div>
                         <div>
-                          <h3 className="text-2xl font-bold text-gray-900">{selectedPlan.name} Plan</h3>
+                          <h3 className="text-2xl font-bold text-gray-900">
+                            {selectedPlan.name} Plan
+                          </h3>
                           <p className="text-gray-600">{selectedPlan.desc}</p>
                         </div>
                       </div>
                       {selectedPlan.originalPrice && (
                         <div className="text-right">
-                          <div className="text-sm text-gray-500 line-through">{formatPrice(selectedPlan.originalPrice)} تومان</div>
-                          <div className="text-3xl font-bold text-gray-900">{formatPrice(selectedPlan.price)} تومان</div>
-                          <div className="text-sm text-green-600 font-semibold">Save {formatPrice(selectedPlan.originalPrice - selectedPlan.price)} تومان</div>
+                          <div className="text-sm text-gray-500 line-through">
+                            {formatPrice(selectedPlan.originalPrice)} تومان
+                          </div>
+                          <div className="text-3xl font-bold text-gray-900">
+                            {formatPrice(selectedPlan.price)} تومان
+                          </div>
+                          <div className="text-sm text-green-600 font-semibold">
+                            Save{' '}
+                            {formatPrice(
+                              selectedPlan.originalPrice - selectedPlan.price
+                            )}{' '}
+                            تومان
+                          </div>
                         </div>
                       )}
                     </div>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                       {selectedPlan.features.map((feature, index) => (
                         <div key={index} className="flex items-center gap-3">
@@ -319,35 +355,39 @@ export default function SubscriptionPage() {
                         </div>
                       ))}
                     </div>
-              </div>
-                  
-              <button
+                  </div>
+
+                  <button
                     className="w-full flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xl shadow-lg transition-all duration-200 disabled:opacity-60"
-                onClick={handleCheckout}
-                disabled={payment}
-              >
-                {payment ? (
-                  <>
+                    onClick={handleCheckout}
+                    disabled={payment}
+                  >
+                    {payment ? (
+                      <>
                         <RefreshCw className="w-5 h-5 animate-spin" />
-                    Redirecting to payment...
-                  </>
-                ) : (
-                  <>
+                        Redirecting to payment...
+                      </>
+                    ) : (
+                      <>
                         <CreditCard className="w-5 h-5" />
                         Proceed to Payment
                         <ArrowRight className="w-5 h-5" />
-                  </>
-                )}
-              </button>
+                      </>
+                    )}
+                  </button>
                 </div>
-            </div>
-          ) : (
+              </div>
+            ) : (
               <div className="space-y-8">
                 {/* Plans Header */}
                 <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20 text-center">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-4">Choose Your Plan</h2>
+                  <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                    Choose Your Plan
+                  </h2>
                   <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-                    Select the perfect plan for your fleet management needs. All plans include our core features with different capacity limits.
+                    Select the perfect plan for your fleet management needs. All
+                    plans include our core features with different capacity
+                    limits.
                   </p>
                 </div>
 
@@ -370,14 +410,18 @@ export default function SubscriptionPage() {
                             </span>
                           </div>
                         )}
-                        
+
                         <div className="text-center mb-6">
-                          <div className={`w-20 h-20 bg-gradient-to-br ${plan.color} rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg`}>
+                          <div
+                            className={`w-20 h-20 bg-gradient-to-br ${plan.color} rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg`}
+                          >
                             <Icon className="w-10 h-10 text-white" />
                           </div>
-                          <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
+                          <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                            {plan.name}
+                          </h3>
                           <p className="text-gray-600 mb-4">{plan.desc}</p>
-                          
+
                           <div className="mb-6">
                             {plan.originalPrice && (
                               <div className="text-sm text-gray-500 line-through mb-1">
@@ -387,19 +431,26 @@ export default function SubscriptionPage() {
                             <div className="text-3xl font-bold text-gray-900">
                               {formatPrice(plan.price)} تومان
                             </div>
-                            <div className="text-sm text-gray-600">per year</div>
+                            <div className="text-sm text-gray-600">
+                              per year
+                            </div>
                           </div>
                         </div>
-                        
+
                         <div className="space-y-3 mb-8">
                           {plan.features.map((feature, index) => (
-                            <div key={index} className="flex items-center gap-3">
+                            <div
+                              key={index}
+                              className="flex items-center gap-3"
+                            >
                               <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                              <span className="text-gray-700 text-sm">{feature}</span>
-                </div>
-              ))}
+                              <span className="text-gray-700 text-sm">
+                                {feature}
+                              </span>
+                            </div>
+                          ))}
                         </div>
-                        
+
                         <button className="w-full py-3 px-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-2xl transition-all duration-200 flex items-center justify-center gap-2">
                           Select Plan
                           <ArrowRight className="w-4 h-4" />
@@ -408,45 +459,50 @@ export default function SubscriptionPage() {
                     );
                   })}
                 </div>
-            </div>
-          )
-        ) : (
+              </div>
+            )
+          ) : (
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-12 shadow-xl border border-white/20 text-center">
               <div className="max-w-md mx-auto">
                 <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
                   <ShoppingCart className="w-12 h-12 text-white" />
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">No Active Subscription</h2>
+                <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                  No Active Subscription
+                </h2>
                 <p className="text-gray-600 mb-8 text-lg">
-                  Get started with Pathnio to unlock powerful fleet management features and analytics.
+                  Get started with Pathnio to unlock powerful fleet management
+                  features and analytics.
                 </p>
-            <button
+                <button
                   className="flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xl shadow-lg transition-all duration-200 mx-auto"
-              onClick={handleBuy}
-              disabled={action?.type === "buy"}
-            >
-              {action?.type === "buy" ? (
-                <>
+                  onClick={handleBuy}
+                  disabled={action?.type === 'buy'}
+                >
+                  {action?.type === 'buy' ? (
+                    <>
                       <RefreshCw className="w-5 h-5 animate-spin" />
-                  Processing...
-                </>
-              ) : (
-                <>
+                      Processing...
+                    </>
+                  ) : (
+                    <>
                       <ShoppingCart className="w-5 h-5" />
                       Choose a Plan
                       <ArrowRight className="w-5 h-5" />
-                </>
-              )}
-            </button>
+                    </>
+                  )}
+                </button>
               </div>
-          </div>
-        )
-      ) : (
+            </div>
+          )
+        ) : (
           <div className="space-y-8">
             {/* Current Subscription Details */}
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Current Subscription</h2>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Current Subscription
+                </h2>
                 <div className="flex items-center gap-3">
                   <button className="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-xl font-medium hover:bg-blue-200 transition-colors">
                     <Download className="w-4 h-4" />
@@ -458,74 +514,116 @@ export default function SubscriptionPage() {
                   </button>
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {subs.map((sub) => {
                   const status = statusConfig[sub.status];
                   const StatusIcon = status.icon;
                   const daysRemaining = getDaysRemaining(sub.end);
-                  
+
                   return (
-                    <div key={sub.id} className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-3xl p-6 border border-gray-200">
+                    <div
+                      key={sub.id}
+                      className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-3xl p-6 border border-gray-200"
+                    >
                       <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-3">
                           <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center">
                             <Crown className="w-6 h-6 text-white" />
                           </div>
                           <div>
-                            <h3 className="text-xl font-bold text-gray-900">{sub.plan} Plan</h3>
-                            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-semibold border ${status.color}`}>
-                              <StatusIcon className={`w-4 h-4 ${status.iconColor}`} />
+                            <h3 className="text-xl font-bold text-gray-900">
+                              {sub.plan} Plan
+                            </h3>
+                            <div
+                              className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-semibold border ${status.color}`}
+                            >
+                              <StatusIcon
+                                className={`w-4 h-4 ${status.iconColor}`}
+                              />
                               {status.label}
                             </div>
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="text-2xl font-bold text-gray-900">{formatPrice(sub.price)} تومان</div>
+                          <div className="text-2xl font-bold text-gray-900">
+                            {formatPrice(sub.price)} تومان
+                          </div>
                           <div className="text-sm text-gray-600">per year</div>
                         </div>
                       </div>
-                      
+
                       <div className="grid grid-cols-2 gap-4 mb-6">
                         <div>
-                          <div className="text-sm text-gray-600 mb-1">Start Date</div>
-                          <div className="font-semibold text-gray-900">{sub.start}</div>
+                          <div className="text-sm text-gray-600 mb-1">
+                            Start Date
+                          </div>
+                          <div className="font-semibold text-gray-900">
+                            {sub.start}
+                          </div>
                         </div>
                         <div>
-                          <div className="text-sm text-gray-600 mb-1">End Date</div>
-                          <div className="font-semibold text-gray-900">{sub.end}</div>
+                          <div className="text-sm text-gray-600 mb-1">
+                            End Date
+                          </div>
+                          <div className="font-semibold text-gray-900">
+                            {sub.end}
+                          </div>
                         </div>
                         <div>
-                          <div className="text-sm text-gray-600 mb-1">Days Remaining</div>
-                          <div className="font-semibold text-gray-900">{daysRemaining} days</div>
+                          <div className="text-sm text-gray-600 mb-1">
+                            Days Remaining
+                          </div>
+                          <div className="font-semibold text-gray-900">
+                            {daysRemaining} days
+                          </div>
                         </div>
                         <div>
-                          <div className="text-sm text-gray-600 mb-1">Auto Renew</div>
-                          <div className="font-semibold text-gray-900">{sub.autoRenew ? 'Enabled' : 'Disabled'}</div>
+                          <div className="text-sm text-gray-600 mb-1">
+                            Auto Renew
+                          </div>
+                          <div className="font-semibold text-gray-900">
+                            {sub.autoRenew ? 'Enabled' : 'Disabled'}
+                          </div>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center gap-3">
-                    {sub.status !== "active" && (
-                      <button
+                        {sub.status !== 'active' && (
+                          <button
                             className="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-xl font-medium hover:bg-green-200 transition-colors"
-                        onClick={() => handleRenew(sub.id)}
-                        disabled={action?.type === "renew" && action?.id === sub.id}
-                      >
-                            <RefreshCw className={`w-4 h-4 ${action?.type === "renew" && action?.id === sub.id ? 'animate-spin' : ''}`} />
-                        {action?.type === "renew" && action?.id === sub.id ? "Renewing..." : "Renew"}
-                      </button>
-                    )}
-                    {sub.status === "active" && (
-                      <button
+                            onClick={() => handleRenew(sub.id)}
+                            disabled={
+                              action?.type === 'renew' && action?.id === sub.id
+                            }
+                          >
+                            <RefreshCw
+                              className={`w-4 h-4 ${
+                                action?.type === 'renew' &&
+                                action?.id === sub.id
+                                  ? 'animate-spin'
+                                  : ''
+                              }`}
+                            />
+                            {action?.type === 'renew' && action?.id === sub.id
+                              ? 'Renewing...'
+                              : 'Renew'}
+                          </button>
+                        )}
+                        {sub.status === 'active' && (
+                          <button
                             className="flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-xl font-medium hover:bg-red-200 transition-colors"
-                        onClick={() => handleCancel(sub.id)}
-                        disabled={action?.type === "cancel" && action?.id === sub.id}
-                      >
+                            onClick={() => handleCancel(sub.id)}
+                            disabled={
+                              action?.type === 'cancel' && action?.id === sub.id
+                            }
+                          >
                             <XCircle className="w-4 h-4" />
-                        {action?.type === "cancel" && action?.id === sub.id ? "Cancelling..." : "Cancel"}
-                      </button>
-                    )}
+                            {action?.type === 'cancel' && action?.id === sub.id
+                              ? 'Cancelling...'
+                              : 'Cancel'}
+                          </button>
+                        )}
                         <button className="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-xl font-medium hover:bg-blue-200 transition-colors">
                           <Settings className="w-4 h-4" />
                           Manage
@@ -536,9 +634,9 @@ export default function SubscriptionPage() {
                 })}
               </div>
             </div>
-        </div>
-      )}
+          </div>
+        )}
       </div>
     </div>
   );
-} 
+}
