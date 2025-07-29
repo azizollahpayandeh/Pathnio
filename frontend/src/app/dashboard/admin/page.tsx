@@ -28,7 +28,7 @@ import {
   Mail,
   Phone,
   MapPin,
-  Calendar,
+  Calendar, 
   Database,
   Server,
   Cpu,
@@ -96,14 +96,9 @@ import {
   Bold,
   Italic,
   Underline,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-  List as ListIcon,
-  Hash,
-  AtSign,
-  Percent,
-  User as UserIcon
+    AlignCenter,
+  Building,
+  User,
 } from "lucide-react";
 
 interface User {
@@ -489,46 +484,158 @@ export default function AdminDashboardPage() {
       {activeTab === 'users' && (
         <>
           <div className="flex items-center justify-between mb-8">
-            <h1 className="text-3xl font-extrabold text-blue-900 drop-shadow-lg">Admin Dashboard</h1>
+            <div>
+              <h1 className="text-3xl font-extrabold text-blue-900 drop-shadow-lg mb-2">User Management</h1>
+              <p className="text-gray-600 text-lg">Manage all system users and their permissions</p>
+            </div>
             <button
-              className="px-6 py-2 rounded-xl font-bold text-lg shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 transition-all duration-200"
+              className="px-8 py-3 rounded-2xl font-bold text-lg shadow-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 flex items-center gap-2"
               onClick={handleAddUser}
             >
-              + Add User
+              <UserPlus className="w-5 h-5" />
+              Add New User
             </button>
           </div>
-          <div className="bg-white rounded-3xl shadow-2xl border border-blue-100 overflow-x-auto">
-            <table className="min-w-full text-sm text-center">
-              <thead>
-                <tr className="bg-blue-50 text-blue-800">
-                  <th className="py-3 px-4">#</th>
-                  <th className="py-3 px-4">Username</th>
-                  <th className="py-3 px-4">Email</th>
-                  <th className="py-3 px-4">Role</th>
-                  <th className="py-3 px-4">Joined</th>
-                  <th className="py-3 px-4">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {loading ? (
-                  <tr><td colSpan={6} className="py-8 text-blue-600 font-bold animate-pulse">Loading users...</td></tr>
-                ) : users.length === 0 ? (
-                  <tr><td colSpan={6} className="py-8 text-gray-400">No users found.</td></tr>
-                ) : users.map((u, i) => (
-                  <tr key={u.id} className="border-b last:border-b-0 hover:bg-blue-50 transition cursor-pointer" onClick={() => handleUserClick(u)}>
-                    <td className="py-2 px-4 font-bold text-blue-900">{i + 1}</td>
-                    <td className="py-2 px-4">{u.username}</td>
-                    <td className="py-2 px-4">{u.email}</td>
-                    <td className="py-2 px-4">{u.is_superuser ? "Superadmin" : u.is_staff ? "Admin" : "User"}</td>
-                    <td className="py-2 px-4">{u.date_joined ? new Date(u.date_joined).toLocaleString("en-US") : "-"}</td>
-                    <td className="py-2 px-4">
-                      <span className="inline-block px-3 py-1 rounded-lg bg-blue-100 text-blue-700 font-semibold shadow">View</span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+
+          {/* Search and Filter Bar */}
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20 mb-6">
+            <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+              <div className="flex items-center gap-4 flex-1">
+                <div className="relative flex-1 max-w-md">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <input
+                    type="text"
+                    placeholder="Search users..."
+                    className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-blue-200 focus:ring-4 focus:ring-blue-300 focus:border-blue-500 bg-white/50 backdrop-blur-sm transition-all duration-300"
+                  />
+                </div>
+                <button className="px-4 py-3 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 transition-all duration-300 flex items-center gap-2">
+                  <Filter className="w-4 h-4" />
+                  Filter
+                </button>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <span className="font-semibold">{users.length}</span>
+                <span>users found</span>
+              </div>
+            </div>
           </div>
+
+          {/* Users Grid */}
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20 animate-pulse">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
+                    <div className="flex-1">
+                      <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                      <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="h-3 bg-gray-200 rounded"></div>
+                    <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                    <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : users.length === 0 ? (
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-12 shadow-xl border border-white/20 text-center">
+              <UsersIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-gray-600 mb-2">No Users Found</h3>
+              <p className="text-gray-500 mb-6">Start by adding your first user to the system</p>
+              <button
+                className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300"
+                onClick={handleAddUser}
+              >
+                Add First User
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {users.map((user, i) => (
+                <div
+                  key={user.id}
+                  className="group bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer transform hover:border-blue-300"
+                  onClick={() => handleUserClick(user)}
+                >
+                  {/* User Header */}
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="relative">
+                      <Image
+                        src={user.profile_photo || "/assets/images.png"}
+                        alt={user.username}
+                        width={48}
+                        height={48}
+                        className="w-12 h-12 rounded-full object-cover border-2 border-blue-200 shadow-lg"
+                      />
+                      <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${
+                        user.status === 'active' ? 'bg-green-500' :
+                        user.status === 'inactive' ? 'bg-gray-400' :
+                        'bg-red-500'
+                      }`}></div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-bold text-gray-900 text-lg truncate group-hover:text-blue-600 transition-colors">
+                        {user.full_name || user.username}
+                      </h3>
+                      <p className="text-gray-500 text-sm truncate">{user.email}</p>
+                    </div>
+                    <div className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      user.is_superuser ? 'bg-purple-100 text-purple-700' :
+                      user.is_staff ? 'bg-blue-100 text-blue-700' :
+                      'bg-green-100 text-green-700'
+                    }`}>
+                      {user.is_superuser ? "Superadmin" : user.is_staff ? "Admin" : "User"}
+                    </div>
+                  </div>
+
+                  {/* User Details */}
+                  <div className="space-y-3 mb-4">
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <Calendar className="w-4 h-4 text-blue-500" />
+                      <span>Joined {user.date_joined ? new Date(user.date_joined).toLocaleDateString() : "Unknown"}</span>
+                    </div>
+                    {user.company_name && (
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <Building className="w-4 h-4 text-green-500" />
+                        <span className="truncate">{user.company_name}</span>
+                      </div>
+                    )}
+                    {user.phone && (
+                      <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <Phone className="w-4 h-4 text-purple-500" />
+                        <span>{user.phone}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                    <div className="flex items-center gap-2">
+                      <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+                        user.status === 'active' ? 'bg-green-100 text-green-700' :
+                        user.status === 'inactive' ? 'bg-gray-100 text-gray-700' :
+                        'bg-red-100 text-red-700'
+                      }`}>
+                        <div className={`w-2 h-2 rounded-full ${
+                          user.status === 'active' ? 'bg-green-500' :
+                          user.status === 'inactive' ? 'bg-gray-500' :
+                          'bg-red-500'
+                        }`}></div>
+                        {user.status}
+                      </span>
+                    </div>
+                    <button className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-4 py-2 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 font-semibold text-sm">
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
           {/* User Modal/Panel */}
           {showModal && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm p-4">
@@ -837,7 +944,7 @@ export default function AdminDashboardPage() {
                 <div key={driver.id} className="bg-gradient-to-r from-orange-50 to-red-50 rounded-3xl p-6 border border-orange-200 hover:shadow-xl transition-all duration-300">
                   <div className="flex items-center justify-between mb-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center">
-                      <UserIcon className="w-6 h-6 text-white" />
+                      <User className="w-6 h-6 text-white" />
                     </div>
                     <div className={`px-3 py-1 rounded-full text-xs font-semibold ${
                       driver.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
@@ -934,7 +1041,7 @@ export default function AdminDashboardPage() {
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-gradient-to-br from-yellow-500 to-amber-600 rounded-2xl flex items-center justify-center">
-                        <UserIcon className="w-5 h-5 text-white" />
+                        <User className="w-5 h-5 text-white" />
                       </div>
                       <div>
                         <div className="font-semibold text-gray-900">{log.user}</div>
