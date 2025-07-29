@@ -5,7 +5,10 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer id="contact" className="bg-blue-800 text-white py-16 px-6">
+    <footer
+      id="contact"
+      className="bg-blue-800 text-white py-16 px-6 z-20 relative"
+    >
       <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
         <div>
           <h5 className="text-xl font-bold mb-4">Pathnio</h5>
