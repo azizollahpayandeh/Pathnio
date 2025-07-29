@@ -19,7 +19,9 @@ import {
   Shield,
   Route,
   Receipt,
+  CheckSquare,
 } from 'lucide-react';
+import AddExpenseModal from '@/components/AddExpenseModal'; // Import the modal component
 
 // تعریف type مناسب برای Expense
 interface Expense {
@@ -48,6 +50,7 @@ const FAKE_EXPENSES = [
     status: 'Approved',
     receipt_url: '/receipts/1.pdf',
     notes: 'Regular fuel purchase',
+    payment_method: 'Company Card',
   },
   {
     id: 2,
@@ -60,6 +63,7 @@ const FAKE_EXPENSES = [
     status: 'Pending',
     receipt_url: '/receipts/2.pdf',
     notes: 'Scheduled maintenance',
+    payment_method: 'Cash',
   },
   {
     id: 3,
@@ -72,6 +76,7 @@ const FAKE_EXPENSES = [
     status: 'Approved',
     receipt_url: '/receipts/3.pdf',
     notes: 'Highway toll payment',
+    payment_method: 'Credit Card',
   },
   {
     id: 4,
@@ -84,6 +89,7 @@ const FAKE_EXPENSES = [
     status: 'Rejected',
     receipt_url: '/receipts/4.pdf',
     notes: 'Emergency repair needed',
+    payment_method: 'Company Card',
   },
   {
     id: 5,
@@ -96,6 +102,7 @@ const FAKE_EXPENSES = [
     status: 'Approved',
     receipt_url: '/receipts/5.pdf',
     notes: 'Long distance trip fuel',
+    payment_method: 'Cash',
   },
   {
     id: 6,
@@ -108,6 +115,7 @@ const FAKE_EXPENSES = [
     status: 'Approved',
     receipt_url: '/receipts/6.pdf',
     notes: 'Annual vehicle insurance',
+    payment_method: 'Bank Transfer',
   },
   {
     id: 7,
@@ -120,6 +128,7 @@ const FAKE_EXPENSES = [
     status: 'Pending',
     receipt_url: '/receipts/7.pdf',
     notes: 'Return trip toll',
+    payment_method: 'Credit Card',
   },
   {
     id: 8,
@@ -132,6 +141,7 @@ const FAKE_EXPENSES = [
     status: 'Approved',
     receipt_url: '/receipts/8.pdf',
     notes: 'Premium fuel purchase',
+    payment_method: 'Company Card',
   },
   {
     id: 9,
@@ -144,6 +154,7 @@ const FAKE_EXPENSES = [
     status: 'Pending',
     receipt_url: '/receipts/9.pdf',
     notes: 'Engine diagnostic and repair',
+    payment_method: 'Cash',
   },
   {
     id: 10,
@@ -156,6 +167,7 @@ const FAKE_EXPENSES = [
     status: 'Approved',
     receipt_url: '/receipts/10.pdf',
     notes: 'Scheduled tire replacement',
+    payment_method: 'Company Card',
   },
 ];
 
@@ -165,6 +177,8 @@ export default function ExpensesPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const router = useRouter();
 
   // در آینده: دریافت داده واقعی از API
@@ -220,9 +234,69 @@ export default function ExpensesPage() {
     router.push(`/dashboard/expenses/${expenseId}`);
   };
 
+  const handleAddExpense = (newExpense: Expense) => {
+    // Add the new expense to the beginning of the list
+    setExpenses((prev) => [newExpense, ...prev]);
+
+    // Show success message
+    setShowSuccessMessage(true);
+    setTimeout(() => setShowSuccessMessage(false), 3000);
+  };
+
+  const handleExport = () => {
+    // Create CSV content
+    const csvContent = [
+      [
+        'ID',
+        'Date',
+        'Category',
+        'Amount',
+        'Description',
+        'Driver',
+        'Vehicle',
+        'Status',
+        'Payment Method',
+        'Notes',
+      ],
+      ...filteredExpenses.map((expense) => [
+        expense.id,
+        expense.date,
+        expense.category,
+        expense.amount,
+        expense.description,
+        expense.driver,
+        expense.vehicle,
+        expense.status,
+        expense.payment_method,
+        expense.notes,
+      ]),
+    ]
+      .map((row) => row.join(','))
+      .join('\n');
+
+    // Create and download file
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `expenses-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-orange-50 to-red-50 p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto space-y-8">
+        {/* Success Message */}
+        {showSuccessMessage && (
+          <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 z-40 animate-slide-in">
+            <CheckSquare className="w-5 h-5" />
+            <span>Expense added successfully!</span>
+          </div>
+        )}
+
         {/* Header Section */}
         <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
           <div className="flex items-center justify-between mb-6">
@@ -240,11 +314,17 @@ export default function ExpensesPage() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <button className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all duration-200">
+              <button
+                onClick={handleExport}
+                className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all duration-200"
+              >
                 <Download className="w-4 h-4" />
                 Export
               </button>
-              <button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-600 to-green-600 text-white rounded-xl hover:shadow-lg transition-all duration-200">
+              <button
+                onClick={() => setIsAddModalOpen(true)}
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-600 to-green-600 text-white rounded-xl hover:shadow-lg transition-all duration-200"
+              >
                 <Plus className="w-4 h-4" />
                 Add Expense
               </button>
@@ -496,7 +576,10 @@ export default function ExpensesPage() {
                 <p className="text-gray-600 mb-6">
                   Try adjusting your search or filter criteria
                 </p>
-                <button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-xl hover:shadow-lg transition-all duration-200 mx-auto">
+                <button
+                  onClick={() => setIsAddModalOpen(true)}
+                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-xl hover:shadow-lg transition-all duration-200 mx-auto"
+                >
                   <Plus className="w-4 h-4" />
                   Add New Expense
                 </button>
@@ -504,7 +587,30 @@ export default function ExpensesPage() {
             )}
           </div>
         )}
+
+        {/* Add Expense Modal */}
+        <AddExpenseModal
+          isOpen={isAddModalOpen}
+          onClose={() => setIsAddModalOpen(false)}
+          onSubmit={handleAddExpense}
+        />
       </div>
+
+      <style jsx>{`
+        @keyframes slide-in {
+          from {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+        .animate-slide-in {
+          animation: slide-in 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
 }
