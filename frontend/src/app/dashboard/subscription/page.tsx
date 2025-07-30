@@ -240,57 +240,59 @@ export default function SubscriptionPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4 sm:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto space-y-6 lg:space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-2 sm:p-4 lg:p-6">
+      <div className="max-w-6xl mx-auto space-y-4 lg:space-y-6">
         {/* Header */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl border border-white/20">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">
-            <div className="flex items-center gap-3 lg:gap-4">
-              <div className="w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center shadow-lg">
-                <CreditCard className="w-6 h-6 lg:w-8 lg:h-8 text-white" />
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl lg:rounded-2xl p-3 sm:p-4 lg:p-6 shadow-xl border border-white/20">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 mb-4 lg:mb-6">
+            <div className="flex items-center gap-2 lg:gap-3">
+              <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl lg:rounded-2xl flex items-center justify-center shadow-lg">
+                <CreditCard className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-1 lg:mb-2">
+                <h1 className="text-xl lg:text-3xl font-bold text-gray-900 mb-0.5 lg:mb-1">
                   Subscription Management
                 </h1>
-                <p className="text-gray-600 text-sm lg:text-lg">
+                <p className="text-gray-600 text-xs lg:text-base">
                   Manage your Pathnio subscription and billing
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2 lg:gap-3 w-full lg:w-auto">
-              <div className="flex items-center gap-2 px-3 lg:px-4 py-2 bg-green-100 rounded-full">
-                <CheckCircle className="w-4 h-4 text-green-600" />
+            <div className="flex items-center gap-1.5 lg:gap-2 w-full lg:w-auto">
+              <div className="flex items-center gap-1.5 px-2 lg:px-3 py-1.5 lg:py-2 bg-green-100 rounded-full">
+                <CheckCircle className="w-3 h-3 lg:w-4 lg:h-4 text-green-600" />
                 <span className="text-xs lg:text-sm font-semibold text-green-700">
                   Active Plan
                 </span>
               </div>
-              <button className="w-10 h-10 lg:w-12 lg:h-12 bg-white rounded-2xl shadow-lg flex items-center justify-center hover:shadow-xl transition-all duration-200">
-                <Settings className="w-4 h-4 lg:w-5 lg:h-5 text-gray-600" />
+              <button className="w-8 h-8 lg:w-10 lg:h-10 bg-white rounded-xl lg:rounded-2xl shadow-lg flex items-center justify-center hover:shadow-xl transition-all duration-200">
+                <Settings className="w-3 h-3 lg:w-4 lg:h-4 text-gray-600" />
               </button>
             </div>
           </div>
 
           {/* Current Plan Summary */}
           {subs.length > 0 && subs[0].status === 'active' && (
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl p-6 border border-blue-200">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center">
-                    <Crown className="w-6 h-6 text-white" />
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl lg:rounded-2xl p-4 lg:p-6 border border-blue-200">
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 lg:gap-4">
+                <div className="flex items-center gap-3 lg:gap-4">
+                  <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl lg:rounded-2xl flex items-center justify-center">
+                    <Crown className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-gray-900">
+                    <h3 className="text-lg lg:text-xl font-bold text-gray-900">
                       {subs[0].plan} Plan
                     </h3>
-                    <p className="text-gray-600">Active until {subs[0].end}</p>
+                    <p className="text-gray-600 text-xs lg:text-sm">
+                      Active until {subs[0].end}
+                    </p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-2xl font-bold text-gray-900">
+                <div className="text-left lg:text-right">
+                  <div className="text-xl lg:text-2xl font-bold text-gray-900">
                     {formatPrice(subs[0].price)} تومان
                   </div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-xs lg:text-sm text-gray-600">
                     Next billing: {subs[0].nextBilling}
                   </div>
                 </div>
@@ -302,41 +304,43 @@ export default function SubscriptionPage() {
         {subs.length === 0 ? (
           showPlans ? (
             checkout && selectedPlan ? (
-              <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl lg:rounded-2xl p-4 lg:p-6 shadow-xl border border-white/20">
                 <div className="max-w-2xl mx-auto">
-                  <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                  <div className="text-center mb-6 lg:mb-8">
+                    <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-1 lg:mb-2">
                       Complete Your Purchase
                     </h2>
-                    <p className="text-gray-600">
+                    <p className="text-gray-600 text-sm lg:text-base">
                       Review your plan details and proceed to payment
                     </p>
                   </div>
 
-                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl p-8 border border-blue-200 mb-8">
-                    <div className="flex items-center justify-between mb-6">
-                      <div className="flex items-center gap-4">
+                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl lg:rounded-2xl p-4 lg:p-6 border border-blue-200 mb-6 lg:mb-8">
+                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 lg:gap-4 mb-4 lg:mb-6">
+                      <div className="flex items-center gap-3 lg:gap-4">
                         <div
-                          className={`w-16 h-16 bg-gradient-to-br ${selectedPlan.color} rounded-3xl flex items-center justify-center`}
+                          className={`w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-br ${selectedPlan.color} rounded-xl lg:rounded-2xl flex items-center justify-center`}
                         >
-                          <selectedPlan.icon className="w-8 h-8 text-white" />
+                          <selectedPlan.icon className="w-6 h-6 lg:w-8 lg:h-8 text-white" />
                         </div>
                         <div>
-                          <h3 className="text-2xl font-bold text-gray-900">
+                          <h3 className="text-lg lg:text-2xl font-bold text-gray-900">
                             {selectedPlan.name} Plan
                           </h3>
-                          <p className="text-gray-600">{selectedPlan.desc}</p>
+                          <p className="text-gray-600 text-xs lg:text-sm">
+                            {selectedPlan.desc}
+                          </p>
                         </div>
                       </div>
                       {selectedPlan.originalPrice && (
-                        <div className="text-right">
-                          <div className="text-sm text-gray-500 line-through">
+                        <div className="text-left lg:text-right">
+                          <div className="text-xs lg:text-sm text-gray-500 line-through">
                             {formatPrice(selectedPlan.originalPrice)} تومان
                           </div>
-                          <div className="text-3xl font-bold text-gray-900">
+                          <div className="text-2xl lg:text-3xl font-bold text-gray-900">
                             {formatPrice(selectedPlan.price)} تومان
                           </div>
-                          <div className="text-sm text-green-600 font-semibold">
+                          <div className="text-xs lg:text-sm text-green-600 font-semibold">
                             Save{' '}
                             {formatPrice(
                               selectedPlan.originalPrice - selectedPlan.price
@@ -347,44 +351,49 @@ export default function SubscriptionPage() {
                       )}
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-4 mb-4 lg:mb-6">
                       {selectedPlan.features.map((feature, index) => (
-                        <div key={index} className="flex items-center gap-3">
-                          <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                          <span className="text-gray-700">{feature}</span>
+                        <div
+                          key={index}
+                          className="flex items-center gap-2 lg:gap-3"
+                        >
+                          <CheckCircle className="w-4 h-4 lg:w-5 lg:h-5 text-green-500 flex-shrink-0" />
+                          <span className="text-gray-700 text-xs lg:text-sm">
+                            {feature}
+                          </span>
                         </div>
                       ))}
                     </div>
                   </div>
 
                   <button
-                    className="w-full flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xl shadow-lg transition-all duration-200 disabled:opacity-60"
+                    className="w-full flex items-center justify-center gap-2 lg:gap-3 px-6 lg:px-8 py-3 lg:py-4 rounded-xl lg:rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-lg lg:text-xl shadow-lg transition-all duration-200 disabled:opacity-60"
                     onClick={handleCheckout}
                     disabled={payment}
                   >
                     {payment ? (
                       <>
-                        <RefreshCw className="w-5 h-5 animate-spin" />
+                        <RefreshCw className="w-4 h-4 lg:w-5 lg:h-5 animate-spin" />
                         Redirecting to payment...
                       </>
                     ) : (
                       <>
-                        <CreditCard className="w-5 h-5" />
+                        <CreditCard className="w-4 h-4 lg:w-5 lg:h-5" />
                         Proceed to Payment
-                        <ArrowRight className="w-5 h-5" />
+                        <ArrowRight className="w-4 h-4 lg:w-5 lg:h-5" />
                       </>
                     )}
                   </button>
                 </div>
               </div>
             ) : (
-              <div className="space-y-8">
+              <div className="space-y-6 lg:space-y-8">
                 {/* Plans Header */}
-                <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20 text-center">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                <div className="bg-white/80 backdrop-blur-sm rounded-xl lg:rounded-2xl p-4 lg:p-6 shadow-xl border border-white/20 text-center">
+                  <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2 lg:mb-4">
                     Choose Your Plan
                   </h2>
-                  <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+                  <p className="text-gray-600 text-sm lg:text-lg max-w-2xl mx-auto">
                     Select the perfect plan for your fleet management needs. All
                     plans include our core features with different capacity
                     limits.
@@ -392,68 +401,70 @@ export default function SubscriptionPage() {
                 </div>
 
                 {/* Plans Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
                   {plans.map((plan) => {
                     const Icon = plan.icon;
                     return (
                       <div
                         key={plan.id}
-                        className={`relative bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2 ${
+                        className={`relative bg-white/80 backdrop-blur-sm rounded-xl lg:rounded-2xl p-4 lg:p-6 shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 lg:hover:-translate-y-2 ${
                           plan.popular ? 'ring-2 ring-purple-200' : ''
                         }`}
                         onClick={() => handleSelectPlan(plan)}
                       >
                         {plan.badge && (
-                          <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                            <span className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-600 text-white text-sm font-semibold rounded-full shadow-lg">
+                          <div className="absolute -top-3 lg:-top-4 left-1/2 transform -translate-x-1/2">
+                            <span className="px-3 lg:px-4 py-1 lg:py-2 bg-gradient-to-r from-purple-500 to-pink-600 text-white text-xs lg:text-sm font-semibold rounded-full shadow-lg">
                               {plan.badge}
                             </span>
                           </div>
                         )}
 
-                        <div className="text-center mb-6">
+                        <div className="text-center mb-4 lg:mb-6">
                           <div
-                            className={`w-20 h-20 bg-gradient-to-br ${plan.color} rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg`}
+                            className={`w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br ${plan.color} rounded-xl lg:rounded-2xl flex items-center justify-center mx-auto mb-3 lg:mb-4 shadow-lg`}
                           >
-                            <Icon className="w-10 h-10 text-white" />
+                            <Icon className="w-8 h-8 lg:w-10 lg:h-10 text-white" />
                           </div>
-                          <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                          <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-1 lg:mb-2">
                             {plan.name}
                           </h3>
-                          <p className="text-gray-600 mb-4">{plan.desc}</p>
+                          <p className="text-gray-600 text-xs lg:text-sm mb-3 lg:mb-4">
+                            {plan.desc}
+                          </p>
 
-                          <div className="mb-6">
+                          <div className="mb-4 lg:mb-6">
                             {plan.originalPrice && (
-                              <div className="text-sm text-gray-500 line-through mb-1">
+                              <div className="text-xs lg:text-sm text-gray-500 line-through mb-0.5 lg:mb-1">
                                 {formatPrice(plan.originalPrice)} تومان
                               </div>
                             )}
-                            <div className="text-3xl font-bold text-gray-900">
+                            <div className="text-2xl lg:text-3xl font-bold text-gray-900">
                               {formatPrice(plan.price)} تومان
                             </div>
-                            <div className="text-sm text-gray-600">
+                            <div className="text-xs lg:text-sm text-gray-600">
                               per year
                             </div>
                           </div>
                         </div>
 
-                        <div className="space-y-3 mb-8">
+                        <div className="space-y-2 lg:space-y-3 mb-6 lg:mb-8">
                           {plan.features.map((feature, index) => (
                             <div
                               key={index}
-                              className="flex items-center gap-3"
+                              className="flex items-center gap-2 lg:gap-3"
                             >
-                              <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                              <span className="text-gray-700 text-sm">
+                              <CheckCircle className="w-4 h-4 lg:w-5 lg:h-5 text-green-500 flex-shrink-0" />
+                              <span className="text-gray-700 text-xs lg:text-sm">
                                 {feature}
                               </span>
                             </div>
                           ))}
                         </div>
 
-                        <button className="w-full py-3 px-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-2xl transition-all duration-200 flex items-center justify-center gap-2">
+                        <button className="w-full py-2 lg:py-3 px-4 lg:px-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl lg:rounded-2xl transition-all duration-200 flex items-center justify-center gap-1.5 lg:gap-2 text-sm lg:text-base">
                           Select Plan
-                          <ArrowRight className="w-4 h-4" />
+                          <ArrowRight className="w-3 h-3 lg:w-4 lg:h-4" />
                         </button>
                       </div>
                     );
@@ -462,33 +473,33 @@ export default function SubscriptionPage() {
               </div>
             )
           ) : (
-            <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-12 shadow-xl border border-white/20 text-center">
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl lg:rounded-2xl p-6 lg:p-8 shadow-xl border border-white/20 text-center">
               <div className="max-w-md mx-auto">
-                <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <ShoppingCart className="w-12 h-12 text-white" />
+                <div className="w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl lg:rounded-2xl flex items-center justify-center mx-auto mb-4 lg:mb-6 shadow-lg">
+                  <ShoppingCart className="w-8 h-8 lg:w-10 lg:h-10 text-white" />
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2 lg:mb-4">
                   No Active Subscription
                 </h2>
-                <p className="text-gray-600 mb-8 text-lg">
+                <p className="text-gray-600 mb-6 lg:mb-8 text-sm lg:text-lg">
                   Get started with Pathnio to unlock powerful fleet management
                   features and analytics.
                 </p>
                 <button
-                  className="flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xl shadow-lg transition-all duration-200 mx-auto"
+                  className="flex items-center gap-2 lg:gap-3 px-6 lg:px-8 py-3 lg:py-4 rounded-xl lg:rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-lg lg:text-xl shadow-lg transition-all duration-200 mx-auto"
                   onClick={handleBuy}
                   disabled={action?.type === 'buy'}
                 >
                   {action?.type === 'buy' ? (
                     <>
-                      <RefreshCw className="w-5 h-5 animate-spin" />
+                      <RefreshCw className="w-4 h-4 lg:w-5 lg:h-5 animate-spin" />
                       Processing...
                     </>
                   ) : (
                     <>
-                      <ShoppingCart className="w-5 h-5" />
+                      <ShoppingCart className="w-4 h-4 lg:w-5 lg:h-5" />
                       Choose a Plan
-                      <ArrowRight className="w-5 h-5" />
+                      <ArrowRight className="w-4 h-4 lg:w-5 lg:h-5" />
                     </>
                   )}
                 </button>
@@ -496,26 +507,26 @@ export default function SubscriptionPage() {
             </div>
           )
         ) : (
-          <div className="space-y-8">
+          <div className="space-y-6 lg:space-y-8">
             {/* Current Subscription Details */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">
+            <div className="bg-white/80 backdrop-blur-sm rounded-xl lg:rounded-2xl p-4 lg:p-6 shadow-xl border border-white/20">
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 lg:gap-4 mb-4 lg:mb-6">
+                <h2 className="text-xl lg:text-2xl font-bold text-gray-900">
                   Current Subscription
                 </h2>
-                <div className="flex items-center gap-3">
-                  <button className="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-xl font-medium hover:bg-blue-200 transition-colors">
-                    <Download className="w-4 h-4" />
+                <div className="flex items-center gap-2 lg:gap-3">
+                  <button className="flex items-center gap-1.5 lg:gap-2 px-3 lg:px-4 py-1.5 lg:py-2 bg-blue-100 text-blue-700 rounded-lg lg:rounded-xl font-medium hover:bg-blue-200 transition-colors text-xs lg:text-sm">
+                    <Download className="w-3 h-3 lg:w-4 lg:h-4" />
                     Download Invoice
                   </button>
-                  <button className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-colors">
-                    <Settings className="w-4 h-4" />
+                  <button className="flex items-center gap-1.5 lg:gap-2 px-3 lg:px-4 py-1.5 lg:py-2 bg-gray-100 text-gray-700 rounded-lg lg:rounded-xl font-medium hover:bg-gray-200 transition-colors text-xs lg:text-sm">
+                    <Settings className="w-3 h-3 lg:w-4 lg:h-4" />
                     Manage Billing
                   </button>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
                 {subs.map((sub) => {
                   const status = statusConfig[sub.status];
                   const StatusIcon = status.icon;
@@ -524,81 +535,83 @@ export default function SubscriptionPage() {
                   return (
                     <div
                       key={sub.id}
-                      className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-3xl p-6 border border-gray-200"
+                      className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl lg:rounded-2xl p-4 lg:p-6 border border-gray-200"
                     >
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center">
-                            <Crown className="w-6 h-6 text-white" />
+                      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 lg:gap-4 mb-3 lg:mb-4">
+                        <div className="flex items-center gap-2 lg:gap-3">
+                          <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl lg:rounded-2xl flex items-center justify-center">
+                            <Crown className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
                           </div>
                           <div>
-                            <h3 className="text-xl font-bold text-gray-900">
+                            <h3 className="text-lg lg:text-xl font-bold text-gray-900">
                               {sub.plan} Plan
                             </h3>
                             <div
-                              className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-semibold border ${status.color}`}
+                              className={`inline-flex items-center gap-1.5 lg:gap-2 px-2 lg:px-3 py-1 lg:py-1.5 rounded-full text-xs lg:text-sm font-semibold border ${status.color}`}
                             >
                               <StatusIcon
-                                className={`w-4 h-4 ${status.iconColor}`}
+                                className={`w-3 h-3 lg:w-4 lg:h-4 ${status.iconColor}`}
                               />
                               {status.label}
                             </div>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <div className="text-2xl font-bold text-gray-900">
+                        <div className="text-left lg:text-right">
+                          <div className="text-xl lg:text-2xl font-bold text-gray-900">
                             {formatPrice(sub.price)} تومان
                           </div>
-                          <div className="text-sm text-gray-600">per year</div>
+                          <div className="text-xs lg:text-sm text-gray-600">
+                            per year
+                          </div>
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4 mb-6">
+                      <div className="grid grid-cols-2 gap-3 lg:gap-4 mb-4 lg:mb-6">
                         <div>
-                          <div className="text-sm text-gray-600 mb-1">
+                          <div className="text-xs lg:text-sm text-gray-600 mb-0.5 lg:mb-1">
                             Start Date
                           </div>
-                          <div className="font-semibold text-gray-900">
+                          <div className="font-semibold text-gray-900 text-xs lg:text-sm">
                             {sub.start}
                           </div>
                         </div>
                         <div>
-                          <div className="text-sm text-gray-600 mb-1">
+                          <div className="text-xs lg:text-sm text-gray-600 mb-0.5 lg:mb-1">
                             End Date
                           </div>
-                          <div className="font-semibold text-gray-900">
+                          <div className="font-semibold text-gray-900 text-xs lg:text-sm">
                             {sub.end}
                           </div>
                         </div>
                         <div>
-                          <div className="text-sm text-gray-600 mb-1">
+                          <div className="text-xs lg:text-sm text-gray-600 mb-0.5 lg:mb-1">
                             Days Remaining
                           </div>
-                          <div className="font-semibold text-gray-900">
+                          <div className="font-semibold text-gray-900 text-xs lg:text-sm">
                             {daysRemaining} days
                           </div>
                         </div>
                         <div>
-                          <div className="text-sm text-gray-600 mb-1">
+                          <div className="text-xs lg:text-sm text-gray-600 mb-0.5 lg:mb-1">
                             Auto Renew
                           </div>
-                          <div className="font-semibold text-gray-900">
+                          <div className="font-semibold text-gray-900 text-xs lg:text-sm">
                             {sub.autoRenew ? 'Enabled' : 'Disabled'}
                           </div>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-3">
+                      <div className="flex flex-wrap items-center gap-2 lg:gap-3">
                         {sub.status !== 'active' && (
                           <button
-                            className="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-xl font-medium hover:bg-green-200 transition-colors"
+                            className="flex items-center gap-1.5 lg:gap-2 px-3 lg:px-4 py-1.5 lg:py-2 bg-green-100 text-green-700 rounded-lg lg:rounded-xl font-medium hover:bg-green-200 transition-colors text-xs lg:text-sm"
                             onClick={() => handleRenew(sub.id)}
                             disabled={
                               action?.type === 'renew' && action?.id === sub.id
                             }
                           >
                             <RefreshCw
-                              className={`w-4 h-4 ${
+                              className={`w-3 h-3 lg:w-4 lg:h-4 ${
                                 action?.type === 'renew' &&
                                 action?.id === sub.id
                                   ? 'animate-spin'
@@ -612,20 +625,20 @@ export default function SubscriptionPage() {
                         )}
                         {sub.status === 'active' && (
                           <button
-                            className="flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-xl font-medium hover:bg-red-200 transition-colors"
+                            className="flex items-center gap-1.5 lg:gap-2 px-3 lg:px-4 py-1.5 lg:py-2 bg-red-100 text-red-700 rounded-lg lg:rounded-xl font-medium hover:bg-red-200 transition-colors text-xs lg:text-sm"
                             onClick={() => handleCancel(sub.id)}
                             disabled={
                               action?.type === 'cancel' && action?.id === sub.id
                             }
                           >
-                            <XCircle className="w-4 h-4" />
+                            <XCircle className="w-3 h-3 lg:w-4 lg:h-4" />
                             {action?.type === 'cancel' && action?.id === sub.id
                               ? 'Cancelling...'
                               : 'Cancel'}
                           </button>
                         )}
-                        <button className="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-xl font-medium hover:bg-blue-200 transition-colors">
-                          <Settings className="w-4 h-4" />
+                        <button className="flex items-center gap-1.5 lg:gap-2 px-3 lg:px-4 py-1.5 lg:py-2 bg-blue-100 text-blue-700 rounded-lg lg:rounded-xl font-medium hover:bg-blue-200 transition-colors text-xs lg:text-sm">
+                          <Settings className="w-3 h-3 lg:w-4 lg:h-4" />
                           Manage
                         </button>
                       </div>
