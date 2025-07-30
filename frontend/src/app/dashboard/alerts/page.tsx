@@ -188,30 +188,30 @@ export default function AlertsPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4 sm:p-6 lg:p-8">
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Header */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center shadow-lg">
-                <Bell className="w-8 h-8 text-white" />
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl border border-white/20">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">
+            <div className="flex items-center gap-3 lg:gap-4">
+              <div className="w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center shadow-lg">
+                <Bell className="w-6 h-6 lg:w-8 lg:h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold text-gray-900 mb-2">Alerts & Notifications</h1>
-                <p className="text-gray-600 text-lg">Stay informed about your fleet operations</p>
+                <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-1 lg:mb-2">Alerts & Notifications</h1>
+                <p className="text-gray-600 text-sm lg:text-lg">Stay informed about your fleet operations</p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 px-4 py-2 bg-red-100 rounded-full">
+            <div className="flex items-center gap-2 lg:gap-3 w-full lg:w-auto">
+              <div className="flex items-center gap-2 px-3 lg:px-4 py-2 bg-red-100 rounded-full">
                 <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                <span className="text-sm font-semibold text-red-700">{unreadCount} Unread</span>
+                <span className="text-xs lg:text-sm font-semibold text-red-700">{unreadCount} Unread</span>
               </div>
-              <button className="w-12 h-12 bg-white rounded-2xl shadow-lg flex items-center justify-center hover:shadow-xl transition-all duration-200">
-                <RefreshCw className="w-5 h-5 text-gray-600" />
+              <button className="w-10 h-10 lg:w-12 lg:h-12 bg-white rounded-2xl shadow-lg flex items-center justify-center hover:shadow-xl transition-all duration-200">
+                <RefreshCw className="w-4 h-4 lg:w-5 lg:h-5 text-gray-600" />
               </button>
             </div>
           </div>
 
           {/* Search and Filters */}
-          <div className="flex flex-col lg:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 lg:gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input

@@ -182,37 +182,37 @@ export default function ReportsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4 sm:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+      <div className="max-w-7xl mx-auto space-y-6 lg:space-y-8">
         {/* Header */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
-          <div className="flex items-center justify-between">
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl border border-white/20">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">Reports & Analytics</h1>
-              <p className="text-gray-600 text-lg">Comprehensive insights into your fleet performance</p>
+              <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-1 lg:mb-2">Reports & Analytics</h1>
+              <p className="text-gray-600 text-sm lg:text-lg">Comprehensive insights into your fleet performance</p>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <BarChart3 className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <BarChart3 className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
               </div>
             </div>
           </div>
         </div>
 
         {loading ? (
-          <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20 text-center">
-            <div className="text-blue-600 animate-pulse text-xl">Loading reports...</div>
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 lg:p-8 shadow-xl border border-white/20 text-center">
+            <div className="text-blue-600 animate-pulse text-lg lg:text-xl">Loading reports...</div>
           </div>
         ) : (
           <>
             {/* Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
               {SUMMARY.map((item, i) => {
                 const Icon = item.icon;
                 return (
-                  <div key={i} className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className={`w-12 h-12 bg-gradient-to-br ${item.color} rounded-2xl flex items-center justify-center shadow-lg`}>
-                        <Icon className="w-6 h-6 text-white" />
+                  <div key={i} className="bg-white/80 backdrop-blur-sm rounded-3xl p-4 lg:p-6 shadow-xl border border-white/20 hover:shadow-2xl transition-all duration-300">
+                    <div className="flex items-center justify-between mb-3 lg:mb-4">
+                      <div className={`w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br ${item.color} rounded-2xl flex items-center justify-center shadow-lg`}>
+                        <Icon className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
                       </div>
                       <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${
                         item.trend === 'up' 
@@ -223,27 +223,27 @@ export default function ReportsPage() {
                         {item.change}
                       </div>
                     </div>
-                    <div className="text-3xl font-bold text-gray-900 mb-1">{item.value}</div>
-                    <div className="text-sm text-gray-600">{item.label}</div>
+                    <div className="text-xl lg:text-3xl font-bold text-gray-900 mb-1">{item.value}</div>
+                    <div className="text-xs lg:text-sm text-gray-600">{item.label}</div>
                   </div>
                 );
               })}
             </div>
 
             {/* Main Charts Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
               {/* Expenses Breakdown */}
-              <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
-                <div className="flex items-center justify-between mb-6">
+              <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl border border-white/20">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 lg:mb-6 gap-4">
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Expenses Breakdown</h3>
-                    <p className="text-gray-600">Distribution of operational costs</p>
+                    <h3 className="text-lg lg:text-2xl font-bold text-gray-900 mb-1 lg:mb-2">Expenses Breakdown</h3>
+                    <p className="text-gray-600 text-sm lg:text-base">Distribution of operational costs</p>
                   </div>
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-                    <PieChart className="w-6 h-6 text-white" />
+                  <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <PieChart className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
                   </div>
                 </div>
-                <div className="h-80 w-full">
+                <div className="h-60 lg:h-80 w-full">
                   <Doughnut
                     data={EXPENSES_DATA}
                     options={{

@@ -161,7 +161,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 relative overflow-hidden py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 relative overflow-hidden py-4 lg:py-8 px-4 sm:px-6 lg:px-8">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -left-40 w-80 h-80 bg-gradient-to-br from-blue-200 to-indigo-300 rounded-full filter blur-3xl opacity-30 animate-pulse" />
@@ -172,14 +172,14 @@ export default function SettingsPage() {
 
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Header Section */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-3xl shadow-2xl mb-6 transform hover:scale-110 transition-all duration-300">
-            <SettingsIcon className="h-10 w-10 text-white" />
+        <div className="text-center mb-8 lg:mb-12">
+          <div className="inline-flex items-center justify-center w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-blue-600 to-purple-600 rounded-3xl shadow-2xl mb-4 lg:mb-6 transform hover:scale-110 transition-all duration-300">
+            <SettingsIcon className="h-8 w-8 lg:h-10 lg:w-10 text-white" />
           </div>
-          <h1 className="text-5xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-4">
+          <h1 className="text-3xl lg:text-5xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-3 lg:mb-4">
             Dashboard Settings
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-base lg:text-xl text-gray-600 max-w-2xl mx-auto px-4">
             Customize your experience and manage your preferences with our comprehensive settings panel
           </p>
         </div>
