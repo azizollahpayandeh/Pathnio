@@ -234,44 +234,44 @@ export default function VehiclesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4 sm:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto space-y-6 lg:space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-2 sm:p-4 lg:p-6">
+      <div className="max-w-7xl mx-auto space-y-4 lg:space-y-6">
         {/* Header Section */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl border border-white/20">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">
-            <div className="flex items-center gap-3 lg:gap-4">
-              <div className="w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-3xl flex items-center justify-center shadow-lg">
-                <Car className="w-6 h-6 lg:w-8 lg:h-8 text-white" />
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl lg:rounded-3xl p-3 sm:p-4 lg:p-6 shadow-xl border border-white/20">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 mb-4 lg:mb-6">
+            <div className="flex items-center gap-2 lg:gap-4">
+              <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl lg:rounded-3xl flex items-center justify-center shadow-lg">
+                <Car className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-1 lg:mb-2">
+                <h1 className="text-xl lg:text-3xl font-bold text-gray-900 mb-1">
                   Vehicles Management
                 </h1>
-                <p className="text-gray-600 text-sm lg:text-lg">
+                <p className="text-gray-600 text-xs lg:text-base">
                   Monitor and manage your fleet vehicles
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2 lg:gap-3 w-full lg:w-auto">
-              <button className="flex items-center gap-2 px-3 lg:px-4 py-2 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all duration-200 text-sm lg:text-base">
-                <Download className="w-4 h-4" />
+            <div className="flex items-center gap-2 w-full lg:w-auto">
+              <button className="flex items-center gap-1 px-2 lg:px-3 py-2 bg-gray-100 rounded-lg lg:rounded-xl hover:bg-gray-200 transition-all duration-200 text-xs lg:text-sm">
+                <Download className="w-3 h-3 lg:w-4 lg:h-4" />
                 <span className="hidden sm:inline">Export</span>
               </button>
               <button
                 onClick={() => setShowAddModal(true)}
-                className="flex items-center gap-2 px-4 lg:px-6 py-2 lg:py-3 bg-gradient-to-r from-orange-600 to-orange-600 text-white rounded-xl hover:shadow-lg transition-all duration-200 text-sm lg:text-base flex-1 lg:flex-none"
+                className="flex items-center gap-1 px-3 lg:px-4 py-2 bg-gradient-to-r from-orange-600 to-orange-600 text-white rounded-lg lg:rounded-xl hover:shadow-lg transition-all duration-200 text-xs lg:text-sm flex-1 lg:flex-none"
               >
-                <Plus className="w-4 h-4" />
+                <Plus className="w-3 h-3 lg:w-4 lg:h-4" />
                 Add Vehicle
               </button>
             </div>
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-4 mb-4 lg:mb-6">
             {[
               {
-                label: 'Total Vehicles',
+                label: 'Total',
                 value: stats.total,
                 icon: Car,
                 color: 'from-orange-500 to-orange-600',
@@ -299,19 +299,19 @@ export default function VehiclesPage() {
               return (
                 <div
                   key={index}
-                  className="bg-gradient-to-r from-gray-50 to-green-50 rounded-3xl p-4 lg:p-6 border border-gray-200 hover:shadow-lg transition-all duration-300"
+                  className="bg-gradient-to-r from-gray-50 to-green-50 rounded-xl lg:rounded-2xl p-3 lg:p-4 border border-gray-200 hover:shadow-lg transition-all duration-300"
                 >
-                  <div className="flex items-center justify-between mb-3 lg:mb-4">
+                  <div className="flex items-center justify-between mb-2 lg:mb-3">
                     <div
-                      className={`w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br ${stat.color} rounded-2xl flex items-center justify-center`}
+                      className={`w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-br ${stat.color} rounded-lg lg:rounded-xl flex items-center justify-center`}
                     >
-                      <Icon className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
+                      <Icon className="w-4 h-4 lg:w-5 lg:h-5 text-white" />
                     </div>
                     <div className="text-right">
-                      <div className="text-xl lg:text-2xl font-bold text-gray-900">
+                      <div className="text-lg lg:text-xl font-bold text-gray-900">
                         {stat.value}
                       </div>
-                      <div className="text-xs lg:text-sm text-gray-600">{stat.label}</div>
+                      <div className="text-xs text-gray-600">{stat.label}</div>
                     </div>
                   </div>
                 </div>
@@ -320,21 +320,21 @@ export default function VehiclesPage() {
           </div>
 
           {/* Search and Filters */}
-          <div className="flex flex-col sm:flex-row gap-3 lg:gap-4">
+          <div className="flex flex-col sm:flex-row gap-2 lg:gap-3">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 lg:w-5 lg:h-5" />
+              <Search className="absolute left-2 lg:left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <input
                 type="text"
                 placeholder="Search vehicles..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 lg:pl-10 pr-4 py-2 lg:py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm lg:text-base"
+                className="w-full pl-8 lg:pl-10 pr-3 lg:pr-4 py-2 bg-white border border-gray-200 rounded-lg lg:rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
               />
             </div>
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="px-3 lg:px-4 py-2 lg:py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm lg:text-base"
+              className="px-2 lg:px-3 py-2 bg-white border border-gray-200 rounded-lg lg:rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
             >
               <option value="all">All Status</option>
               <option value="Active">Active</option>
@@ -344,7 +344,7 @@ export default function VehiclesPage() {
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className="px-3 lg:px-4 py-2 lg:py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm lg:text-base"
+              className="px-2 lg:px-3 py-2 bg-white border border-gray-200 rounded-lg lg:rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
             >
               <option value="all">All Types</option>
               <option value="Truck">Truck</option>
@@ -356,19 +356,19 @@ export default function VehiclesPage() {
 
         {/* Vehicles List */}
         {loading ? (
-          <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
-            <div className="flex items-center justify-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
-              <span className="ml-3 text-lg text-gray-600">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl lg:rounded-3xl p-6 lg:p-8 shadow-xl border border-white/20">
+            <div className="flex items-center justify-center py-8 lg:py-12">
+              <div className="animate-spin rounded-full h-8 w-8 lg:h-12 lg:w-12 border-b-2 border-green-600"></div>
+              <span className="ml-3 text-base lg:text-lg text-gray-600">
                 Loading vehicles...
               </span>
             </div>
           </div>
         ) : (
-          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 overflow-hidden">
-            <div className="p-4 lg:p-6 border-b border-gray-100">
-              <h2 className="text-lg lg:text-2xl font-bold text-gray-900 flex items-center gap-2">
-                <Car className="w-5 h-5 lg:w-6 lg:h-6 text-orange-500" />
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl lg:rounded-3xl shadow-xl border border-white/20 overflow-hidden">
+            <div className="p-3 lg:p-6 border-b border-gray-100">
+              <h2 className="text-base lg:text-xl font-bold text-gray-900 flex items-center gap-2">
+                <Car className="w-4 h-4 lg:w-5 lg:h-5 text-orange-500" />
                 Fleet Vehicles ({filteredVehicles.length})
               </h2>
             </div>
@@ -386,72 +386,98 @@ export default function VehiclesPage() {
                 return (
                   <div
                     key={index}
-                    className="p-6 hover:bg-gray-50 transition-all duration-200 cursor-pointer"
+                    className="p-3 lg:p-6 hover:bg-gray-50 transition-all duration-200 cursor-pointer"
                     onClick={() =>
                       (window.location.href = `/dashboard/vehicles/${encodeURIComponent(
                         vehicle.plate_number
                       )}`)
                     }
                   >
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 lg:gap-6">
                       {/* Vehicle Info */}
-                      <div className="flex items-center gap-6 flex-1">
+                      <div className="flex items-start gap-3 lg:gap-6 flex-1">
                         {/* Vehicle Icon */}
-                        <div className="w-16 h-16 bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl flex items-center justify-center">
-                          <VehicleIcon className="w-8 h-8 text-orange-500" />
+                        <div className="w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl lg:rounded-2xl flex items-center justify-center flex-shrink-0">
+                          <VehicleIcon className="w-6 h-6 lg:w-8 lg:h-8 text-orange-500" />
                         </div>
 
                         {/* Main Details */}
-                        <div className="flex-1">
-                          <div className="flex items-center gap-4 mb-2">
-                            <h3 className="text-xl font-bold text-gray-900">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-2 lg:gap-4 mb-2">
+                            <h3 className="text-lg lg:text-xl font-bold text-gray-900 truncate">
                               {vehicle.plate_number}
                             </h3>
-                            <div
-                              className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold border ${
-                                statusConfig[
-                                  vehicle.status as keyof typeof statusConfig
-                                ]?.color
-                              }`}
-                            >
-                              <StatusIcon className="w-4 h-4" />
-                              {vehicle.status}
-                            </div>
-                            <div
-                              className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold ${
-                                vehicleTypeConfig[
-                                  vehicle.vehicle_type as keyof typeof vehicleTypeConfig
-                                ]?.color
-                              }`}
-                            >
-                              <VehicleIcon className="w-4 h-4" />
-                              {vehicle.vehicle_type}
+                            <div className="flex flex-wrap gap-1 lg:gap-2">
+                              <div
+                                className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold border ${
+                                  statusConfig[
+                                    vehicle.status as keyof typeof statusConfig
+                                  ]?.color
+                                }`}
+                              >
+                                <StatusIcon className="w-3 h-3" />
+                                {vehicle.status}
+                              </div>
+                              <div
+                                className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${
+                                  vehicleTypeConfig[
+                                    vehicle.vehicle_type as keyof typeof vehicleTypeConfig
+                                  ]?.color
+                                }`}
+                              >
+                                <VehicleIcon className="w-3 h-3" />
+                                {vehicle.vehicle_type}
+                              </div>
                             </div>
                           </div>
 
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600">
-                            <div className="flex items-center gap-2">
-                              <User className="w-4 h-4" />
-                              <span>{vehicle.driver}</span>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-4 text-xs lg:text-sm text-gray-600">
+                            <div className="flex items-center gap-1 lg:gap-2">
+                              <User className="w-3 h-3 lg:w-4 lg:h-4 flex-shrink-0" />
+                              <span className="truncate">{vehicle.driver}</span>
                             </div>
-                            <div className="flex items-center gap-2">
-                              <Building className="w-4 h-4" />
-                              <span>{vehicle.company}</span>
+                            <div className="flex items-center gap-1 lg:gap-2">
+                              <Building className="w-3 h-3 lg:w-4 lg:h-4 flex-shrink-0" />
+                              <span className="truncate">
+                                {vehicle.company}
+                              </span>
                             </div>
-                            <div className="flex items-center gap-2">
-                              <Weight className="w-4 h-4" />
+                            <div className="flex items-center gap-1 lg:gap-2">
+                              <Weight className="w-3 h-3 lg:w-4 lg:h-4 flex-shrink-0" />
                               <span>{vehicle.capacity}</span>
                             </div>
-                            <div className="flex items-center gap-2">
-                              <Palette className="w-4 h-4" />
+                            <div className="flex items-center gap-1 lg:gap-2">
+                              <Palette className="w-3 h-3 lg:w-4 lg:h-4 flex-shrink-0" />
                               <span>{vehicle.color}</span>
+                            </div>
+                          </div>
+
+                          {/* Mobile Stats */}
+                          <div className="flex items-center gap-4 mt-2 lg:hidden text-xs text-gray-500">
+                            <div className="text-center">
+                              <div className="font-semibold text-gray-900">
+                                {vehicle.fuel_level}
+                              </div>
+                              <div>Fuel</div>
+                            </div>
+                            <div className="text-center">
+                              <div className="font-semibold text-gray-900">
+                                {vehicle.total_trips}
+                              </div>
+                              <div>Trips</div>
+                            </div>
+                            <div className="text-center">
+                              <div className="font-semibold text-gray-900">
+                                {vehicle.mileage}
+                              </div>
+                              <div>Mileage</div>
                             </div>
                           </div>
                         </div>
                       </div>
 
-                      {/* Additional Stats */}
-                      <div className="hidden lg:flex items-center gap-6 text-sm text-gray-500">
+                      {/* Desktop Additional Stats */}
+                      <div className="hidden lg:flex items-center gap-4 text-sm text-gray-500">
                         <div className="text-center">
                           <div className="font-semibold text-gray-900">
                             {vehicle.fuel_level}
@@ -479,19 +505,19 @@ export default function VehiclesPage() {
                       </div>
 
                       {/* Actions */}
-                      <div className="flex items-center gap-3 ml-6">
+                      <div className="flex items-center gap-2 lg:gap-3 lg:ml-6">
                         <Link
                           href={`/dashboard/vehicles/${encodeURIComponent(
                             vehicle.plate_number
                           )}`}
-                          className="flex items-center gap-2 px-4 py-2 bg-orange-100 text-orange-500 rounded-xl hover:bg-orange-200 transition-all duration-200"
+                          className="flex items-center gap-1 px-2 lg:px-3 py-1 lg:py-2 bg-orange-100 text-orange-500 rounded-lg hover:bg-orange-200 transition-all duration-200 text-xs lg:text-sm"
                           onClick={(e) => e.stopPropagation()}
                         >
-                          <Eye className="w-4 h-4" />
-                          View
+                          <Eye className="w-3 h-3 lg:w-4 lg:h-4" />
+                          <span className="hidden sm:inline">View</span>
                         </Link>
-                        <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-all duration-200">
-                          <MoreVertical className="w-4 h-4" />
+                        <button className="p-1 lg:p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all duration-200">
+                          <MoreVertical className="w-3 h-3 lg:w-4 lg:h-4" />
                         </button>
                       </div>
                     </div>
@@ -502,16 +528,16 @@ export default function VehiclesPage() {
 
             {/* Empty State */}
             {filteredVehicles.length === 0 && (
-              <div className="text-center py-12">
-                <Car className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <div className="text-center py-8 lg:py-12">
+                <Car className="w-12 h-12 lg:w-16 lg:h-16 text-gray-400 mx-auto mb-3 lg:mb-4" />
+                <h3 className="text-lg lg:text-xl font-semibold text-gray-900 mb-2">
                   No Vehicles Found
                 </h3>
-                <p className="text-gray-600 mb-6">
+                <p className="text-gray-600 mb-4 lg:mb-6 text-sm lg:text-base">
                   Try adjusting your search or filter criteria
                 </p>
-                <button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-600 to-orange-600 text-white rounded-xl hover:shadow-lg transition-all duration-200 mx-auto">
-                  <Plus className="w-4 h-4" />
+                <button className="flex items-center gap-2 px-4 lg:px-6 py-2 lg:py-3 bg-gradient-to-r from-orange-600 to-orange-600 text-white rounded-lg lg:rounded-xl hover:shadow-lg transition-all duration-200 mx-auto text-sm">
+                  <Plus className="w-3 h-3 lg:w-4 lg:h-4" />
                   Add New Vehicle
                 </button>
               </div>
