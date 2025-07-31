@@ -9,16 +9,8 @@ import {
   Sun,
   Globe,
   Bell,
-<<<<<<< HEAD
-  CheckCircle,
-  XCircle,
   Save,
   Loader2,
-  Lock,
-=======
-  Save,
-  Loader2,
->>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
   Cloud,
   Mail,
   MessageSquareText,
@@ -30,11 +22,6 @@ import {
   Shield,
   Database,
   Zap,
-<<<<<<< HEAD
-  Eye,
-  EyeOff,
-=======
->>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
 } from 'lucide-react';
 
 interface Settings {

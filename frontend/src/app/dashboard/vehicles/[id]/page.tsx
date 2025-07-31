@@ -17,19 +17,9 @@ import {
   CalendarDays,
   Gauge,
   BatteryCharging,
-<<<<<<< HEAD
-  LineChart,
   Calendar,
   RefreshCcw,
   TrendingUp,
-  Activity,
-  Zap,
-  Shield,
-=======
-  Calendar,
-  RefreshCcw,
-  TrendingUp,
->>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
 } from 'lucide-react';
 
 // FAKE DATA - Replace with API in a real application

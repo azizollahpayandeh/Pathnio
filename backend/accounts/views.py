@@ -140,8 +140,6 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 'method': 'jwt'
             }, user)
             
-<<<<<<< HEAD
-=======
             # Create login alert
             create_alert(
                 user=user,
@@ -303,8 +301,6 @@ class LoginView(APIView):
                     'method': 'password'
                 }, user)
                 
-<<<<<<< HEAD
-=======
                 # Create login alert
                 create_alert(
                     user=user,
@@ -314,8 +310,6 @@ class LoginView(APIView):
                     priority='low',
                     request=request
                 )
-                
->>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                 # Generate JWT tokens
                 refresh = RefreshToken.for_user(user)
                 access_token = refresh.access_token
@@ -441,8 +435,6 @@ class PasswordChangeView(APIView):
                 'password_changed_at': timezone.now().isoformat()
             })
             
-<<<<<<< HEAD
-=======
             # Create password change alert
             create_alert(
                 user=user,
@@ -781,6 +773,25 @@ def check_auth_status(request):
 class UserListView(APIView):
     permission_classes = [IsAuthenticated]
 
+    def get_profile_photo_url(self, user, company):
+        """Safely get profile photo URL for a user"""
+        try:
+            # Try to get profile photo from user's profile first
+            if hasattr(user, 'profile') and user.profile and user.profile.profile_photo:
+                return user.profile.profile_photo.url
+        except:
+            pass
+        
+        try:
+            # Fall back to company profile photo
+            if company and hasattr(company, 'profile_photo') and company.profile_photo:
+                return company.profile_photo.url
+        except:
+            pass
+        
+        # Return None if no photo found
+        return None
+
     def get(self, request):
         user = request.user
         print(f"UserListView - Request from user: {user.username}")
@@ -815,11 +826,7 @@ class UserListView(APIView):
                 'is_superuser': u.is_superuser,
                 'is_manager': company is not None,
                 'date_joined': u.date_joined,
-<<<<<<< HEAD
-                'profile_photo': company.profile_photo.url if company and company.profile_photo else None,
-=======
-                'profile_photo': u.profile.profile_photo.url if hasattr(u, 'profile') and u.profile.profile_photo else (company.profile_photo.url if company and company.profile_photo else None),
->>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
+                'profile_photo': self.get_profile_photo_url(u, company),
             }
             data.append(user_data)
             print(f"UserListView - User {u.id}: {u.username} - {full_name} - Company: {getattr(company, 'company_name', 'None')}")
@@ -910,14 +917,9 @@ class UserCreateView(APIView):
             full_name = request.data.get('full_name', '')
             phone = request.data.get('phone', '')
             company_name = request.data.get('company_name', '')
-<<<<<<< HEAD
-            
-            print(f"UserCreateView - Extracted data: username={username}, email={email}, password={'***' if password else 'None'}, full_name={full_name}, phone={phone}, company_name={company_name}")
-=======
             role = request.data.get('role', 'user')  # 'user', 'manager', 'admin', 'superadmin'
             
             print(f"UserCreateView - Extracted data: username={username}, email={email}, password={'***' if password else 'None'}, full_name={full_name}, phone={phone}, company_name={company_name}, role={role}")
->>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
             
             # بررسی وجود فیلدهای اجباری
             if not username or not email or not password:
@@ -1025,11 +1027,7 @@ class UserCreateView(APIView):
                 'is_superuser': new_user.is_superuser,
                 'is_manager': company is not None,
                 'date_joined': new_user.date_joined,
-<<<<<<< HEAD
-                'profile_photo': getattr(company, 'profile_photo.url', None) if company else None,
-=======
-                'profile_photo': new_user.profile.profile_photo.url if hasattr(new_user, 'profile') and new_user.profile.profile_photo else None,
->>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
+                'profile_photo': new_user.profile.profile_photo.url if hasattr(new_user, 'profile') and new_user.profile.profile_photo else (company.profile_photo.url if company and company.profile_photo else None),
             }
             
             print(f"UserCreateView - Returning response: {response_data}")

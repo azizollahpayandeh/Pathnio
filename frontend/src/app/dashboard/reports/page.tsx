@@ -20,10 +20,6 @@ import {
   DollarSign,
   Car,
   User,
-<<<<<<< HEAD
-  Calendar,
-=======
->>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
   Activity,
   BarChart3,
   PieChart,
@@ -260,11 +256,7 @@ export default function ReportsPage() {
                             padding: 20,
                             font: {
                               size: 12,
-<<<<<<< HEAD
-                              weight: '600',
-=======
                               weight: 'bold',
->>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                             },
                           },
                         },
@@ -315,11 +307,7 @@ export default function ReportsPage() {
                             padding: 20,
                             font: {
                               size: 12,
-<<<<<<< HEAD
-                              weight: '600',
-=======
                               weight: 'bold',
->>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                             },
                           },
                         },
@@ -337,20 +325,12 @@ export default function ReportsPage() {
                           beginAtZero: true,
                           grid: {
                             color: 'rgba(0, 0, 0, 0.05)',
-<<<<<<< HEAD
-                            drawBorder: false,
-=======
->>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                           },
                           ticks: {
                             color: '#6b7280',
                             font: {
                               size: 12,
-<<<<<<< HEAD
-                              weight: '500',
-=======
                               weight: 'normal',
->>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                             },
                           },
                         },
@@ -362,11 +342,7 @@ export default function ReportsPage() {
                             color: '#6b7280',
                             font: {
                               size: 12,
-<<<<<<< HEAD
-                              weight: '500',
-=======
                               weight: 'normal',
->>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                             },
                           },
                         },
@@ -419,20 +395,12 @@ export default function ReportsPage() {
                           beginAtZero: true,
                           grid: {
                             color: 'rgba(0, 0, 0, 0.05)',
-<<<<<<< HEAD
-                            drawBorder: false,
-=======
->>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                           },
                           ticks: {
                             color: '#6b7280',
                             font: {
                               size: 12,
-<<<<<<< HEAD
-                              weight: '500',
-=======
                               weight: 'normal',
->>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                             },
                             callback: function(value) {
                               return '₺' + (value as number / 1000) + 'K';
@@ -447,11 +415,7 @@ export default function ReportsPage() {
                             color: '#6b7280',
                             font: {
                               size: 12,
-<<<<<<< HEAD
-                              weight: '500',
-=======
                               weight: 'normal',
->>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                             },
                           },
                         },
@@ -508,20 +472,12 @@ export default function ReportsPage() {
                           max: 100,
                           grid: {
                             color: 'rgba(0, 0, 0, 0.05)',
-<<<<<<< HEAD
-                            drawBorder: false,
-=======
->>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                           },
                           ticks: {
                             color: '#6b7280',
                             font: {
                               size: 12,
-<<<<<<< HEAD
-                              weight: '500',
-=======
                               weight: 'normal',
->>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                             },
                             stepSize: 20,
                           },
@@ -534,11 +490,7 @@ export default function ReportsPage() {
                             color: '#6b7280',
                             font: {
                               size: 12,
-<<<<<<< HEAD
-                              weight: '500',
-=======
                               weight: 'normal',
->>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                             },
                           },
                         },

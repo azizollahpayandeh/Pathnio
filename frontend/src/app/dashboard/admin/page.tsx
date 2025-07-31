@@ -215,7 +215,8 @@ export default function AdminDashboardPage() {
       setUsers(res.data);
     } catch (e) {
       console.error("Admin - Error fetching users:", e);
-      router.push("/dashboard");
+      // Don't redirect to dashboard, just show an error message instead
+      setUsers([]);
     } finally {
       setLoading(false);
     }

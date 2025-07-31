@@ -141,3 +141,52 @@ class LoginAttempt(models.Model):
     def __str__(self):
         status = "Success" if self.success else "Failed"
         return f"{self.username} - {status} - {self.timestamp}"
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    profile_photo = models.ImageField(upload_to='profiles/', blank=True, null=True)
+    
+    def __str__(self):
+        return f"Profile - {self.user.username}"
+
+class Alert(models.Model):
+    PRIORITY_CHOICES = [
+        ('low', 'Low'),
+        ('medium', 'Medium'),
+        ('high', 'High'),
+        ('critical', 'Critical'),
+    ]
+    
+    ALERT_TYPE_CHOICES = [
+        ('login', 'Login'),
+        ('logout', 'Logout'),
+        ('password_change', 'Password Change'),
+        ('profile_update', 'Profile Update'),
+        ('user_created', 'User Created'),
+        ('user_updated', 'User Updated'),
+        ('user_deleted', 'User Deleted'),
+        ('security_issue', 'Security Issue'),
+        ('failed_login', 'Failed Login'),
+        ('account_locked', 'Account Locked'),
+        ('system', 'System Alert'),
+    ]
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='alerts')
+    alert_type = models.CharField(max_length=20, choices=ALERT_TYPE_CHOICES)
+    title = models.CharField(max_length=255)
+    message = models.TextField()
+    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='medium')
+    read = models.BooleanField(default=False)
+    ip_address = models.GenericIPAddressField(blank=True, null=True)
+    user_agent = models.TextField(blank=True, null=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-timestamp']
+        indexes = [
+            models.Index(fields=['user', 'read', 'timestamp']),
+            models.Index(fields=['alert_type', 'timestamp']),
+        ]
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.title} - {self.priority}"

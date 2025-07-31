@@ -167,15 +167,6 @@ const EXPENSE_DETAILS = {
   }
 };
 
-<<<<<<< HEAD
-// Replace 'any' with a specific Expense type
-interface Expense {
-  id: string;
-  amount: number;
-  description: string;
-  date: string;
-  // Add more fields as needed
-=======
 // Define the complete Expense interface to match the data structure
 interface Expense {
   id: number;
@@ -201,7 +192,6 @@ interface Expense {
   payment_date: string | null;
   bank_transaction_id: string | null;
   category_details: any;
->>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
 }
 
 export default function ExpenseDetailPage() {
