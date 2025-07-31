@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
-from .models import Company, Driver, ContactMessage, SiteSettings
+from .models import Company, Driver, ContactMessage, SiteSettings, Profile, Alert
 from djoser.serializers import UserSerializer as DjoserUserSerializer, UserCreateSerializer as DjoserUserCreateSerializer
 
 class UserSerializer(serializers.ModelSerializer):
@@ -167,11 +167,16 @@ class CompanySerializer(serializers.ModelSerializer):
         }
         return representation
 
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ('profile_photo',)
 class CompanyUpdateSerializer(serializers.ModelSerializer):
     """Serializer for updating existing company profiles"""
     
     # Add language field for frontend compatibility
     language = serializers.CharField(required=False, write_only=True)
+    profile_photo = serializers.ImageField(required=False)
     
     class Meta:
         model = Company
@@ -264,4 +269,11 @@ class ActivityLogSerializer(serializers.Serializer):
     timestamp = serializers.DateTimeField()
     ip_address = serializers.IPAddressField()
     user_agent = serializers.CharField()
-    details = serializers.JSONField(required=False) 
+    details = serializers.JSONField(required=False)
+
+# Alert Serializer
+class AlertSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Alert
+        fields = ('id', 'alert_type', 'title', 'message', 'priority', 'read', 'ip_address', 'user_agent', 'timestamp')
+        read_only_fields = ('id', 'timestamp')

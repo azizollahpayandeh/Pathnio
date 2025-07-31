@@ -22,12 +22,12 @@ from rest_framework.permissions import IsAdminUser
 
 from .models import (
     Company, Driver, ContactMessage, SiteSettings, 
-    ActivityLog, UserSession, SecuritySettings, LoginAttempt
+    ActivityLog, UserSession, SecuritySettings, LoginAttempt, Profile, Alert
 )
 from .serializers import (
     CompanySerializer, CompanyUpdateSerializer, CompanyUserSerializer, DriverSerializer, ContactMessageSerializer, 
     SiteSettingsSerializer, LoginSerializer, PasswordChangeSerializer,
-    UserProfileUpdateSerializer, ActivityLogSerializer
+    UserProfileUpdateSerializer, ActivityLogSerializer, AlertSerializer
 )
 
 logger = logging.getLogger(__name__)
@@ -55,6 +55,21 @@ def log_activity(request, action, details=None, user=None):
     except Exception as e:
         logger.error(f"Failed to log activity: {e}")
 
+def create_alert(user, alert_type, title, message, priority='medium', request=None):
+    """Create a new alert for the user"""
+    try:
+        Alert.objects.create(
+            user=user,
+            alert_type=alert_type,
+            title=title,
+            message=message,
+            priority=priority,
+            ip_address=get_client_ip(request) if request else None,
+            user_agent=request.META.get('HTTP_USER_AGENT', '') if request else None
+        )
+        logger.info(f"Alert created for user {user.username}: {title}")
+    except Exception as e:
+        logger.error(f"Failed to create alert: {e}")
 def check_login_attempts(username, ip_address):
     """Check if user is locked out due to too many failed attempts"""
     from datetime import timedelta
@@ -125,6 +140,17 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 'method': 'jwt'
             }, user)
             
+<<<<<<< HEAD
+=======
+            # Create login alert
+            create_alert(
+                user=user,
+                alert_type='login',
+                title='Successful Login',
+                message=f'You logged in successfully from IP: {get_client_ip(request)}',
+                priority='low',
+                request=request
+            )
             # Generate JWT tokens
             refresh = RefreshToken.for_user(user)
             access_token = refresh.access_token
@@ -163,6 +189,16 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             # Record failed login attempt (even if user does not exist)
             record_login_attempt(username, ip_address, user_agent, False, user_obj)
             
+            # Create failed login alert for existing users
+            if user_obj:
+                create_alert(
+                    user=user_obj,
+                    alert_type='failed_login',
+                    title='Failed Login Attempt',
+                    message=f'Failed login attempt from IP: {ip_address}',
+                    priority='high',
+                    request=request
+                )
             # Improved error message
             if not user_obj:
                 logger.warning(f"Login attempt with non-existent username: {username}")
@@ -267,6 +303,19 @@ class LoginView(APIView):
                     'method': 'password'
                 }, user)
                 
+<<<<<<< HEAD
+=======
+                # Create login alert
+                create_alert(
+                    user=user,
+                    alert_type='login',
+                    title='Successful Login',
+                    message=f'You logged in successfully from IP: {ip_address}',
+                    priority='low',
+                    request=request
+                )
+                
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                 # Generate JWT tokens
                 refresh = RefreshToken.for_user(user)
                 access_token = refresh.access_token
@@ -332,6 +381,15 @@ class LogoutView(APIView):
                 'session_id': request.session.session_key
             })
             
+            # Create logout alert
+            create_alert(
+                user=request.user,
+                alert_type='logout',
+                title='Logout',
+                message=f'You logged out from IP: {get_client_ip(request)}',
+                priority='low',
+                request=request
+            )
             # Invalidate session
             if request.session:
                 session_key = request.session.session_key
@@ -383,6 +441,17 @@ class PasswordChangeView(APIView):
                 'password_changed_at': timezone.now().isoformat()
             })
             
+<<<<<<< HEAD
+=======
+            # Create password change alert
+            create_alert(
+                user=user,
+                alert_type='password_change',
+                title='Password Changed',
+                message=f'Your password was changed successfully from IP: {get_client_ip(request)}',
+                priority='medium',
+                request=request
+            )
             return Response({'detail': 'Password changed successfully.'})
         else:
             print(f"PasswordChangeView - Serializer errors: {serializer.errors}")
@@ -420,6 +489,15 @@ class UserProfileView(APIView):
                 'updated_fields': list(request.data.keys())
             })
             
+            # Create profile update alert
+            create_alert(
+                user=request.user,
+                alert_type='profile_update',
+                title='Profile Updated',
+                message=f'Your profile was updated from IP: {get_client_ip(request)}',
+                priority='low',
+                request=request
+            )
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -737,7 +815,11 @@ class UserListView(APIView):
                 'is_superuser': u.is_superuser,
                 'is_manager': company is not None,
                 'date_joined': u.date_joined,
+<<<<<<< HEAD
                 'profile_photo': company.profile_photo.url if company and company.profile_photo else None,
+=======
+                'profile_photo': u.profile.profile_photo.url if hasattr(u, 'profile') and u.profile.profile_photo else (company.profile_photo.url if company and company.profile_photo else None),
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
             }
             data.append(user_data)
             print(f"UserListView - User {u.id}: {u.username} - {full_name} - Company: {getattr(company, 'company_name', 'None')}")
@@ -828,8 +910,14 @@ class UserCreateView(APIView):
             full_name = request.data.get('full_name', '')
             phone = request.data.get('phone', '')
             company_name = request.data.get('company_name', '')
+<<<<<<< HEAD
             
             print(f"UserCreateView - Extracted data: username={username}, email={email}, password={'***' if password else 'None'}, full_name={full_name}, phone={phone}, company_name={company_name}")
+=======
+            role = request.data.get('role', 'user')  # 'user', 'manager', 'admin', 'superadmin'
+            
+            print(f"UserCreateView - Extracted data: username={username}, email={email}, password={'***' if password else 'None'}, full_name={full_name}, phone={phone}, company_name={company_name}, role={role}")
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
             
             # بررسی وجود فیلدهای اجباری
             if not username or not email or not password:
@@ -851,7 +939,7 @@ class UserCreateView(APIView):
                     'detail': 'Email already exists.'
                 }, status=400)
             
-            print(f"UserCreateView - Creating new user: {username}")
+            print(f"UserCreateView - Creating new user: {username} with role: {role}")
             
             # ایجاد کاربر جدید
             new_user = User.objects.create_user(
@@ -862,12 +950,21 @@ class UserCreateView(APIView):
                 last_name=' '.join(full_name.split()[1:]) if full_name and len(full_name.split()) > 1 else ''
             )
             
-            print(f"UserCreateView - User created successfully: {new_user.id}")
+            # تنظیم نقش کاربر
+            if role == 'admin':
+                new_user.is_staff = True
+            elif role == 'superadmin':
+                new_user.is_staff = True
+                new_user.is_superuser = True
+            
+            new_user.save()
+            
+            print(f"UserCreateView - User created successfully: {new_user.id}, is_staff: {new_user.is_staff}, is_superuser: {new_user.is_superuser}")
             
             # Verify user was actually saved
             try:
                 saved_user = User.objects.get(id=new_user.id)
-                print(f"UserCreateView - User verification: ID={saved_user.id}, Username={saved_user.username}, Email={saved_user.email}, Active={saved_user.is_active}")
+                print(f"UserCreateView - User verification: ID={saved_user.id}, Username={saved_user.username}, Email={saved_user.email}, Active={saved_user.is_active}, is_staff: {saved_user.is_staff}")
                 
                 # Test authentication
                 test_auth = authenticate(username=saved_user.username, password=password)
@@ -884,7 +981,7 @@ class UserCreateView(APIView):
             
             # اگر company_name داده شده، Company Profile ایجاد کن
             company = None
-            if company_name and company_name.strip():
+            if (company_name and company_name.strip()) or role == 'manager':
                 print(f"UserCreateView - Creating company profile: {company_name}")
                 company = Company.objects.create(
                     user=new_user,
@@ -893,6 +990,14 @@ class UserCreateView(APIView):
                     phone=phone
                 )
                 print(f"UserCreateView - Company profile created: {company.id}")
+
+            # Profile photo
+            profile_photo = request.FILES.get('profile_photo')
+            if profile_photo:
+                profile, created = Profile.objects.get_or_create(user=new_user)
+                profile.profile_photo = profile_photo
+                profile.save()
+                print(f"UserCreateView - Profile photo saved for user: {new_user.id}")
             
             # لاگ فعالیت
             log_activity(request, 'user_created', {
@@ -900,6 +1005,15 @@ class UserCreateView(APIView):
                 'created_user_username': new_user.username
             })
             
+            # Create alert for new user
+            create_alert(
+                user=new_user,
+                alert_type='user_created',
+                title='Account Created',
+                message=f'Your account was created successfully by {user.username}',
+                priority='medium',
+                request=request
+            )
             response_data = {
                 'id': new_user.id,
                 'username': new_user.username,
@@ -911,7 +1025,11 @@ class UserCreateView(APIView):
                 'is_superuser': new_user.is_superuser,
                 'is_manager': company is not None,
                 'date_joined': new_user.date_joined,
+<<<<<<< HEAD
                 'profile_photo': getattr(company, 'profile_photo.url', None) if company else None,
+=======
+                'profile_photo': new_user.profile.profile_photo.url if hasattr(new_user, 'profile') and new_user.profile.profile_photo else None,
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
             }
             
             print(f"UserCreateView - Returning response: {response_data}")
@@ -958,6 +1076,21 @@ class UserUpdateView(APIView):
                 target_user.first_name = full_name.split()[0] if full_name else ''
                 target_user.last_name = ' '.join(full_name.split()[1:]) if full_name and len(full_name.split()) > 1 else ''
             
+            # بروزرسانی نقش کاربر
+            if 'role' in request.data:
+                role = request.data['role']
+                if role == 'user':
+                    target_user.is_staff = False
+                    target_user.is_superuser = False
+                elif role == 'manager':
+                    target_user.is_staff = False
+                    target_user.is_superuser = False
+                elif role == 'admin':
+                    target_user.is_staff = True
+                    target_user.is_superuser = False
+                elif role == 'superadmin':
+                    target_user.is_staff = True
+                    target_user.is_superuser = True
             target_user.save()
             
             # بروزرسانی Company Profile اگر وجود دارد
@@ -984,12 +1117,26 @@ class UserUpdateView(APIView):
                 target_user.set_password(request.data['password'])
                 target_user.save()
             
+            # Profile photo
+            if 'profile_photo' in request.FILES:
+                profile, created = Profile.objects.get_or_create(user=target_user)
+                profile.profile_photo = request.FILES['profile_photo']
+                profile.save()
             # لاگ فعالیت
             log_activity(request, 'user_updated', {
                 'updated_user_id': target_user.id,
                 'updated_user_username': target_user.username
             })
             
+            # Create alert for updated user
+            create_alert(
+                user=target_user,
+                alert_type='user_updated',
+                title='Account Updated',
+                message=f'Your account was updated by {user.username}',
+                priority='medium',
+                request=request
+            )
             # بروزرسانی company reference بعد از تغییرات
             company = getattr(target_user, 'company_profile', None)
             
@@ -1004,7 +1151,7 @@ class UserUpdateView(APIView):
                 'is_superuser': target_user.is_superuser,
                 'is_manager': company is not None,
                 'date_joined': target_user.date_joined,
-                'profile_photo': getattr(company, 'profile_photo.url', None) if company else None,
+                'profile_photo': target_user.profile.profile_photo.url if hasattr(target_user, 'profile') and target_user.profile.profile_photo else (company.profile_photo.url if company and company.profile_photo else None),
             })
             
         except User.DoesNotExist:
@@ -1041,6 +1188,15 @@ class UserDeleteView(APIView):
                 'deleted_user_username': target_user.username
             })
             
+            # Create alert for deleted user (before deletion)
+            create_alert(
+                user=target_user,
+                alert_type='user_deleted',
+                title='Account Deleted',
+                message=f'Your account was deleted by {user.username}',
+                priority='critical',
+                request=request
+            )
             target_user.delete()
             
             return Response({
@@ -1056,3 +1212,35 @@ class UserDeleteView(APIView):
             return Response({
                 'detail': 'Failed to delete user. Please try again.'
             }, status=500)
+
+class UserAlertsView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        """Get user's alerts"""
+        alerts = Alert.objects.filter(user=request.user).order_by('-timestamp')[:50]
+        serializer = AlertSerializer(alerts, many=True)
+        return Response(serializer.data)
+    
+    def patch(self, request, alert_id):
+        """Mark alert as read"""
+        try:
+            alert = Alert.objects.get(id=alert_id, user=request.user)
+            alert.read = True
+            alert.save()
+            return Response({'detail': 'Alert marked as read.'})
+        except Alert.DoesNotExist:
+            return Response({'detail': 'Alert not found.'}, status=404)
+
+class AdminAlertsView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        """Get all alerts for admin"""
+        user = request.user
+        if not (user.is_staff or hasattr(user, 'company_profile')):
+            return Response({'detail': 'Permission denied.'}, status=403)
+        
+        alerts = Alert.objects.all().order_by('-timestamp')[:100]
+        serializer = AlertSerializer(alerts, many=True)
+        return Response(serializer.data)

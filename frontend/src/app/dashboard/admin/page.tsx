@@ -3,10 +3,9 @@ import { useEffect, useState } from "react";
 import api from "../../api";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { 
-  MessageSquare, 
-  Users as UsersIcon, 
-  Truck, 
+import {
+  Users,
+  MessageSquare,
   Shield,
   Settings,
   BarChart3,
@@ -14,91 +13,25 @@ import {
   Bell,
   Search,
   Filter,
-  Plus,
-  Edit,
-  Trash2,
-  Eye,
   CheckCircle,
-  XCircle,
   Clock,
-  AlertCircle,
   TrendingUp,
-  TrendingDown,
-  UserPlus,
-  Mail,
-  Phone,
-  MapPin,
   Calendar, 
   Database,
   Server,
-  Cpu,
   HardDrive,
+  Cpu,
   Wifi,
-  Globe,
-  Zap,
-  Crown,
-  Star,
-  Award,
-  Target,
-  PieChart,
-  LineChart,
   RefreshCw,
-  Download,
-  Upload,
-  Archive,
-  Lock,
-  Unlock,
-  Key,
-  CreditCard,
-  DollarSign,
-  Package,
-  Car,
-  Route,
-  Fuel,
-  Gauge,
-  Timer,
-  AlertTriangle,
-  Info,
-  HelpCircle,
-  FileText,
-  Folder,
-  Image as ImageIcon,
-  Video,
-  Music,
-  File,
-  FolderOpen,
-  Grid,
-  List,
-  MoreVertical,
-  ChevronRight,
-  ChevronDown,
-  ArrowRight,
-  ArrowUp,
-  ArrowDown,
-  Minus,
-  Plus as PlusIcon,
-  X,
-  Check,
-  RotateCcw,
-  Save,
-  Send,
-  Reply,
-  Forward,
-  Copy,
-  Link,
-  Unlink,
-  ExternalLink,
-  Maximize,
-  Minimize,
-  Move,
-  Crop,
-  Type,
-  Bold,
-  Italic,
-  Underline,
-    AlignCenter,
   Building,
   User,
+  UserPlus,
+  Phone,
+  AlertCircle,
+  Send,
+  Car,
+  Star,
+  Zap,
 } from "lucide-react";
 
 interface User {
@@ -109,7 +42,7 @@ interface User {
   is_superuser: boolean;
   is_manager: boolean;
   date_joined: string;
-  profile_photo?: string;
+  profile_photo?: string | File | null;
   full_name?: string;
   phone?: string;
   company_name?: string;
@@ -118,6 +51,7 @@ interface User {
   last_login?: string;
   login_count?: number;
   role: "superadmin" | "admin" | "manager" | "user";
+  [key: string]: any;
 }
 
 interface SystemStats {
@@ -159,6 +93,7 @@ const emptyUser: Partial<User> = {
   phone: "",
   company_name: "",
   is_staff: false,
+  is_manager: false,
   status: "active",
   role: "user",
 };
@@ -306,28 +241,60 @@ export default function AdminDashboardPage() {
     setEditMode("view");
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    if (e.target.type === 'file') {
+      const files = (e.target as HTMLInputElement).files;
+      if (files && files.length > 0) {
+        setForm({ ...form, [name]: files[0] });
+      }
+    } else {
+      setForm(prevForm => {
+        const updatedForm = { ...prevForm, [name]: value };
+
+        // Update boolean flags based on role
+        if (name === "role") {
+          updatedForm.is_staff = value === 'admin' || value === 'superadmin';
+          updatedForm.is_superuser = value === 'superadmin';
+          updatedForm.is_manager = value === 'manager';
+        }
+        
+        return updatedForm;
+      });
+    }
   };
 
   const handleSave = async () => {
     setFormLoading(true);
     setFormError("");
+
+    const formData = new FormData();
+    Object.keys(form).forEach(key => {
+      if (key === 'profile_photo' && form.profile_photo instanceof File) {
+        formData.append(key, form.profile_photo);
+      } else if (form[key] !== null && form[key] !== undefined) {
+        formData.append(key, form[key]);
+      }
+    });
+
     try {
       console.log("Admin - handleSave called with editMode:", editMode);
-      console.log("Admin - Form data:", form);
       
       if (editMode === "edit" && selectedUser) {
         // Update existing user
         console.log("Admin - Updating user:", selectedUser.id);
-        const res = await api.patch(`accounts/users/${selectedUser.id}/`, form);
+        const res = await api.patch(`accounts/users/${selectedUser.id}/`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
         console.log("Admin - Update response:", res.data);
         setUsers(users.map(u => u.id === selectedUser.id ? { ...u, ...res.data } as User : u));
         setEditMode("view");
       } else if (editMode === "add") {
         // Create new user
         console.log("Admin - Creating new user with data:", form);
-        const res = await api.post("accounts/users/", form);
+        const res = await api.post("accounts/users/", formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
         console.log("Admin - Create response:", res.data);
         setUsers([res.data, ...users]);
         setShowModal(false);
@@ -388,9 +355,9 @@ export default function AdminDashboardPage() {
           <div className="flex flex-wrap gap-3">
             {[
               { id: 'dashboard', label: 'Dashboard', icon: BarChart3, color: 'from-blue-500 to-indigo-600' },
-              { id: 'users', label: 'Users', icon: UsersIcon, color: 'from-green-500 to-emerald-600' },
+              { id: 'users', label: 'Users', icon: Users, color: 'from-green-500 to-emerald-600' },
               { id: 'messages', label: 'Messages', icon: MessageSquare, color: 'from-purple-500 to-pink-600' },
-              { id: 'drivers', label: 'Drivers', icon: Truck, color: 'from-orange-500 to-red-600' },
+              { id: 'drivers', label: 'Drivers', icon: Car, color: 'from-orange-500 to-red-600' },
               { id: 'analytics', label: 'Analytics', icon: TrendingUp, color: 'from-cyan-500 to-blue-600' },
               { id: 'system', label: 'System', icon: Server, color: 'from-gray-500 to-slate-600' },
               { id: 'logs', label: 'Activity Logs', icon: Activity, color: 'from-yellow-500 to-amber-600' },
@@ -420,7 +387,7 @@ export default function AdminDashboardPage() {
             {/* System Stats */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { label: "Total Users", value: systemStats.totalUsers, icon: UsersIcon, color: "from-blue-500 to-indigo-600", change: "+12%" },
+                { label: "Total Users", value: systemStats.totalUsers, icon: Users, color: "from-blue-500 to-indigo-600", change: "+12%" },
                 { label: "Active Users", value: systemStats.activeUsers, icon: CheckCircle, color: "from-green-500 to-emerald-600", change: "+8%" },
                 { label: "Total Messages", value: systemStats.totalMessages, icon: MessageSquare, color: "from-purple-500 to-pink-600", change: "+15%" },
                 { label: "System Health", value: `${systemStats.systemHealth}%`, icon: Shield, color: "from-orange-500 to-red-600", change: "+2%" },
@@ -543,7 +510,7 @@ export default function AdminDashboardPage() {
             </div>
           ) : users.length === 0 ? (
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-12 shadow-xl border border-white/20 text-center">
-              <UsersIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-600 mb-2">No Users Found</h3>
               <p className="text-gray-500 mb-6">Start by adding your first user to the system</p>
               <button
@@ -565,7 +532,13 @@ export default function AdminDashboardPage() {
                   <div className="flex items-center gap-4 mb-4">
                     <div className="relative">
                       <Image
-                        src={user.profile_photo || "/assets/images.png"}
+                        src={
+                          user.profile_photo && typeof user.profile_photo === 'string' 
+                            ? (user.profile_photo.startsWith('http') 
+                                ? user.profile_photo 
+                                : `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}${user.profile_photo}`)
+                            : "/assets/images.png"
+                        }
                         alt={user.username}
                         width={48}
                         height={48}
@@ -645,7 +618,15 @@ export default function AdminDashboardPage() {
                 {/* Header Section */}
                 <div className="flex flex-col items-center gap-4 mb-8">
                   <Image
-                    src={form.profile_photo || "/assets/images.png"}
+                    src={
+                      form.profile_photo instanceof File 
+                        ? URL.createObjectURL(form.profile_photo)
+                        : (form.profile_photo && typeof form.profile_photo === 'string'
+                            ? (form.profile_photo.startsWith('http') 
+                                ? form.profile_photo 
+                                : `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}${form.profile_photo}`)
+                            : "/assets/images.png")
+                    }
                     alt="Profile"
                     width={96}
                     height={96}
@@ -778,6 +759,34 @@ export default function AdminDashboardPage() {
                         />
                       </div>
                     )}
+                  </div>
+                  {/* Role */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Role</label>
+                    <select
+                      name="role"
+                      value={form.role || "user"}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 rounded-xl border-2 border-blue-200 shadow-sm focus:ring-4 focus:ring-blue-300 focus:border-blue-500 bg-white text-gray-900 transition-all duration-300"
+                      disabled={editMode === "view"}
+                    >
+                      <option value="user">User</option>
+                      <option value="manager">Manager</option>
+                      <option value="admin">Admin</option>
+                      <option value="superadmin">Superadmin</option>
+                    </select>
+                  </div>
+
+                  {/* Profile Photo */}
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Profile Photo</label>
+                    <input 
+                      type="file" 
+                      name="profile_photo" 
+                      onChange={e => setForm({ ...form, profile_photo: e.target.files?.[0] })}
+                      className="w-full px-4 py-3 rounded-xl border-2 border-blue-200 shadow-sm focus:ring-4 focus:ring-blue-300 focus:border-blue-500 bg-white text-gray-900 transition-all duration-300" 
+                      disabled={editMode === "view"} 
+                    />
                   </div>
 
                   {/* Error Message */}
@@ -936,7 +945,7 @@ export default function AdminDashboardPage() {
       {activeTab === 'drivers' && (
           <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
             <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-              <Truck className="w-6 h-6 text-orange-500" />
+              <Car className="w-6 h-6 text-orange-500" />
               Drivers Management
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

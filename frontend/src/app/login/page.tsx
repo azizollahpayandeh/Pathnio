@@ -1,44 +1,98 @@
-"use client";
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import FloatingAlert from "@/components/FloatingAlert";
-import api from "../api";
-import { Lock } from "lucide-react";
+'use client';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import FloatingAlert from '@/components/FloatingAlert';
+import api from '../api';
+import { Lock } from 'lucide-react';
+
+interface CompanyData {
+  companyName: string;
+  fullName: string;
+  phone: string;
+  email: string;
+  password: string;
+  address: string;
+}
 
 const companyFields = [
-  { label: "Company Name", name: "companyName", required: true, placeholder: "Enter company name" },
-  { label: "Full Name", name: "fullName", required: true, placeholder: "Enter your full name" },
-  { label: "Phone Number", name: "phone", required: true, placeholder: "Enter phone number" },
-  { label: "Email", name: "email", required: true, placeholder: "Enter email address" },
-  { label: "Password", name: "password", required: true, placeholder: "Create a password", type: "password" },
-  { label: "Head Office Address", name: "address", required: false, placeholder: "Enter head office address" },
+  {
+    label: 'Company Name',
+    name: 'companyName',
+    required: true,
+    placeholder: 'Enter company name',
+  },
+  {
+    label: 'Full Name',
+    name: 'fullName',
+    required: true,
+    placeholder: 'Enter your full name',
+  },
+  {
+    label: 'Phone Number',
+    name: 'phone',
+    required: true,
+    placeholder: 'Enter phone number',
+  },
+  {
+    label: 'Email',
+    name: 'email',
+    required: true,
+    placeholder: 'Enter email address',
+  },
+  {
+    label: 'Password',
+    name: 'password',
+    required: true,
+    placeholder: 'Create a password',
+    type: 'password',
+  },
+  {
+    label: 'Head Office Address',
+    name: 'address',
+    required: false,
+    placeholder: 'Enter head office address',
+  },
 ];
 
 export default function LoginPage() {
-  const [tab, setTab] = useState("login");
+  const [tab, setTab] = useState('login');
   const [registerLoading, setRegisterLoading] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
-  const [registerMessage, setRegisterMessage] = useState("");
-  const [alert, setAlert] = useState<{ type: "success" | "error"; msg: string } | null>(null);
+  const [registerMessage, setRegisterMessage] = useState('');
+  const [alert, setAlert] = useState<{
+    type: 'success' | 'error';
+    msg: string;
+  } | null>(null);
   const router = useRouter();
+
+  // Check if user is already logged in
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const access = localStorage.getItem('access');
+      if (access) {
+        // User is already logged in, redirect to dashboard
+        router.push('/dashboard');
+      }
+    }
+  }, [router]);
 
   // Register
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setRegisterLoading(true);
-    setRegisterMessage("");
+    setRegisterMessage('');
     const form = e.currentTarget;
     const formData = new FormData(form);
     const data: CompanyData = {
-      companyName: formData.get("companyName") as string,
-      fullName: formData.get("fullName") as string,
-      phone: formData.get("phone") as string,
-      email: formData.get("email") as string,
-      password: formData.get("password") as string,
-      address: formData.get("address") as string,
+      companyName: formData.get('companyName') as string,
+      fullName: formData.get('fullName') as string,
+      phone: formData.get('phone') as string,
+      email: formData.get('email') as string,
+      password: formData.get('password') as string,
+      address: formData.get('address') as string,
     };
     try {
-      const res = await api.post("accounts/register/company/", {
+      const res = await api.post('accounts/register/company/', {
         user: {
           username: data.email,
           email: data.email,
@@ -51,15 +105,20 @@ export default function LoginPage() {
         address: data.address,
       });
       if (res.status === 201 || res.status === 200) {
-        setAlert({ type: "success", msg: "Registration successful! You can now log in." });
-        setTab("login");
+        setAlert({
+          type: 'success',
+          msg: 'Registration successful! You can now log in.',
+        });
+        setTab('login');
       } else {
-        let errorMsg = res.data?.detail || "Registration failed. Please check your information.";
-        setAlert({ type: "error", msg: errorMsg });
+        let errorMsg =
+          res.data?.detail ||
+          'Registration failed. Please check your information.';
+        setAlert({ type: 'error', msg: errorMsg });
       }
     } catch (err: unknown) {
-      let errorMsg = "Registration failed. Please try again.";
-      if (err && typeof err === "object" && "response" in err) {
+      let errorMsg = 'Registration failed. Please try again.';
+      if (err && typeof err === 'object' && 'response' in err) {
         const response = (err as any).response;
         if (response?.data?.detail) {
           errorMsg = response.data.detail;
@@ -83,7 +142,7 @@ export default function LoginPage() {
           }
         }
       }
-      setAlert({ type: "error", msg: errorMsg });
+      setAlert({ type: 'error', msg: errorMsg });
     } finally {
       setRegisterLoading(false);
     }
@@ -95,32 +154,43 @@ export default function LoginPage() {
     setLoginLoading(true);
     const form = e.currentTarget;
     const formData = new FormData(form);
-    const username = formData.get("login-username") as string;
-    const password = formData.get("login-password") as string;
+    const username = formData.get('login-username') as string;
+    const password = formData.get('login-password') as string;
     try {
-      const res = await api.post("accounts/auth/login/", { username, password });
+      const res = await api.post('accounts/auth/login/', {
+        username,
+        password,
+      });
       if (res.status === 200) {
         const access = res.data.access;
         const refresh = res.data.refresh;
-        localStorage.setItem("access", access);
-        localStorage.setItem("refresh", refresh);
+        localStorage.setItem('access', access);
+        localStorage.setItem('refresh', refresh);
         // ذخیره user با نقش‌ها از پاسخ لاگین
         if (res.data.user) {
-          localStorage.setItem("user", JSON.stringify(res.data.user));
+          localStorage.setItem('user', JSON.stringify(res.data.user));
         }
-        setAlert({ type: "success", msg: "Login successful!" });
+        setAlert({ type: 'success', msg: 'Login successful!' });
         setTimeout(() => {
-          router.push("/dashboard");
+          router.push('/dashboard');
         }, 1500);
       } else {
-        setAlert({ type: "error", msg: res.data?.detail || "Check your credentials." });
+        setAlert({
+          type: 'error',
+          msg: res.data?.detail || 'Check your credentials.',
+        });
       }
     } catch (err: unknown) {
-      let errorMsg = "Login failed. Please try again.";
-      if (err && typeof err === "object" && "response" in err && (err as any).response?.data?.detail) {
+      let errorMsg = 'Login failed. Please try again.';
+      if (
+        err &&
+        typeof err === 'object' &&
+        'response' in err &&
+        (err as any).response?.data?.detail
+      ) {
         errorMsg = (err as any).response.data.detail;
       }
-      setAlert({ type: "error", msg: errorMsg });
+      setAlert({ type: 'error', msg: errorMsg });
     } finally {
       setLoginLoading(false);
     }
@@ -146,25 +216,38 @@ export default function LoginPage() {
           </div>
           <div className="flex justify-center w-full gap-2">
             <button
-              className={`flex-1 px-6 py-2 rounded-l-xl font-semibold transition-colors duration-200 cursor-pointer text-lg ${tab === "login" ? "bg-blue-600 text-white shadow" : "bg-gray-100 text-blue-700"}`}
-              onClick={() => setTab("login")}
+              className={`flex-1 px-6 py-2 rounded-l-xl font-semibold transition-colors duration-200 cursor-pointer text-lg ${
+                tab === 'login'
+                  ? 'bg-blue-600 text-white shadow'
+                  : 'bg-gray-100 text-blue-700'
+              }`}
+              onClick={() => setTab('login')}
             >
               Login
             </button>
             <button
-              className={`flex-1 px-6 py-2 rounded-r-xl font-semibold transition-colors duration-200 cursor-pointer text-lg ${tab === "register" ? "bg-blue-600 text-white shadow" : "bg-gray-100 text-blue-700"}`}
-              onClick={() => setTab("register")}
+              className={`flex-1 px-6 py-2 rounded-r-xl font-semibold transition-colors duration-200 cursor-pointer text-lg ${
+                tab === 'register'
+                  ? 'bg-blue-600 text-white shadow'
+                  : 'bg-gray-100 text-blue-700'
+              }`}
+              onClick={() => setTab('register')}
             >
               Register
             </button>
           </div>
         </div>
-        {tab === "login" ? (
+        {tab === 'login' ? (
           <>
-            <h2 className="text-2xl font-extrabold text-center text-blue-700 mb-8 tracking-tight">Sign In to Pathnio</h2>
+            <h2 className="text-2xl font-extrabold text-center text-blue-700 mb-8 tracking-tight">
+              Sign In to Pathnio
+            </h2>
             <form className="space-y-7" onSubmit={handleLogin}>
               <div>
-                <label htmlFor="login-username" className="block mb-2 text-sm font-semibold text-gray-700">
+                <label
+                  htmlFor="login-username"
+                  className="block mb-2 text-sm font-semibold text-gray-700"
+                >
                   Email
                 </label>
                 <input
@@ -177,7 +260,12 @@ export default function LoginPage() {
                 />
               </div>
               <div>
-                <label htmlFor="login-password" className="block mb-2 text-sm font-semibold text-gray-700">Password</label>
+                <label
+                  htmlFor="login-password"
+                  className="block mb-2 text-sm font-semibold text-gray-700"
+                >
+                  Password
+                </label>
                 <input
                   type="password"
                   id="login-password"
@@ -192,22 +280,32 @@ export default function LoginPage() {
                 className="w-full py-3 px-4 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl transition duration-200 shadow-lg cursor-pointer mt-2 text-lg"
                 disabled={loginLoading}
               >
-                {loginLoading ? "Signing In..." : "Sign In"}
+                {loginLoading ? 'Signing In...' : 'Sign In'}
               </button>
             </form>
           </>
         ) : (
           <>
-            <h2 className="text-2xl font-extrabold text-center text-blue-700 mb-8 tracking-tight">Register Your Company</h2>
-            {registerMessage && <div className="mb-4 text-center text-green-600 font-semibold">{registerMessage}</div>}
+            <h2 className="text-2xl font-extrabold text-center text-blue-700 mb-8 tracking-tight">
+              Register Your Company
+            </h2>
+            {registerMessage && (
+              <div className="mb-4 text-center text-green-600 font-semibold">
+                {registerMessage}
+              </div>
+            )}
             <form className="space-y-6" onSubmit={handleRegister}>
               {companyFields.map((field) => (
                 <div key={field.name}>
-                  <label htmlFor={field.name} className="block mb-2 text-sm font-semibold text-gray-700">
-                    {field.label}{field.required && <span className="text-red-500">*</span>}
+                  <label
+                    htmlFor={field.name}
+                    className="block mb-2 text-sm font-semibold text-gray-700"
+                  >
+                    {field.label}
+                    {field.required && <span className="text-red-500">*</span>}
                   </label>
                   <input
-                    type={field.type || "text"}
+                    type={field.type || 'text'}
                     id={field.name}
                     name={field.name}
                     className="w-full px-5 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50/60 placeholder:text-blue-300 text-blue-900 text-base shadow-sm"
@@ -221,14 +319,20 @@ export default function LoginPage() {
                 className="w-full py-3 px-4 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl transition duration-200 shadow-lg cursor-pointer mt-2 text-lg"
                 disabled={registerLoading}
               >
-                {registerLoading ? "Registering..." : "Register"}
+                {registerLoading ? 'Registering...' : 'Register'}
               </button>
             </form>
           </>
         )}
       </div>
       {/* Floating Alert */}
-      {alert && <FloatingAlert type={alert.type} msg={alert.msg} onClose={() => setAlert(null)} />}
+      {alert && (
+        <FloatingAlert
+          type={alert.type}
+          msg={alert.msg}
+          onClose={() => setAlert(null)}
+        />
+      )}
     </div>
   );
-} 
+}

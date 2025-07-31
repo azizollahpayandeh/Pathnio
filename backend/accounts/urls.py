@@ -6,7 +6,8 @@ from .views import (
     SupportTicketReplyView, LoginView, LogoutView, PasswordChangeView,
     UserProfileView, ActivityLogView, SecurityStatusView, check_auth_status,
     DriverDetailView, UserListView, UserRoleUpdateView, AllMessagesView, ProfileAPIView,
-    UserCreateView, UserUpdateView, UserDeleteView, TestCompanyRegistrationView, TestPhotoUploadView
+    UserCreateView, UserUpdateView, UserDeleteView, TestCompanyRegistrationView, TestPhotoUploadView,
+    UserAlertsView, AdminAlertsView
 )
 
 urlpatterns = [
@@ -35,6 +36,11 @@ urlpatterns = [
     path('contact/', ContactMessageCreateView.as_view(), name='contact-message'),
     path('drivers/', DriverListView.as_view(), name='drivers-list'),
     path('drivers/<int:pk>/', DriverDetailView.as_view(), name='driver-detail'),
+    
+    # Alerts URLs
+    path('alerts/', UserAlertsView.as_view(), name='user-alerts'),
+    path('alerts/<int:alert_id>/', UserAlertsView.as_view(), name='alert-mark-read'),
+    path('admin/alerts/', AdminAlertsView.as_view(), name='admin-alerts'),
     path('site-settings/', SiteSettingsView.as_view(), name='site-settings'),
     
     # Support URLs

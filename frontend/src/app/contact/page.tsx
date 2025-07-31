@@ -66,20 +66,47 @@ export default function ContactUs() {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setAlert(null);
     setIsSubmitting(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      setAlert({
-        type: 'success',
-        msg: '🎉 Your message has been sent successfully!',
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          subject: 'Contact Form Submission',
+          message: form.message,
+        }),
       });
-      setForm({ name: '', email: '', message: '' });
+
+      if (response.ok) {
+        setAlert({
+          type: 'success',
+          msg: '🎉 پیام شما با موفقیت ارسال شد!',
+        });
+        setForm({ name: '', email: '', message: '' });
+      } else {
+        const errorData = await response.json();
+        setAlert({
+          type: 'error',
+          msg: errorData.detail || 'خطا در ارسال پیام. لطفاً دوباره تلاش کنید.',
+        });
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setAlert({
+        type: 'error',
+        msg: 'خطا در اتصال به سرور. لطفاً دوباره تلاش کنید.',
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 2000);
+    }
   };
 
   useEffect(() => {

@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+<<<<<<< HEAD
 import {
   Route,
   Search,
@@ -12,6 +13,19 @@ import {
   Calendar,
   Clock,
   Download,
+=======
+import { 
+  Route, 
+  Search, 
+  Plus, 
+  Eye, 
+  User, 
+  Car, 
+  MapPin, 
+  Calendar, 
+  Clock, 
+  Download, 
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
   CheckCircle,
   XCircle,
   MoreVertical,
@@ -20,7 +34,11 @@ import {
   DollarSign,
   Zap,
   X,
+<<<<<<< HEAD
   Check,
+=======
+  Check
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
 } from 'lucide-react';
 
 // تعریف type مناسب برای Trip
@@ -49,6 +67,7 @@ interface AddTripModalProps {
 }
 
 const FAKE_TRIPS = [
+<<<<<<< HEAD
   {
     id: 1,
     driver: 'Amir Rezaei',
@@ -209,6 +228,18 @@ const FAKE_TRIPS = [
     rating: 4.9,
     notes: 'Excellent trip with great feedback',
   },
+=======
+  { id: 1, driver: "Amir Rezaei", vehicle: "12A345-IR", origin: "Tehran", destination: "Isfahan", start: "2024-07-01 08:00", end: "2024-07-01 12:00", status: "Completed", distance: "450 km", duration: "4h 0m", fuel_used: "36L", cost: "2,450,000", rating: 4.8, notes: "Smooth trip, no issues" },
+  { id: 2, driver: "Sara Ahmadi", vehicle: "22B456-IR", origin: "Shiraz", destination: "Tabriz", start: "2024-07-02 09:00", end: "2024-07-02 15:00", status: "Completed", distance: "1,200 km", duration: "6h 0m", fuel_used: "85L", cost: "4,800,000", rating: 4.5, notes: "Long distance trip completed successfully" },
+  { id: 3, driver: "Mohammad Karimi", vehicle: "33C567-IR", origin: "Mashhad", destination: "Tehran", start: "2024-07-03 07:30", end: "2024-07-03 13:00", status: "In Progress", distance: "900 km", duration: "5h 30m", fuel_used: "65L", cost: "3,600,000", rating: 0, notes: "Currently en route" },
+  { id: 4, driver: "Reza Mohammadi", vehicle: "44D678-IR", origin: "Isfahan", destination: "Qom", start: "2024-07-04 10:00", end: "2024-07-04 14:00", status: "Completed", distance: "300 km", duration: "4h 0m", fuel_used: "24L", cost: "1,800,000", rating: 4.9, notes: "Excellent performance" },
+  { id: 5, driver: "Fatemeh Hosseini", vehicle: "55E789-IR", origin: "Qom", destination: "Mashhad", start: "2024-07-05 11:00", end: "2024-07-05 18:00", status: "Cancelled", distance: "0 km", duration: "0h 0m", fuel_used: "0L", cost: "0", rating: 0, notes: "Trip cancelled due to weather" },
+  { id: 6, driver: "Hossein Alavi", vehicle: "66F890-IR", origin: "Tabriz", destination: "Shiraz", start: "2024-07-06 06:00", end: "2024-07-06 13:00", status: "Completed", distance: "1,500 km", duration: "7h 0m", fuel_used: "105L", cost: "6,000,000", rating: 4.7, notes: "Long haul completed" },
+  { id: 7, driver: "Maryam Jafari", vehicle: "77G901-IR", origin: "Tehran", destination: "Isfahan", start: "2024-07-07 08:30", end: "2024-07-07 12:30", status: "Completed", distance: "450 km", duration: "4h 0m", fuel_used: "38L", cost: "2,500,000", rating: 4.6, notes: "Regular route trip" },
+  { id: 8, driver: "Ali Naderi", vehicle: "88H012-IR", origin: "Mashhad", destination: "Qom", start: "2024-07-08 09:00", end: "2024-07-08 15:00", status: "In Progress", distance: "600 km", duration: "6h 0m", fuel_used: "45L", cost: "3,200,000", rating: 0, notes: "Currently traveling" },
+  { id: 9, driver: "Zahra Kazemi", vehicle: "99I123-IR", origin: "Isfahan", destination: "Tehran", start: "2024-07-09 10:00", end: "2024-07-09 14:00", status: "Completed", distance: "450 km", duration: "4h 0m", fuel_used: "35L", cost: "2,300,000", rating: 4.8, notes: "Return trip completed" },
+  { id: 10, driver: "Alireza Sadeghi", vehicle: "10J234-IR", origin: "Tehran", destination: "Shiraz", start: "2024-07-10 07:00", end: "2024-07-10 13:00", status: "Completed", distance: "900 km", duration: "6h 0m", fuel_used: "72L", cost: "4,100,000", rating: 4.9, notes: "Excellent trip with great feedback" },
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
 ];
 
 // Add Trip Modal Component
@@ -226,7 +257,11 @@ const AddTripModal = ({ isOpen, onClose, onAddTrip }: AddTripModalProps) => {
     fuel_used: '',
     cost: '',
     rating: 0,
+<<<<<<< HEAD
     notes: '',
+=======
+    notes: ''
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -234,6 +269,7 @@ const AddTripModal = ({ isOpen, onClose, onAddTrip }: AddTripModalProps) => {
 
   if (!isOpen) return null;
 
+<<<<<<< HEAD
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -241,10 +277,16 @@ const AddTripModal = ({ isOpen, onClose, onAddTrip }: AddTripModalProps) => {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+=======
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
   };
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
+<<<<<<< HEAD
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
     const newTrip: Trip = {
@@ -255,6 +297,18 @@ const AddTripModal = ({ isOpen, onClose, onAddTrip }: AddTripModalProps) => {
 
     onAddTrip(newTrip);
 
+=======
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    const newTrip: Trip = {
+      ...formData,
+      id: Date.now(),
+      rating: Number(formData.rating) || 0
+    };
+    
+    onAddTrip(newTrip);
+    
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
     // Reset form
     setFormData({
       driver: '',
@@ -269,9 +323,15 @@ const AddTripModal = ({ isOpen, onClose, onAddTrip }: AddTripModalProps) => {
       fuel_used: '',
       cost: '',
       rating: 0,
+<<<<<<< HEAD
       notes: '',
     });
 
+=======
+      notes: ''
+    });
+    
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
     setIsSubmitting(false);
     setCurrentStep(1);
     onClose();
@@ -288,6 +348,10 @@ const AddTripModal = ({ isOpen, onClose, onAddTrip }: AddTripModalProps) => {
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl relative transform transition-all animate-in slide-in-from-bottom-4 duration-300 border border-gray-100 max-h-[90vh] overflow-hidden">
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
           <div className="flex items-center gap-3">
@@ -295,9 +359,13 @@ const AddTripModal = ({ isOpen, onClose, onAddTrip }: AddTripModalProps) => {
               <Plus className="w-5 h-5 text-purple-600" />
             </div>
             <div>
+<<<<<<< HEAD
               <h2 className="text-xl font-semibold text-gray-900">
                 Add New Trip
               </h2>
+=======
+              <h2 className="text-xl font-semibold text-gray-900">Add New Trip</h2>
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
               <p className="text-sm text-gray-500">Step {currentStep} of 3</p>
             </div>
           </div>
@@ -314,6 +382,7 @@ const AddTripModal = ({ isOpen, onClose, onAddTrip }: AddTripModalProps) => {
           <div className="flex items-center gap-2">
             {[1, 2, 3].map((step) => (
               <div key={step} className="flex items-center flex-1">
+<<<<<<< HEAD
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
                     step <= currentStep
@@ -329,6 +398,19 @@ const AddTripModal = ({ isOpen, onClose, onAddTrip }: AddTripModalProps) => {
                       step < currentStep ? 'bg-purple-600' : 'bg-gray-200'
                     }`}
                   />
+=======
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
+                  step <= currentStep 
+                    ? 'bg-purple-600 text-white' 
+                    : 'bg-gray-200 text-gray-500'
+                }`}>
+                  {step < currentStep ? <Check className="w-4 h-4" /> : step}
+                </div>
+                {step < 3 && (
+                  <div className={`flex-1 h-1 mx-2 rounded-full transition-colors ${
+                    step < currentStep ? 'bg-purple-600' : 'bg-gray-200'
+                  }`} />
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                 )}
               </div>
             ))}
@@ -550,6 +632,7 @@ const AddTripModal = ({ isOpen, onClose, onAddTrip }: AddTripModalProps) => {
 
               {/* Review Section */}
               <div className="bg-gray-50 rounded-xl p-6 mt-6">
+<<<<<<< HEAD
                 <h3 className="text-lg font-medium text-gray-900 mb-4">
                   Review Trip Information
                 </h3>
@@ -565,12 +648,28 @@ const AddTripModal = ({ isOpen, onClose, onAddTrip }: AddTripModalProps) => {
                     <span className="ml-2 font-medium">
                       {formData.vehicle || 'Not specified'}
                     </span>
+=======
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Review Trip Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="text-gray-600">Driver:</span>
+                    <span className="ml-2 font-medium">{formData.driver || 'Not specified'}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-600">Vehicle:</span>
+                    <span className="ml-2 font-medium">{formData.vehicle || 'Not specified'}</span>
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                   </div>
                   <div>
                     <span className="text-gray-600">Route:</span>
                     <span className="ml-2 font-medium">
+<<<<<<< HEAD
                       {formData.origin && formData.destination
                         ? `${formData.origin} → ${formData.destination}`
+=======
+                      {formData.origin && formData.destination 
+                        ? `${formData.origin} → ${formData.destination}` 
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                         : 'Not specified'}
                     </span>
                   </div>
@@ -593,7 +692,11 @@ const AddTripModal = ({ isOpen, onClose, onAddTrip }: AddTripModalProps) => {
           >
             Previous
           </button>
+<<<<<<< HEAD
 
+=======
+          
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
           <div className="flex gap-3">
             <button
               onClick={onClose}
@@ -601,7 +704,11 @@ const AddTripModal = ({ isOpen, onClose, onAddTrip }: AddTripModalProps) => {
             >
               Cancel
             </button>
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
             {currentStep < 3 ? (
               <button
                 onClick={nextStep}
@@ -639,9 +746,15 @@ const AddTripModal = ({ isOpen, onClose, onAddTrip }: AddTripModalProps) => {
 export default function TripsPage() {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [loading, setLoading] = useState(false);
+<<<<<<< HEAD
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [selectedDriver, setSelectedDriver] = useState('all');
+=======
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("all");
+  const [selectedDriver, setSelectedDriver] = useState("all");
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
 
@@ -655,6 +768,7 @@ export default function TripsPage() {
     setTrips([newTrip, ...trips]);
   };
 
+<<<<<<< HEAD
   const showTrips =
     trips.length >= 10
       ? trips.slice(0, 10)
@@ -665,10 +779,19 @@ export default function TripsPage() {
       trip.driver.toLowerCase().includes(searchTerm.toLowerCase()) &&
       (selectedStatus === 'all' || trip.status === selectedStatus) &&
       (selectedDriver === 'all' || trip.driver === selectedDriver)
+=======
+  const showTrips = trips.length >= 10 ? trips.slice(0, 10) : [...trips, ...FAKE_TRIPS.slice(0, 10 - trips.length)];
+
+  const filteredTrips = showTrips.filter(trip => 
+    trip.driver.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    (selectedStatus === "all" || trip.status === selectedStatus) &&
+    (selectedDriver === "all" || trip.driver === selectedDriver)
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
   );
 
   const stats = {
     total: filteredTrips.length,
+<<<<<<< HEAD
     completed: filteredTrips.filter((t) => t.status === 'Completed').length,
     inProgress: filteredTrips.filter((t) => t.status === 'In Progress').length,
     cancelled: filteredTrips.filter((t) => t.status === 'Cancelled').length,
@@ -687,6 +810,17 @@ export default function TripsPage() {
       color: 'bg-red-100 text-red-700 border-red-200',
       icon: XCircle,
     },
+=======
+    completed: filteredTrips.filter(t => t.status === "Completed").length,
+    inProgress: filteredTrips.filter(t => t.status === "In Progress").length,
+    cancelled: filteredTrips.filter(t => t.status === "Cancelled").length,
+  };
+
+  const statusConfig = {
+    Completed: { color: "bg-green-100 text-green-700 border-green-200", icon: CheckCircle },
+    "In Progress": { color: "bg-blue-100 text-blue-700 border-blue-200", icon: Clock },
+    Cancelled: { color: "bg-red-100 text-red-700 border-red-200", icon: XCircle },
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
   };
 
   const handleViewTrip = (tripId: number) => {
@@ -694,6 +828,7 @@ export default function TripsPage() {
   };
 
   return (
+<<<<<<< HEAD
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50 p-2 sm:p-4 lg:p-6">
       <div className="max-w-7xl mx-auto space-y-4 lg:space-y-6">
         {/* Header Section */}
@@ -722,12 +857,39 @@ export default function TripsPage() {
                 className="flex items-center gap-1 px-3 lg:px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg lg:rounded-xl hover:shadow-lg transition-all duration-200 text-xs lg:text-sm flex-1 lg:flex-none"
               >
                 <Plus className="w-3 h-3 lg:w-4 lg:h-4" />
+=======
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50 p-4 sm:p-6 lg:p-8">
+      <div className="max-w-7xl mx-auto space-y-6 lg:space-y-8">
+        {/* Header Section */}
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl border border-white/20">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">
+            <div className="flex items-center gap-3 lg:gap-4">
+              <div className="w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-3xl flex items-center justify-center shadow-lg">
+                <Route className="w-6 h-6 lg:w-8 lg:h-8 text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-1 lg:mb-2">Trips History</h1>
+                <p className="text-gray-600 text-sm lg:text-lg">Track and analyze your fleet trips</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 lg:gap-3 w-full lg:w-auto">
+              <button className="flex items-center gap-2 px-3 lg:px-4 py-2 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all duration-200 text-sm lg:text-base">
+                <Download className="w-4 h-4" />
+                <span className="hidden sm:inline">Export</span>
+              </button>
+              <button 
+                onClick={() => setIsModalOpen(true)}
+                className="flex items-center gap-2 px-4 lg:px-6 py-2 lg:py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl hover:shadow-lg transition-all duration-200 text-sm lg:text-base flex-1 lg:flex-none"
+              >
+                <Plus className="w-4 h-4" />
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                 New Trip
               </button>
             </div>
           </div>
 
           {/* Stats Cards */}
+<<<<<<< HEAD
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-4 mb-4 lg:mb-6">
             {[
               {
@@ -772,6 +934,25 @@ export default function TripsPage() {
                         {stat.value}
                       </div>
                       <div className="text-xs text-gray-600">{stat.label}</div>
+=======
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6">
+            {[
+              { label: "Total Trips", value: stats.total, icon: Route, color: "from-purple-500 to-pink-600" },
+              { label: "Completed", value: stats.completed, icon: CheckCircle, color: "from-green-500 to-emerald-600" },
+              { label: "In Progress", value: stats.inProgress, icon: Clock, color: "from-blue-500 to-indigo-600" },
+              { label: "Cancelled", value: stats.cancelled, icon: XCircle, color: "from-red-500 to-pink-600" },
+            ].map((stat, index) => {
+              const Icon = stat.icon;
+              return (
+                <div key={index} className="bg-gradient-to-r from-gray-50 to-purple-50 rounded-3xl p-4 lg:p-6 border border-gray-200 hover:shadow-lg transition-all duration-300">
+                  <div className="flex items-center justify-between mb-3 lg:mb-4">
+                    <div className={`w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br ${stat.color} rounded-2xl flex items-center justify-center`}>
+                      <Icon className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xl lg:text-2xl font-bold text-gray-900">{stat.value}</div>
+                      <div className="text-xs lg:text-sm text-gray-600">{stat.label}</div>
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                     </div>
                   </div>
                 </div>
@@ -780,21 +961,35 @@ export default function TripsPage() {
           </div>
 
           {/* Search and Filters */}
+<<<<<<< HEAD
           <div className="flex flex-col sm:flex-row gap-2 lg:gap-3">
             <div className="flex-1 relative">
               <Search className="absolute left-2 lg:left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+=======
+          <div className="flex flex-col sm:flex-row gap-3 lg:gap-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 lg:w-5 lg:h-5" />
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
               <input
                 type="text"
                 placeholder="Search trips..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+<<<<<<< HEAD
                 className="w-full pl-8 lg:pl-10 pr-3 lg:pr-4 py-2 bg-white border border-gray-200 rounded-lg lg:rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+=======
+                className="w-full pl-9 lg:pl-10 pr-4 py-2 lg:py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm lg:text-base"
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
               />
             </div>
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
+<<<<<<< HEAD
               className="px-2 lg:px-3 py-2 bg-white border border-gray-200 rounded-lg lg:rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+=======
+              className="px-3 lg:px-4 py-2 lg:py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm lg:text-base"
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
             >
               <option value="all">All Status</option>
               <option value="Completed">Completed</option>
@@ -804,6 +999,7 @@ export default function TripsPage() {
             <select
               value={selectedDriver}
               onChange={(e) => setSelectedDriver(e.target.value)}
+<<<<<<< HEAD
               className="px-2 lg:px-3 py-2 bg-white border border-gray-200 rounded-lg lg:rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
             >
               <option value="all">All Drivers</option>
@@ -814,12 +1010,21 @@ export default function TripsPage() {
                   </option>
                 )
               )}
+=======
+              className="px-3 lg:px-4 py-2 lg:py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm lg:text-base"
+            >
+              <option value="all">All Drivers</option>
+              {Array.from(new Set(showTrips.map(t => t.driver))).map(driver => (
+                <option key={driver} value={driver}>{driver}</option>
+              ))}
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
             </select>
           </div>
         </div>
 
         {/* Trips List */}
         {loading ? (
+<<<<<<< HEAD
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl lg:rounded-3xl p-6 lg:p-8 shadow-xl border border-white/20">
             <div className="flex items-center justify-center py-8 lg:py-12">
               <div className="animate-spin rounded-full h-8 w-8 lg:h-12 lg:w-12 border-b-2 border-purple-600"></div>
@@ -932,6 +1137,78 @@ export default function TripsPage() {
 
                           {/* Desktop Trip Stats */}
                           <div className="hidden lg:grid grid-cols-4 gap-4 text-xs text-gray-500">
+=======
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
+            <div className="flex items-center justify-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+              <span className="ml-3 text-lg text-gray-600">Loading trips...</span>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 overflow-hidden">
+            <div className="p-6 border-b border-gray-100">
+              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                <Route className="w-6 h-6 text-purple-500" />
+                Trip Records ({filteredTrips.length})
+              </h2>
+            </div>
+            
+            <div className="divide-y divide-gray-100">
+              {filteredTrips.map((trip, index) => {
+                const StatusIcon = statusConfig[trip.status as keyof typeof statusConfig]?.icon || CheckCircle;
+                
+                return (
+                  <div
+                    key={index}
+                    className="p-6 hover:bg-gray-50 transition-all duration-200 cursor-pointer"
+                    onClick={() => handleViewTrip(trip.id)}
+                  >
+                    <div className="flex items-center justify-between">
+                      {/* Trip Info */}
+                      <div className="flex items-center gap-6 flex-1">
+                        {/* Trip Icon */}
+                        <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl flex items-center justify-center">
+                          <Route className="w-8 h-8 text-purple-600" />
+                        </div>
+                        
+                        {/* Main Details */}
+                        <div className="flex-1">
+                          <div className="flex items-center gap-4 mb-3">
+                            <h3 className="text-xl font-bold text-gray-900">Trip #{trip.id}</h3>
+                            <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold border ${statusConfig[trip.status as keyof typeof statusConfig]?.color}`}>
+                              <StatusIcon className="w-4 h-4" />
+                              {trip.status}
+                            </div>
+                            {trip.rating && trip.rating > 0 && (
+                              <div className="flex items-center gap-1">
+                                <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                                <span className="text-sm font-semibold text-gray-700">{trip.rating}</span>
+                              </div>
+                            )}
+                          </div>
+                          
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600 mb-3">
+                            <div className="flex items-center gap-2">
+                              <User className="w-4 h-4" />
+                              <span>{trip.driver}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Car className="w-4 h-4" />
+                              <span>{trip.vehicle}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <MapPin className="w-4 h-4" />
+                              <span>{trip.origin} → {trip.destination}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Calendar className="w-4 h-4" />
+                              <span>{trip.start.split(' ')[0]}</span>
+                            </div>
+                          </div>
+
+                          {/* Trip Stats */}
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs text-gray-500">
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                             <div className="flex items-center gap-1">
                               <Navigation className="w-3 h-3" />
                               <span>{trip.distance}</span>
@@ -953,12 +1230,18 @@ export default function TripsPage() {
                       </div>
 
                       {/* Actions */}
+<<<<<<< HEAD
                       <div className="flex items-center gap-2 lg:gap-3 lg:ml-6">
                         <button
+=======
+                      <div className="flex items-center gap-3 ml-6">
+                        <button 
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                           onClick={(e) => {
                             e.stopPropagation();
                             handleViewTrip(trip.id);
                           }}
+<<<<<<< HEAD
                           className="flex items-center gap-1 px-2 lg:px-3 py-1 lg:py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-all duration-200 text-xs lg:text-sm"
                         >
                           <Eye className="w-3 h-3 lg:w-4 lg:h-4" />
@@ -966,6 +1249,15 @@ export default function TripsPage() {
                         </button>
                         <button className="p-1 lg:p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all duration-200">
                           <MoreVertical className="w-3 h-3 lg:w-4 lg:h-4" />
+=======
+                          className="flex items-center gap-2 px-4 py-2 bg-purple-100 text-purple-700 rounded-xl hover:bg-purple-200 transition-all duration-200"
+                        >
+                          <Eye className="w-4 h-4" />
+                          View
+                        </button>
+                        <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-all duration-200">
+                          <MoreVertical className="w-4 h-4" />
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                         </button>
                       </div>
                     </div>
@@ -976,6 +1268,7 @@ export default function TripsPage() {
 
             {/* Empty State */}
             {filteredTrips.length === 0 && (
+<<<<<<< HEAD
               <div className="text-center py-8 lg:py-12">
                 <Route className="w-12 h-12 lg:w-16 lg:h-16 text-gray-400 mx-auto mb-3 lg:mb-4" />
                 <h3 className="text-lg lg:text-xl font-semibold text-gray-900 mb-2">
@@ -989,6 +1282,17 @@ export default function TripsPage() {
                   className="flex items-center gap-2 px-4 lg:px-6 py-2 lg:py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg lg:rounded-xl hover:shadow-lg transition-all duration-200 mx-auto text-sm"
                 >
                   <Plus className="w-3 h-3 lg:w-4 lg:h-4" />
+=======
+              <div className="text-center py-12">
+                <Route className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">No Trips Found</h3>
+                <p className="text-gray-600 mb-6">Try adjusting your search or filter criteria</p>
+                <button 
+                  onClick={() => setIsModalOpen(true)}
+                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl hover:shadow-lg transition-all duration-200 mx-auto"
+                >
+                  <Plus className="w-4 h-4" />
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                   Create New Trip
                 </button>
               </div>
@@ -1005,4 +1309,8 @@ export default function TripsPage() {
       </div>
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720

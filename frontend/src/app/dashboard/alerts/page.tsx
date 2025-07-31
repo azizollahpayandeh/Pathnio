@@ -1,12 +1,12 @@
-'use client';
-import { useState, useMemo } from 'react';
-import {
-  Bell,
-  AlertTriangle,
-  CheckCircle,
-  XCircle,
-  Info,
-  Filter,
+"use client";
+import { useState, useEffect, useMemo } from "react";
+import api from "../../api";
+import { 
+  Bell, 
+  AlertTriangle, 
+  CheckCircle, 
+  XCircle, 
+  Info, 
   Search,
   Clock,
   Eye,
@@ -17,285 +17,224 @@ import {
   Trash2,
   Archive,
   Star,
-  StarOff,
-} from 'lucide-react';
+  User,
+  LogIn,
+  LogOut,
+  Lock,
+  UserCheck,
+  Shield,
+} from "lucide-react";
 
-const FAKE_ALERTS = [
-  {
-    id: 1,
-    type: 'info',
-    title: 'System Update Available',
-    desc: 'A new version of the Pathnio app is available with enhanced features and security improvements.',
-    time: '2 min ago',
-    read: false,
-    priority: 'low',
-    category: 'system',
-  },
-  {
-    id: 2,
-    type: 'success',
-    title: 'Payment Successfully Processed',
-    desc: 'Your monthly subscription payment of ₺2,500 has been successfully processed.',
-    time: '10 min ago',
-    read: false,
-    priority: 'medium',
-    category: 'payment',
-  },
-  {
-    id: 3,
-    type: 'warning',
-    title: 'Driver Delay Alert',
-    desc: 'Driver Mohammad Ahmadi is running 15 minutes late for scheduled trip #23 to Tehran.',
-    time: '30 min ago',
-    read: true,
-    priority: 'high',
-    category: 'driver',
-  },
-  {
-    id: 4,
-    type: 'error',
-    title: 'Critical Vehicle Maintenance Required',
-    desc: 'Truck 12A345-IR requires immediate maintenance. Engine temperature is above normal limits.',
-    time: '1 hour ago',
-    read: false,
-    priority: 'critical',
-    category: 'vehicle',
-  },
-  {
-    id: 5,
-    type: 'info',
-    title: 'New Support Message',
-    desc: 'You have received a new message from our support team regarding your recent inquiry.',
-    time: '2 hours ago',
-    read: true,
-    priority: 'low',
-    category: 'support',
-  },
-  {
-    id: 6,
-    type: 'success',
-    title: 'Trip Successfully Completed',
-    desc: 'Trip #45 from Tehran to Isfahan has been completed successfully with 98% customer satisfaction.',
-    time: '3 hours ago',
-    read: true,
-    priority: 'medium',
-    category: 'trip',
-  },
-  {
-    id: 7,
-    type: 'warning',
-    title: 'Driver License Expiry Warning',
-    desc: "Driver Sara Karimi's license will expire in 15 days. Please ensure renewal is completed.",
-    time: 'Yesterday',
-    read: false,
-    priority: 'high',
-    category: 'driver',
-  },
-  {
-    id: 8,
-    type: 'error',
-    title: 'Security Alert - Failed Login Attempt',
-    desc: 'Multiple failed login attempts detected from IP address 192.168.1.100. Account temporarily locked.',
-    time: 'Yesterday',
-    read: false,
-    priority: 'critical',
-    category: 'security',
-  },
-  {
-    id: 9,
-    type: 'success',
-    title: 'Fuel Efficiency Milestone',
-    desc: 'Your fleet achieved 15% improvement in fuel efficiency this month compared to last month.',
-    time: '2 days ago',
-    read: true,
-    priority: 'medium',
-    category: 'performance',
-  },
-  {
-    id: 10,
-    type: 'info',
-    title: 'Weather Alert',
-    desc: "Heavy rain expected in Tehran area. Consider route adjustments for today's deliveries.",
-    time: '3 days ago',
-    read: true,
-    priority: 'low',
-    category: 'weather',
-  },
-];
+interface Alert {
+  id: number;
+  alert_type: string;
+  title: string;
+  message: string;
+  priority: string;
+  read: boolean;
+  timestamp: string;
+  ip_address?: string;
+  user_agent?: string;
+}
 
 const ICONS = {
-  info: <Info className="w-5 h-5 text-blue-500" />,
-  success: <CheckCircle className="w-5 h-5 text-green-500" />,
-  warning: <AlertTriangle className="w-5 h-5 text-yellow-500" />,
-  error: <XCircle className="w-5 h-5 text-red-500" />,
+  login: <LogIn className="w-5 h-5 text-green-500" />,
+  logout: <LogOut className="w-5 h-5 text-blue-500" />,
+  password_change: <Lock className="w-5 h-5 text-yellow-500" />,
+  profile_update: <User className="w-5 h-5 text-blue-500" />,
+  user_created: <UserCheck className="w-5 h-5 text-green-500" />,
+  user_updated: <User className="w-5 h-5 text-blue-500" />,
+  user_deleted: <XCircle className="w-5 h-5 text-red-500" />,
+  security_issue: <Shield className="w-5 h-5 text-red-500" />,
+  failed_login: <XCircle className="w-5 h-5 text-red-500" />,
+  account_locked: <Lock className="w-5 h-5 text-red-500" />,
+  system: <Info className="w-5 h-5 text-blue-500" />,
 };
 
 const PRIORITY_COLORS = {
-  low: 'bg-gray-100 text-gray-600',
-  medium: 'bg-blue-100 text-blue-600',
-  high: 'bg-yellow-100 text-yellow-600',
-  critical: 'bg-red-100 text-red-600',
+  low: "bg-gray-100 text-gray-600",
+  medium: "bg-blue-100 text-blue-600",
+  high: "bg-yellow-100 text-yellow-600",
+  critical: "bg-red-100 text-red-600",
 };
 
 const TYPE_COLORS = {
-  info: 'from-blue-50 to-blue-100 border-blue-200',
-  success: 'from-green-50 to-green-100 border-green-200',
-  warning: 'from-yellow-50 to-yellow-100 border-yellow-200',
-  error: 'from-red-50 to-red-100 border-red-200',
+  login: "from-green-50 to-green-100 border-green-200",
+  logout: "from-blue-50 to-blue-100 border-blue-200",
+  password_change: "from-yellow-50 to-yellow-100 border-yellow-200",
+  profile_update: "from-blue-50 to-blue-100 border-blue-200",
+  user_created: "from-green-50 to-green-100 border-green-200",
+  user_updated: "from-blue-50 to-blue-100 border-blue-200",
+  user_deleted: "from-red-50 to-red-100 border-red-200",
+  security_issue: "from-red-50 to-red-100 border-red-200",
+  failed_login: "from-red-50 to-red-100 border-red-200",
+  account_locked: "from-red-50 to-red-100 border-red-200",
+  system: "from-blue-50 to-blue-100 border-blue-200",
 };
 
-const CATEGORIES = [
-  { id: 'all', label: 'All Alerts', count: FAKE_ALERTS.length },
-  {
-    id: 'system',
-    label: 'System',
-    count: FAKE_ALERTS.filter((a) => a.category === 'system').length,
-  },
-  {
-    id: 'driver',
-    label: 'Driver',
-    count: FAKE_ALERTS.filter((a) => a.category === 'driver').length,
-  },
-  {
-    id: 'vehicle',
-    label: 'Vehicle',
-    count: FAKE_ALERTS.filter((a) => a.category === 'vehicle').length,
-  },
-  {
-    id: 'payment',
-    label: 'Payment',
-    count: FAKE_ALERTS.filter((a) => a.category === 'payment').length,
-  },
-  {
-    id: 'security',
-    label: 'Security',
-    count: FAKE_ALERTS.filter((a) => a.category === 'security').length,
-  },
+// This will be updated dynamically based on actual alerts
+const getCategories = (alerts: Alert[]) => [
+  { id: "all", label: "All Alerts", count: alerts.length },
+  { id: "login", label: "Login", count: alerts.filter(a => a.alert_type === "login").length },
+  { id: "logout", label: "Logout", count: alerts.filter(a => a.alert_type === "logout").length },
+  { id: "password_change", label: "Password", count: alerts.filter(a => a.alert_type === "password_change").length },
+  { id: "profile_update", label: "Profile", count: alerts.filter(a => a.alert_type === "profile_update").length },
+  { id: "user_created", label: "User Created", count: alerts.filter(a => a.alert_type === "user_created").length },
+  { id: "failed_login", label: "Security", count: alerts.filter(a => a.alert_type === "failed_login" || a.alert_type === "security_issue").length },
 ];
 
 export default function AlertsPage() {
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [alerts, setAlerts] = useState<Alert[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [showRead, setShowRead] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedAlerts, setSelectedAlerts] = useState<number[]>([]);
 
+  useEffect(() => {
+    fetchAlerts();
+  }, []);
+
+  const fetchAlerts = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get('accounts/alerts/');
+      setAlerts(response.data);
+    } catch (error) {
+      console.error('Error fetching alerts:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const categories = getCategories(alerts);
+
   const filteredAlerts = useMemo(() => {
-    return FAKE_ALERTS.filter((alert) => {
-      const matchesCategory =
-        selectedCategory === 'all' || alert.category === selectedCategory;
+    return alerts.filter(alert => {
+      const matchesCategory = selectedCategory === "all" || alert.alert_type === selectedCategory;
       const matchesRead = showRead || !alert.read;
-      const matchesSearch =
-        alert.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        alert.desc.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesSearch = alert.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           alert.message.toLowerCase().includes(searchTerm.toLowerCase());
       return matchesCategory && matchesRead && matchesSearch;
     });
-  }, [selectedCategory, showRead, searchTerm]);
+  }, [alerts, selectedCategory, showRead, searchTerm]);
 
-  const unreadCount = FAKE_ALERTS.filter((alert) => !alert.read).length;
+  const unreadCount = alerts.filter(alert => !alert.read).length;
 
   const toggleAlertSelection = (alertId: number) => {
-    setSelectedAlerts((prev) =>
-      prev.includes(alertId)
-        ? prev.filter((id) => id !== alertId)
+    setSelectedAlerts(prev => 
+      prev.includes(alertId) 
+        ? prev.filter(id => id !== alertId)
         : [...prev, alertId]
     );
   };
 
-  const markAsRead = (alertId: number) => {
-    // In real app, this would update the backend
-    console.log(`Marking alert ${alertId} as read`);
+  const markAsRead = async (alertId: number) => {
+    try {
+      await api.patch(`accounts/alerts/${alertId}/`);
+      // Update local state
+      setAlerts(prev => prev.map(alert => 
+        alert.id === alertId ? { ...alert, read: true } : alert
+      ));
+    } catch (error) {
+      console.error('Error marking alert as read:', error);
+    }
+  };
+
+  const formatTime = (timestamp: string) => {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins} min ago`;
+    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+    if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+    return date.toLocaleDateString();
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-0.5 sm:p-1 lg:p-2">
-      <div className="max-w-4xl mx-auto space-y-2 lg:space-y-3">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-4 sm:p-6 lg:p-8">
+      <div className="max-w-6xl mx-auto space-y-6">
         {/* Header */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-lg lg:rounded-xl p-1.5 sm:p-2 lg:p-3 shadow-xl border border-white/20">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-1.5 mb-2 lg:mb-3">
-            <div className="flex items-center gap-1.5 lg:gap-2">
-              <div className="w-6 h-6 lg:w-8 lg:h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg lg:rounded-xl flex items-center justify-center shadow-lg">
-                <Bell className="w-3 h-3 lg:w-4 lg:h-4 text-white" />
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl border border-white/20">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">
+            <div className="flex items-center gap-3 lg:gap-4">
+              <div className="w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center shadow-lg">
+                <Bell className="w-6 h-6 lg:w-8 lg:h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-base lg:text-xl font-bold text-gray-900 mb-0.5">
-                  Alerts & Notifications
-                </h1>
-                <p className="text-gray-600 text-xs">
-                  Stay informed about your fleet operations
-                </p>
+                <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-1 lg:mb-2">Alerts & Notifications</h1>
+                <p className="text-gray-600 text-sm lg:text-lg">Stay informed about your fleet operations</p>
               </div>
             </div>
-            <div className="flex items-center gap-1 w-full lg:w-auto">
-              <div className="flex items-center gap-1 px-1.5 py-0.5 bg-red-100 rounded-full">
-                <div className="w-1 h-1 lg:w-1.5 lg:h-1.5 bg-red-500 rounded-full animate-pulse"></div>
-                <span className="text-xs font-semibold text-red-700">
-                  {unreadCount} Unread
-                </span>
+            <div className="flex items-center gap-2 lg:gap-3 w-full lg:w-auto">
+              <div className="flex items-center gap-2 px-3 lg:px-4 py-2 bg-red-100 rounded-full">
+                <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                <span className="text-xs lg:text-sm font-semibold text-red-700">{unreadCount} Unread</span>
               </div>
-              <button className="w-5 h-5 lg:w-6 lg:h-6 bg-white rounded shadow-lg flex items-center justify-center hover:shadow-xl transition-all duration-200">
-                <RefreshCw className="w-2.5 h-2.5 lg:w-3 lg:h-3 text-gray-600" />
+              <button 
+                onClick={fetchAlerts}
+                className="w-10 h-10 lg:w-12 lg:h-12 bg-white rounded-2xl shadow-lg flex items-center justify-center hover:shadow-xl transition-all duration-200"
+              >
+                <RefreshCw className={`w-4 h-4 lg:w-5 lg:h-5 text-gray-600 ${loading ? 'animate-spin' : ''}`} />
               </button>
             </div>
           </div>
 
           {/* Search and Filters */}
-          <div className="flex flex-col sm:flex-row gap-1 lg:gap-1.5">
+          <div className="flex flex-col sm:flex-row gap-3 lg:gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-1.5 top-1/2 transform -translate-y-1/2 w-3 h-3 text-gray-400" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search alerts..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-6 lg:pl-7 pr-2 py-1 lg:py-1.5 bg-white rounded border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 text-xs"
+                className="w-full pl-12 pr-4 py-3 bg-white rounded-2xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
               />
             </div>
-            <div className="flex items-center gap-1 lg:gap-1.5">
+            <div className="flex items-center gap-3">
               <button
                 onClick={() => setShowRead(!showRead)}
-                className={`flex items-center gap-1 px-1.5 lg:px-2 py-1 lg:py-1.5 rounded font-medium transition-all duration-200 text-xs ${
-                  showRead
-                    ? 'bg-blue-100 text-blue-700'
+                className={`flex items-center gap-2 px-4 py-3 rounded-2xl font-medium transition-all duration-200 ${
+                  showRead 
+                    ? 'bg-blue-100 text-blue-700' 
                     : 'bg-gray-100 text-gray-600'
                 }`}
               >
-                {showRead ? (
-                  <Eye className="w-2.5 h-2.5" />
-                ) : (
-                  <EyeOff className="w-2.5 h-2.5" />
-                )}
-                <span className="hidden sm:inline">
-                  {showRead ? 'Show All' : 'Unread Only'}
-                </span>
+                {showRead ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                {showRead ? 'Show All' : 'Unread Only'}
               </button>
-              <button className="w-5 h-5 lg:w-6 lg:h-6 bg-white rounded shadow-lg flex items-center justify-center hover:shadow-xl transition-all duration-200">
-                <Settings className="w-2.5 h-2.5 lg:w-3 lg:h-3 text-gray-600" />
+              <button className="w-12 h-12 bg-white rounded-2xl shadow-lg flex items-center justify-center hover:shadow-xl transition-all duration-200">
+                <Settings className="w-5 h-5 text-gray-600" />
               </button>
             </div>
           </div>
         </div>
 
         {/* Category Filters */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-lg lg:rounded-xl p-1.5 lg:p-3 shadow-xl border border-white/20">
-          <div className="flex flex-wrap gap-1 lg:gap-1.5">
-            {CATEGORIES.map((category) => (
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/20">
+          <div className="flex flex-wrap gap-3">
+            {categories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`px-1.5 lg:px-3 py-1 lg:py-1.5 rounded font-medium transition-all duration-200 flex items-center gap-1 text-xs ${
+                className={`px-6 py-3 rounded-2xl font-medium transition-all duration-200 flex items-center gap-2 ${
                   selectedCategory === category.id
                     ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg'
                     : 'bg-white text-gray-700 hover:bg-gray-50 shadow-md'
                 }`}
               >
-                <span className="hidden sm:inline">{category.label}</span>
-                <span
-                  className={`px-0.5 py-0.5 rounded-full text-xs font-bold ${
-                    selectedCategory === category.id
-                      ? 'bg-white/20 text-white'
-                      : 'bg-gray-100 text-gray-600'
-                  }`}
-                >
+                <span>{category.label}</span>
+                <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                  selectedCategory === category.id
+                    ? 'bg-white/20 text-white'
+                    : 'bg-gray-100 text-gray-600'
+                }`}>
                   {category.count}
                 </span>
               </button>
@@ -304,123 +243,122 @@ export default function AlertsPage() {
         </div>
 
         {/* Alerts List */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-lg lg:rounded-xl p-2 lg:p-4 shadow-xl border border-white/20">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 mb-2 lg:mb-3">
-            <h2 className="text-sm lg:text-lg font-bold text-gray-900">
-              {filteredAlerts.length} Alert
-              {filteredAlerts.length !== 1 ? 's' : ''}
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">
+              {filteredAlerts.length} Alert{filteredAlerts.length !== 1 ? 's' : ''}
             </h2>
             {selectedAlerts.length > 0 && (
-              <div className="flex items-center gap-1 lg:gap-1.5">
-                <button className="flex items-center gap-1 px-1.5 lg:px-2 py-1 lg:py-1.5 bg-blue-100 text-blue-700 rounded font-medium hover:bg-blue-200 transition-colors text-xs">
-                  <Archive className="w-2.5 h-2.5" />
-                  <span className="hidden sm:inline">Archive Selected</span>
+              <div className="flex items-center gap-3">
+                <button className="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-xl font-medium hover:bg-blue-200 transition-colors">
+                  <Archive className="w-4 h-4" />
+                  Archive Selected
                 </button>
-                <button className="flex items-center gap-1 px-1.5 lg:px-2 py-1 lg:py-1.5 bg-red-100 text-red-700 rounded font-medium hover:bg-red-200 transition-colors text-xs">
-                  <Trash2 className="w-2.5 h-2.5" />
-                  <span className="hidden sm:inline">Delete Selected</span>
+                <button className="flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-xl font-medium hover:bg-red-200 transition-colors">
+                  <Trash2 className="w-4 h-4" />
+                  Delete Selected
                 </button>
               </div>
             )}
           </div>
 
-          <div className="space-y-1.5 lg:space-y-2">
-            {filteredAlerts.map((alert) => (
-              <div
-                key={alert.id}
-                className={`group relative bg-gradient-to-r ${
-                  TYPE_COLORS[alert.type]
-                } rounded lg:rounded-lg p-1.5 lg:p-3 shadow-lg hover:shadow-xl transition-all duration-300 border ${
-                  !alert.read ? 'ring-2 ring-blue-200' : ''
-                }`}
-              >
-                <div className="flex items-start gap-1 lg:gap-2">
-                  {/* Checkbox */}
-                  <input
-                    type="checkbox"
-                    checked={selectedAlerts.includes(alert.id)}
-                    onChange={() => toggleAlertSelection(alert.id)}
-                    className="mt-0.5 w-3 h-3 lg:w-4 lg:h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                  />
-
-                  {/* Icon */}
-                  <div className="flex-shrink-0 mt-0.5">
-                    <div className="w-5 h-5 lg:w-6 lg:h-6 flex items-center justify-center">
-                      {ICONS[alert.type]}
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-1 lg:gap-1.5 mb-1 lg:mb-1.5">
-                      <div className="flex flex-col sm:flex-row sm:items-center gap-1 lg:gap-1.5 flex-wrap">
-                        <h3
-                          className={`font-bold text-xs lg:text-sm ${
-                            !alert.read ? 'text-gray-900' : 'text-gray-700'
-                          } truncate`}
-                        >
-                          {alert.title}
-                        </h3>
-                        <div className="flex flex-wrap gap-0.5 lg:gap-1">
-                          {!alert.read && (
-                            <span className="px-0.5 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
-                              New
-                            </span>
-                          )}
-                          <span
-                            className={`px-1 lg:px-1.5 py-0.5 rounded-full text-xs font-semibold ${
-                              PRIORITY_COLORS[alert.priority]
-                            }`}
-                          >
-                            {alert.priority.charAt(0).toUpperCase() +
-                              alert.priority.slice(1)}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
-                          onClick={() => markAsRead(alert.id)}
-                          className="w-4 h-4 lg:w-5 lg:h-5 bg-white/80 rounded flex items-center justify-center hover:bg-white transition-colors"
-                        >
-                          <Eye className="w-2 h-2 lg:w-2.5 lg:h-2.5 text-gray-600" />
-                        </button>
-                        <button className="w-4 h-4 lg:w-5 lg:h-5 bg-white/80 rounded flex items-center justify-center hover:bg-white transition-colors">
-                          <Star className="w-2 h-2 lg:w-2.5 lg:h-2.5 text-gray-600" />
-                        </button>
-                        <button className="w-4 h-4 lg:w-5 lg:h-5 bg-white/80 rounded flex items-center justify-center hover:bg-white transition-colors">
-                          <MoreVertical className="w-2 h-2 lg:w-2.5 lg:h-2.5 text-gray-600" />
-                        </button>
-                      </div>
-                    </div>
-                    <p className="text-gray-700 mb-1 lg:mb-1.5 leading-relaxed text-xs line-clamp-2">
-                      {alert.desc}
-                    </p>
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 lg:gap-2 text-xs text-gray-500">
-                      <div className="flex items-center gap-0.5">
-                        <Clock className="w-2 h-2 lg:w-2.5 lg:h-2.5" />
-                        {alert.time}
-                      </div>
-                      <span className="capitalize">{alert.category}</span>
+          {loading ? (
+            <div className="space-y-4">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="bg-gray-100 rounded-3xl p-6 animate-pulse">
+                  <div className="flex items-start gap-4">
+                    <div className="w-5 h-5 bg-gray-200 rounded mt-2"></div>
+                    <div className="w-6 h-6 bg-gray-200 rounded mt-1"></div>
+                    <div className="flex-1 space-y-3">
+                      <div className="h-6 bg-gray-200 rounded w-1/3"></div>
+                      <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                      <div className="h-4 bg-gray-200 rounded w-1/4"></div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {filteredAlerts.map((alert) => (
+                <div
+                  key={alert.id}
+                  className={`group relative bg-gradient-to-r ${TYPE_COLORS[alert.alert_type as keyof typeof TYPE_COLORS] || TYPE_COLORS.system} rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border ${
+                    !alert.read ? 'ring-2 ring-blue-200' : ''
+                  }`}
+                >
+                  <div className="flex items-start gap-4">
+                    {/* Checkbox */}
+                    <input
+                      type="checkbox"
+                      checked={selectedAlerts.includes(alert.id)}
+                      onChange={() => toggleAlertSelection(alert.id)}
+                      className="mt-2 w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                    />
+                    
+                    {/* Icon */}
+                    <div className="flex-shrink-0 mt-1">
+                      {ICONS[alert.alert_type as keyof typeof ICONS] || ICONS.system}
+                    </div>
+
+                    {/* Content */}
+                  <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex items-center gap-3 flex-wrap">
+                          <h3 className={`font-bold text-lg ${!alert.read ? 'text-gray-900' : 'text-gray-700'}`}>
+                            {alert.title}
+                          </h3>
+                          {!alert.read && (
+                            <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
+                              New
+                            </span>
+                          )}
+                          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${PRIORITY_COLORS[alert.priority as keyof typeof PRIORITY_COLORS]}`}>
+                            {alert.priority.charAt(0).toUpperCase() + alert.priority.slice(1)}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={() => markAsRead(alert.id)}
+                            className="w-8 h-8 bg-white/80 rounded-lg flex items-center justify-center hover:bg-white transition-colors"
+                          >
+                            <Eye className="w-4 h-4 text-gray-600" />
+                          </button>
+                          <button className="w-8 h-8 bg-white/80 rounded-lg flex items-center justify-center hover:bg-white transition-colors">
+                            <Star className="w-4 h-4 text-gray-600" />
+                          </button>
+                          <button className="w-8 h-8 bg-white/80 rounded-lg flex items-center justify-center hover:bg-white transition-colors">
+                            <MoreVertical className="w-4 h-4 text-gray-600" />
+                          </button>
+                        </div>
+                      </div>
+                      <p className="text-gray-700 mb-3 leading-relaxed">{alert.message}</p>
+                      <div className="flex items-center gap-4 text-sm text-gray-500">
+                        <div className="flex items-center gap-1">
+                          <Clock className="w-4 h-4" />
+                          {formatTime(alert.timestamp)}
+                        </div>
+                        <span className="capitalize">{alert.alert_type.replace('_', ' ')}</span>
+                        {alert.ip_address && (
+                          <span className="text-xs bg-gray-100 px-2 py-1 rounded">IP: {alert.ip_address}</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
           {filteredAlerts.length === 0 && (
-            <div className="text-center py-4 lg:py-6">
-              <Bell className="w-8 h-8 lg:w-10 lg:h-10 text-gray-300 mx-auto mb-1.5 lg:mb-2" />
-              <h3 className="text-sm lg:text-base font-semibold text-gray-600 mb-1">
-                No alerts found
-              </h3>
-              <p className="text-gray-500 text-xs">
-                Try adjusting your filters or search terms
-              </p>
+            <div className="text-center py-12">
+              <Bell className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-gray-600 mb-2">No alerts found</h3>
+              <p className="text-gray-500">Try adjusting your filters or search terms</p>
             </div>
           )}
         </div>
       </div>
     </div>
   );
-}
+} 

@@ -287,6 +287,7 @@ export default function ExpensesPage() {
   };
 
   return (
+<<<<<<< HEAD
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-orange-50 to-red-50 p-2 sm:p-4 lg:p-6">
       <div className="max-w-7xl mx-auto space-y-4 lg:space-y-6">
         {/* Success Message */}
@@ -294,10 +295,20 @@ export default function ExpensesPage() {
           <div className="fixed top-4 right-4 bg-green-500 text-white px-3 lg:px-4 py-2 lg:py-3 rounded-lg lg:rounded-xl shadow-lg flex items-center gap-2 z-40 animate-slide-in">
             <CheckSquare className="w-3 h-3 lg:w-4 lg:h-4" />
             <span className="text-xs lg:text-sm">Expense added successfully!</span>
+=======
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-orange-50 to-red-50 p-4 sm:p-6 lg:p-8">
+      <div className="max-w-7xl mx-auto space-y-6 lg:space-y-8">
+        {/* Success Message */}
+        {showSuccessMessage && (
+          <div className="fixed top-4 right-4 bg-green-500 text-white px-4 lg:px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 z-40 animate-slide-in">
+            <CheckSquare className="w-4 h-4 lg:w-5 lg:h-5" />
+            <span className="text-sm lg:text-base">Expense added successfully!</span>
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
           </div>
         )}
 
         {/* Header Section */}
+<<<<<<< HEAD
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl lg:rounded-3xl p-3 sm:p-4 lg:p-6 shadow-xl border border-white/20">
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 mb-4 lg:mb-6">
             <div className="flex items-center gap-2 lg:gap-4">
@@ -309,39 +320,78 @@ export default function ExpensesPage() {
                   Expenses Management
                 </h1>
                 <p className="text-gray-600 text-xs lg:text-base">
+=======
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl border border-white/20">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">
+            <div className="flex items-center gap-3 lg:gap-4">
+              <div className="w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-3xl flex items-center justify-center shadow-lg">
+                <DollarSign className="w-6 h-6 lg:w-8 lg:h-8 text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl lg:text-4xl font-bold text-gray-900 mb-1 lg:mb-2">
+                  Expenses Management
+                </h1>
+                <p className="text-gray-600 text-sm lg:text-lg">
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                   Track and manage your fleet expenses
                 </p>
               </div>
             </div>
+<<<<<<< HEAD
             <div className="flex items-center gap-2 w-full lg:w-auto">
               <button
                 onClick={handleExport}
                 className="flex items-center gap-1 px-2 lg:px-3 py-2 bg-gray-100 rounded-lg lg:rounded-xl hover:bg-gray-200 transition-all duration-200 text-xs lg:text-sm"
               >
                 <Download className="w-3 h-3 lg:w-4 lg:h-4" />
+=======
+            <div className="flex items-center gap-2 lg:gap-3 w-full lg:w-auto">
+              <button
+                onClick={handleExport}
+                className="flex items-center gap-2 px-3 lg:px-4 py-2 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all duration-200 text-sm lg:text-base"
+              >
+                <Download className="w-4 h-4" />
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                 <span className="hidden sm:inline">Export</span>
               </button>
               <button
                 onClick={() => setIsAddModalOpen(true)}
+<<<<<<< HEAD
                 className="flex items-center gap-1 px-3 lg:px-4 py-2 bg-gradient-to-r from-green-600 to-green-600 text-white rounded-lg lg:rounded-xl hover:shadow-lg transition-all duration-200 text-xs lg:text-sm flex-1 lg:flex-none"
               >
                 <Plus className="w-3 h-3 lg:w-4 lg:h-4" />
+=======
+                className="flex items-center gap-2 px-4 lg:px-6 py-2 lg:py-3 bg-gradient-to-r from-green-600 to-green-600 text-white rounded-xl hover:shadow-lg transition-all duration-200 text-sm lg:text-base flex-1 lg:flex-none"
+              >
+                <Plus className="w-4 h-4" />
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                 Add Expense
               </button>
             </div>
           </div>
 
           {/* Stats Cards */}
+<<<<<<< HEAD
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-2 lg:gap-4 mb-4 lg:mb-6">
             {[
               {
                 label: 'Total',
+=======
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6 mb-6">
+            {[
+              {
+                label: 'Total Expenses',
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                 value: stats.total,
                 icon: Receipt,
                 color: 'from-green-500 to-green-600',
               },
               {
+<<<<<<< HEAD
                 label: 'Amount',
+=======
+                label: 'Total Amount',
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                 value: `${(stats.totalAmount / 1000000).toFixed(1)}M`,
                 icon: DollarSign,
                 color: 'from-green-700 to-green-700',
@@ -369,6 +419,7 @@ export default function ExpensesPage() {
               return (
                 <div
                   key={index}
+<<<<<<< HEAD
                   className="bg-gradient-to-r from-gray-50 to-orange-50 rounded-xl lg:rounded-2xl p-3 lg:p-4 border border-gray-200 hover:shadow-lg transition-all duration-300"
                 >
                   <div className="flex items-center justify-between mb-2 lg:mb-3">
@@ -382,6 +433,21 @@ export default function ExpensesPage() {
                         {stat.value}
                       </div>
                       <div className="text-xs text-gray-600">{stat.label}</div>
+=======
+                  className="bg-gradient-to-r from-gray-50 to-orange-50 rounded-3xl p-4 lg:p-6 border border-gray-200 hover:shadow-lg transition-all duration-300"
+                >
+                  <div className="flex items-center justify-between mb-3 lg:mb-4">
+                    <div
+                      className={`w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br ${stat.color} rounded-2xl flex items-center justify-center`}
+                    >
+                      <Icon className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
+                    </div>
+                    <div className="text-right">
+                      <div className="text-lg lg:text-2xl font-bold text-gray-900">
+                        {stat.value}
+                      </div>
+                      <div className="text-xs lg:text-sm text-gray-600">{stat.label}</div>
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                     </div>
                   </div>
                 </div>
@@ -390,21 +456,35 @@ export default function ExpensesPage() {
           </div>
 
           {/* Search and Filters */}
+<<<<<<< HEAD
           <div className="flex flex-col sm:flex-row gap-2 lg:gap-3">
             <div className="flex-1 relative">
               <Search className="absolute left-2 lg:left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+=======
+          <div className="flex flex-col sm:flex-row gap-3 lg:gap-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 lg:w-5 lg:h-5" />
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
               <input
                 type="text"
                 placeholder="Search expenses..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+<<<<<<< HEAD
                 className="w-full pl-8 lg:pl-10 pr-3 lg:pr-4 py-2 bg-white border border-gray-200 rounded-lg lg:rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+=======
+                className="w-full pl-9 lg:pl-10 pr-4 py-2 lg:py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm lg:text-base"
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
               />
             </div>
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
+<<<<<<< HEAD
               className="px-2 lg:px-3 py-2 bg-white border border-gray-200 rounded-lg lg:rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+=======
+              className="px-3 lg:px-4 py-2 lg:py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm lg:text-base"
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
             >
               <option value="all">All Status</option>
               <option value="Approved">Approved</option>
@@ -414,7 +494,11 @@ export default function ExpensesPage() {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
+<<<<<<< HEAD
               className="px-2 lg:px-3 py-2 bg-white border border-gray-200 rounded-lg lg:rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+=======
+              className="px-3 lg:px-4 py-2 lg:py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm lg:text-base"
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
             >
               <option value="all">All Categories</option>
               <option value="Fuel">Fuel</option>
@@ -428,19 +512,33 @@ export default function ExpensesPage() {
 
         {/* Expenses List */}
         {loading ? (
+<<<<<<< HEAD
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl lg:rounded-3xl p-6 lg:p-8 shadow-xl border border-white/20">
             <div className="flex items-center justify-center py-8 lg:py-12">
               <div className="animate-spin rounded-full h-8 w-8 lg:h-12 lg:w-12 border-b-2 border-orange-600"></div>
               <span className="ml-3 text-base lg:text-lg text-gray-600">
+=======
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
+            <div className="flex items-center justify-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
+              <span className="ml-3 text-lg text-gray-600">
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                 Loading expenses...
               </span>
             </div>
           </div>
         ) : (
+<<<<<<< HEAD
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl lg:rounded-3xl shadow-xl border border-white/20 overflow-hidden">
             <div className="p-3 lg:p-6 border-b border-gray-100">
               <h2 className="text-base lg:text-xl font-bold text-gray-900 flex items-center gap-2">
                 <DollarSign className="w-4 h-4 lg:w-5 lg:h-5 text-green-500" />
+=======
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 overflow-hidden">
+            <div className="p-6 border-b border-gray-100">
+              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                <DollarSign className="w-6 h-6 text-green-500" />
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                 Expense Records ({filteredExpenses.length})
               </h2>
             </div>
@@ -458,6 +556,7 @@ export default function ExpensesPage() {
                 return (
                   <div
                     key={index}
+<<<<<<< HEAD
                     className="p-3 lg:p-6 hover:bg-gray-50 transition-all duration-200 cursor-pointer"
                     onClick={() => handleViewExpense(expense.id)}
                   >
@@ -515,11 +614,69 @@ export default function ExpensesPage() {
                             <div className="flex items-center gap-1 lg:gap-2">
                               <DollarSign className="w-3 h-3 lg:w-4 lg:h-4 flex-shrink-0" />
                               <span className="font-semibold text-gray-900 truncate">
+=======
+                    className="p-6 hover:bg-gray-50 transition-all duration-200 cursor-pointer"
+                    onClick={() => handleViewExpense(expense.id)}
+                  >
+                    <div className="flex items-center justify-between">
+                      {/* Expense Info */}
+                      <div className="flex items-center gap-6 flex-1">
+                        {/* Expense Icon */}
+                        <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-100 rounded-2xl flex items-center justify-center">
+                          <CategoryIcon className="w-8 h-8 text-green-600" />
+                        </div>
+
+                        {/* Main Details */}
+                        <div className="flex-1">
+                          <div className="flex items-center gap-4 mb-3">
+                            <h3 className="text-xl font-bold text-gray-900">
+                              Expense #{expense.id}
+                            </h3>
+                            <div
+                              className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold border ${
+                                statusConfig[
+                                  expense.status as keyof typeof statusConfig
+                                ]?.color
+                              }`}
+                            >
+                              <StatusIcon className="w-4 h-4" />
+                              {expense.status}
+                            </div>
+                            <div
+                              className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold ${
+                                categoryConfig[
+                                  expense.category as keyof typeof categoryConfig
+                                ]?.color
+                              }`}
+                            >
+                              <CategoryIcon className="w-4 h-4" />
+                              {expense.category}
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600 mb-3">
+                            <div className="flex items-center gap-2">
+                              <Calendar className="w-4 h-4" />
+                              <span>{expense.date}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <User className="w-4 h-4" />
+                              <span>{expense.driver}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Car className="w-4 h-4" />
+                              <span>{expense.vehicle}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <DollarSign className="w-4 h-4" />
+                              <span className="font-semibold text-gray-900">
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                                 {expense.amount.toLocaleString()} Toman
                               </span>
                             </div>
                           </div>
 
+<<<<<<< HEAD
                           {/* Mobile Amount Display */}
                           <div className="lg:hidden flex items-center gap-4 mt-2 text-xs text-gray-500">
                             <div className="text-center">
@@ -543,6 +700,15 @@ export default function ExpensesPage() {
                             </div>
                             {expense.notes && (
                               <div className="text-gray-500 italic truncate">
+=======
+                          {/* Description and Notes */}
+                          <div className="text-sm text-gray-600">
+                            <div className="font-medium text-gray-900 mb-1">
+                              {expense.description}
+                            </div>
+                            {expense.notes && (
+                              <div className="text-gray-500 italic">
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                                 {expense.notes}
                               </div>
                             )}
@@ -551,17 +717,28 @@ export default function ExpensesPage() {
                       </div>
 
                       {/* Actions */}
+<<<<<<< HEAD
                       <div className="flex items-center gap-2 lg:gap-3 lg:ml-6">
+=======
+                      <div className="flex items-center gap-3 ml-6">
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                         {expense.receipt_url && (
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               window.open(expense.receipt_url, '_blank');
                             }}
+<<<<<<< HEAD
                             className="flex items-center gap-1 px-2 lg:px-3 py-1 lg:py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all duration-200 text-xs lg:text-sm"
                           >
                             <Receipt className="w-3 h-3 lg:w-4 lg:h-4" />
                             <span className="hidden sm:inline">Receipt</span>
+=======
+                            className="flex items-center gap-2 px-3 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all duration-200"
+                          >
+                            <Receipt className="w-4 h-4" />
+                            Receipt
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                           </button>
                         )}
                         <button
@@ -569,6 +746,7 @@ export default function ExpensesPage() {
                             e.stopPropagation();
                             handleViewExpense(expense.id);
                           }}
+<<<<<<< HEAD
                           className="flex items-center gap-1 px-2 lg:px-3 py-1 lg:py-2 bg-green-100 text-green-700 rounded-lg hover:bg-orange-200 transition-all duration-200 text-xs lg:text-sm"
                         >
                           <Eye className="w-3 h-3 lg:w-4 lg:h-4" />
@@ -576,6 +754,15 @@ export default function ExpensesPage() {
                         </button>
                         <button className="p-1 lg:p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all duration-200">
                           <MoreVertical className="w-3 h-3 lg:w-4 lg:h-4" />
+=======
+                          className="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-xl hover:bg-orange-200 transition-all duration-200"
+                        >
+                          <Eye className="w-4 h-4" />
+                          View
+                        </button>
+                        <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-all duration-200">
+                          <MoreVertical className="w-4 h-4" />
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                         </button>
                       </div>
                     </div>
@@ -586,19 +773,34 @@ export default function ExpensesPage() {
 
             {/* Empty State */}
             {filteredExpenses.length === 0 && (
+<<<<<<< HEAD
               <div className="text-center py-8 lg:py-12">
                 <DollarSign className="w-12 h-12 lg:w-16 lg:h-16 text-gray-400 mx-auto mb-3 lg:mb-4" />
                 <h3 className="text-lg lg:text-xl font-semibold text-gray-900 mb-2">
                   No Expenses Found
                 </h3>
                 <p className="text-gray-600 mb-4 lg:mb-6 text-sm lg:text-base">
+=======
+              <div className="text-center py-12">
+                <DollarSign className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  No Expenses Found
+                </h3>
+                <p className="text-gray-600 mb-6">
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                   Try adjusting your search or filter criteria
                 </p>
                 <button
                   onClick={() => setIsAddModalOpen(true)}
+<<<<<<< HEAD
                   className="flex items-center gap-2 px-4 lg:px-6 py-2 lg:py-3 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-lg lg:rounded-xl hover:shadow-lg transition-all duration-200 mx-auto text-sm"
                 >
                   <Plus className="w-3 h-3 lg:w-4 lg:h-4" />
+=======
+                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-xl hover:shadow-lg transition-all duration-200 mx-auto"
+                >
+                  <Plus className="w-4 h-4" />
+>>>>>>> 66d33a4f74ca751e334222b05c8975696d814720
                   Add New Expense
                 </button>
               </div>
