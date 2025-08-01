@@ -134,7 +134,9 @@ export default function VehiclePerformanceChart() {
                   max: 100,
                   grid: {
                     color: 'rgba(0, 0, 0, 0.05)',
-                    drawBorder: false,
+                  },
+                  border: {
+                    display: false,
                   },
                   ticks: {
                     stepSize: 20,
@@ -147,6 +149,9 @@ export default function VehiclePerformanceChart() {
                 },
                 x: {
                   grid: {
+                    display: false,
+                  },
+                  border: {
                     display: false,
                   },
                   ticks: {
@@ -232,7 +237,9 @@ export default function VehiclePerformanceChart() {
                   beginAtZero: true,
                   grid: {
                     color: 'rgba(0, 0, 0, 0.05)',
-                    drawBorder: false,
+                  },
+                  border: {
+                    display: false,
                   },
                   ticks: {
                     color: '#6b7280',
@@ -244,6 +251,9 @@ export default function VehiclePerformanceChart() {
                 },
                 x: {
                   grid: {
+                    display: false,
+                  },
+                  border: {
                     display: false,
                   },
                   ticks: {
