@@ -110,6 +110,11 @@ interface Trip {
   start: string;
   end: string;
   status: string;
+  distance: string;
+  duration: string;
+  avg_speed: string;
+  route: string;
+  driver_rating: number;
 }
 
 export default function TripDetailPage() {

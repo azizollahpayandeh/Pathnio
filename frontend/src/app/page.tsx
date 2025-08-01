@@ -23,9 +23,8 @@ export default function HomePage() {
         <Image
           src="/images/Pathnio2.png" // Ensure this path is correct
           alt="Logistics cinematic background"
-          layout="fill"
-          objectFit="cover"
-          className={`z-0 transition-opacity duration-1000 ${
+          fill
+          className={`z-0 transition-opacity duration-1000 object-cover ${
             isLoaded ? 'opacity-100' : 'opacity-0'
           }`}
           priority // Prioritize loading for LCP
@@ -189,8 +188,8 @@ export default function HomePage() {
               <Image
                 src={logo.src}
                 alt={logo.alt}
-                layout="fill"
-                objectFit="contain"
+                fill
+                className="object-contain"
                 priority={i === 0} // prioritize first image loading
               />
             </div>
