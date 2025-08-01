@@ -115,6 +115,22 @@ interface Trip {
   avg_speed: string;
   route: string;
   driver_rating: number;
+  vehicle_condition: string;
+  cargo: string;
+  weight: string;
+  stops: number;
+  max_speed: string;
+  fuel_efficiency: string;
+  fuel_consumed: string;
+  engine_temp: string;
+  oil_pressure: string;
+  tire_pressure: string;
+  weather: string;
+  temperature: string;
+  road_conditions: string;
+  traffic: string;
+  maintenance_due: string;
+  notes: string;
 }
 
 export default function TripDetailPage() {
