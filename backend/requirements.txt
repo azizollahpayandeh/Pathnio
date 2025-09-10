@@ -22,3 +22,8 @@ defusedxml==0.7.1
 asgiref==3.9.1
 sqlparse==0.5.3
 tzdata==2025.2 
+dj-database-url==2.3.0
+psycopg[binary]==3.2.3
+whitenoise==6.8.2
+django-storages==1.14.4
+boto3==1.35.36

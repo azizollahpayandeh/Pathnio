@@ -13,7 +13,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Send to Django backend
-    const response = await fetch('http://localhost:8000/api/accounts/contact/', {
+    const base = process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+    const apiUrl = `${base.replace(/\/$/, '')}/api/accounts/contact/`;
+    const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

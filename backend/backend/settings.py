@@ -13,6 +13,11 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 import os
+import sys
+try:
+    import dj_database_url  # type: ignore
+except Exception:
+    dj_database_url = None
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,12 +27,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-255do%edf3=ek&q^y*mviqh_84yed+g(d*$83*xfkqe4f1sedr'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-255do%edf3=ek&q^y*mviqh_84yed+g(d*$83*xfkqe4f1sedr')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True').lower() in ['1', 'true', 'yes']
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,0.0.0.0,.vercel.app').split(',')
 
 
 # Application definition
@@ -45,10 +50,12 @@ INSTALLED_APPS = [
     'djoser',
     'corsheaders',
     'accounts',
+    'storages',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -91,6 +98,12 @@ DATABASES = {
     }
 }
 
+# Prefer DATABASE_URL if provided (e.g., for Vercel/production)
+database_url = os.environ.get('DATABASE_URL')
+if database_url and dj_database_url is not None:
+    # Enable persistent connections and SSL when available
+    DATABASES['default'] = dj_database_url.parse(database_url, conn_max_age=600)
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -131,9 +144,22 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Optional S3 storage for media when env vars are provided
+if os.environ.get('AWS_S3_BUCKET_NAME'):
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', '')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', '')
+    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_S3_BUCKET_NAME', '')
+    AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME')
+    AWS_S3_SIGNATURE_VERSION = 's3v4'
+    AWS_QUERYSTRING_AUTH = False
+    AWS_DEFAULT_ACL = None
+    MEDIA_URL = os.environ.get('MEDIA_URL', f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -184,12 +210,17 @@ SIMPLE_JWT = {
 }
 
 # CORS Configuration
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-]
+# CORS configuration (allow override via env comma-separated list)
+cors_origins_env = os.environ.get('CORS_ALLOWED_ORIGINS')
+if cors_origins_env:
+    CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins_env.split(',') if origin.strip()]
+else:
+    CORS_ALLOWED_ORIGINS = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+    ]
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -221,18 +252,28 @@ X_FRAME_OPTIONS = 'DENY'
 SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
+SECURE_SSL_REDIRECT = not DEBUG
 
 # Session Settings
-SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
+SESSION_COOKIE_SECURE = not DEBUG
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_AGE = 432000  # 5 days in seconds
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_SAVE_EVERY_REQUEST = True
 
-# CSRF Settings
-CSRF_COOKIE_SECURE = False  # Set to True in production with HTTPS
+""" CSRF Settings """
+CSRF_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_AGE = 432000  # 5 days in seconds
+csrf_trusted = os.environ.get('CSRF_TRUSTED_ORIGINS')
+if csrf_trusted:
+    CSRF_TRUSTED_ORIGINS = [o.strip() for o in csrf_trusted.split(',') if o.strip()]
+else:
+    CSRF_TRUSTED_ORIGINS = [
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+        'https://*.vercel.app',
+    ]
 
 # DJOSER Configuration
 DJOSER = {
@@ -267,7 +308,7 @@ DJOSER = {
     'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
 }
 
-# Logging Configuration
+# Logging Configuration (console by default for serverless platforms like Vercel)
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -276,28 +317,29 @@ LOGGING = {
             'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
             'style': '{',
         },
+        'simple': {
+            'format': '[{levelname}] {message}',
+            'style': '{',
+        },
     },
     'handlers': {
-        'file': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
             'level': 'ERROR',
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'logs' / 'django.log',
-            'formatter': 'verbose',
+            'stream': sys.stdout,
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['file'],
+            'handlers': ['console'],
             'level': 'ERROR',
             'propagate': True,
         },
         'accounts': {
-            'handlers': ['file'],
+            'handlers': ['console'],
             'level': 'ERROR',
             'propagate': True,
         },
     },
 }
-
-# Create logs directory if it doesn't exist
-os.makedirs(BASE_DIR / 'logs', exist_ok=True)

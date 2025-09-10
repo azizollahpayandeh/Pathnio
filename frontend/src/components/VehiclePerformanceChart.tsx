@@ -143,7 +143,7 @@ export default function VehiclePerformanceChart() {
                     color: '#6b7280',
                     font: {
                       size: 12,
-                      weight: '500',
+                      weight: 500,
                     },
                   },
                 },
@@ -158,7 +158,7 @@ export default function VehiclePerformanceChart() {
                     color: '#6b7280',
                     font: {
                       size: 12,
-                      weight: '500',
+                      weight: 500,
                     },
                   },
                 },
@@ -218,7 +218,7 @@ export default function VehiclePerformanceChart() {
                     padding: 20,
                     font: {
                       size: 12,
-                      weight: '600',
+                      weight: 600,
                     },
                   },
                 },
@@ -245,7 +245,7 @@ export default function VehiclePerformanceChart() {
                     color: '#6b7280',
                     font: {
                       size: 12,
-                      weight: '500',
+                      weight: 500,
                     },
                   },
                 },
@@ -260,7 +260,7 @@ export default function VehiclePerformanceChart() {
                     color: '#6b7280',
                     font: {
                       size: 12,
-                      weight: '500',
+                      weight: 500,
                     },
                   },
                 },

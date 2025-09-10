@@ -1,7 +1,14 @@
 import axios from "axios";
 
+const envBase =
+  process.env.NEXT_PUBLIC_API_BASE_URL ||
+  process.env.API_BASE_URL ||
+  "http://localhost:8000";
+
+const normalizedBase = envBase.endsWith("/") ? envBase.slice(0, -1) : envBase;
+
 const api = axios.create({
-  baseURL: "http://localhost:8000/api/",
+  baseURL: `${normalizedBase}/api/`,
 });
 
 // Add token to header in every request

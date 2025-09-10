@@ -848,3 +848,4 @@ Traceback (most recent call last):
            ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
 django.db.utils.OperationalError: no such table: accounts_profile
 ERROR 2025-07-31 09:45:17,844 basehttp 1748 2192 "GET /api/accounts/users/all/ HTTP/1.1" 500 183258
+ERROR 2025-08-20 16:30:50,658 views 20368 6264 Company registration validation error: {'user': [ErrorDetail(string='This field is required.', code='required')], 'company_name': [ErrorDetail(string='This field is required.', code='required')], 'manager_full_name': [ErrorDetail(string='This field is required.', code='required')]}
