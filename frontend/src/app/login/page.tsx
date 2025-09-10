@@ -117,31 +117,41 @@ export default function LoginPage() {
         setAlert({ type: 'error', msg: errorMsg });
       }
     } catch (err: unknown) {
-      let errorMsg = 'Registration failed. Please try again.';
-      if (err && typeof err === 'object' && 'response' in err) {
-        const response = (err as any).response;
-        if (response?.data?.detail) {
-          errorMsg = response.data.detail;
-        } else if (response?.data?.errors) {
-          // Handle nested validation errors
-          const errors = response.data.errors;
-          if (errors.user) {
-            if (typeof errors.user === 'string') {
-              errorMsg = errors.user;
-            } else if (errors.user.username) {
-              errorMsg = errors.user.username[0];
-            } else if (errors.user.email) {
-              errorMsg = errors.user.email[0];
-            }
-          } else if (errors.company_name) {
-            errorMsg = errors.company_name[0];
-          } else if (errors.manager_full_name) {
-            errorMsg = errors.manager_full_name[0];
-          } else if (errors.phone) {
-            errorMsg = errors.phone[0];
-          }
+      // Extract DRF validation errors (both top-level and nested 'errors')
+      const extractError = (data: any): string | null => {
+        if (!data) return null;
+        if (typeof data.detail === 'string') return data.detail;
+        const source = data.errors || data; // DRF may return dict at root
+        if (source.user) {
+          const u = source.user;
+          if (typeof u === 'string') return u;
+          if (u.username && Array.isArray(u.username)) return u.username[0];
+          if (u.email && Array.isArray(u.email)) return u.email[0];
+          if (u.password && Array.isArray(u.password)) return u.password[0];
         }
-      }
+        const keys = ['company_name','manager_full_name','phone','address','non_field_errors','password'];
+        for (const k of keys) {
+          const v = source[k];
+          if (typeof v === 'string') return v;
+          if (Array.isArray(v) && v.length) return v[0];
+        }
+        // Fallback: first value in dict
+        if (source && typeof source === 'object') {
+          const first = Object.values(source)[0] as any;
+          if (typeof first === 'string') return first;
+          if (Array.isArray(first) && first.length) return first[0];
+        }
+        return null;
+      };
+
+      let errorMsg = 'Registration failed. Please try again.';
+      try {
+        if (err && typeof err === 'object' && 'response' in err) {
+          const data = (err as any).response?.data;
+          const parsed = extractError(data);
+          if (parsed) errorMsg = parsed;
+        }
+      } catch {}
       setAlert({ type: 'error', msg: errorMsg });
     } finally {
       setRegisterLoading(false);
