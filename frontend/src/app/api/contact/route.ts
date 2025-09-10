@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Send to Django backend
-    const base = process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+    const base = process.env.API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || 'https://pathnio-backend.vercel.app';
     const apiUrl = `${base.replace(/\/$/, '')}/api/accounts/contact/`;
     const response = await fetch(apiUrl, {
       method: 'POST',

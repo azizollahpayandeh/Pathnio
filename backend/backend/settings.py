@@ -222,6 +222,11 @@ else:
         "http://127.0.0.1:8000",
     ]
 
+# Allow all Vercel frontends by regex (e.g., https://*.vercel.app)
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://.*\.vercel\.app$",
+]
+
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOW_METHODS = [
