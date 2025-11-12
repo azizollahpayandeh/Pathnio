@@ -3,7 +3,9 @@ import axios from "axios";
 const envBase =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
   process.env.API_BASE_URL ||
-  "https://pathnio-backend.vercel.app";
+  (typeof window !== 'undefined' && window.location.hostname === 'localhost' 
+    ? "http://localhost:8000" 
+    : "https://pathnio-backend.vercel.app");
 
 const normalizedBase = envBase.endsWith("/") ? envBase.slice(0, -1) : envBase;
 

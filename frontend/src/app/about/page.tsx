@@ -5,7 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Code, Users, Zap, Target, Heart, Star, ArrowRight, Sparkles } from 'lucide-react';
+import { Code, Users, Target, Heart, Star, ArrowRight, Sparkles } from 'lucide-react';
 
 // A custom hook to detect if an element is in view with TypeScript support
 function useInView<T extends HTMLElement>(
@@ -206,8 +206,8 @@ export default function AboutPage() {
             </div>
 
             {/* Team Members Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-              {/* Team Member 1 - Azizollah Paeezadeh */}
+            <div className="grid grid-cols-1 gap-8 lg:gap-12 max-w-3xl mx-auto">
+              {/* Team Member - Azizollah Paeezadeh */}
               <div
                 className={`group transition-all duration-700 ease-out ${
                   teamInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
@@ -220,10 +220,14 @@ export default function AboutPage() {
                   
                   {/* Profile Image */}
                   <div className="relative w-32 h-32 mx-auto mb-8 rounded-full overflow-hidden shadow-2xl group-hover:scale-110 transition-transform duration-500">
-                    <div className="w-full h-full bg-gradient-to-br from-blue-500 via-cyan-500 to-blue-700 flex items-center justify-center text-white text-3xl font-bold relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-blue-400/50 to-cyan-400/50 rounded-full"></div>
-                      <span className="relative z-10">AP</span>
-                    </div>
+                    <Image
+                      src="/images/azizollah-profile.JPG"
+                      alt="Azizollah Payanda"
+                      fill
+                      sizes="128px"
+                      priority
+                      className="object-cover"
+                    />
                     {/* Floating Ring */}
                     <div className="absolute inset-0 border-2 border-blue-400/30 rounded-full animate-spin-slow"></div>
                   </div>
@@ -256,57 +260,7 @@ export default function AboutPage() {
                     </div>
                   </div>
                 </div>
-              </div>
-
-              {/* Team Member 2 - Amir Mohammad Marvi */}
-              <div
-                className={`group transition-all duration-700 ease-out ${
-                  teamInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
-                }`}
-                style={{ transitionDelay: '400ms' }}
-              >
-                <div className="relative bg-white/90 backdrop-blur-xl rounded-3xl p-8 border border-green-100 hover:bg-white hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 hover:shadow-green-500/25">
-                  {/* Glow Effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  
-                  {/* Profile Image */}
-                  <div className="relative w-32 h-32 mx-auto mb-8 rounded-full overflow-hidden shadow-2xl group-hover:scale-110 transition-transform duration-500">
-                    <div className="w-full h-full bg-gradient-to-br from-green-500 via-emerald-500 to-green-700 flex items-center justify-center text-white text-3xl font-bold relative">
-                      <div className="absolute inset-0 bg-gradient-to-br from-green-400/50 to-emerald-400/50 rounded-full"></div>
-                      <span className="relative z-10">AM</span>
-                    </div>
-                    {/* Floating Ring */}
-                    <div className="absolute inset-0 border-2 border-green-400/30 rounded-full animate-spin-slow"></div>
-                  </div>
-                  
-                  {/* Team Member Info */}
-                  <div className="text-center relative z-10">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-green-700 transition-colors duration-300">
-                      AmirMuhammad Marwi
-                    </h3>
-                    <div className="inline-flex items-center px-4 py-2 bg-green-100 rounded-full border border-green-200 mb-6">
-                      <Zap className="w-4 h-4 text-green-600 mr-2" />
-                      <span className="text-green-800 font-semibold">Employee</span>
-                    </div>
-                    <p className="text-gray-600 leading-relaxed mb-8 text-sm">
-                      AmirMuhammad Marwi is a valued employee at Pathnio. With dedication and commitment, 
-                      he contributes to the success of our team and helps deliver quality solutions to our clients.
-                    </p>
-                    
-                    {/* Social Links */}
-                    <div className="flex justify-center space-x-4">
-                      <div className="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center hover:bg-green-100 border border-green-200 transition-all duration-300 hover:scale-110">
-                        <span className="text-green-600 font-bold text-sm">G</span>
-                      </div>
-                      <div className="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center hover:bg-green-100 border border-green-200 transition-all duration-300 hover:scale-110">
-                        <span className="text-green-600 font-bold text-sm">T</span>
-                      </div>
-                      <div className="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center hover:bg-green-100 border border-green-200 transition-all duration-300 hover:scale-110">
-                        <span className="text-green-600 font-bold text-sm">D</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                
               </div>
             </div>
 
