@@ -1,16 +1,19 @@
 import axios from "axios";
 
+// یک Base URL واحد برای همه جا (API و عکس‌ها)
 const envBase =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
   process.env.API_BASE_URL ||
-  (typeof window !== 'undefined' && window.location.hostname === 'localhost' 
-    ? "http://localhost:8000" 
+  (typeof window !== "undefined" && window.location.hostname === "localhost"
+    ? "http://localhost:8000"
     : "https://pathnio-backend.vercel.app");
 
-const normalizedBase = envBase.endsWith("/") ? envBase.slice(0, -1) : envBase;
+export const API_BASE_URL = envBase.endsWith("/")
+  ? envBase.slice(0, -1)
+  : envBase;
 
 const api = axios.create({
-  baseURL: `${normalizedBase}/api/`,
+  baseURL: `${API_BASE_URL}/api/`,
 });
 
 // Add token to header in every request
@@ -43,4 +46,4 @@ api.interceptors.response.use(
   }
 );
 
-export default api; 
+export default api;

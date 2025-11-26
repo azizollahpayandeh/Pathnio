@@ -5,7 +5,7 @@ import FloatingAlert from "@/components/FloatingAlert";
 import { useRouter } from "next/navigation";
 import Swal from 'sweetalert2';
 import Image from 'next/image';
-import api from "../api";
+import api, { API_BASE_URL } from "../api";
 
 const LANGUAGES = [
   { value: "en", label: "English", flag: "🇺🇸" },  
@@ -187,15 +187,13 @@ export default function ProfilePage() {
       return photo;
     }
     if (photo.startsWith("/media/")) {
-      const base = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-      const fullUrl = base + photo;
+      const fullUrl = API_BASE_URL + photo;
       console.log("Built full URL:", fullUrl);
       return fullUrl;
     }
     // If it's a relative path without /media/, assume it's from the API
     if (photo && !photo.startsWith("/")) {
-      const base = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-      const fullUrl = base + "/media/" + photo;
+      const fullUrl = API_BASE_URL + "/media/" + photo;
       console.log("Built media URL:", fullUrl);
       return fullUrl;
     }

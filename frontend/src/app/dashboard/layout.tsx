@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import api from '../api';
+import api, { API_BASE_URL } from '../api';
 
 interface User {
   id: string;
@@ -144,8 +144,7 @@ export default function DashboardLayout({
       return photo;
     }
     if (photo.startsWith('/media/')) {
-      const base = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const fullUrl = base + photo;
+      const fullUrl = API_BASE_URL + photo;
       console.log('Dashboard - Built full URL:', fullUrl);
       return fullUrl;
     }
