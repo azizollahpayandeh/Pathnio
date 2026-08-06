@@ -1,197 +1,91 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { Truck, Menu, X } from "lucide-react";
+import { isAuthenticated } from "@/lib/auth";
 
-// تعریف type مناسب برای User
-interface User {
-  id: number;
-  username: string;
-  email: string;
-  // سایر فیلدها در صورت نیاز
-}
+const LINKS = [
+  { href: "/", label: "Home" },
+  { href: "/features", label: "Features" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+];
 
 export default function Header() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
-    const access = localStorage.getItem('access');
-    const userData = localStorage.getItem('user');
-
-    if (access && userData) {
-      setIsLoggedIn(true);
-      // setUser(JSON.parse(userData)); // This line was removed as per the edit hint
-    }
-    setIsLoading(false);
+    setLoggedIn(isAuthenticated());
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const handleLinkClick = () => {
-    setMenuOpen(false);
-  };
-
-  if (isLoading) {
-    return (
-      <header className="fixed top-0 w-full z-50 backdrop-blur-md bg-gradient-to-r from-blue-900/70 to-blue-600/70 shadow-lg border-b border-white/20">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <Link
-            href="/"
-            className="text-3xl font-extrabold text-white tracking-wide drop-shadow-xl cursor-pointer select-none"
-          >
-            Pathnio
-          </Link>
-          <div className="w-20 h-8 bg-white/30 rounded animate-pulse"></div>
-        </div>
-      </header>
-    );
-  }
+  // Transparent over the dark hero on the home page; solid elsewhere so the
+  // white nav text always stays readable over light backgrounds.
+  const solid = scrolled || pathname !== "/";
 
   return (
-    <header className="fixed top-0 w-full z-50 backdrop-blur-lg bg-gradient-to-r from-blue-900/90 to-blue-600/90 shadow-xl border-b border-white/25">
-      <div className="container mx-auto px-6 py-5 flex justify-between items-center">
-        {/* لوگو */}
-        <Link
-          href="/"
-          className="text-3xl font-extrabold text-white tracking-wide drop-shadow-xl cursor-pointer select-none transition-transform duration-300 hover:scale-105"
-          onClick={handleLinkClick}
-        >
+    <header
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+        solid
+          ? "bg-blue-950/90 backdrop-blur-lg shadow-lg border-b border-white/10"
+          : "bg-transparent"
+      }`}
+    >
+      <div className="container mx-auto px-5 sm:px-8 h-16 flex justify-between items-center">
+        <Link href="/" className="flex items-center gap-2.5 text-2xl font-extrabold text-white tracking-wide" onClick={() => setMenuOpen(false)}>
+          <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-brand">
+            <Truck className="w-5 h-5 text-white" />
+          </span>
           Pathnio
         </Link>
 
-        {/* دکمه منوی موبایل */}
         <button
-          className={`md:hidden relative w-10 h-10 flex flex-col justify-center items-center group focus:outline-none`}
+          className="md:hidden w-10 h-10 flex items-center justify-center text-white"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Toggle menu"
         >
-          {/* خطوط همبرگر با انیمیشن چرخش */}
-          <span
-            className={`block absolute h-1 w-7 bg-white rounded transition-transform duration-300 ease-in-out origin-center
-              ${menuOpen ? 'rotate-45' : '-translate-y-3.5'}
-            `}
-          />
-          <span
-            className={`block absolute h-1 w-7 bg-white rounded transition-all duration-300 ease-in-out
-              ${menuOpen ? 'opacity-0' : 'opacity-100'}
-            `}
-          />
-          <span
-            className={`block absolute h-1 w-7 bg-white rounded transition-transform duration-300 ease-in-out origin-center
-              ${menuOpen ? '-rotate-45' : 'translate-y-3.5'}
-            `}
-          />
-          <span className="sr-only">Toggle menu</span>
+          {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
 
-        {/* منو دسکتاپ */}
-        <nav className="hidden md:flex space-x-8 text-white font-semibold items-center text-4x">
-          <Link
-            href="/"
-            className="hover:text-blue-300 transition-colors duration-300"
-            onClick={handleLinkClick}
-          >
-            Home
-          </Link>
-          <Link
-            href="/features"
-            className="hover:text-blue-300 transition-colors duration-300"
-            onClick={handleLinkClick}
-          >
-            Features
-          </Link>
-          <Link
-            href="/about"
-            className="hover:text-blue-300 transition-colors duration-300"
-            onClick={handleLinkClick}
-          >
-            About Us
-          </Link>
-          <Link
-            href="/contact"
-            className="hover:text-blue-300 transition-colors duration-300"
-            onClick={handleLinkClick}
-          >
-            Contact Us
-          </Link>
-
-          {isLoggedIn ? (
-            <>
-              <Link
-                href="/dashboard"
-                className="px-5 py-2 bg-gradient-to-r from-blue-700 to-blue-500 rounded-xl shadow-lg hover:from-blue-600 hover:to-blue-400 transition-colors duration-300"
-                onClick={handleLinkClick}
-              >
-                Dashboard
-              </Link>
-            </>
-          ) : (
-            <Link
-              href="/login"
-              className="ml-6 px-5 py-2 bg-white text-blue-900 font-semibold rounded-xl shadow-lg hover:bg-blue-100 transition-colors duration-300"
-              onClick={handleLinkClick}
-            >
-              Login
+        <nav className="hidden md:flex items-center gap-8 text-white/90 font-medium">
+          {LINKS.map((l) => (
+            <Link key={l.href} href={l.href} className="hover:text-white transition-colors">
+              {l.label}
             </Link>
-          )}
+          ))}
+          <Link
+            href={loggedIn ? "/dashboard" : "/login"}
+            className="px-5 py-2 bg-white text-blue-800 font-semibold rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
+          >
+            {loggedIn ? "Dashboard" : "Sign In"}
+          </Link>
         </nav>
       </div>
 
-      {/* منوی موبایل با انیمیشن اسلاید */}
-      <div
-        className={`md:hidden bg-blue-900/95 text-white font-semibold flex flex-col px-6 overflow-hidden border-t border-blue-700
-          transition-all duration-400 ease-in-out
-          ${menuOpen ? 'max-h-96 py-6' : 'max-h-0 py-0'}
-        `}
-      >
-        <Link
-          href="/"
-          onClick={handleLinkClick}
-          className="py-2 hover:text-blue-300 transition-colors duration-300"
-        >
-          Home
-        </Link>
-        <Link
-          href="/features"
-          onClick={handleLinkClick}
-          className="py-2 hover:text-blue-300 transition-colors duration-300"
-        >
-          Features
-        </Link>
-        <Link
-          href="/about"
-          onClick={handleLinkClick}
-          className="py-2 hover:text-blue-300 transition-colors duration-300"
-        >
-          About Us
-        </Link>
-        <Link
-          href="/contact"
-          onClick={handleLinkClick}
-          className="py-2 hover:text-blue-300 transition-colors duration-300"
-        >
-          Contact Us
-        </Link>
-
-        {isLoggedIn ? (
-          <>
-            <Link
-              href="/dashboard"
-              className="mt-4 px-4 py-2 bg-gradient-to-r from-blue-700 to-blue-500 rounded-xl shadow-lg hover:from-blue-600 hover:to-blue-400 transition-colors duration-300"
-              onClick={handleLinkClick}
-            >
-              Dashboard
+      {/* Mobile menu */}
+      <div className={`md:hidden overflow-hidden transition-all duration-300 bg-blue-950/95 backdrop-blur-lg ${menuOpen ? "max-h-96 py-4 border-t border-white/10" : "max-h-0"}`}>
+        <div className="flex flex-col px-6 gap-1 text-white/90 font-medium">
+          {LINKS.map((l) => (
+            <Link key={l.href} href={l.href} onClick={() => setMenuOpen(false)} className="py-2.5 hover:text-white transition-colors">
+              {l.label}
             </Link>
-          </>
-        ) : (
+          ))}
           <Link
-            href="/login"
-            className="mt-4 px-4 py-2 bg-white text-blue-900 font-semibold rounded-xl shadow-lg hover:bg-blue-100 transition-colors duration-300"
-            onClick={handleLinkClick}
+            href={loggedIn ? "/dashboard" : "/login"}
+            onClick={() => setMenuOpen(false)}
+            className="mt-3 px-4 py-2.5 bg-white text-blue-800 font-semibold rounded-xl text-center"
           >
-            Login
+            {loggedIn ? "Dashboard" : "Sign In"}
           </Link>
-        )}
+        </div>
       </div>
     </header>
   );

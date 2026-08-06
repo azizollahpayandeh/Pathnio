@@ -190,3 +190,83 @@ class Alert(models.Model):
     
     def __str__(self):
         return f"{self.user.username} - {self.title} - {self.priority}"
+
+
+class Vehicle(models.Model):
+    STATUS_CHOICES = [("Active", "Active"), ("Inactive", "Inactive"), ("Maintenance", "Maintenance")]
+    TYPE_CHOICES = [("Truck", "Truck"), ("Van", "Van"), ("Sedan", "Sedan"), ("Pickup", "Pickup")]
+
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="vehicles", null=True, blank=True)
+    plate_number = models.CharField(max_length=32)
+    vehicle_type = models.CharField(max_length=16, choices=TYPE_CHOICES, default="Truck")
+    model = models.CharField(max_length=128, blank=True)
+    driver = models.CharField(max_length=255, blank=True)
+    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default="Active")
+    capacity = models.CharField(max_length=32, blank=True)
+    color = models.CharField(max_length=32, blank=True)
+    fuel_level = models.PositiveIntegerField(default=100)
+    odometer = models.PositiveIntegerField(default=0)
+    efficiency = models.CharField(max_length=32, blank=True)
+    last_maintenance = models.DateField(null=True, blank=True)
+    total_trips = models.PositiveIntegerField(default=0)
+    lat = models.FloatField(default=0)
+    lng = models.FloatField(default=0)
+    speed = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.plate_number} ({self.model})"
+
+
+class Trip(models.Model):
+    STATUS_CHOICES = [
+        ("Ongoing", "Ongoing"), ("Completed", "Completed"),
+        ("Scheduled", "Scheduled"), ("Cancelled", "Cancelled"),
+    ]
+
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="trips", null=True, blank=True)
+    origin = models.CharField(max_length=128)
+    destination = models.CharField(max_length=128)
+    driver = models.CharField(max_length=255, blank=True)
+    plate_number = models.CharField(max_length=32, blank=True)
+    distance = models.PositiveIntegerField(default=0)
+    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default="Scheduled")
+    cargo = models.CharField(max_length=128, blank=True)
+    revenue = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    start_time = models.DateTimeField(default=timezone.now)
+    end_time = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-start_time"]
+
+    def __str__(self):
+        return f"{self.origin} -> {self.destination} ({self.status})"
+
+
+class Expense(models.Model):
+    CATEGORY_CHOICES = [
+        ("Fuel", "Fuel"), ("Maintenance", "Maintenance"), ("Tolls", "Tolls"),
+        ("Insurance", "Insurance"), ("Salary", "Salary"), ("Other", "Other"),
+    ]
+    STATUS_CHOICES = [("Paid", "Paid"), ("Pending", "Pending")]
+
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="expenses", null=True, blank=True)
+    title = models.CharField(max_length=255)
+    category = models.CharField(max_length=16, choices=CATEGORY_CHOICES, default="Fuel")
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    date = models.DateField(default=timezone.now)
+    plate_number = models.CharField(max_length=32, blank=True)
+    driver = models.CharField(max_length=255, blank=True)
+    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default="Paid")
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-date"]
+
+    def __str__(self):
+        return f"{self.title} - {self.amount}"

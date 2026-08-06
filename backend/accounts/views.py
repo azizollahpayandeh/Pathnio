@@ -21,13 +21,15 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 
 from .models import (
-    Company, Driver, ContactMessage, SiteSettings, 
-    ActivityLog, UserSession, SecuritySettings, LoginAttempt, Profile, Alert
+    Company, Driver, ContactMessage, SiteSettings,
+    ActivityLog, UserSession, SecuritySettings, LoginAttempt, Profile, Alert,
+    Vehicle, Trip, Expense
 )
 from .serializers import (
-    CompanySerializer, CompanyUpdateSerializer, CompanyUserSerializer, DriverSerializer, ContactMessageSerializer, 
+    CompanySerializer, CompanyUpdateSerializer, CompanyUserSerializer, DriverSerializer, ContactMessageSerializer,
     SiteSettingsSerializer, LoginSerializer, PasswordChangeSerializer,
-    UserProfileUpdateSerializer, ActivityLogSerializer, AlertSerializer
+    UserProfileUpdateSerializer, ActivityLogSerializer, AlertSerializer,
+    VehicleSerializer, TripSerializer, ExpenseSerializer
 )
 
 logger = logging.getLogger(__name__)
@@ -211,52 +213,11 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                     'code': 'invalid_password',
                 }, status=status.HTTP_401_UNAUTHORIZED)
 
-# Test view to verify endpoint is accessible
-class TestLoginView(APIView):
-    permission_classes = [AllowAny]
-    
-    def post(self, request):
-        return Response({
-            'message': 'Login endpoint is working',
-            'data': request.data
-        })
-
-# Test view for company registration
-class TestCompanyRegistrationView(APIView):
-    permission_classes = [AllowAny]
-    
-    def post(self, request):
-        logger.info(f"Test registration endpoint called with data: {request.data}")
-        return Response({
-            'message': 'Company registration endpoint is accessible',
-            'received_data': request.data,
-            'data_structure': {
-                'has_user': 'user' in request.data,
-                'user_fields': list(request.data.get('user', {}).keys()) if 'user' in request.data else [],
-                'company_fields': [k for k in request.data.keys() if k != 'user']
-            }
-        })
-
-# Test view for profile photo upload
-class TestPhotoUploadView(APIView):
-    permission_classes = [AllowAny]
-    
-    def post(self, request):
-        logger.info(f"Test photo upload endpoint called")
-        logger.info(f"Files: {request.FILES}")
-        logger.info(f"Data: {request.data}")
-        return Response({
-            'message': 'Photo upload test endpoint',
-            'files': list(request.FILES.keys()) if request.FILES else [],
-            'data': request.data
-        })
-
 # Authentication Views
 class LoginView(APIView):
     permission_classes = [AllowAny]
     
     def post(self, request):
-        print(f"LoginView - Login attempt with data: {request.data}")
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             username = serializer.validated_data['username']
@@ -264,11 +225,9 @@ class LoginView(APIView):
             ip_address = get_client_ip(request)
             user_agent = request.META.get('HTTP_USER_AGENT', '')
             
-            print(f"LoginView - Attempting login for username: {username}")
             
             # Check if user is locked out
             if check_login_attempts(username, ip_address):
-                print(f"LoginView - User {username} is locked out")
                 return Response({
                     'detail': 'اکانت شما به دلیل تلاش ناموفق زیاد، به مدت یک ساعت قفل شد. لطفاً بعداً دوباره تلاش کنید.',
                     'code': 'too_many_attempts',
@@ -280,18 +239,14 @@ class LoginView(APIView):
                 # If not found by username, try email
                 user_obj = User.objects.filter(email=username).first()
                 if user_obj:
-                    print(f"LoginView - User found by email: {user_obj.username}")
                     username = user_obj.username  # Use the actual username for authentication
             
-            print(f"LoginView - User object found: {user_obj is not None}")
             if user_obj:
-                print(f"LoginView - User ID: {user_obj.id}, Username: {user_obj.username}, Email: {user_obj.email}, Is active: {user_obj.is_active}")
+                pass
             
             user = authenticate(username=username, password=password)
-            print(f"LoginView - Authentication result: {user is not None}")
             
             if user is not None:
-                print(f"LoginView - Login successful for user: {username}")
                 # Record successful login
                 record_login_attempt(username, ip_address, user_agent, True, user)
                 
@@ -344,25 +299,21 @@ class LoginView(APIView):
                     }
                 })
             else:
-                print(f"LoginView - Login failed for user: {username}")
                 # Record failed login attempt (even if user does not exist)
                 record_login_attempt(username, ip_address, user_agent, False, user_obj)
                 
                 # Improved error message
                 if not user_obj:
-                    print(f"LoginView - User {username} does not exist")
                     return Response({
                         'detail': 'The entered username does not exist.',
                         'code': 'user_not_found',
                     }, status=status.HTTP_401_UNAUTHORIZED)
                 else:
-                    print(f"LoginView - Password incorrect for user {username}")
                     return Response({
                         'detail': 'The password is incorrect. Please try again.',
                         'code': 'invalid_password',
                     }, status=status.HTTP_401_UNAUTHORIZED)
         
-        print(f"LoginView - Serializer errors: {serializer.errors}")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LogoutView(APIView):
@@ -399,8 +350,6 @@ class PasswordChangeView(APIView):
     permission_classes = [IsAuthenticated]
     
     def post(self, request):
-        print(f"PasswordChangeView - Request from user: {request.user.username}")
-        print(f"PasswordChangeView - Request data: {request.data}")
         
         serializer = PasswordChangeSerializer(data=request.data)
         if serializer.is_valid():
@@ -408,22 +357,18 @@ class PasswordChangeView(APIView):
             old_password = serializer.validated_data['old_password']
             new_password = serializer.validated_data['new_password']
             
-            print(f"PasswordChangeView - Validated data: old_password={'***' if old_password else 'None'}, new_password={'***' if new_password else 'None'}")
             
             # Check old password
             if not user.check_password(old_password):
-                print(f"PasswordChangeView - Old password check failed for user: {user.username}")
                 return Response({
                     'detail': 'Current password is incorrect.'
                 }, status=status.HTTP_400_BAD_REQUEST)
             
-            print(f"PasswordChangeView - Old password check passed, changing password...")
             
             # Change password
             user.set_password(new_password)
             user.save()
             
-            print(f"PasswordChangeView - Password changed successfully for user: {user.username}")
             
             # Update security settings
             security_settings, created = SecuritySettings.objects.get_or_create(user=user)
@@ -446,7 +391,7 @@ class PasswordChangeView(APIView):
             )
             return Response({'detail': 'Password changed successfully.'})
         else:
-            print(f"PasswordChangeView - Serializer errors: {serializer.errors}")
+            pass
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -794,15 +739,12 @@ class UserListView(APIView):
 
     def get(self, request):
         user = request.user
-        print(f"UserListView - Request from user: {user.username}")
         
         # فقط ادمین یا مدیر (کسی که company_profile دارد)
         if not (user.is_staff or hasattr(user, 'company_profile')):
-            print(f"UserListView - Permission denied for user: {user.username}")
             return Response({'detail': 'Permission denied.'}, status=403)
         
         users = User.objects.all().order_by('-date_joined')
-        print(f"UserListView - Found {users.count()} users in database")
         
         data = []
         for u in users:
@@ -829,9 +771,7 @@ class UserListView(APIView):
                 'profile_photo': self.get_profile_photo_url(u, company),
             }
             data.append(user_data)
-            print(f"UserListView - User {u.id}: {u.username} - {full_name} - Company: {getattr(company, 'company_name', 'None')}")
         
-        print(f"UserListView - Returning {len(data)} users")
         return Response(data)
 
 class UserRoleUpdateView(APIView):
@@ -874,16 +814,12 @@ class ProfileAPIView(APIView):
         company = getattr(user, 'company_profile', None)
         
         # Debug logging
-        print(f"ProfileAPIView - User: {user.username}")
-        print(f"ProfileAPIView - Company: {company}")
         if company:
-            print(f"ProfileAPIView - Company profile_photo: {company.profile_photo}")
-            print(f"ProfileAPIView - Company profile_photo.url: {company.profile_photo.url if company.profile_photo else 'None'}")
+            pass
         
         profile_photo = None
         if company and company.profile_photo:
             profile_photo = company.profile_photo.url
-            print(f"ProfileAPIView - Final profile_photo URL: {profile_photo}")
         
         response_data = {
             'full_name': getattr(company, 'manager_full_name', None) or user.get_full_name() or user.username,
@@ -894,7 +830,6 @@ class ProfileAPIView(APIView):
             'profile_photo': profile_photo,
         }
         
-        print(f"ProfileAPIView - Response data: {response_data}")
         return Response(response_data)
 
 class UserCreateView(APIView):
@@ -902,12 +837,9 @@ class UserCreateView(APIView):
     
     def post(self, request):
         user = request.user
-        print(f"UserCreateView - Request from user: {user.username}")
-        print(f"UserCreateView - Request data: {request.data}")
         
         # فقط ادمین یا مدیر می‌تواند کاربر جدید ایجاد کند
         if not (user.is_staff or hasattr(user, 'company_profile')):
-            print(f"UserCreateView - Permission denied for user: {user.username}")
             return Response({'detail': 'Permission denied.'}, status=403)
         
         try:
@@ -919,29 +851,24 @@ class UserCreateView(APIView):
             company_name = request.data.get('company_name', '')
             role = request.data.get('role', 'user')  # 'user', 'manager', 'admin', 'superadmin'
             
-            print(f"UserCreateView - Extracted data: username={username}, email={email}, password={'***' if password else 'None'}, full_name={full_name}, phone={phone}, company_name={company_name}, role={role}")
             
             # بررسی وجود فیلدهای اجباری
             if not username or not email or not password:
-                print(f"UserCreateView - Missing required fields: username={bool(username)}, email={bool(email)}, password={bool(password)}")
                 return Response({
                     'detail': 'Username, email and password are required.'
                 }, status=400)
             
             # بررسی تکراری نبودن username و email
             if User.objects.filter(username=username).exists():
-                print(f"UserCreateView - Username already exists: {username}")
                 return Response({
                     'detail': 'Username already exists.'
                 }, status=400)
             
             if User.objects.filter(email=email).exists():
-                print(f"UserCreateView - Email already exists: {email}")
                 return Response({
                     'detail': 'Email already exists.'
                 }, status=400)
             
-            print(f"UserCreateView - Creating new user: {username} with role: {role}")
             
             # ایجاد کاربر جدید
             new_user = User.objects.create_user(
@@ -961,37 +888,32 @@ class UserCreateView(APIView):
             
             new_user.save()
             
-            print(f"UserCreateView - User created successfully: {new_user.id}, is_staff: {new_user.is_staff}, is_superuser: {new_user.is_superuser}")
             
             # Verify user was actually saved
             try:
                 saved_user = User.objects.get(id=new_user.id)
-                print(f"UserCreateView - User verification: ID={saved_user.id}, Username={saved_user.username}, Email={saved_user.email}, Active={saved_user.is_active}, is_staff: {saved_user.is_staff}")
                 
                 # Test authentication
                 test_auth = authenticate(username=saved_user.username, password=password)
-                print(f"UserCreateView - Authentication test: {test_auth is not None}")
                 if test_auth:
-                    print(f"UserCreateView - Test auth successful for: {test_auth.username}")
+                    pass
                 else:
-                    print(f"UserCreateView - Test auth failed for: {saved_user.username}")
+                    pass
                     
             except User.DoesNotExist:
-                print(f"UserCreateView - ERROR: User {new_user.id} was not found in database after creation!")
+                pass
             except Exception as e:
-                print(f"UserCreateView - Error during verification: {e}")
+                pass
             
             # اگر company_name داده شده، Company Profile ایجاد کن
             company = None
             if (company_name and company_name.strip()) or role == 'manager':
-                print(f"UserCreateView - Creating company profile: {company_name}")
                 company = Company.objects.create(
                     user=new_user,
                     company_name=company_name,
                     manager_full_name=full_name,
                     phone=phone
                 )
-                print(f"UserCreateView - Company profile created: {company.id}")
 
             # Profile photo
             profile_photo = request.FILES.get('profile_photo')
@@ -999,7 +921,6 @@ class UserCreateView(APIView):
                 profile, created = Profile.objects.get_or_create(user=new_user)
                 profile.profile_photo = profile_photo
                 profile.save()
-                print(f"UserCreateView - Profile photo saved for user: {new_user.id}")
             
             # لاگ فعالیت
             log_activity(request, 'user_created', {
@@ -1030,11 +951,9 @@ class UserCreateView(APIView):
                 'profile_photo': new_user.profile.profile_photo.url if hasattr(new_user, 'profile') and new_user.profile.profile_photo else (company.profile_photo.url if company and company.profile_photo else None),
             }
             
-            print(f"UserCreateView - Returning response: {response_data}")
             return Response(response_data, status=201)
             
         except Exception as e:
-            print(f"UserCreateView - Error creating user: {e}")
             logger.error(f"Error creating user: {e}")
             return Response({
                 'detail': 'Failed to create user. Please try again.'
@@ -1232,13 +1151,49 @@ class UserAlertsView(APIView):
 
 class AdminAlertsView(APIView):
     permission_classes = [IsAuthenticated]
-    
+
     def get(self, request):
         """Get all alerts for admin"""
         user = request.user
         if not (user.is_staff or hasattr(user, 'company_profile')):
             return Response({'detail': 'Permission denied.'}, status=403)
-        
+
         alerts = Alert.objects.all().order_by('-timestamp')[:100]
         serializer = AlertSerializer(alerts, many=True)
         return Response(serializer.data)
+
+
+class CompanyScopedViewSet(viewsets.ModelViewSet):
+    """Base viewset that scopes fleet resources to the requesting user's company."""
+    permission_classes = [IsAuthenticated]
+
+    def _company(self):
+        return getattr(self.request.user, 'company_profile', None)
+
+    def get_queryset(self):
+        company = self._company()
+        qs = self.queryset
+        # Staff see everything; company managers see only their own records.
+        if self.request.user.is_staff:
+            return qs
+        if company is not None:
+            return qs.filter(company=company)
+        return qs.none()
+
+    def perform_create(self, serializer):
+        serializer.save(company=self._company())
+
+
+class VehicleViewSet(CompanyScopedViewSet):
+    queryset = Vehicle.objects.all()
+    serializer_class = VehicleSerializer
+
+
+class TripViewSet(CompanyScopedViewSet):
+    queryset = Trip.objects.all()
+    serializer_class = TripSerializer
+
+
+class ExpenseViewSet(CompanyScopedViewSet):
+    queryset = Expense.objects.all()
+    serializer_class = ExpenseSerializer

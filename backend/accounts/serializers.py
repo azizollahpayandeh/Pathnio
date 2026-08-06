@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
-from .models import Company, Driver, ContactMessage, SiteSettings, Profile, Alert
+from .models import Company, Driver, ContactMessage, SiteSettings, Profile, Alert, Vehicle, Trip, Expense
 from djoser.serializers import UserSerializer as DjoserUserSerializer, UserCreateSerializer as DjoserUserCreateSerializer
 
 class UserSerializer(serializers.ModelSerializer):
@@ -277,3 +277,25 @@ class AlertSerializer(serializers.ModelSerializer):
         model = Alert
         fields = ('id', 'alert_type', 'title', 'message', 'priority', 'read', 'ip_address', 'user_agent', 'timestamp')
         read_only_fields = ('id', 'timestamp')
+
+
+# Fleet resource serializers
+class VehicleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vehicle
+        fields = '__all__'
+        read_only_fields = ('id', 'company', 'created_at')
+
+
+class TripSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Trip
+        fields = '__all__'
+        read_only_fields = ('id', 'company', 'created_at')
+
+
+class ExpenseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Expense
+        fields = '__all__'
+        read_only_fields = ('id', 'company', 'created_at')

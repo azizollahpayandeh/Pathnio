@@ -14,8 +14,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Fleet Management Dashboard",
-  description: "Modern fleet management dashboard",
+  title: "Pathnio — Modern Fleet Management",
+  description:
+    "Track, manage and optimize your entire fleet in real time — drivers, vehicles, trips, expenses and analytics in one beautiful dashboard.",
+  icons: { icon: "/favicon.svg" },
 };
 
 export default function RootLayout({

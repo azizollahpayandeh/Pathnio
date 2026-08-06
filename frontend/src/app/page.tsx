@@ -1,254 +1,172 @@
-'use client';
-import { useState } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+"use client";
+import Link from "next/link";
+import Image from "next/image";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import {
+  MapPin, BarChart3, UserCheck, ArrowRight, Truck, Route,
+  Wallet, Bell, ShieldCheck, Zap, Gauge, Star,
+} from "lucide-react";
 
-// Import Lucide icons for a more professional look
+const FEATURES = [
+  { icon: MapPin, title: "Real-Time GPS", desc: "Track every vehicle live on an interactive map with accurate positioning.", tone: "from-emerald-500 to-teal-600" },
+  { icon: BarChart3, title: "Fleet Analytics", desc: "Revenue, expenses and performance — visualized in beautiful reports.", tone: "from-blue-500 to-indigo-600" },
+  { icon: UserCheck, title: "Driver Insights", desc: "Monitor ratings, trips and behavior to keep your team performing.", tone: "from-purple-500 to-fuchsia-600" },
+  { icon: Route, title: "Trip Management", desc: "Schedule, track and complete journeys with cargo and revenue tracking.", tone: "from-orange-500 to-amber-600" },
+  { icon: Wallet, title: "Expense Control", desc: "Log fuel, maintenance and tolls — always know where money goes.", tone: "from-cyan-500 to-blue-600" },
+  { icon: Bell, title: "Smart Alerts", desc: "Get notified about maintenance, low fuel and critical events instantly.", tone: "from-rose-500 to-red-600" },
+];
 
-import { MapPin, BarChart2, UserCheck, ArrowRight } from 'lucide-react';
+const STATS = [
+  { value: "12+", label: "Vehicles tracked" },
+  { value: "98%", label: "On-time rate" },
+  { value: "24/7", label: "Live monitoring" },
+  { value: "€1.2M", label: "Revenue managed" },
+];
 
 export default function HomePage() {
-  const [isLoaded, setIsLoaded] = useState(false);
-
   return (
-    <div className="text-gray-800 font-[Inter,sans-serif]">
-      {/* Header component - Assumed to be styled externally */}
+    <div className="text-slate-800">
       <Header />
-      {/* Hero Section with Image Background and Dynamic Content */}
-      <section className="relative h-screen flex items-center justify-center text-white overflow-hidden">
-        {/* Background Image with smooth loading transition */}
 
-        <Image
-          src="/images/Pathnio2.png" // Ensure this path is correct
-          alt="Logistics cinematic background"
-          fill
-          className={`z-0 transition-opacity duration-1000 object-cover ${
-            isLoaded ? 'opacity-100' : 'opacity-0'
-          }`}
-          priority // Prioritize loading for LCP
-          placeholder="blur" // Use blurDataURL for a smooth loading placeholder
-          blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABeElEQVR4Xu3WQQ6DMAwF0It58AfKiR3AuRXKn0xN4U0AfRbUQyZuNmd3a+6G4jyHoEcAAMAAHgO/oE8uRcAzjP8yX+qa9z/4nUq1cLYNnd3p/Ra1XxeC6vrNkyVmcuWQd0+FEqX66ps6g7E5u5c9Ve0q7Go+r9dP1YLflWmP18YcwN1ZdOWmWe7z2n31ZfShWhXVxDHzkg37ahk6lKPR+B0pFqHUfpOCUYgC4dKXGoe9GCXmoBOUnQ7nR4HLt8h20cKn9H4vFUSnUeV6MB0eFSYpFmfxB3dywfwdf0hElSo1GgkElkK9Fq9dqxQunMTHi0Wp3GlzgxN3TyN6+DTikI1Fq9Xa5QiqbVoqBq8SyqlUq6uJTE5LSJkO2OSvIV1eCcAPAD8BrigYcAAGAAHwAA4AIAbCDqGYL48Q/p1Lzlt4e6f4MnyNfpOr/TvcAAAAASUVORK5CYII="
-          onLoadingComplete={() => setIsLoaded(true)}
-        />
+      {/* Hero */}
+      <section className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-950 text-white">
+        <div className="absolute -top-32 -left-32 w-[32rem] h-[32rem] bg-blue-500/25 rounded-full blur-3xl animate-floaty" />
+        <div className="absolute top-1/3 -right-24 w-[30rem] h-[30rem] bg-indigo-500/25 rounded-full blur-3xl" />
+        <div className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)", backgroundSize: "36px 36px" }} />
 
-        {/* Dark overlay with a subtle gradient for better text contrast */}
+        <div className="relative z-10 container mx-auto px-6 sm:px-10 py-28 grid lg:grid-cols-2 gap-12 items-center">
+          <div className="animate-fade-in-up">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/15 text-sm font-medium mb-6">
+              <Zap className="w-4 h-4 text-amber-300" /> The modern fleet platform
+            </span>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1] mb-6">
+              Fleet management,<br /><span className="bg-gradient-to-r from-blue-300 to-cyan-300 bg-clip-text text-transparent">redefined.</span>
+            </h1>
+            <p className="text-lg text-blue-100/90 max-w-xl mb-8">
+              Track, manage and optimize your entire fleet in real time — drivers, vehicles, trips and expenses in one beautiful dashboard.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link href="/dashboard" className="btn btn-primary text-lg px-8 py-4">
+                Get Started <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link href="/about" className="btn text-lg px-8 py-4 bg-white/10 border border-white/20 text-white hover:bg-white/20">
+                Learn More
+              </Link>
+            </div>
+            <div className="flex items-center gap-6 mt-10">
+              <div className="flex -space-x-3">
+                {["from-blue-400 to-blue-600", "from-emerald-400 to-teal-600", "from-purple-400 to-fuchsia-600", "from-orange-400 to-amber-600"].map((g, i) => (
+                  <span key={i} className={`w-10 h-10 rounded-full bg-gradient-to-br ${g} border-2 border-blue-900`} />
+                ))}
+              </div>
+              <div>
+                <div className="flex text-amber-300">{[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-amber-300" />)}</div>
+                <div className="text-sm text-blue-100/80">Trusted by logistics teams</div>
+              </div>
+            </div>
+          </div>
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-0" />
-
-        {/* Hero content: Headline, Subtitle, and Call-to-Action Buttons */}
-
-        <div className="relative z-10 text-center px-6 sm:px-10 md:px-16 max-w-5xl mx-auto">
-          <h2
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 drop-shadow-2xl animate-text-fade-in"
-            style={{ animationDelay: '0.3s' }}
-          >
-            Fleet Management, <span className="text-blue-300">Redefined</span>
-          </h2>
-          <p
-            className="text-base sm:text-lg md:text-xl text-gray-200 max-w-xl mx-auto animate-text-fade-in"
-            style={{ animationDelay: '0.7s' }}
-          >
-            Track, manage, and optimize your transit company’s trucks in
-            real-time — with Pathnio.
-          </p>
-
-          {/* Call-to-Action Buttons */}
-
-          <div
-            className="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4 animate-text-fade-in"
-            style={{ animationDelay: '1.0s' }}
-          >
-            <Link
-              href="/dashboard"
-              className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white font-bold rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 hover:shadow-xl"
-            >
-              Get Started
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
-
-            <Link
-              href="/about"
-              className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 font-bold rounded-full shadow-lg hover:text-blue-800 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 hover:shadow-xl"
-            >
-              Learn More
-            </Link>
+          {/* Floating dashboard preview */}
+          <div className="relative hidden lg:block animate-fade-in-up" style={{ animationDelay: "0.15s" }}>
+            <div className="card-glass p-5 text-slate-800 shadow-xl rotate-1 hover:rotate-0 transition-transform duration-500">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="w-3 h-3 rounded-full bg-rose-400" />
+                <span className="w-3 h-3 rounded-full bg-amber-400" />
+                <span className="w-3 h-3 rounded-full bg-emerald-400" />
+                <span className="ml-2 text-sm font-semibold text-slate-500">Pathnio Dashboard</span>
+              </div>
+              <div className="grid grid-cols-3 gap-3 mb-4">
+                {([
+                  { Icon: Truck, v: "12", l: "Vehicles", g: "from-orange-500 to-amber-600" },
+                  { Icon: Route, v: "8", l: "Trips", g: "from-purple-500 to-fuchsia-600" },
+                  { Icon: Gauge, v: "98%", l: "Uptime", g: "from-emerald-500 to-teal-600" },
+                ] as const).map(({ Icon, v, l, g }, i) => (
+                  <div key={i} className="rounded-2xl bg-white p-3 border border-slate-100 shadow-sm">
+                    <div className={`w-8 h-8 rounded-xl bg-gradient-to-br ${g} flex items-center justify-center mb-2`}><Icon className="w-4 h-4 text-white" /></div>
+                    <div className="text-xl font-bold text-slate-900">{v}</div>
+                    <div className="text-xs text-slate-400">{l}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="rounded-2xl bg-white p-4 border border-slate-100 shadow-sm">
+                <div className="text-sm font-semibold text-slate-600 mb-3">Weekly revenue</div>
+                <div className="flex items-end gap-2 h-24">
+                  {[40, 65, 45, 80, 55, 90, 70].map((h, i) => (
+                    <div key={i} className="flex-1 rounded-lg bg-gradient-to-t from-blue-600 to-indigo-400" style={{ height: `${h}%` }} />
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* About Section */}
-
-      <section
-        id="about"
-        className="py-16 sm:py-20 px-6 sm:px-10 md:px-20 bg-white relative overflow-hidden"
-      >
-        {/* Subtle background graphic/shape for visual interest */}
-
-        <div className="absolute inset-0 opacity-10 bg-[url('/images/dots.svg')] bg-repeat z-0" />
-
-        <div className="max-w-3xl mx-auto text-center relative z-10">
-          <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-700 mb-6 sm:mb-8 animate-text-fade-in">
-            Why Choose Pathnio?
-          </h3>
-
-          <p className="text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed animate-text-fade-in">
-            Pathnio is a smart solution for transit and logistics companies. We
-            provide powerful tools to monitor, control, and analyze your truck
-            fleet in real-time — making transportation more efficient,
-            transparent, and profitable.
-          </p>
-        </div>
-      </section>
-
-      {/* Features */}
-
-      <section
-        id="features"
-        className="bg-blue-50 py-16 sm:py-20 px-6 sm:px-10 md:px-20"
-      >
-        <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-12 pointer">
-          {['gps', 'analytics', 'driver'].map((type, i) => {
-            const content = {
-              gps: {
-                title: 'Real-Time GPS',
-
-                icon: '📍',
-
-                desc: 'Live tracking with accuracy across all routes.',
-              },
-
-              analytics: {
-                title: 'Fleet Analytics',
-
-                icon: '📊',
-
-                desc: 'Detailed performance metrics and reports.',
-              },
-
-              driver: {
-                title: 'Driver Behavior',
-
-                icon: '🧑‍✈️',
-
-                desc: 'Monitor and evaluate driver patterns easily.',
-              },
-            }[type as 'gps' | 'analytics' | 'driver'];
-
-            if (!content) return null;
-
-            return (
-              <div
-                key={i}
-                className="group bg-white rounded-3xl shadow-lg p-6 sm:p-8 transform transition hover:-translate-y-3 hover:shadow-2xl"
-              >
-                <div className="text-4xl sm:text-5xl mb-4 sm:mb-6 transition group-hover:scale-110">
-                  {content.icon}
-                </div>
-
-                <h4 className="text-xl sm:text-2xl font-semibold text-blue-600 mb-1 sm:mb-2">
-                  {content.title}
-                </h4>
-
-                <p className="text-gray-600 text-sm sm:text-base">
-                  {content.desc}
-                </p>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Trusted Brands Section - Added animations */}
-
-      <section className="bg-white py-16 sm:py-20 px-6 sm:px-10 md:px-20 text-center">
-        <h3
-          className="text-2xl sm:text-3xl md:text-4xl font-semibold text-blue-800 mb-8 sm:mb-10 animate-text-fade-in"
-          style={{ animationDelay: '0.2s' }} // Added animation delay
-        >
-          Trusted by Leading Companies
-        </h3>
-
-        <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-10">
-          {[
-            { src: '/logos/DHL.png', alt: 'DHL' },
-
-            { src: '/logos/FEDEX.png', alt: 'FedEx' },
-
-            { src: '/logos/MAERSK.png', alt: 'Maersk' },
-
-            { src: '/logos/UPS.png', alt: 'UPS' },
-          ].map((logo, i) => (
-            <div
-              key={i}
-              className="w-24 sm:w-32 h-12 sm:h-16 relative grayscale hover:grayscale-0 transition-all duration-300 transform hover:scale-105 animate-text-fade-in"
-              style={{ animationDelay: `${0.4 + i * 0.1}s` }} // Staggered animation delay
-            >
-              <Image
-                src={logo.src}
-                alt={logo.alt}
-                fill
-                className="object-contain"
-                priority={i === 0} // prioritize first image loading
-              />
+      {/* Stats band */}
+      <section className="bg-white py-14 border-b border-slate-100">
+        <div className="container mx-auto px-6 grid grid-cols-2 lg:grid-cols-4 gap-8">
+          {STATS.map((s) => (
+            <div key={s.label} className="text-center">
+              <div className="text-4xl font-extrabold text-blue-700">{s.value}</div>
+              <div className="text-slate-500 mt-1">{s.label}</div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Call-to-Action (CTA) Section at the bottom - Added animations */}
-
-      <section className="bg-blue-50 py-16 sm:py-20 px-6 sm:px-10 text-center">
-        <h4
-          className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-800 mb-4 animate-text-fade-in"
-          style={{ animationDelay: '0.2s' }} // Added animation delay
-        >
-          Ready to transform your fleet?
-        </h4>
-
-        <p
-          className="text-base sm:text-lg md:text-xl text-gray-700 mb-8 max-w-xl mx-auto animate-text-fade-in"
-          style={{ animationDelay: '0.4s' }} // Added animation delay
-        >
-          Join hundreds of companies already optimizing their logistics with
-          Pathnio.
-        </p>
-
-        <Link
-          href="/login"
-          className="inline-block px-8 py-4 bg-blue-700 text-white font-bold rounded-full hover:bg-blue-800 transition-all duration-300 ease-in-out shadow-xl hover:shadow-2xl transform hover:-translate-y-1 hover:scale-105 animate-text-fade-in"
-          style={{ animationDelay: '0.6s' }} // Added animation delay
-        >
-          Get Started Now
-        </Link>
+      {/* Features */}
+      <section id="features" className="py-24 bg-[var(--background)]">
+        <div className="container mx-auto px-6">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">Everything you need to run a fleet</h2>
+            <p className="text-lg text-slate-500">Powerful tools designed to make transportation efficient, transparent and profitable.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {FEATURES.map((f) => (
+              <div key={f.title} className="card card-hover p-7">
+                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${f.tone} flex items-center justify-center shadow-md mb-5`}>
+                  <f.icon className="w-7 h-7 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">{f.title}</h3>
+                <p className="text-slate-500">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
-      {/* Footer component - Assumed to be styled externally */}
+      {/* Trusted brands */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-6 text-center">
+          <h3 className="text-2xl font-bold text-slate-800 mb-10">Trusted by leading companies</h3>
+          <div className="flex flex-wrap justify-center items-center gap-10">
+            {[
+              { src: "/logos/DHL.png", alt: "DHL" },
+              { src: "/logos/FEDEX.png", alt: "FedEx" },
+              { src: "/logos/MAERSK.png", alt: "Maersk" },
+              { src: "/logos/UPS.png", alt: "UPS" },
+            ].map((logo, i) => (
+              <div key={i} className="w-28 h-14 relative grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300">
+                <Image src={logo.src} alt={logo.alt} fill className="object-contain" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-24 bg-gradient-to-br from-blue-700 to-indigo-800 text-white">
+        <div className="container mx-auto px-6 text-center max-w-2xl">
+          <ShieldCheck className="w-14 h-14 mx-auto mb-6 text-blue-200" />
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Ready to transform your fleet?</h2>
+          <p className="text-lg text-blue-100/90 mb-8">Join hundreds of teams already optimizing their logistics with Pathnio.</p>
+          <Link href="/login" className="btn text-lg px-8 py-4 bg-white text-blue-800 hover:-translate-y-0.5 shadow-xl">
+            Get Started Now <ArrowRight className="w-5 h-5" />
+          </Link>
+        </div>
+      </section>
 
       <Footer />
-
-      {/* Custom CSS for Animations */}
-
-      <style jsx>{`
-        @keyframes textFadeIn {
-          0% {
-            opacity: 0;
-
-            transform: translateY(30px) scale(0.95);
-          }
-
-          100% {
-            opacity: 1;
-
-            transform: translateY(0) scale(1);
-          }
-        }
-
-        .animate-text-fade-in {
-          animation: textFadeIn 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-      `}</style>
     </div>
   );
 }

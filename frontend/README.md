@@ -1,37 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pathnio — Frontend
 
-## Getting Started
+The Pathnio fleet-management web app, built with **Next.js 15**, **React 19**,
+**TypeScript** and **Tailwind CSS v4**.
 
-First, run the development server:
+## Development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
 ```
-fdfd
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Build
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+npm run start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## How data works
 
-## Learn More
+The app is self-contained: all fleet data is kept in a reactive
+`localStorage`-backed store (`src/lib/store.ts`) with seed data
+(`src/lib/seed.ts`), and auth is handled client-side (`src/lib/auth.ts`). Every
+create / edit / delete persists across reloads.
 
-To learn more about Next.js, take a look at the following resources:
+Demo login: **demo@pathnio.com** / **demo1234** (or click _“Use demo account”_).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To connect a real backend instead, set `NEXT_PUBLIC_API_BASE_URL` and use the
+Django REST API in `../backend`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Structure
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+├── app/          # App Router routes (landing, auth, dashboard/*)
+├── components/   # UI primitives, modals, widgets
+└── lib/          # store, auth, types, seed data
+```

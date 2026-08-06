@@ -1,212 +1,82 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import FloatingAlert from '@/components/FloatingAlert';
-import api from '../api';
-import { Lock } from 'lucide-react';
-
-interface CompanyData {
-  companyName: string;
-  fullName: string;
-  phone: string;
-  email: string;
-  password: string;
-  address: string;
-}
+"use client";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import FloatingAlert from "@/components/FloatingAlert";
+import { Lock, Truck, ArrowRight, Sparkles } from "lucide-react";
+import { register, login, isAuthenticated } from "@/lib/auth";
 
 const companyFields = [
-  {
-    label: 'Company Name',
-    name: 'companyName',
-    required: true,
-    placeholder: 'Enter company name',
-  },
-  {
-    label: 'Full Name',
-    name: 'fullName',
-    required: true,
-    placeholder: 'Enter your full name',
-  },
-  {
-    label: 'Phone Number',
-    name: 'phone',
-    required: true,
-    placeholder: 'Enter phone number',
-  },
-  {
-    label: 'Email',
-    name: 'email',
-    required: true,
-    placeholder: 'Enter email address',
-  },
-  {
-    label: 'Password',
-    name: 'password',
-    required: true,
-    placeholder: 'Create a password',
-    type: 'password',
-  },
-  {
-    label: 'Head Office Address',
-    name: 'address',
-    required: false,
-    placeholder: 'Enter head office address',
-  },
+  { label: "Company Name", name: "companyName", required: true, placeholder: "Acme Logistics" },
+  { label: "Full Name", name: "fullName", required: true, placeholder: "Your full name" },
+  { label: "Phone Number", name: "phone", required: true, placeholder: "+49 151 000 000" },
+  { label: "Email", name: "email", required: true, placeholder: "you@company.com", type: "email" },
+  { label: "Password", name: "password", required: true, placeholder: "At least 6 characters", type: "password" },
+  { label: "Head Office Address", name: "address", required: false, placeholder: "City, Country" },
 ];
 
 export default function LoginPage() {
-  const [tab, setTab] = useState('login');
+  const [tab, setTab] = useState<"login" | "register">("login");
   const [registerLoading, setRegisterLoading] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
-  const [registerMessage, setRegisterMessage] = useState('');
-  const [alert, setAlert] = useState<{
-    type: 'success' | 'error';
-    msg: string;
-  } | null>(null);
+  const [alert, setAlert] = useState<{ type: "success" | "error"; msg: string } | null>(null);
   const router = useRouter();
 
-  // Check if user is already logged in
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const access = localStorage.getItem('access');
-      if (access) {
-        // User is already logged in, redirect to dashboard
-        router.push('/dashboard');
-      }
-    }
+    if (isAuthenticated()) router.push("/dashboard");
   }, [router]);
 
-  // Register
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setRegisterLoading(true);
-    setRegisterMessage('');
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-    const data: CompanyData = {
-      companyName: formData.get('companyName') as string,
-      fullName: formData.get('fullName') as string,
-      phone: formData.get('phone') as string,
-      email: formData.get('email') as string,
-      password: formData.get('password') as string,
-      address: formData.get('address') as string,
-    };
+    const fd = new FormData(e.currentTarget);
     try {
-      const res = await api.post('accounts/register/company/', {
-        user: {
-          username: data.email,
-          email: data.email,
-          password: data.password,
-        },
-        company_name: data.companyName,
-        manager_full_name: data.fullName,
-        phone: data.phone,
-        address: data.address,
+      const password = fd.get("password") as string;
+      if (password.length < 6) throw new Error("Password must be at least 6 characters.");
+      register({
+        company_name: fd.get("companyName") as string,
+        manager_full_name: fd.get("fullName") as string,
+        phone: fd.get("phone") as string,
+        email: fd.get("email") as string,
+        password,
+        address: (fd.get("address") as string) || "",
       });
-      if (res.status === 201 || res.status === 200) {
-        setAlert({
-          type: 'success',
-          msg: 'Registration successful! You can now log in.',
-        });
-        setTab('login');
-      } else {
-        let errorMsg =
-          res.data?.detail ||
-          'Registration failed. Please check your information.';
-        setAlert({ type: 'error', msg: errorMsg });
-      }
-    } catch (err: unknown) {
-      // Extract DRF validation errors (both top-level and nested 'errors')
-      const extractError = (data: any): string | null => {
-        if (!data) return null;
-        if (typeof data.detail === 'string') return data.detail;
-        const source = data.errors || data; // DRF may return dict at root
-        if (source.user) {
-          const u = source.user;
-          if (typeof u === 'string') return u;
-          if (u.username && Array.isArray(u.username)) return u.username[0];
-          if (u.email && Array.isArray(u.email)) return u.email[0];
-          if (u.password && Array.isArray(u.password)) return u.password[0];
-        }
-        const keys = ['company_name','manager_full_name','phone','address','non_field_errors','password'];
-        for (const k of keys) {
-          const v = source[k];
-          if (typeof v === 'string') return v;
-          if (Array.isArray(v) && v.length) return v[0];
-        }
-        // Fallback: first value in dict
-        if (source && typeof source === 'object') {
-          const first = Object.values(source)[0] as any;
-          if (typeof first === 'string') return first;
-          if (Array.isArray(first) && first.length) return first[0];
-        }
-        return null;
-      };
-
-      let errorMsg = 'Registration failed. Please try again.';
-      try {
-        if (err && typeof err === 'object' && 'response' in err) {
-          const data = (err as any).response?.data;
-          const parsed = extractError(data);
-          if (parsed) errorMsg = parsed;
-        }
-      } catch {}
-      setAlert({ type: 'error', msg: errorMsg });
+      setAlert({ type: "success", msg: "Account created! Signing you in…" });
+      setTimeout(() => {
+        login(fd.get("email") as string, password);
+        router.push("/dashboard");
+      }, 900);
+    } catch (err) {
+      setAlert({ type: "error", msg: err instanceof Error ? err.message : "Registration failed." });
     } finally {
       setRegisterLoading(false);
     }
   };
 
-  // Login
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoginLoading(true);
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-    const username = formData.get('login-username') as string;
-    const password = formData.get('login-password') as string;
+    const fd = new FormData(e.currentTarget);
     try {
-      const res = await api.post('accounts/auth/login/', {
-        username,
-        password,
-      });
-      if (res.status === 200) {
-        const access = res.data.access;
-        const refresh = res.data.refresh;
-        localStorage.setItem('access', access);
-        localStorage.setItem('refresh', refresh);
-        // ذخیره user با نقش‌ها از پاسخ لاگین
-        if (res.data.user) {
-          localStorage.setItem('user', JSON.stringify(res.data.user));
-        }
-        setAlert({ type: 'success', msg: 'Login successful!' });
-        setTimeout(() => {
-          router.push('/dashboard');
-        }, 1500);
-      } else {
-        setAlert({
-          type: 'error',
-          msg: res.data?.detail || 'Check your credentials.',
-        });
-      }
-    } catch (err: unknown) {
-      let errorMsg = 'Login failed. Please try again.';
-      if (
-        err &&
-        typeof err === 'object' &&
-        'response' in err &&
-        (err as any).response?.data?.detail
-      ) {
-        errorMsg = (err as any).response.data.detail;
-      }
-      setAlert({ type: 'error', msg: errorMsg });
+      login(fd.get("login-username") as string, fd.get("login-password") as string);
+      setAlert({ type: "success", msg: "Welcome back! Redirecting…" });
+      setTimeout(() => router.push("/dashboard"), 800);
+    } catch (err) {
+      setAlert({ type: "error", msg: err instanceof Error ? err.message : "Login failed." });
     } finally {
       setLoginLoading(false);
     }
   };
 
-  // Floating alert auto-close
-  React.useEffect(() => {
+  const fillDemo = () => {
+    setTab("login");
+    setTimeout(() => {
+      (document.getElementById("login-username") as HTMLInputElement).value = "demo@pathnio.com";
+      (document.getElementById("login-password") as HTMLInputElement).value = "demo1234";
+    }, 0);
+  };
+
+  useEffect(() => {
     if (alert) {
       const t = setTimeout(() => setAlert(null), 3500);
       return () => clearTimeout(t);
@@ -214,134 +84,98 @@ export default function LoginPage() {
   }, [alert]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-300 relative overflow-hidden">
-      {/* Decorative blurred circles */}
-      <div className="absolute -top-32 -left-32 w-96 h-96 bg-blue-200 rounded-full filter blur-3xl opacity-40 z-0" />
-      <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-blue-400 rounded-full filter blur-3xl opacity-30 z-0" />
-      <div className="w-full max-w-lg bg-white/90 rounded-3xl shadow-2xl p-8 md:p-12 relative z-10 backdrop-blur-xl border border-blue-100">
-        <div className="flex flex-col items-center mb-8 gap-2">
-          <div className="bg-blue-100 rounded-full p-4 shadow-lg mb-2">
-            <Lock className="w-10 h-10 text-blue-700" />
-          </div>
-          <div className="flex justify-center w-full gap-2">
-            <button
-              className={`flex-1 px-6 py-2 rounded-l-xl font-semibold transition-colors duration-200 cursor-pointer text-lg ${
-                tab === 'login'
-                  ? 'bg-blue-600 text-white shadow'
-                  : 'bg-gray-100 text-blue-700'
-              }`}
-              onClick={() => setTab('login')}
-            >
-              Login
-            </button>
-            <button
-              className={`flex-1 px-6 py-2 rounded-r-xl font-semibold transition-colors duration-200 cursor-pointer text-lg ${
-                tab === 'register'
-                  ? 'bg-blue-600 text-white shadow'
-                  : 'bg-gray-100 text-blue-700'
-              }`}
-              onClick={() => setTab('register')}
-            >
-              Register
-            </button>
+    <div className="min-h-screen grid lg:grid-cols-2">
+      {/* Brand panel */}
+      <div className="relative hidden lg:flex flex-col justify-between overflow-hidden bg-gradient-to-br from-blue-700 via-blue-800 to-indigo-900 p-12 text-white">
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-400/30 rounded-full blur-3xl animate-floaty" />
+        <div className="absolute -bottom-32 -right-16 w-[28rem] h-[28rem] bg-indigo-500/30 rounded-full blur-3xl" />
+        <Link href="/" className="relative z-10 flex items-center gap-3 font-extrabold text-2xl tracking-widest">
+          <span className="w-11 h-11 rounded-2xl bg-white/15 backdrop-blur flex items-center justify-center shadow-glow">
+            <Truck className="w-6 h-6" />
+          </span>
+          Pathnio
+        </Link>
+        <div className="relative z-10 max-w-md">
+          <h1 className="text-4xl font-bold leading-tight mb-4">
+            Run your fleet from a single, beautiful dashboard.
+          </h1>
+          <p className="text-blue-100/90 text-lg">
+            Real-time tracking, drivers, trips, expenses and analytics — all in one place.
+          </p>
+          <div className="mt-8 grid grid-cols-3 gap-4">
+            {[["12+", "Vehicles"], ["10", "Drivers"], ["98%", "On-time"]].map(([v, l]) => (
+              <div key={l} className="rounded-2xl bg-white/10 backdrop-blur p-4 border border-white/10">
+                <div className="text-2xl font-bold">{v}</div>
+                <div className="text-sm text-blue-100/80">{l}</div>
+              </div>
+            ))}
           </div>
         </div>
-        {tab === 'login' ? (
-          <>
-            <h2 className="text-2xl font-extrabold text-center text-blue-700 mb-8 tracking-tight">
-              Sign In to Pathnio
-            </h2>
-            <form className="space-y-7" onSubmit={handleLogin}>
-              <div>
-                <label
-                  htmlFor="login-username"
-                  className="block mb-2 text-sm font-semibold text-gray-700"
+        <p className="relative z-10 text-blue-200/70 text-sm">© {new Date().getFullYear()} Pathnio. All rights reserved.</p>
+      </div>
+
+      {/* Form panel */}
+      <div className="flex items-center justify-center p-6 sm:p-10 bg-[var(--background)]">
+        <div className="w-full max-w-md">
+          <div className="flex flex-col items-center mb-8">
+            <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-brand mb-4">
+              <Lock className="w-8 h-8 text-white" />
+            </div>
+            <div className="flex p-1 bg-slate-100 rounded-2xl w-full max-w-xs">
+              {(["login", "register"] as const).map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setTab(t)}
+                  className={`flex-1 px-6 py-2.5 rounded-xl font-semibold capitalize transition-all ${
+                    tab === t ? "bg-white text-blue-700 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                  }`}
                 >
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="login-username"
-                  name="login-username"
-                  className="w-full px-5 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50/60 placeholder:text-blue-300 text-blue-900 text-base shadow-sm"
-                  placeholder="Enter your email"
-                  required
-                />
+                  {t}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {tab === "login" ? (
+            <form className="space-y-5 animate-fade-in-up" onSubmit={handleLogin}>
+              <h2 className="text-2xl font-bold text-slate-900 text-center">Welcome back</h2>
+              <p className="text-center text-slate-500 -mt-2 text-sm">Sign in to your Pathnio account</p>
+              <div>
+                <label htmlFor="login-username" className="block mb-1.5 text-sm font-semibold text-slate-700">Email</label>
+                <input id="login-username" name="login-username" type="email" required className="field" placeholder="you@company.com" defaultValue="" />
               </div>
               <div>
-                <label
-                  htmlFor="login-password"
-                  className="block mb-2 text-sm font-semibold text-gray-700"
-                >
-                  Password
-                </label>
-                <input
-                  type="password"
-                  id="login-password"
-                  name="login-password"
-                  className="w-full px-5 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50/60 placeholder:text-blue-300 text-blue-900 text-base shadow-sm"
-                  placeholder="Enter your password"
-                  required
-                />
+                <label htmlFor="login-password" className="block mb-1.5 text-sm font-semibold text-slate-700">Password</label>
+                <input id="login-password" name="login-password" type="password" required className="field" placeholder="••••••••" />
               </div>
-              <button
-                type="submit"
-                className="w-full py-3 px-4 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl transition duration-200 shadow-lg cursor-pointer mt-2 text-lg"
-                disabled={loginLoading}
-              >
-                {loginLoading ? 'Signing In...' : 'Sign In'}
+              <button type="submit" className="btn btn-primary w-full text-lg" disabled={loginLoading}>
+                {loginLoading ? "Signing In…" : (<>Sign In <ArrowRight className="w-5 h-5" /></>)}
+              </button>
+              <button type="button" onClick={fillDemo} className="w-full flex items-center justify-center gap-2 text-sm text-blue-600 font-medium hover:text-blue-800 transition">
+                <Sparkles className="w-4 h-4" /> Use demo account
               </button>
             </form>
-          </>
-        ) : (
-          <>
-            <h2 className="text-2xl font-extrabold text-center text-blue-700 mb-8 tracking-tight">
-              Register Your Company
-            </h2>
-            {registerMessage && (
-              <div className="mb-4 text-center text-green-600 font-semibold">
-                {registerMessage}
-              </div>
-            )}
-            <form className="space-y-6" onSubmit={handleRegister}>
-              {companyFields.map((field) => (
-                <div key={field.name}>
-                  <label
-                    htmlFor={field.name}
-                    className="block mb-2 text-sm font-semibold text-gray-700"
-                  >
-                    {field.label}
-                    {field.required && <span className="text-red-500">*</span>}
+          ) : (
+            <form className="space-y-4 animate-fade-in-up" onSubmit={handleRegister}>
+              <h2 className="text-2xl font-bold text-slate-900 text-center">Create your company</h2>
+              <p className="text-center text-slate-500 -mt-1 text-sm mb-2">Start managing your fleet in seconds</p>
+              {companyFields.map((f) => (
+                <div key={f.name}>
+                  <label htmlFor={f.name} className="block mb-1.5 text-sm font-semibold text-slate-700">
+                    {f.label}{f.required && <span className="text-rose-500 ml-0.5">*</span>}
                   </label>
-                  <input
-                    type={field.type || 'text'}
-                    id={field.name}
-                    name={field.name}
-                    className="w-full px-5 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50/60 placeholder:text-blue-300 text-blue-900 text-base shadow-sm"
-                    placeholder={field.placeholder}
-                    required={field.required}
-                  />
+                  <input id={f.name} name={f.name} type={f.type || "text"} required={f.required} className="field" placeholder={f.placeholder} />
                 </div>
               ))}
-              <button
-                type="submit"
-                className="w-full py-3 px-4 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl transition duration-200 shadow-lg cursor-pointer mt-2 text-lg"
-                disabled={registerLoading}
-              >
-                {registerLoading ? 'Registering...' : 'Register'}
+              <button type="submit" className="btn btn-primary w-full text-lg" disabled={registerLoading}>
+                {registerLoading ? "Creating…" : (<>Create Account <ArrowRight className="w-5 h-5" /></>)}
               </button>
             </form>
-          </>
-        )}
+          )}
+        </div>
       </div>
-      {/* Floating Alert */}
-      {alert && (
-        <FloatingAlert
-          type={alert.type}
-          msg={alert.msg}
-          onClose={() => setAlert(null)}
-        />
-      )}
+
+      {alert && <FloatingAlert type={alert.type} msg={alert.msg} onClose={() => setAlert(null)} />}
     </div>
   );
 }

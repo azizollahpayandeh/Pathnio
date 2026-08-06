@@ -1,223 +1,86 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation'; // Import useRouter
-import api from '../../../api';
-import DriverPerformanceChart from './../../../../components/DriverPerformanceChart';
-import { ArrowLeft } from 'lucide-react'; // Import the Lucide icon for the back button
+"use client";
+import { useParams, useRouter } from "next/navigation";
+import { useMemo } from "react";
+import Link from "next/link";
+import {
+  ArrowLeft, Users, Phone, Mail, Star, Route as RouteIcon, IdCard,
+  Truck, Calendar, CheckCircle, Navigation, XCircle,
+} from "lucide-react";
+import { useCollection } from "@/lib/store";
+import { Badge, EmptyState } from "@/components/ui";
 
-const DriverCard = () => {
-  const { id } = useParams();
-  const router = useRouter(); // Initialize useRouter
-  const [driver, setDriver] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+const statusTone: Record<string, string> = { Active: "green", "On Trip": "blue", Inactive: "gray" };
+const currency = (n: number) => "€" + n.toLocaleString();
 
-  // Sample performance data for the chart
-  const performanceData = {
-    labels: ['Punctuality', 'Safety', 'Customer', 'Efficiency', 'Maintenance'],
-    datasets: [
-      {
-        label: 'Performance',
-        data: [90, 85, 80, 88, 92],
-        backgroundColor: '#3B82F6',
-        borderRadius: 5,
-      },
-    ],
-  };
+export default function DriverDetail() {
+  const params = useParams();
+  const router = useRouter();
+  const id = String(params.id);
+  const [drivers] = useCollection("drivers");
+  const [trips] = useCollection("trips");
 
-  // useEffect hook to fetch driver data when the ID changes
-  useEffect(() => {
-    if (!id) return; // Exit if ID is not available
-    setLoading(true); // Set loading state to true
-    api
-      .get(`accounts/drivers/${id}/`) // Make API call to fetch driver data
-      .then((res) => {
-        setDriver(res.data); // Set driver data
-        setError(null); // Clear any previous errors
-      })
-      .catch((err) => {
-        console.error('Driver detail API error:', err);
-        if (err.response?.status === 404) {
-          setError('Driver not found. The requested driver does not exist.'); // More specific error for 404
-        } else {
-          setError('Failed to load driver data. Please try again later.'); // Generic error for other issues
-        }
-        setDriver(null); // Clear driver data
-      })
-      .finally(() => setLoading(false)); // Set loading state to false regardless of success or failure
-  }, [id]); // Dependency array: re-run effect if 'id' changes
+  const driver = useMemo(() => drivers.find((d) => d.id === id), [drivers, id]);
+  const dTrips = useMemo(() => (driver ? trips.filter((t) => t.driver === driver.full_name) : []), [trips, driver]);
 
-  // Display loading message while data is being fetched
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen text-blue-500 text-xl">
-        Loading driver information...
-      </div>
-    );
+  if (!driver) {
+    return <div className="card"><EmptyState icon={Users} title="Driver not found" action={<Link href="/dashboard/drivers" className="btn btn-primary mx-auto">Back to drivers</Link>} /></div>;
   }
 
-  // Display error message if data loading failed or driver not found
-  if (error || !driver) {
-    return (
-      <div className="flex items-center justify-center min-h-screen text-red-500 text-xl">
-        {error || 'راننده پیدا نشد.'}
-      </div>
-    );
-  }
+  const specs = [
+    { icon: Phone, label: "Mobile", value: driver.mobile },
+    { icon: Mail, label: "Email", value: driver.email || "—" },
+    { icon: IdCard, label: "License", value: driver.license_no || "—" },
+    { icon: Truck, label: "Vehicle", value: driver.plate_number || "Unassigned" },
+    { icon: RouteIcon, label: "Total trips", value: driver.total_trips },
+    { icon: Calendar, label: "Joined", value: new Date(driver.joined_at).toLocaleDateString() },
+  ];
+  const SIcon = driver.status === "Active" ? CheckCircle : driver.status === "On Trip" ? Navigation : XCircle;
 
-  // Render the driver details card
   return (
-    // Main container for the page, with background gradient, minimum height, and responsive padding.
-    // 'flex flex-col' ensures content stacks vertically.
-    // 'pt-16' pushes content down from the top for better visual placement.
-    // 'pb-8' adds padding at the bottom.
-    <div className="bg-gradient-to-br from-gray-50 to-blue-100 min-h-screen flex flex-col pt-16 pb-8 px-4 sm:px-6 lg:px-8">
-      {/* Central content wrapper to align the button and the main card */}
-      <div className="w-full max-w-6xl mx-auto flex flex-col gap-8">
-        {/* Back Button Section */}
-        <div>
-          <button
-            // Navigates back to the drivers dashboard when clicked.
-            onClick={() => router.push('/dashboard/drivers')} // Adjusted path to /dashboard/drivers
-            // Tailwind CSS classes for styling the button:
-            // flex items-center gap-2: Uses Flexbox to align icon and text horizontally with spacing.
-            // px-6 py-3: Horizontal and vertical padding for the button.
-            // rounded-lg: Applies rounded corners to the button.
-            // font-bold: Makes the text inside the button bold.
-            // bg-white: Sets the background color of the button to white.
-            // text-blue-600: Sets the text color to a shade of blue.
-            // shadow-md: Adds a medium-sized shadow to the button.
-            // border border-gray-200: Adds a light gray border around the button.
-            // transition-all duration-300 ease-in-out: Defines a smooth transition for all CSS properties
-            //                                         over 300 milliseconds with an ease-in-out timing function.
-            // hover:text-blue-800: Changes text color to a darker blue on hover.
-            // hover:shadow-lg: Increases the shadow size on hover, creating a stronger depth effect.
-            // hover:-translate-y-1: Moves the button slightly upwards on the Y-axis when hovered, enhancing the "pop-out" effect.
-            // hover:scale-105: Slightly scales up the button on hover, contributing to the interactive feel.
-            className="flex items-center gap-2 px-6 py-3 rounded-lg font-bold bg-white text-blue-600 shadow-md border border-gray-200 transition-all duration-300 ease-in-out hover:text-blue-800 hover:shadow-lg hover:-translate-y-1 hover:scale-105"
-          >
-            {/* Lucide ArrowLeft icon, sized with h-5 (height) and w-5 (width) */}
-            <ArrowLeft className="h-5 w-5" />
-            Back to Drivers
-          </button>
-        </div>
+    <div className="space-y-6 animate-fade-in">
+      <button onClick={() => router.back()} className="btn btn-ghost"><ArrowLeft className="w-4 h-4" /> Back</button>
 
-        {/* Driver Details Card Section */}
-        {/* This card displays the main information about the selected driver. */}
-        <div className="bg-white rounded-[2rem] shadow-2xl shadow-blue-200 w-full max-w-[95vw] sm:max-w-2xl md:max-w-4xl lg:max-w-6xl xl:max-w-7xl 2xl:max-w-[80rem] grid grid-cols-1 md:grid-cols-2 gap-8 p-6 sm:p-8 md:p-10 lg:p-12 transform hover:scale-[1.01] transition-transform duration-300 ease-in-out">
-          {/* Left side: Driver Information */}
-          <div className="flex flex-col justify-center space-y-6 text-gray-800">
-            <div className="text-center md:text-left">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-blue-800">
-                {driver.full_name || driver.name}
-              </h2>
-              <p className="text-xs sm:text-sm md:text-base text-gray-500 mt-1">
-                Driver ID:{' '}
-                <span className="font-bold text-blue-600">{driver.id}</span>
-              </p>
-            </div>
-
-            {/* Grid for additional driver details */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 sm:gap-y-5 md:gap-y-6 gap-x-6 text-xs sm:text-sm md:text-base">
-              {/* Company */}
-              <div>
-                <div className="text-gray-500 font-semibold text-[11px] sm:text-xs">
-                  Company
-                </div>
-                <div className="font-extrabold text-gray-900">
-                  {driver.company?.company_name || driver.company || '-'}
-                </div>
-              </div>
-              {/* Status with conditional coloring */}
-              <div>
-                <div className="text-gray-500 font-semibold text-[11px] sm:text-xs">
-                  Status
-                </div>
-                <div
-                  className={`font-extrabold ${
-                    driver.status === 'Active'
-                      ? 'text-green-600'
-                      : 'text-red-500'
-                  }`}
-                >
-                  {driver.status || 'Active'}
-                </div>
-              </div>
-              {/* Vehicle & Plate */}
-              <div>
-                <div className="text-gray-500 font-semibold text-[11px] sm:text-xs">
-                  Vehicle & Plate
-                </div>
-                <div className="font-extrabold text-gray-900">
-                  {driver.license || '-'}
-                </div>
-              </div>
-              {/* Phone */}
-              <div>
-                <div className="text-gray-500 font-semibold text-[11px] sm:text-xs">
-                  Phone
-                </div>
-                <div className="font-extrabold text-gray-900">
-                  {driver.mobile || driver.phone || '-'}
-                </div>
-              </div>
-              {/* Experience */}
-              <div>
-                <div className="text-gray-500 font-semibold text-[11px] sm:text-xs">
-                  Experience
-                </div>
-                <div className="font-extrabold text-gray-900">
-                  {driver.experience || '-'}
-                </div>
-              </div>
-              {/* Trips Completed */}
-              <div>
-                <div className="text-gray-500 font-semibold text-[11px] sm:text-xs">
-                  Trips Completed
-                </div>
-                <div className="font-extrabold text-gray-900">
-                  {driver.tripsCompleted || '-'}
-                </div>
-              </div>
-              {/* Contract Type */}
-              <div>
-                <div className="text-gray-500 font-semibold text-[11px] sm:text-xs">
-                  Contract Type
-                </div>
-                <div className="font-extrabold text-gray-900">
-                  {driver.contractType || '-'}
-                </div>
-              </div>
-              {/* Rating */}
-              <div>
-                <div className="text-gray-500 font-semibold text-[11px] sm:text-xs">
-                  Rating
-                </div>
-                <div className="font-extrabold text-yellow-500">
-                  {driver.rating ? `${driver.rating} / 5` : '-'}{' '}
-                  <span className="text-gray-400">⭐</span>
-                </div>
-              </div>
-            </div>
+      <div className="card p-6 sm:p-8">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+          <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-indigo-500 to-blue-600 text-white text-3xl font-bold flex items-center justify-center shadow-brand">
+            {driver.full_name.charAt(0)}
           </div>
-
-          {/* Right side: Performance Chart */}
-          <div className="flex flex-col items-center justify-center flex-grow space-y-6">
-            <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 text-center">
-              Performance Chart
-            </h3>
-            <div className="w-full md:w-[90%] lg:w-[80%] max-w-[22rem] sm:max-w-sm md:max-w-md lg:max-w-lg">
-              <DriverPerformanceChart performanceData={performanceData} />
+          <div className="flex-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="text-3xl font-bold text-slate-900">{driver.full_name}</h1>
+              <Badge tone={statusTone[driver.status]} icon={SIcon}>{driver.status}</Badge>
             </div>
-            <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 text-center px-4">
-              This chart shows a detailed performance view of the driver across
-              key indicators.
-            </p>
+            <p className="text-amber-500 mt-1 flex items-center gap-1"><Star className="w-4 h-4 fill-amber-400" /> {driver.rating.toFixed(1)} rating</p>
           </div>
         </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
+          {specs.map((s) => (
+            <div key={s.label} className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+              <s.icon className="w-5 h-5 text-slate-400 mb-2" />
+              <div className="text-xs text-slate-500">{s.label}</div>
+              <div className="font-semibold text-slate-800 truncate">{s.value}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="card p-6">
+        <h2 className="font-bold text-slate-800 mb-3">Trip history ({dTrips.length})</h2>
+        {dTrips.length === 0 ? <p className="text-slate-400 text-sm py-6 text-center">No trips recorded for this driver.</p> : (
+          <div className="space-y-2">
+            {dTrips.map((t) => (
+              <div key={t.id} className="flex items-center justify-between p-3 rounded-xl bg-slate-50">
+                <span className="text-sm font-medium text-slate-700">{t.origin} → {t.destination}</span>
+                <div className="flex items-center gap-3">
+                  <span className="text-sm text-slate-500">{t.distance} km</span>
+                  <span className="text-sm font-semibold text-slate-800">{currency(t.revenue)}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
-};
-
-export default DriverCard;
+}

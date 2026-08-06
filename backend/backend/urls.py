@@ -20,7 +20,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,
 )
-from accounts.views import CustomTokenObtainPairView, TestLoginView, DriverRegisterView
+from accounts.views import CustomTokenObtainPairView, DriverRegisterView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -31,7 +31,6 @@ urlpatterns = [
     path('api/auth/token/login/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/auth/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
-    path('api/test/login/', TestLoginView.as_view(), name='test_login'),
     path('api/driver/register/', DriverRegisterView.as_view(), name='driver-register-root'),
     path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair_root'),
 ]
