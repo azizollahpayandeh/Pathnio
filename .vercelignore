@@ -1,0 +1,13 @@
+# The Vercel project builds only the frontend/ directory (rootDirectory=frontend).
+# Keep the upload well under the 100 MB source limit by excluding everything
+# that isn't frontend source.
+.git
+node_modules
+.next
+out
+backend
+*.rar
+*.sqlite3
+*.log
+.env*
+**/__pycache__
