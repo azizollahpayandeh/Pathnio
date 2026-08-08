@@ -35,13 +35,13 @@ export default function Header() {
     <header
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
         solid
-          ? "bg-blue-950/90 backdrop-blur-lg shadow-lg border-b border-white/10"
+          ? "bg-violet-950/90 backdrop-blur-lg shadow-lg border-b border-white/10"
           : "bg-transparent"
       }`}
     >
       <div className="container mx-auto px-5 sm:px-8 h-16 flex justify-between items-center">
         <Link href="/" className="flex items-center gap-2.5 text-2xl font-extrabold text-white tracking-wide" onClick={() => setMenuOpen(false)}>
-          <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-brand">
+          <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-brand">
             <Truck className="w-5 h-5 text-white" />
           </span>
           Pathnio
@@ -63,7 +63,7 @@ export default function Header() {
           ))}
           <Link
             href={loggedIn ? "/dashboard" : "/login"}
-            className="px-5 py-2 bg-white text-blue-800 font-semibold rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
+            className="px-5 py-2 bg-white text-violet-800 font-semibold rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
           >
             {loggedIn ? "Dashboard" : "Sign In"}
           </Link>
@@ -71,7 +71,7 @@ export default function Header() {
       </div>
 
       {/* Mobile menu */}
-      <div className={`md:hidden overflow-hidden transition-all duration-300 bg-blue-950/95 backdrop-blur-lg ${menuOpen ? "max-h-96 py-4 border-t border-white/10" : "max-h-0"}`}>
+      <div className={`md:hidden overflow-hidden transition-all duration-300 bg-violet-950/95 backdrop-blur-lg ${menuOpen ? "max-h-96 py-4 border-t border-white/10" : "max-h-0"}`}>
         <div className="flex flex-col px-6 gap-1 text-white/90 font-medium">
           {LINKS.map((l) => (
             <Link key={l.href} href={l.href} onClick={() => setMenuOpen(false)} className="py-2.5 hover:text-white transition-colors">
@@ -81,7 +81,7 @@ export default function Header() {
           <Link
             href={loggedIn ? "/dashboard" : "/login"}
             onClick={() => setMenuOpen(false)}
-            className="mt-3 px-4 py-2.5 bg-white text-blue-800 font-semibold rounded-xl text-center"
+            className="mt-3 px-4 py-2.5 bg-white text-violet-800 font-semibold rounded-xl text-center"
           >
             {loggedIn ? "Dashboard" : "Sign In"}
           </Link>

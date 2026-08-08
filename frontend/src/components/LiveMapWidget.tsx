@@ -68,9 +68,9 @@ export default function LiveMapWidget({ fullscreen = false }: LiveMapWidgetProps
 
   if (!isClient || Object.keys(statusIcons).length === 0) {
     return (
-      <div className="w-full h-full min-h-[320px] bg-blue-50 rounded-2xl flex items-center justify-center">
-        <div className="flex flex-col items-center gap-3 text-blue-500">
-          <div className="w-9 h-9 rounded-full border-4 border-blue-200 border-t-blue-600 animate-spin" />
+      <div className="w-full h-full min-h-[320px] bg-violet-50 rounded-2xl flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3 text-violet-500">
+          <div className="w-9 h-9 rounded-full border-4 border-violet-200 border-t-violet-600 animate-spin" />
           <span className="font-medium">Loading map…</span>
         </div>
       </div>
@@ -81,7 +81,7 @@ export default function LiveMapWidget({ fullscreen = false }: LiveMapWidgetProps
     <div className="w-full h-full min-h-[320px] relative rounded-2xl overflow-hidden">
       {/* Counters */}
       <div className="absolute top-3 left-3 z-[1000] card px-4 py-2.5 flex flex-wrap gap-x-5 gap-y-1 items-center text-sm shadow-soft">
-        <span className="font-bold text-blue-700 flex items-center gap-1.5"><FaCarSide className="text-blue-400" />{vehicles.length} total</span>
+        <span className="font-bold text-violet-700 flex items-center gap-1.5"><FaCarSide className="text-violet-400" />{vehicles.length} total</span>
         <span className="font-semibold text-emerald-600 flex items-center gap-1"><FaCheckCircle />{counts.moving} moving</span>
         <span className="font-semibold text-amber-600 flex items-center gap-1"><FaRegClock />{counts.stopped} stopped</span>
         <span className="font-semibold text-rose-600 flex items-center gap-1"><FaTimesCircle />{counts.offline} offline</span>
@@ -102,11 +102,11 @@ export default function LiveMapWidget({ fullscreen = false }: LiveMapWidgetProps
           return (
             <Marker key={v.id} position={[v.lat, v.lng] as LatLngExpression} icon={statusIcons[st] as never}>
               <Popup>
-                <div className="font-bold text-blue-800 text-base mb-1">{v.model}</div>
+                <div className="font-bold text-violet-800 text-base mb-1">{v.model}</div>
                 <div className="text-slate-600 mb-0.5">Driver: <span className="font-semibold">{v.driver}</span></div>
                 <div className="text-slate-600 mb-0.5">Plate: <span className="font-mono">{v.plate_number}</span></div>
                 <div className="mb-0.5">Status: <span className="font-semibold">{statusLabel[st]}</span></div>
-                <div>Speed: <span className="font-mono text-blue-700">{v.speed} km/h</span></div>
+                <div>Speed: <span className="font-mono text-violet-700">{v.speed} km/h</span></div>
               </Popup>
               <Tooltip direction="top" offset={[0, -22]} opacity={0.95}>
                 {v.plate_number} · {v.driver}

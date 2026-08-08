@@ -86,9 +86,9 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       {/* Brand panel */}
-      <div className="relative hidden lg:flex flex-col justify-between overflow-hidden bg-gradient-to-br from-blue-700 via-blue-800 to-indigo-900 p-12 text-white">
-        <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-400/30 rounded-full blur-3xl animate-floaty" />
-        <div className="absolute -bottom-32 -right-16 w-[28rem] h-[28rem] bg-indigo-500/30 rounded-full blur-3xl" />
+      <div className="relative hidden lg:flex flex-col justify-between overflow-hidden bg-gradient-to-br from-violet-700 via-violet-800 to-purple-900 p-12 text-white">
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-violet-400/30 rounded-full blur-3xl animate-floaty" />
+        <div className="absolute -bottom-32 -right-16 w-[28rem] h-[28rem] bg-purple-500/30 rounded-full blur-3xl" />
         <Link href="/" className="relative z-10 flex items-center gap-3 font-extrabold text-2xl tracking-widest">
           <span className="w-11 h-11 rounded-2xl bg-white/15 backdrop-blur flex items-center justify-center shadow-glow">
             <Truck className="w-6 h-6" />
@@ -99,26 +99,26 @@ export default function LoginPage() {
           <h1 className="text-4xl font-bold leading-tight mb-4">
             Run your fleet from a single, beautiful dashboard.
           </h1>
-          <p className="text-blue-100/90 text-lg">
+          <p className="text-violet-100/90 text-lg">
             Real-time tracking, drivers, trips, expenses and analytics — all in one place.
           </p>
           <div className="mt-8 grid grid-cols-3 gap-4">
             {[["12+", "Vehicles"], ["10", "Drivers"], ["98%", "On-time"]].map(([v, l]) => (
               <div key={l} className="rounded-2xl bg-white/10 backdrop-blur p-4 border border-white/10">
                 <div className="text-2xl font-bold">{v}</div>
-                <div className="text-sm text-blue-100/80">{l}</div>
+                <div className="text-sm text-violet-100/80">{l}</div>
               </div>
             ))}
           </div>
         </div>
-        <p className="relative z-10 text-blue-200/70 text-sm">© {new Date().getFullYear()} Pathnio. All rights reserved.</p>
+        <p className="relative z-10 text-violet-200/70 text-sm">© {new Date().getFullYear()} Pathnio. All rights reserved.</p>
       </div>
 
       {/* Form panel */}
       <div className="flex items-center justify-center p-6 sm:p-10 bg-[var(--background)]">
         <div className="w-full max-w-md">
           <div className="flex flex-col items-center mb-8">
-            <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-brand mb-4">
+            <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-brand mb-4">
               <Lock className="w-8 h-8 text-white" />
             </div>
             <div className="flex p-1 bg-slate-100 rounded-2xl w-full max-w-xs">
@@ -127,7 +127,7 @@ export default function LoginPage() {
                   key={t}
                   onClick={() => setTab(t)}
                   className={`flex-1 px-6 py-2.5 rounded-xl font-semibold capitalize transition-all ${
-                    tab === t ? "bg-white text-blue-700 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                    tab === t ? "bg-white text-violet-700 shadow-sm" : "text-slate-500 hover:text-slate-700"
                   }`}
                 >
                   {t}
@@ -151,7 +151,7 @@ export default function LoginPage() {
               <button type="submit" className="btn btn-primary w-full text-lg" disabled={loginLoading}>
                 {loginLoading ? "Signing In…" : (<>Sign In <ArrowRight className="w-5 h-5" /></>)}
               </button>
-              <button type="button" onClick={fillDemo} className="w-full flex items-center justify-center gap-2 text-sm text-blue-600 font-medium hover:text-blue-800 transition">
+              <button type="button" onClick={fillDemo} className="w-full flex items-center justify-center gap-2 text-sm text-violet-600 font-medium hover:text-violet-800 transition">
                 <Sparkles className="w-4 h-4" /> Use demo account
               </button>
             </form>

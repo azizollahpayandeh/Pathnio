@@ -10,10 +10,10 @@ import {
 
 const FEATURES = [
   { icon: MapPin, title: "Real-Time GPS", desc: "Track every vehicle live on an interactive map with accurate positioning.", tone: "from-emerald-500 to-teal-600" },
-  { icon: BarChart3, title: "Fleet Analytics", desc: "Revenue, expenses and performance — visualized in beautiful reports.", tone: "from-blue-500 to-indigo-600" },
+  { icon: BarChart3, title: "Fleet Analytics", desc: "Revenue, expenses and performance — visualized in beautiful reports.", tone: "from-violet-500 to-purple-600" },
   { icon: UserCheck, title: "Driver Insights", desc: "Monitor ratings, trips and behavior to keep your team performing.", tone: "from-purple-500 to-fuchsia-600" },
   { icon: Route, title: "Trip Management", desc: "Schedule, track and complete journeys with cargo and revenue tracking.", tone: "from-orange-500 to-amber-600" },
-  { icon: Wallet, title: "Expense Control", desc: "Log fuel, maintenance and tolls — always know where money goes.", tone: "from-cyan-500 to-blue-600" },
+  { icon: Wallet, title: "Expense Control", desc: "Log fuel, maintenance and tolls — always know where money goes.", tone: "from-teal-500 to-violet-600" },
   { icon: Bell, title: "Smart Alerts", desc: "Get notified about maintenance, low fuel and critical events instantly.", tone: "from-rose-500 to-red-600" },
 ];
 
@@ -30,9 +30,9 @@ export default function HomePage() {
       <Header />
 
       {/* Hero */}
-      <section className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-950 text-white">
-        <div className="absolute -top-32 -left-32 w-[32rem] h-[32rem] bg-blue-500/25 rounded-full blur-3xl animate-floaty" />
-        <div className="absolute top-1/3 -right-24 w-[30rem] h-[30rem] bg-indigo-500/25 rounded-full blur-3xl" />
+      <section className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-violet-900 via-violet-800 to-purple-950 text-white">
+        <div className="absolute -top-32 -left-32 w-[32rem] h-[32rem] bg-violet-500/25 rounded-full blur-3xl animate-floaty" />
+        <div className="absolute top-1/3 -right-24 w-[30rem] h-[30rem] bg-purple-500/25 rounded-full blur-3xl" />
         <div className="absolute inset-0 opacity-[0.07]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)", backgroundSize: "36px 36px" }} />
 
         <div className="relative z-10 container mx-auto px-6 sm:px-10 py-28 grid lg:grid-cols-2 gap-12 items-center">
@@ -41,9 +41,9 @@ export default function HomePage() {
               <Zap className="w-4 h-4 text-amber-300" /> The modern fleet platform
             </span>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1] mb-6">
-              Fleet management,<br /><span className="bg-gradient-to-r from-blue-300 to-cyan-300 bg-clip-text text-transparent">redefined.</span>
+              Fleet management,<br /><span className="bg-gradient-to-r from-violet-300 to-teal-300 bg-clip-text text-transparent">redefined.</span>
             </h1>
-            <p className="text-lg text-blue-100/90 max-w-xl mb-8">
+            <p className="text-lg text-violet-100/90 max-w-xl mb-8">
               Track, manage and optimize your entire fleet in real time — drivers, vehicles, trips and expenses in one beautiful dashboard.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
@@ -56,13 +56,13 @@ export default function HomePage() {
             </div>
             <div className="flex items-center gap-6 mt-10">
               <div className="flex -space-x-3">
-                {["from-blue-400 to-blue-600", "from-emerald-400 to-teal-600", "from-purple-400 to-fuchsia-600", "from-orange-400 to-amber-600"].map((g, i) => (
-                  <span key={i} className={`w-10 h-10 rounded-full bg-gradient-to-br ${g} border-2 border-blue-900`} />
+                {["from-violet-400 to-violet-600", "from-emerald-400 to-teal-600", "from-purple-400 to-fuchsia-600", "from-orange-400 to-amber-600"].map((g, i) => (
+                  <span key={i} className={`w-10 h-10 rounded-full bg-gradient-to-br ${g} border-2 border-violet-900`} />
                 ))}
               </div>
               <div>
                 <div className="flex text-amber-300">{[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-amber-300" />)}</div>
-                <div className="text-sm text-blue-100/80">Trusted by logistics teams</div>
+                <div className="text-sm text-violet-100/80">Trusted by logistics teams</div>
               </div>
             </div>
           </div>
@@ -93,7 +93,7 @@ export default function HomePage() {
                 <div className="text-sm font-semibold text-slate-600 mb-3">Weekly revenue</div>
                 <div className="flex items-end gap-2 h-24">
                   {[40, 65, 45, 80, 55, 90, 70].map((h, i) => (
-                    <div key={i} className="flex-1 rounded-lg bg-gradient-to-t from-blue-600 to-indigo-400" style={{ height: `${h}%` }} />
+                    <div key={i} className="flex-1 rounded-lg bg-gradient-to-t from-violet-600 to-purple-400" style={{ height: `${h}%` }} />
                   ))}
                 </div>
               </div>
@@ -107,7 +107,7 @@ export default function HomePage() {
         <div className="container mx-auto px-6 grid grid-cols-2 lg:grid-cols-4 gap-8">
           {STATS.map((s) => (
             <div key={s.label} className="text-center">
-              <div className="text-4xl font-extrabold text-blue-700">{s.value}</div>
+              <div className="text-4xl font-extrabold text-violet-700">{s.value}</div>
               <div className="text-slate-500 mt-1">{s.label}</div>
             </div>
           ))}
@@ -155,12 +155,12 @@ export default function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-gradient-to-br from-blue-700 to-indigo-800 text-white">
+      <section className="py-24 bg-gradient-to-br from-violet-700 to-purple-800 text-white">
         <div className="container mx-auto px-6 text-center max-w-2xl">
-          <ShieldCheck className="w-14 h-14 mx-auto mb-6 text-blue-200" />
+          <ShieldCheck className="w-14 h-14 mx-auto mb-6 text-violet-200" />
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">Ready to transform your fleet?</h2>
-          <p className="text-lg text-blue-100/90 mb-8">Join hundreds of teams already optimizing their logistics with Pathnio.</p>
-          <Link href="/login" className="btn text-lg px-8 py-4 bg-white text-blue-800 hover:-translate-y-0.5 shadow-xl">
+          <p className="text-lg text-violet-100/90 mb-8">Join hundreds of teams already optimizing their logistics with Pathnio.</p>
+          <Link href="/login" className="btn text-lg px-8 py-4 bg-white text-violet-800 hover:-translate-y-0.5 shadow-xl">
             Get Started Now <ArrowRight className="w-5 h-5" />
           </Link>
         </div>

@@ -42,7 +42,7 @@ export default function AddDriverModal({ isOpen, onClose, onAddDriver, initial }
   };
 
   return (
-    <Modal open={isOpen} onClose={onClose} title={initial ? "Edit Driver" : "Add Driver"} subtitle="Add a driver to your team" icon={Users} gradient="from-indigo-500 to-blue-600" maxWidth="max-w-xl">
+    <Modal open={isOpen} onClose={onClose} title={initial ? "Edit Driver" : "Add Driver"} subtitle="Add a driver to your team" icon={Users} gradient="from-purple-500 to-violet-600" maxWidth="max-w-xl">
       <form onSubmit={submit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label="Full Name" required>

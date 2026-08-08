@@ -43,7 +43,7 @@ export default function LiveMapPage() {
             {list.map((v) => {
               const st = liveStatus(v);
               return (
-                <div key={v.id} className="p-3 rounded-2xl border border-slate-100 hover:border-blue-200 hover:shadow-soft transition bg-white">
+                <div key={v.id} className="p-3 rounded-2xl border border-slate-100 hover:border-violet-200 hover:shadow-soft transition bg-white">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-slate-800">{v.plate_number}</span>
                     <Badge tone={tone[st]}>{st}</Badge>

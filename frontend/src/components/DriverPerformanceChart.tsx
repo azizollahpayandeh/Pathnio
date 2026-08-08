@@ -48,7 +48,7 @@ const options = {
       font: {
         size: 18,
       },
-      color: '#2563EB',
+      color: '#7c3aed',
     },
   },
   scales: {

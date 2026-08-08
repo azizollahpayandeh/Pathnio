@@ -61,7 +61,7 @@ export default function VehiclesPage() {
         <StatCard icon={Car} label="Total Vehicles" value={stats.total} gradient="from-orange-500 to-amber-600" />
         <StatCard icon={CheckCircle} label="Active" value={stats.active} gradient="from-emerald-500 to-teal-600" />
         <StatCard icon={XCircle} label="Inactive" value={stats.inactive} gradient="from-slate-400 to-slate-600" />
-        <StatCard icon={Wrench} label="Maintenance" value={stats.maintenance} gradient="from-blue-500 to-indigo-600" />
+        <StatCard icon={Wrench} label="Maintenance" value={stats.maintenance} gradient="from-violet-500 to-purple-600" />
       </div>
 
       <div className="card p-4 flex flex-col sm:flex-row gap-3">

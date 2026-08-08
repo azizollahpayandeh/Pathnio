@@ -17,11 +17,11 @@ const catTone: Record<ExpenseCategory, string> = {
   Fuel: "blue", Maintenance: "orange", Tolls: "purple", Insurance: "teal", Salary: "indigo", Other: "gray",
 };
 const catIconBg: Record<ExpenseCategory, string> = {
-  Fuel: "bg-blue-100 text-blue-600",
+  Fuel: "bg-violet-100 text-violet-600",
   Maintenance: "bg-orange-100 text-orange-600",
   Tolls: "bg-purple-100 text-purple-600",
   Insurance: "bg-teal-100 text-teal-600",
-  Salary: "bg-indigo-100 text-indigo-600",
+  Salary: "bg-purple-100 text-purple-600",
   Other: "bg-slate-100 text-slate-600",
 };
 const currency = (n: number) => "€" + n.toLocaleString(undefined, { minimumFractionDigits: 0 });
@@ -72,7 +72,7 @@ export default function ExpensesPage() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 stagger">
         <StatCard icon={Wallet} label="Total Spent" value={currency(stats.total)} gradient="from-emerald-500 to-teal-600" />
         <StatCard icon={TrendingDown} label="Pending" value={currency(stats.pending)} gradient="from-amber-500 to-orange-600" />
-        <StatCard icon={Fuel} label="Fuel Costs" value={currency(stats.fuel)} gradient="from-blue-500 to-indigo-600" />
+        <StatCard icon={Fuel} label="Fuel Costs" value={currency(stats.fuel)} gradient="from-violet-500 to-purple-600" />
         <StatCard icon={Receipt} label="Records" value={stats.count} gradient="from-purple-500 to-fuchsia-600" />
       </div>
 
@@ -127,7 +127,7 @@ export default function ExpensesPage() {
                       <td className="py-3.5 px-4"><Badge tone={x.status === "Paid" ? "green" : "amber"}>{x.status}</Badge></td>
                       <td className="py-3.5 px-6">
                         <div className="flex items-center justify-end gap-2">
-                          <Link href={`/dashboard/expenses/${x.id}`} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-blue-50 hover:text-blue-600 transition" aria-label="View">
+                          <Link href={`/dashboard/expenses/${x.id}`} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-violet-50 hover:text-violet-600 transition" aria-label="View">
                             <Eye className="w-4 h-4" />
                           </Link>
                           <button onClick={() => remove("expenses", x.id)} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition" aria-label="Delete">

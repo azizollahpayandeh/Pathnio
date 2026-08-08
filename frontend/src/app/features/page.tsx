@@ -56,7 +56,7 @@ export default function FeaturesPage() {
 
       <main className="pt-20 sm:pt-24 md:pt-28 pb-16 px-4 sm:px-8 md:px-20 max-w-7xl mx-auto flex-grow">
         <section className="text-center mb-12 md:mb-16 px-2 sm:px-6 animate-fadeInUp">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-blue-700 mb-3 sm:mb-4 leading-tight tracking-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-violet-700 mb-3 sm:mb-4 leading-tight tracking-tight">
             Unleash the Power of Pathnio
           </h1>
           <p className="text-sm sm:text-base md:text-lg text-gray-700 max-w-4xl mx-auto leading-relaxed">
@@ -86,12 +86,12 @@ export default function FeaturesPage() {
                 rounded-3xl
                 shadow-2xl
                 bg-white
-                hover:bg-blue-50
+                hover:bg-violet-50
                 hover:scale-105
                 focus:scale-105
                 focus:outline-none
                 focus:ring-4
-                focus:ring-blue-300
+                focus:ring-violet-300
                 transform
                 transition-all
                 duration-300
@@ -113,7 +113,7 @@ export default function FeaturesPage() {
               >
                 {icon}
               </div>
-              <h3 className="text-lg sm:text-xl font-bold text-blue-800 mb-2">
+              <h3 className="text-lg sm:text-xl font-bold text-violet-800 mb-2">
                 {title}
               </h3>
               <p className="text-sm text-gray-600 leading-snug">
@@ -131,7 +131,7 @@ export default function FeaturesPage() {
               md:text-7xl
               lg:text-8xl
               font-black
-              text-blue-800
+              text-violet-800
               tracking-widest
               select-none
               flex
@@ -158,7 +158,7 @@ export default function FeaturesPage() {
         <div className="text-center mt-12 px-4 sm:px-0 animate-fadeInUp">
           <Link
             href="/login"
-            className="inline-block px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold rounded-full text-base shadow-xl hover:from-blue-700 hover:to-blue-900 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl"
+            className="inline-block px-8 py-3 bg-gradient-to-r from-violet-600 to-violet-800 text-white font-bold rounded-full text-base shadow-xl hover:from-violet-700 hover:to-violet-900 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl"
           >
             Get Started Now
           </Link>

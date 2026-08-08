@@ -34,14 +34,14 @@ export default function SupportPage() {
   };
 
   const channels = [
-    { icon: Mail, label: "Email", value: "support@pathnio.com", tone: "from-blue-500 to-indigo-600" },
+    { icon: Mail, label: "Email", value: "support@pathnio.com", tone: "from-violet-500 to-purple-600" },
     { icon: Phone, label: "Phone", value: "+49 30 1234 5678", tone: "from-emerald-500 to-teal-600" },
     { icon: Headphones, label: "Live chat", value: "Mon–Fri, 9–18 CET", tone: "from-purple-500 to-fuchsia-600" },
   ];
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <PageHeader icon={LifeBuoy} title="Support" subtitle="We're here to help" gradient="from-cyan-500 to-blue-600" />
+      <PageHeader icon={LifeBuoy} title="Support" subtitle="We're here to help" gradient="from-teal-500 to-violet-600" />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 stagger">
         {channels.map((c) => (
@@ -60,7 +60,7 @@ export default function SupportPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* New ticket */}
         <form onSubmit={submit} className="card p-6 space-y-4">
-          <h2 className="font-bold text-slate-800 flex items-center gap-2"><Plus className="w-5 h-5 text-blue-600" /> New ticket</h2>
+          <h2 className="font-bold text-slate-800 flex items-center gap-2"><Plus className="w-5 h-5 text-violet-600" /> New ticket</h2>
           <Field label="Subject" required>
             <input className="field" value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="How can we help?" />
           </Field>
@@ -72,7 +72,7 @@ export default function SupportPage() {
 
         {/* Ticket list */}
         <div className="card p-6">
-          <h2 className="font-bold text-slate-800 flex items-center gap-2 mb-4"><MessageCircle className="w-5 h-5 text-blue-600" /> Your tickets ({tickets.length})</h2>
+          <h2 className="font-bold text-slate-800 flex items-center gap-2 mb-4"><MessageCircle className="w-5 h-5 text-violet-600" /> Your tickets ({tickets.length})</h2>
           {tickets.length === 0 ? (
             <EmptyState icon={BookOpen} title="No tickets yet" description="Submit a ticket and it will appear here." />
           ) : (
@@ -85,8 +85,8 @@ export default function SupportPage() {
                   </div>
                   <p className="text-sm text-slate-600 mt-1">{t.message}</p>
                   {t.reply && (
-                    <div className="mt-3 pl-3 border-l-2 border-blue-300 text-sm text-slate-600">
-                      <span className="font-semibold text-blue-700">Support:</span> {t.reply}
+                    <div className="mt-3 pl-3 border-l-2 border-violet-300 text-sm text-slate-600">
+                      <span className="font-semibold text-violet-700">Support:</span> {t.reply}
                     </div>
                   )}
                   <div className="text-xs text-slate-400 mt-2">{new Date(t.created_at).toLocaleDateString()}</div>

@@ -85,7 +85,7 @@ export default function ReportsPage() {
         icon={BarChart3}
         title="Reports & Analytics"
         subtitle="Financial and operational insights"
-        gradient="from-blue-500 to-indigo-600"
+        gradient="from-violet-500 to-purple-600"
         actions={
           <button onClick={() => window.print()} className="btn btn-ghost">
             <Download className="w-4 h-4" /> Export
@@ -96,7 +96,7 @@ export default function ReportsPage() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 stagger">
         <StatCard icon={TrendingUp} label="Total Revenue" value={currency(totals.revenue)} gradient="from-emerald-500 to-teal-600" />
         <StatCard icon={TrendingDown} label="Total Costs" value={currency(totals.cost)} gradient="from-rose-500 to-red-600" />
-        <StatCard icon={BarChart3} label="Net Profit" value={currency(totals.profit)} gradient="from-blue-500 to-indigo-600" />
+        <StatCard icon={BarChart3} label="Net Profit" value={currency(totals.profit)} gradient="from-violet-500 to-purple-600" />
         <StatCard icon={Percent} label="Profit Margin" value={`${totals.margin.toFixed(1)}%`} gradient="from-purple-500 to-fuchsia-600" />
       </div>
 
@@ -109,8 +109,8 @@ export default function ReportsPage() {
                 labels: timeSeries.labels,
                 datasets: [
                   {
-                    label: "Revenue", data: timeSeries.rev, borderColor: "#2563eb",
-                    backgroundColor: "rgba(37,99,235,0.12)", fill: true, tension: 0.4, pointRadius: 3,
+                    label: "Revenue", data: timeSeries.rev, borderColor: "#7c3aed",
+                    backgroundColor: "rgba(124, 58, 237,0.12)", fill: true, tension: 0.4, pointRadius: 3,
                   },
                   {
                     label: "Expenses", data: timeSeries.exp, borderColor: "#f43f5e",
@@ -138,7 +138,7 @@ export default function ReportsPage() {
                 labels: byCategory.labels,
                 datasets: [{
                   data: byCategory.values,
-                  backgroundColor: ["#3b82f6", "#f97316", "#a855f7", "#14b8a6", "#6366f1", "#94a3b8"],
+                  backgroundColor: ["#8b5cf6", "#f97316", "#a855f7", "#14b8a6", "#6366f1", "#94a3b8"],
                   borderWidth: 0,
                 }],
               }}
@@ -159,7 +159,7 @@ export default function ReportsPage() {
               labels: topVehicles.labels,
               datasets: [{
                 label: "Revenue", data: topVehicles.values,
-                backgroundColor: "rgba(37,99,235,0.85)", borderRadius: 8, maxBarThickness: 42,
+                backgroundColor: "rgba(124, 58, 237,0.85)", borderRadius: 8, maxBarThickness: 42,
               }],
             }}
             options={{

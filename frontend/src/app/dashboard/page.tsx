@@ -80,7 +80,7 @@ export default function Dashboard() {
           label="Active Drivers"
           value={stats.activeDrivers}
           hint={`of ${stats.totalDrivers} total`}
-          gradient="from-indigo-500 to-blue-600"
+          gradient="from-purple-500 to-violet-600"
         />
         <StatCard
           icon={Truck}
@@ -136,7 +136,7 @@ export default function Dashboard() {
                 <div key={b.label} className="flex-1 flex flex-col items-center gap-2">
                   <div className="w-full flex items-end justify-center h-28">
                     <div
-                      className="w-full max-w-[26px] rounded-lg bg-gradient-to-t from-blue-600 to-indigo-400 shadow-sm transition-all"
+                      className="w-full max-w-[26px] rounded-lg bg-gradient-to-t from-violet-600 to-purple-400 shadow-sm transition-all"
                       style={{ height: `${Math.max(6, b.pct)}%` }}
                       title={`${b.value} trips`}
                     />
@@ -148,14 +148,14 @@ export default function Dashboard() {
           </div>
 
           {/* Finance summary */}
-          <div className="card p-6 bg-gradient-to-br from-blue-600 to-indigo-700 text-white border-0 shadow-brand">
-            <div className="flex items-center gap-2 text-blue-100 mb-1">
+          <div className="card p-6 bg-gradient-to-br from-violet-600 to-purple-700 text-white border-0 shadow-brand">
+            <div className="flex items-center gap-2 text-violet-100 mb-1">
               <Wallet className="w-4 h-4" /> Expenses this month
             </div>
             <div className="text-3xl font-bold">{currency(stats.expensesMonth)}</div>
             <div className="mt-4 pt-4 border-t border-white/20 flex items-center justify-between">
               <div>
-                <div className="text-blue-100 text-sm">Net (7d)</div>
+                <div className="text-violet-100 text-sm">Net (7d)</div>
                 <div className="text-xl font-bold flex items-center gap-1">
                   <ArrowUpRight className="w-4 h-4" />
                   {currency(stats.revenueWeek)}
@@ -173,7 +173,7 @@ export default function Dashboard() {
       <div className="card overflow-hidden">
         <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100">
           <h2 className="font-bold text-slate-800 text-lg">Recent trips</h2>
-          <Link href="/dashboard/trips" className="text-blue-600 font-semibold text-sm hover:text-blue-800">
+          <Link href="/dashboard/trips" className="text-violet-600 font-semibold text-sm hover:text-violet-800">
             View all →
           </Link>
         </div>

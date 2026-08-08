@@ -42,7 +42,7 @@ export default function DriverDetail() {
 
       <div className="card p-6 sm:p-8">
         <div className="flex flex-col sm:flex-row sm:items-center gap-5">
-          <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-indigo-500 to-blue-600 text-white text-3xl font-bold flex items-center justify-center shadow-brand">
+          <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-purple-500 to-violet-600 text-white text-3xl font-bold flex items-center justify-center shadow-brand">
             {driver.full_name.charAt(0)}
           </div>
           <div className="flex-1">

@@ -57,7 +57,7 @@ export default function AlertsPage() {
       />
 
       <div className="grid grid-cols-3 gap-4 stagger">
-        <StatCard icon={Bell} label="Total" value={alerts.length} gradient="from-blue-500 to-indigo-600" />
+        <StatCard icon={Bell} label="Total" value={alerts.length} gradient="from-violet-500 to-purple-600" />
         <StatCard icon={Clock} label="Unread" value={unread} gradient="from-amber-500 to-orange-600" />
         <StatCard icon={ShieldAlert} label="Critical" value={critical} gradient="from-rose-500 to-red-600" />
       </div>
@@ -69,7 +69,7 @@ export default function AlertsPage() {
         </div>
         <div className="flex p-1 bg-slate-100 rounded-xl">
           {(["all", "unread"] as const).map((f) => (
-            <button key={f} onClick={() => setFilter(f)} className={`px-5 py-2 rounded-lg font-semibold capitalize text-sm transition ${filter === f ? "bg-white text-blue-700 shadow-sm" : "text-slate-500"}`}>
+            <button key={f} onClick={() => setFilter(f)} className={`px-5 py-2 rounded-lg font-semibold capitalize text-sm transition ${filter === f ? "bg-white text-violet-700 shadow-sm" : "text-slate-500"}`}>
               {f}
             </button>
           ))}
@@ -83,15 +83,15 @@ export default function AlertsPage() {
           {filtered.map((a) => {
             const Icon = icon[a.priority];
             return (
-              <div key={a.id} className={`card p-4 flex items-start gap-4 transition ${a.read ? "" : "border-l-4 border-l-blue-500"}`}>
-                <div className={`w-11 h-11 shrink-0 rounded-2xl flex items-center justify-center ${a.priority === "critical" ? "bg-rose-100 text-rose-600" : a.priority === "high" ? "bg-amber-100 text-amber-600" : "bg-blue-100 text-blue-600"}`}>
+              <div key={a.id} className={`card p-4 flex items-start gap-4 transition ${a.read ? "" : "border-l-4 border-l-violet-500"}`}>
+                <div className={`w-11 h-11 shrink-0 rounded-2xl flex items-center justify-center ${a.priority === "critical" ? "bg-rose-100 text-rose-600" : a.priority === "high" ? "bg-amber-100 text-amber-600" : "bg-violet-100 text-violet-600"}`}>
                   <Icon className="w-5 h-5" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <h3 className="font-bold text-slate-900">{a.title}</h3>
                     <Badge tone={tone[a.priority]}>{a.priority}</Badge>
-                    {!a.read && <span className="w-2 h-2 rounded-full bg-blue-500" />}
+                    {!a.read && <span className="w-2 h-2 rounded-full bg-violet-500" />}
                   </div>
                   <p className="text-slate-600 text-sm mt-0.5">{a.message}</p>
                   <span className="text-xs text-slate-400 mt-1 inline-block">{timeAgo(a.timestamp)}</span>

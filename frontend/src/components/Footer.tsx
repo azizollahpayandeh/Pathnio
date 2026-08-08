@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="container mx-auto grid gap-10 md:grid-cols-4">
         <div className="md:col-span-1">
           <Link href="/" className="flex items-center gap-2.5 text-2xl font-extrabold text-white mb-4">
-            <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+            <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
               <Truck className="w-5 h-5 text-white" />
             </span>
             Pathnio

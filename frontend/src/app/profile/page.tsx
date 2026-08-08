@@ -71,7 +71,7 @@ export default function ProfilePage() {
 
         {/* Header card */}
         <div className="card overflow-hidden">
-          <div className="h-32 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600" />
+          <div className="h-32 bg-gradient-to-r from-violet-600 via-purple-600 to-purple-600" />
           <div className="px-6 sm:px-8 pb-6 -mt-14">
             <div className="flex flex-col sm:flex-row sm:items-end gap-4">
               <div className="relative">
@@ -79,12 +79,12 @@ export default function ProfilePage() {
                   {photo ? (
                     <img src={photo} alt="Avatar" className="w-full h-full rounded-[1.35rem] object-cover" />
                   ) : (
-                    <div className="w-full h-full rounded-[1.35rem] bg-gradient-to-br from-blue-500 to-indigo-600 text-white text-4xl font-bold flex items-center justify-center">
+                    <div className="w-full h-full rounded-[1.35rem] bg-gradient-to-br from-violet-500 to-purple-600 text-white text-4xl font-bold flex items-center justify-center">
                       {initial}
                     </div>
                   )}
                 </div>
-                <label className="absolute -bottom-1 -right-1 w-9 h-9 rounded-xl bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center cursor-pointer shadow-md transition">
+                <label className="absolute -bottom-1 -right-1 w-9 h-9 rounded-xl bg-violet-600 hover:bg-violet-700 text-white flex items-center justify-center cursor-pointer shadow-md transition">
                   <Camera className="w-4 h-4" />
                   <input type="file" accept="image/*" className="hidden" onChange={handlePhoto} />
                 </label>
@@ -93,7 +93,7 @@ export default function ProfilePage() {
                 <h1 className="text-2xl font-bold text-slate-900 truncate">{form.company_name || "Your company"}</h1>
                 <p className="text-slate-500 flex items-center gap-1.5"><UserIcon className="w-4 h-4" />{form.manager_full_name}</p>
               </div>
-              <span className="badge bg-blue-50 text-blue-700 border-blue-200 self-start sm:self-auto">
+              <span className="badge bg-violet-50 text-violet-700 border-violet-200 self-start sm:self-auto">
                 <Shield className="w-3.5 h-3.5" /> {user.role}
               </span>
             </div>
@@ -102,7 +102,7 @@ export default function ProfilePage() {
 
         {/* Edit form */}
         <form onSubmit={save} className="card p-6 sm:p-8 space-y-5">
-          <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2"><Building2 className="w-5 h-5 text-blue-600" /> Company details</h2>
+          <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2"><Building2 className="w-5 h-5 text-violet-600" /> Company details</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="Company Name"><input className="field" value={form.company_name} onChange={(e) => set("company_name", e.target.value)} /></Field>
             <Field label="Manager Full Name"><input className="field" value={form.manager_full_name} onChange={(e) => set("manager_full_name", e.target.value)} /></Field>
@@ -120,7 +120,7 @@ export default function ProfilePage() {
 
         {/* Security */}
         <div className="card p-6 sm:p-8">
-          <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2 mb-4"><Lock className="w-5 h-5 text-blue-600" /> Security</h2>
+          <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2 mb-4"><Lock className="w-5 h-5 text-violet-600" /> Security</h2>
           <div className="flex flex-col sm:flex-row gap-3">
             <button
               onClick={() => setAlert({ type: "success", msg: "In the demo, passwords are managed locally." })}

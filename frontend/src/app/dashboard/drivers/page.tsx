@@ -49,7 +49,7 @@ export default function DriversPage() {
         icon={Users}
         title="Drivers"
         subtitle="Your team on the road"
-        gradient="from-indigo-500 to-blue-600"
+        gradient="from-purple-500 to-violet-600"
         actions={
           <button onClick={() => setShowAdd(true)} className="btn btn-primary">
             <Plus className="w-4 h-4" /> Add Driver
@@ -58,7 +58,7 @@ export default function DriversPage() {
       />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 stagger">
-        <StatCard icon={Users} label="Total Drivers" value={stats.total} gradient="from-indigo-500 to-blue-600" />
+        <StatCard icon={Users} label="Total Drivers" value={stats.total} gradient="from-purple-500 to-violet-600" />
         <StatCard icon={CheckCircle} label="Available" value={stats.active} gradient="from-emerald-500 to-teal-600" />
         <StatCard icon={Navigation} label="On Trip" value={stats.onTrip} gradient="from-purple-500 to-fuchsia-600" />
         <StatCard icon={Star} label="Avg. Rating" value={stats.avgRating} gradient="from-amber-500 to-orange-600" />
@@ -91,7 +91,7 @@ export default function DriversPage() {
             return (
               <div key={d.id} className="card card-hover p-5">
                 <div className="flex items-center gap-3">
-                  <span className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-600 text-white font-bold text-lg flex items-center justify-center shadow-md">
+                  <span className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-violet-600 text-white font-bold text-lg flex items-center justify-center shadow-md">
                     {d.full_name.charAt(0)}
                   </span>
                   <div className="flex-1 min-w-0">

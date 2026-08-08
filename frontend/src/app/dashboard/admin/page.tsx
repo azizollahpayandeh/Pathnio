@@ -73,7 +73,7 @@ export default function AdminPage() {
                   <tr key={u.id} className="border-b border-slate-50 last:border-0 hover:bg-slate-50/70 transition">
                     <td className="py-3.5 px-6">
                       <div className="flex items-center gap-3">
-                        <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-bold flex items-center justify-center">
+                        <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 text-white font-bold flex items-center justify-center">
                           {u.company_name.charAt(0)}
                         </span>
                         <div>

@@ -16,14 +16,14 @@ interface Trip {
 export default function TripsThisWeekWidget({ trips }: { trips: Trip[] }) {
   return (
     <>
-      <h2 className="font-extrabold mb-6 text-blue-700 text-xl flex items-center gap-2">
-        <span className="inline-block w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
+      <h2 className="font-extrabold mb-6 text-violet-700 text-xl flex items-center gap-2">
+        <span className="inline-block w-2 h-2 bg-violet-500 rounded-full animate-pulse"></span>
         Trips This Week
       </h2>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white rounded-xl shadow text-base">
           <thead>
-            <tr className="bg-gradient-to-r from-blue-50 to-blue-100 text-blue-800">
+            <tr className="bg-gradient-to-r from-violet-50 to-violet-100 text-violet-800">
               <th className="py-3 px-4 text-left">Trip ID</th>
               <th className="py-3 px-4 text-left">Driver</th>
               <th className="py-3 px-4 text-left">Vehicle</th>
@@ -34,8 +34,8 @@ export default function TripsThisWeekWidget({ trips }: { trips: Trip[] }) {
           </thead>
           <tbody>
             {trips.slice(0,5).map((t, i) => (
-              <tr key={i} className="hover:bg-blue-50 transition border-b last:border-b-0 cursor-pointer">
-                <td className="py-3 px-4 font-bold text-blue-900">{t.id}</td>
+              <tr key={i} className="hover:bg-violet-50 transition border-b last:border-b-0 cursor-pointer">
+                <td className="py-3 px-4 font-bold text-violet-900">{t.id}</td>
                 <td className="py-3 px-4">{t.driver}</td>
                 <td className="py-3 px-4">{t.vehicle}</td>
                 <td className="py-3 px-4">{t.origin}</td>
@@ -47,7 +47,7 @@ export default function TripsThisWeekWidget({ trips }: { trips: Trip[] }) {
         </table>
       </div>
       <div className="text-right mt-4">
-        <Link href="/dashboard/trips" className="text-blue-700 font-bold hover:underline">View All Trips &rarr;</Link>
+        <Link href="/dashboard/trips" className="text-violet-700 font-bold hover:underline">View All Trips &rarr;</Link>
       </div>
     </>
   );

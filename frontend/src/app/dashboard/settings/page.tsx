@@ -8,13 +8,13 @@ import FloatingAlert from "@/components/FloatingAlert";
 import { PageHeader } from "@/components/ui";
 import { useSettings, resetDatabase } from "@/lib/store";
 
-const COLORS = ["#2563eb", "#7c3aed", "#0d9488", "#ea580c", "#e11d48", "#0284c7"];
+const COLORS = ["#7c3aed", "#7c3aed", "#0d9488", "#ea580c", "#e11d48", "#0284c7"];
 
 function Toggle({ checked, onChange }: { checked: boolean; onChange: () => void }) {
   return (
     <button
       onClick={onChange}
-      className={`w-12 h-7 rounded-full p-1 transition-colors ${checked ? "bg-blue-600" : "bg-slate-300"}`}
+      className={`w-12 h-7 rounded-full p-1 transition-colors ${checked ? "bg-violet-600" : "bg-slate-300"}`}
       role="switch"
       aria-checked={checked}
     >

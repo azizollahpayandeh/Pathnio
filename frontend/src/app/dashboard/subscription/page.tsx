@@ -11,7 +11,7 @@ const PLANS = [
     features: ["Up to 5 vehicles", "Live map tracking", "Basic reports", "Email support"],
   },
   {
-    id: "pro", name: "Professional", price: 49, icon: Rocket, tone: "from-blue-500 to-indigo-600",
+    id: "pro", name: "Professional", price: 49, icon: Rocket, tone: "from-violet-500 to-purple-600",
     tagline: "For growing fleets", popular: true,
     features: ["Up to 50 vehicles", "Advanced analytics", "Driver performance", "Priority support", "Expense management", "Custom alerts"],
   },
@@ -43,10 +43,10 @@ export default function SubscriptionPage() {
           return (
             <div
               key={p.id}
-              className={`card p-6 relative flex flex-col ${p.popular ? "ring-2 ring-blue-500 shadow-brand" : ""} card-hover`}
+              className={`card p-6 relative flex flex-col ${p.popular ? "ring-2 ring-violet-500 shadow-brand" : ""} card-hover`}
             >
               {p.popular && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 badge bg-blue-600 text-white border-0 shadow-md">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 badge bg-violet-600 text-white border-0 shadow-md">
                   <Sparkles className="w-3.5 h-3.5" /> Most popular
                 </span>
               )}
@@ -83,7 +83,7 @@ export default function SubscriptionPage() {
 
       <div className="card p-6">
         <h2 className="font-bold text-slate-800 mb-1">Billing</h2>
-        <p className="text-sm text-slate-500">You are currently on the <span className="font-semibold text-blue-600">{PLANS.find((p) => p.id === current)?.name}</span> plan. Invoices and payment methods would appear here in production.</p>
+        <p className="text-sm text-slate-500">You are currently on the <span className="font-semibold text-violet-600">{PLANS.find((p) => p.id === current)?.name}</span> plan. Invoices and payment methods would appear here in production.</p>
       </div>
 
       {alert && <FloatingAlert type={alert.type} msg={alert.msg} onClose={() => setAlert(null)} />}

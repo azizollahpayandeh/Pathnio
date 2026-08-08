@@ -21,16 +21,16 @@ interface NavItem {
 }
 
 const NAV: NavItem[] = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, color: "text-blue-500" },
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, color: "text-violet-500" },
   { href: "/dashboard/live-map", label: "Live Map", icon: Map, color: "text-emerald-500" },
-  { href: "/dashboard/drivers", label: "Drivers", icon: Users, color: "text-indigo-500" },
+  { href: "/dashboard/drivers", label: "Drivers", icon: Users, color: "text-purple-500" },
   { href: "/dashboard/vehicles", label: "Vehicles", icon: Truck, color: "text-orange-500" },
   { href: "/dashboard/trips", label: "Trips", icon: Route, color: "text-purple-500" },
   { href: "/dashboard/expenses", label: "Expenses", icon: Wallet, color: "text-emerald-600" },
-  { href: "/dashboard/reports", label: "Reports", icon: BarChart3, color: "text-blue-600" },
+  { href: "/dashboard/reports", label: "Reports", icon: BarChart3, color: "text-violet-600" },
   { href: "/dashboard/alerts", label: "Alerts", icon: Bell, color: "text-amber-500" },
   { href: "/dashboard/subscription", label: "Subscription", icon: CreditCard, color: "text-teal-500" },
-  { href: "/dashboard/support", label: "Support", icon: LifeBuoy, color: "text-cyan-500" },
+  { href: "/dashboard/support", label: "Support", icon: LifeBuoy, color: "text-teal-500" },
   { href: "/dashboard/settings", label: "Settings", icon: Settings, color: "text-slate-500" },
   { href: "/dashboard/admin", label: "Admin", icon: ShieldCheck, color: "text-rose-500", admin: true },
 ];
@@ -47,13 +47,13 @@ function SidebarLink({ item, onNavigate }: { item: NavItem; onNavigate?: () => v
       onClick={onNavigate}
       className={`group flex items-center gap-3.5 px-4 py-3 rounded-2xl font-semibold transition-all duration-200 select-none ${
         isActive
-          ? "bg-white text-blue-700 shadow-soft border border-blue-100"
+          ? "bg-white text-violet-700 shadow-soft border border-violet-100"
           : "text-slate-600 hover:bg-white/70 hover:text-slate-900"
       }`}
     >
       <Icon
         className={`w-5 h-5 transition-transform duration-200 group-hover:scale-110 ${
-          isActive ? "text-blue-600" : item.color
+          isActive ? "text-violet-600" : item.color
         }`}
       />
       <span>{item.label}</span>
@@ -67,9 +67,9 @@ function SidebarContent({ isAdmin, onNavigate }: { isAdmin: boolean; onNavigate?
       <div className="flex items-center h-20 px-6 border-b border-slate-200/70">
         <Link
           href="/"
-          className="flex items-center gap-2.5 font-extrabold text-2xl text-blue-800 tracking-wide"
+          className="flex items-center gap-2.5 font-extrabold text-2xl text-violet-800 tracking-wide"
         >
-          <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-brand">
+          <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-brand">
             <Truck className="w-5 h-5 text-white" />
           </span>
           Pathnio
@@ -120,7 +120,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   if (!ready || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
-        <div className="w-12 h-12 rounded-full border-4 border-blue-200 border-t-blue-600 animate-spin" />
+        <div className="w-12 h-12 rounded-full border-4 border-violet-200 border-t-violet-600 animate-spin" />
       </div>
     );
   }
@@ -128,7 +128,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="flex h-screen bg-[var(--background)] text-slate-800">
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex fixed inset-y-0 left-0 z-40 w-64 flex-col bg-gradient-to-b from-slate-50 to-blue-50/70 border-r border-slate-200 shadow-sm">
+      <aside className="hidden lg:flex fixed inset-y-0 left-0 z-40 w-64 flex-col bg-gradient-to-b from-slate-50 to-violet-50/70 border-r border-slate-200 shadow-sm">
         <SidebarContent isAdmin={isAdmin} />
       </aside>
 
@@ -137,7 +137,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
       <aside
-        className={`lg:hidden fixed inset-y-0 left-0 z-50 w-64 flex flex-col bg-gradient-to-b from-slate-50 to-blue-50 border-r border-slate-200 shadow-xl transition-transform duration-300 ${
+        className={`lg:hidden fixed inset-y-0 left-0 z-50 w-64 flex flex-col bg-gradient-to-b from-slate-50 to-violet-50 border-r border-slate-200 shadow-xl transition-transform duration-300 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -183,7 +183,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               {avatar ? (
                 <Image src={avatar} alt="User" width={32} height={32} className="w-8 h-8 rounded-lg object-cover" />
               ) : (
-                <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-bold flex items-center justify-center">
+                <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 text-white font-bold flex items-center justify-center">
                   {displayName.charAt(0).toUpperCase()}
                 </span>
               )}

@@ -195,7 +195,7 @@ export function createSeedDatabase(): Database {
     settings: {
       theme: "light",
       language: "en",
-      primary_color: "#2563eb",
+      primary_color: "#7c3aed",
       email_notifications: true,
       push_notifications: true,
     },

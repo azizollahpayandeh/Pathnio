@@ -145,12 +145,12 @@ export default function ContactUs() {
   return (
     <>
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-100"></div>
-        <div className="absolute top-20 left-20 w-64 h-64 bg-gradient-to-r from-blue-100 to-blue-200 rounded-full opacity-30 animate-blob"></div>
-        <div className="absolute top-40 right-20 w-48 h-48 bg-gradient-to-r from-blue-200 to-blue-300 rounded-full opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute -bottom-8 left-40 w-56 h-56 bg-gradient-to-r from-blue-50 to-blue-150 rounded-full opacity-25 animate-blob animation-delay-4000"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-white to-violet-100"></div>
+        <div className="absolute top-20 left-20 w-64 h-64 bg-gradient-to-r from-violet-100 to-violet-200 rounded-full opacity-30 animate-blob"></div>
+        <div className="absolute top-40 right-20 w-48 h-48 bg-gradient-to-r from-violet-200 to-violet-300 rounded-full opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute -bottom-8 left-40 w-56 h-56 bg-gradient-to-r from-violet-50 to-violet-150 rounded-full opacity-25 animate-blob animation-delay-4000"></div>
         <div
-          className="absolute w-72 h-72 bg-gradient-to-r from-blue-100 to-blue-200 rounded-full opacity-10 transition-all duration-1000 ease-out pointer-events-none"
+          className="absolute w-72 h-72 bg-gradient-to-r from-violet-100 to-violet-200 rounded-full opacity-10 transition-all duration-1000 ease-out pointer-events-none"
           style={{
             left: mousePosition.x - 144,
             top: mousePosition.y - 144,
@@ -179,7 +179,7 @@ export default function ContactUs() {
               const Icon = stat.icon;
               return (
                 <div key={index} className="text-center group">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-blue-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-lg shadow-blue-500/25">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-violet-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-lg shadow-violet-500/25">
                     <Icon className="w-8 h-8 text-white" />
                   </div>
                   <div className="text-3xl font-bold text-gray-900 mb-1">
@@ -198,7 +198,7 @@ export default function ContactUs() {
               {/* Contact Card */}
               <div className="bg-white rounded-3xl p-8 border border-gray-200 shadow-xl">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-violet-600 rounded-2xl flex items-center justify-center">
                     <MessageCircle className="w-6 h-6 text-white" />
                   </div>
                   <h2 className="text-3xl font-bold text-gray-900">
@@ -226,7 +226,7 @@ export default function ContactUs() {
                     {
                       icon: MapPin,
                       text: 'Vakilabad St, Mashhad, Iran',
-                      color: 'bg-blue-500',
+                      color: 'bg-violet-500',
                     },
                     {
                       icon: Globe,
@@ -245,7 +245,7 @@ export default function ContactUs() {
                         >
                           <Icon className="w-6 h-6 text-white" />
                         </div>
-                        <span className="text-gray-700 text-lg group-hover:text-blue-600 transition-colors duration-300">
+                        <span className="text-gray-700 text-lg group-hover:text-violet-600 transition-colors duration-300">
                           {item.text}
                         </span>
                       </div>
@@ -296,7 +296,7 @@ export default function ContactUs() {
                       onClick={() => setCurrentTestimonial(index)}
                       className={`w-2 h-2 rounded-full transition-all duration-300 ${
                         index === currentTestimonial
-                          ? 'bg-blue-600 w-8'
+                          ? 'bg-violet-600 w-8'
                           : 'bg-gray-300'
                       }`}
                     />
@@ -309,7 +309,7 @@ export default function ContactUs() {
             <div className="animate-slide-up-fade animation-delay-900">
               <div className="bg-white rounded-3xl p-8 border border-gray-200 shadow-xl">
                 <div className="flex items-center gap-4 mb-8">
-                  <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-violet-600 rounded-2xl flex items-center justify-center">
                     <Send className="w-6 h-6 text-white" />
                   </div>
                   <h2 className="text-3xl font-bold text-gray-900">
@@ -328,7 +328,7 @@ export default function ContactUs() {
                       value={form.name}
                       onChange={handleChange}
                       placeholder="What should we call you?"
-                      className="w-full px-6 py-4 bg-gray-50 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 text-lg transition-all duration-300 group-hover:bg-gray-100"
+                      className="w-full px-6 py-4 bg-gray-50 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-gray-900 placeholder-gray-500 text-lg transition-all duration-300 group-hover:bg-gray-100"
                     />
                   </div>
 
@@ -342,7 +342,7 @@ export default function ContactUs() {
                       value={form.email}
                       onChange={handleChange}
                       placeholder="your@awesome-email.com"
-                      className="w-full px-6 py-4 bg-gray-50 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 text-lg transition-all duration-300 group-hover:bg-gray-100"
+                      className="w-full px-6 py-4 bg-gray-50 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-gray-900 placeholder-gray-500 text-lg transition-all duration-300 group-hover:bg-gray-100"
                     />
                   </div>
 
@@ -356,14 +356,14 @@ export default function ContactUs() {
                       onChange={handleChange}
                       rows={6}
                       placeholder="Tell us about your amazing project! We're excited to hear from you..."
-                      className="w-full px-6 py-4 bg-gray-50 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 text-lg resize-none transition-all duration-300 group-hover:bg-gray-100"
+                      className="w-full px-6 py-4 bg-gray-50 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-gray-900 placeholder-gray-500 text-lg resize-none transition-all duration-300 group-hover:bg-gray-100"
                     />
                   </div>
 
                   <button
                     onClick={handleSubmit}
                     disabled={isSubmitting}
-                    className="w-full py-4 px-8 bg-blue-600 text-white rounded-2xl font-bold text-lg hover:bg-blue-700 hover:shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 group overflow-hidden relative"
+                    className="w-full py-4 px-8 bg-violet-600 text-white rounded-2xl font-bold text-lg hover:bg-violet-700 hover:shadow-2xl hover:shadow-violet-500/25 transition-all duration-300 hover:scale-105 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 group overflow-hidden relative"
                   >
                     <div className="relative flex items-center gap-3">
                       {isSubmitting ? (

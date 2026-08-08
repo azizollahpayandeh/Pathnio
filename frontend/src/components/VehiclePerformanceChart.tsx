@@ -32,7 +32,7 @@ const HEALTH_DATA = {
       data: [92, 76, 88, 95, 90, 87],
       backgroundColor: [
         'rgba(34, 197, 94, 0.8)',
-        'rgba(59, 130, 246, 0.8)',
+        'rgba(139,  92,  246, 0.8)',
         'rgba(168, 85, 247, 0.8)',
         'rgba(16, 185, 129, 0.8)',
         'rgba(245, 158, 11, 0.8)',
@@ -40,7 +40,7 @@ const HEALTH_DATA = {
       ],
       borderColor: [
         'rgba(34, 197, 94, 1)',
-        'rgba(59, 130, 246, 1)',
+        'rgba(139,  92,  246, 1)',
         'rgba(168, 85, 247, 1)',
         'rgba(16, 185, 129, 1)',
         'rgba(245, 158, 11, 1)',
@@ -59,12 +59,12 @@ const PERFORMANCE_DATA = {
     {
       label: 'Fuel Efficiency (km/L)',
       data: [12.5, 13.2, 11.8, 14.1, 12.9, 13.5, 12.7],
-      borderColor: 'rgba(59, 130, 246, 1)',
-      backgroundColor: 'rgba(59, 130, 246, 0.1)',
+      borderColor: 'rgba(139,  92,  246, 1)',
+      backgroundColor: 'rgba(139,  92,  246, 0.1)',
       borderWidth: 3,
       fill: true,
       tension: 0.4,
-      pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+      pointBackgroundColor: 'rgba(139,  92,  246, 1)',
       pointBorderColor: '#ffffff',
       pointBorderWidth: 2,
       pointRadius: 6,
@@ -91,7 +91,7 @@ export default function VehiclePerformanceChart() {
   return (
     <div className="w-full space-y-8">
       {/* Health Overview Chart */}
-      <div className="bg-gradient-to-br from-white to-blue-50 rounded-3xl p-8 shadow-xl border border-blue-100">
+      <div className="bg-gradient-to-br from-white to-violet-50 rounded-3xl p-8 shadow-xl border border-violet-100">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className="text-2xl font-bold text-gray-900 mb-2">Vehicle Health Overview</h3>
@@ -117,7 +117,7 @@ export default function VehiclePerformanceChart() {
                   backgroundColor: 'rgba(0, 0, 0, 0.8)',
                   titleColor: '#ffffff',
                   bodyColor: '#ffffff',
-                  borderColor: 'rgba(59, 130, 246, 0.5)',
+                  borderColor: 'rgba(139,  92,  246, 0.5)',
                   borderWidth: 1,
                   cornerRadius: 12,
                   displayColors: false,
@@ -198,9 +198,9 @@ export default function VehiclePerformanceChart() {
             <h3 className="text-2xl font-bold text-gray-900 mb-2">Weekly Performance Trends</h3>
             <p className="text-gray-600">Fuel efficiency and distance covered over the past week</p>
           </div>
-          <div className="flex items-center gap-2 px-4 py-2 bg-blue-100 rounded-full">
-            <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-            <span className="text-sm font-semibold text-blue-700">Trending Up</span>
+          <div className="flex items-center gap-2 px-4 py-2 bg-violet-100 rounded-full">
+            <div className="w-3 h-3 bg-violet-500 rounded-full"></div>
+            <span className="text-sm font-semibold text-violet-700">Trending Up</span>
           </div>
         </div>
         
@@ -226,7 +226,7 @@ export default function VehiclePerformanceChart() {
                   backgroundColor: 'rgba(0, 0, 0, 0.8)',
                   titleColor: '#ffffff',
                   bodyColor: '#ffffff',
-                  borderColor: 'rgba(59, 130, 246, 0.5)',
+                  borderColor: 'rgba(139,  92,  246, 0.5)',
                   borderWidth: 1,
                   cornerRadius: 12,
                   displayColors: true,
@@ -280,10 +280,10 @@ export default function VehiclePerformanceChart() {
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-sm font-medium text-gray-600">Average Fuel Efficiency</div>
-                <div className="text-3xl font-bold text-blue-600">12.9 km/L</div>
+                <div className="text-3xl font-bold text-violet-600">12.9 km/L</div>
               </div>
-              <div className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-12 h-12 bg-violet-100 rounded-2xl flex items-center justify-center">
+                <svg className="w-6 h-6 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                 </svg>
               </div>

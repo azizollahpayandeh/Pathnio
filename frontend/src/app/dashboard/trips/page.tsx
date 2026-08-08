@@ -60,7 +60,7 @@ export default function TripsPage() {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 stagger">
         <StatCard icon={Route} label="Total Trips" value={stats.total} gradient="from-purple-500 to-fuchsia-600" />
-        <StatCard icon={Navigation} label="Ongoing" value={stats.ongoing} gradient="from-blue-500 to-indigo-600" />
+        <StatCard icon={Navigation} label="Ongoing" value={stats.ongoing} gradient="from-violet-500 to-purple-600" />
         <StatCard icon={CheckCircle2} label="Completed" value={stats.completed} gradient="from-emerald-500 to-teal-600" />
         <StatCard icon={TrendingUp} label="Revenue" value={currency(stats.revenue)} gradient="from-amber-500 to-orange-600" />
       </div>
@@ -115,7 +115,7 @@ export default function TripsPage() {
                       <td className="py-3.5 px-4"><Badge tone={tone[t.status]} icon={SIcon}>{t.status}</Badge></td>
                       <td className="py-3.5 px-6">
                         <div className="flex items-center justify-end gap-2">
-                          <Link href={`/dashboard/trips/${t.id}`} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-blue-50 hover:text-blue-600 transition" aria-label="View">
+                          <Link href={`/dashboard/trips/${t.id}`} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-violet-50 hover:text-violet-600 transition" aria-label="View">
                             <Eye className="w-4 h-4" />
                           </Link>
                           <button onClick={() => remove("trips", t.id)} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition" aria-label="Delete">
