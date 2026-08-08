@@ -89,10 +89,16 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 
 # Database
-# Prefer DATABASE_URL (e.g., Neon/Supabase/Vercel Postgres). Fallback to local SQLite for dev.
+# Prefer a direct (unpooled) managed-Postgres URL. On serverless + Neon's
+# pgbouncer pooler, psycopg3's server-side prepared statements break, so use the
+# non-pooling endpoint when available. Fall back to DATABASE_URL, then SQLite.
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASE_URL = os.environ.get('DATABASE_URL')
+DATABASE_URL = (
+    os.environ.get('DATABASE_URL_UNPOOLED')
+    or os.environ.get('POSTGRES_URL_NON_POOLING')
+    or os.environ.get('DATABASE_URL')
+)
 
 if DATABASE_URL and dj_database_url is not None:
     # Require SSL for managed Postgres providers like Neon
