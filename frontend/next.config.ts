@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
       // بک‌اند روی ورسل
       {
         protocol: "https",
-        hostname: "pathnio-backend.vercel.app",
+        hostname: "pathnio-backend-api.vercel.app",
       },
       // اگر بعداً دامین سفارشی اضافه شد، اینجا راحت می‌شود اضافه کرد
       // آیکون‌های خارجی

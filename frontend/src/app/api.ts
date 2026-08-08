@@ -6,7 +6,7 @@ const envBase =
   process.env.API_BASE_URL ||
   (typeof window !== "undefined" && window.location.hostname === "localhost"
     ? "http://localhost:8000"
-    : "https://pathnio-backend.vercel.app");
+    : "https://pathnio-backend-api.vercel.app");
 
 export const API_BASE_URL = envBase.endsWith("/")
   ? envBase.slice(0, -1)
