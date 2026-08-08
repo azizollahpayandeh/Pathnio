@@ -147,7 +147,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Non-manifest storage: Vercel's Python builder has no build step to run
+# collectstatic, and the manifest variant raises 500s when the manifest is
+# missing. The JSON API doesn't use static files; this keeps admin from 500ing.
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -261,6 +264,10 @@ SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 SECURE_SSL_REDIRECT = not DEBUG
+# Vercel terminates TLS at the edge and forwards to the function over HTTP.
+# Trust the forwarded-proto header so Django knows the request was HTTPS and
+# doesn't infinite-redirect when SECURE_SSL_REDIRECT is on (DEBUG=False).
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Session Settings
 SESSION_COOKIE_SECURE = not DEBUG
