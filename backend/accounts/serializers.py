@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
-from .models import Company, Driver, ContactMessage, SiteSettings, Profile, Alert, Vehicle, Trip, Expense
+from .models import Company, Driver, ContactMessage, SiteSettings, Profile, Alert, Vehicle, Trip, Expense, LocationPing
 from djoser.serializers import UserSerializer as DjoserUserSerializer, UserCreateSerializer as DjoserUserCreateSerializer
 
 class UserSerializer(serializers.ModelSerializer):
@@ -299,3 +299,19 @@ class ExpenseSerializer(serializers.ModelSerializer):
         model = Expense
         fields = '__all__'
         read_only_fields = ('id', 'company', 'created_at')
+
+
+class LocationPingSerializer(serializers.ModelSerializer):
+    """Read/write serializer for a single GPS fix from the mobile app.
+
+    The client only supplies the raw fix fields; company/driver/vehicle are
+    resolved server-side from the authenticated user, so they are read-only.
+    """
+    class Meta:
+        model = LocationPing
+        fields = (
+            'id', 'lat', 'lng', 'speed', 'heading', 'accuracy', 'altitude',
+            'battery', 'is_moving', 'recorded_at', 'created_at',
+            'company', 'driver', 'vehicle',
+        )
+        read_only_fields = ('id', 'created_at', 'company', 'driver', 'vehicle')

@@ -10,6 +10,7 @@ from .views import (
     UserCreateView, UserUpdateView, UserDeleteView,
     UserAlertsView, AdminAlertsView,
     VehicleViewSet, TripViewSet, ExpenseViewSet,
+    LocationIngestView,
 )
 
 router = DefaultRouter()
@@ -59,6 +60,9 @@ urlpatterns = [
     path('users/<int:user_id>/delete/', UserDeleteView.as_view(), name='user-delete'),
 
     path('profile/', ProfileAPIView.as_view(), name='profile'),
+
+    # Mobile driver app — GPS ingest
+    path('locations/', LocationIngestView.as_view(), name='location-ingest'),
 
     # Fleet resources (vehicles / trips / expenses)
     path('', include(router.urls)),

@@ -270,3 +270,39 @@ class Expense(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.amount}"
+
+
+class LocationPing(models.Model):
+    """A single GPS fix reported by the Pathnio driver mobile app.
+
+    The app posts fixes (usually in small batches) to the location-ingest
+    endpoint. Each fix is stored here as breadcrumb history, and the latest
+    fix is mirrored onto the matching Vehicle (lat/lng/speed) so the live
+    dashboard map updates without needing a websocket layer.
+    """
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="location_pings", null=True, blank=True)
+    driver = models.ForeignKey(Driver, on_delete=models.SET_NULL, related_name="location_pings", null=True, blank=True)
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.SET_NULL, related_name="location_pings", null=True, blank=True)
+
+    lat = models.FloatField()
+    lng = models.FloatField()
+    speed = models.FloatField(default=0)          # metres/second, straight from GPS
+    heading = models.FloatField(null=True, blank=True)   # degrees, 0-360
+    accuracy = models.FloatField(null=True, blank=True)  # metres
+    altitude = models.FloatField(null=True, blank=True)  # metres
+    battery = models.IntegerField(null=True, blank=True)  # 0-100
+    is_moving = models.BooleanField(default=True)
+
+    recorded_at = models.DateTimeField()          # device clock (when the fix was taken)
+    created_at = models.DateTimeField(auto_now_add=True)  # server clock (when it arrived)
+
+    class Meta:
+        ordering = ["-recorded_at"]
+        indexes = [
+            models.Index(fields=["company", "recorded_at"]),
+            models.Index(fields=["vehicle", "recorded_at"]),
+            models.Index(fields=["driver", "recorded_at"]),
+        ]
+
+    def __str__(self):
+        return f"{self.lat:.5f},{self.lng:.5f} @ {self.recorded_at:%Y-%m-%d %H:%M:%S}"

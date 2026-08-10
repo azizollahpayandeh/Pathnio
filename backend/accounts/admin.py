@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
     Company, Driver, ContactMessage, SiteSettings,
-    Alert, Vehicle, Trip, Expense,
+    Alert, Vehicle, Trip, Expense, LocationPing,
 )
 
 admin.site.register(Company)
@@ -35,3 +35,11 @@ class ExpenseAdmin(admin.ModelAdmin):
 class AlertAdmin(admin.ModelAdmin):
     list_display = ("title", "user", "alert_type", "priority", "read", "timestamp")
     list_filter = ("priority", "alert_type", "read")
+
+
+@admin.register(LocationPing)
+class LocationPingAdmin(admin.ModelAdmin):
+    list_display = ("recorded_at", "vehicle", "driver", "lat", "lng", "speed", "is_moving")
+    list_filter = ("is_moving", "company")
+    search_fields = ("vehicle__plate_number", "driver__full_name")
+    date_hierarchy = "recorded_at"

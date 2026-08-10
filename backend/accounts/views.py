@@ -23,13 +23,13 @@ from rest_framework.permissions import IsAdminUser
 from .models import (
     Company, Driver, ContactMessage, SiteSettings,
     ActivityLog, UserSession, SecuritySettings, LoginAttempt, Profile, Alert,
-    Vehicle, Trip, Expense
+    Vehicle, Trip, Expense, LocationPing
 )
 from .serializers import (
     CompanySerializer, CompanyUpdateSerializer, CompanyUserSerializer, DriverSerializer, ContactMessageSerializer,
     SiteSettingsSerializer, LoginSerializer, PasswordChangeSerializer,
     UserProfileUpdateSerializer, ActivityLogSerializer, AlertSerializer,
-    VehicleSerializer, TripSerializer, ExpenseSerializer
+    VehicleSerializer, TripSerializer, ExpenseSerializer, LocationPingSerializer
 )
 
 logger = logging.getLogger(__name__)
@@ -1197,3 +1197,88 @@ class TripViewSet(CompanyScopedViewSet):
 class ExpenseViewSet(CompanyScopedViewSet):
     queryset = Expense.objects.all()
     serializer_class = ExpenseSerializer
+
+
+class LocationIngestView(APIView):
+    """Receive GPS fixes from the Pathnio driver app.
+
+    Accepts either a single fix or a batch:
+
+        POST /api/accounts/locations/
+        { "locations": [ {lat, lng, speed, heading, accuracy,
+                          altitude, battery, is_moving, recorded_at}, ... ] }
+
+    The authenticated user resolves to a Driver (via driver_profile) and,
+    where possible, a Vehicle (matched on plate_number within the driver's
+    company). Every fix is stored as history; the most recent fix is mirrored
+    onto the Vehicle so the live map updates. A company manager / staff user
+    may also post on behalf of a vehicle by passing "plate_number".
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+
+        # --- Resolve who / what this batch belongs to -----------------
+        driver = getattr(user, 'driver_profile', None)
+        company = getattr(driver, 'company', None) or getattr(user, 'company_profile', None)
+
+        # Vehicle: prefer the driver's plate; allow an explicit override for
+        # managers/staff testing from a dashboard or curl.
+        plate = (request.data.get('plate_number')
+                 or getattr(driver, 'plate_number', None))
+        vehicle = None
+        if plate:
+            vq = Vehicle.objects.filter(plate_number=plate)
+            if company is not None:
+                vq = vq.filter(company=company)
+            vehicle = vq.first()
+            if vehicle and company is None:
+                company = vehicle.company
+
+        # --- Normalise payload to a list ------------------------------
+        raw = request.data.get('locations')
+        if raw is None:
+            raw = [request.data]  # single-fix convenience form
+        if not isinstance(raw, list):
+            return Response({'detail': '"locations" must be a list.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        if not raw:
+            return Response({'saved': 0, 'detail': 'No locations supplied.'},
+                            status=status.HTTP_200_OK)
+
+        # --- Persist each fix -----------------------------------------
+        saved = []
+        errors = []
+        for i, item in enumerate(raw):
+            ser = LocationPingSerializer(data=item)
+            if not ser.is_valid():
+                errors.append({'index': i, 'errors': ser.errors})
+                continue
+            ping = ser.save(company=company, driver=driver, vehicle=vehicle)
+            saved.append(ping)
+
+        if not saved:
+            return Response(
+                {'saved': 0, 'errors': errors, 'detail': 'No valid fixes.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # --- Mirror the newest fix onto the Vehicle -------------------
+        if vehicle is not None:
+            latest = max(saved, key=lambda p: p.recorded_at)
+            vehicle.lat = latest.lat
+            vehicle.lng = latest.lng
+            # Vehicle.speed is a whole-number field the UI reads as km/h;
+            # GPS speed is m/s, so convert.
+            vehicle.speed = max(0, round((latest.speed or 0) * 3.6))
+            vehicle.save(update_fields=['lat', 'lng', 'speed'])
+
+        return Response(
+            {
+                'saved': len(saved),
+                'errors': errors,
+                'vehicle': vehicle.plate_number if vehicle else None,
+            },
+            status=status.HTTP_201_CREATED,
+        )
