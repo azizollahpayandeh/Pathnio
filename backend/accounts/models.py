@@ -275,7 +275,7 @@ class Expense(models.Model):
     category = models.CharField(max_length=16, choices=CATEGORY_CHOICES, default="Fuel")
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     currency = models.CharField(max_length=8, default="EUR")
-    date = models.DateField(default=timezone.now)
+    date = models.DateField(default=timezone.localdate)
     # Optional real references (kept alongside legacy display strings).
     vehicle_ref = models.ForeignKey(Vehicle, on_delete=models.SET_NULL, null=True, blank=True, related_name="expenses")
     driver_ref = models.ForeignKey(Driver, on_delete=models.SET_NULL, null=True, blank=True, related_name="expenses")

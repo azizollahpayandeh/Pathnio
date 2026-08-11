@@ -207,6 +207,13 @@ REST_FRAMEWORK = {
     },
 }
 
+# Throttling relies on the cache and would false-trip across the shared test
+# process; disable it under the test runner (production keeps the limits).
+import sys as _sys
+if 'test' in _sys.argv:
+    REST_FRAMEWORK['DEFAULT_THROTTLE_RATES'] = {k: None for k in REST_FRAMEWORK['DEFAULT_THROTTLE_RATES']}
+
+
 # JWT Settings - 5 days token expiration
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=5),
@@ -382,3 +389,12 @@ LOGGING = {
         },
     },
 }
+
+
+# --- Test runner overrides -------------------------------------------------
+# DEBUG defaults False (prod-safe), which turns on SECURE_SSL_REDIRECT and would
+# 301 the test client's HTTP requests. Relax transport security under tests only.
+if 'test' in sys.argv:
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
