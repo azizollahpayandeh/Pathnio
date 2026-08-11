@@ -13,6 +13,7 @@ import {
 } from "./storage";
 
 export type Ping = {
+  event_id: string; // client UUID for idempotent retransmits
   lat: number;
   lng: number;
   speed: number; // m/s

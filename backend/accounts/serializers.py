@@ -348,8 +348,12 @@ class LocationPingSerializer(serializers.ModelSerializer):
     class Meta:
         model = LocationPing
         fields = (
-            'id', 'lat', 'lng', 'speed', 'heading', 'accuracy', 'altitude',
+            'id', 'event_id', 'lat', 'lng', 'speed', 'heading', 'accuracy', 'altitude',
             'battery', 'is_moving', 'recorded_at', 'created_at',
-            'company', 'driver', 'vehicle',
+            'company', 'driver', 'vehicle', 'trip',
         )
-        read_only_fields = ('id', 'created_at', 'company', 'driver', 'vehicle')
+        read_only_fields = ('id', 'created_at', 'company', 'driver', 'vehicle', 'trip')
+        # Duplicate event_ids are handled explicitly in the ingest view (skip &
+        # count), so strip DRF's auto uniqueness validator that would otherwise
+        # 400 a legitimate offline retransmit.
+        extra_kwargs = {'event_id': {'validators': []}}

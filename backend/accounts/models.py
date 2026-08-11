@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -215,6 +216,7 @@ class Vehicle(models.Model):
     lat = models.FloatField(default=0)
     lng = models.FloatField(default=0)
     speed = models.PositiveIntegerField(default=0)
+    last_seen_at = models.DateTimeField(null=True, blank=True)  # last telemetry received
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -296,6 +298,11 @@ class LocationPing(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="location_pings", null=True, blank=True)
     driver = models.ForeignKey(Driver, on_delete=models.SET_NULL, related_name="location_pings", null=True, blank=True)
     vehicle = models.ForeignKey(Vehicle, on_delete=models.SET_NULL, related_name="location_pings", null=True, blank=True)
+    # Trip this fix belongs to (the driver's active trip at receive time).
+    trip = models.ForeignKey('Trip', on_delete=models.SET_NULL, related_name="location_pings", null=True, blank=True)
+    # Client-generated idempotency key so retransmitted offline fixes don't
+    # create duplicate rows (unique when present — enforced below).
+    event_id = models.UUIDField(null=True, blank=True, db_index=True)
 
     lat = models.FloatField()
     lng = models.FloatField()
@@ -315,6 +322,12 @@ class LocationPing(models.Model):
             models.Index(fields=["company", "recorded_at"]),
             models.Index(fields=["vehicle", "recorded_at"]),
             models.Index(fields=["driver", "recorded_at"]),
+            models.Index(fields=["trip", "recorded_at"]),
+        ]
+        constraints = [
+            models.UniqueConstraint(fields=["event_id"],
+                                    condition=models.Q(event_id__isnull=False),
+                                    name="uniq_location_event_id"),
         ]
 
     def __str__(self):

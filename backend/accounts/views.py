@@ -1347,38 +1347,53 @@ class LocationIngestView(APIView):
             return Response({'saved': 0, 'detail': 'No locations supplied.'},
                             status=status.HTTP_200_OK)
 
-        # --- Persist each fix -----------------------------------------
+        # The trip this batch belongs to = the driver's active trip (server-
+        # derived, never from the client).
+        trip = None
+        if driver is not None:
+            trip = (Trip.objects.filter(driver_ref=driver, status='ACTIVE')
+                    .order_by('-start_time').first())
+
+        # --- Persist each fix (idempotent on event_id) ----------------
         saved = []
         errors = []
+        duplicates = 0
         for i, item in enumerate(raw):
             ser = LocationPingSerializer(data=item)
             if not ser.is_valid():
                 errors.append({'index': i, 'errors': ser.errors})
                 continue
-            ping = ser.save(company=company, driver=driver, vehicle=vehicle)
+            eid = ser.validated_data.get('event_id')
+            if eid and LocationPing.objects.filter(event_id=eid).exists():
+                duplicates += 1  # retransmitted offline fix — skip silently
+                continue
+            ping = ser.save(company=company, driver=driver, vehicle=vehicle, trip=trip)
             saved.append(ping)
 
-        if not saved:
+        if not saved and not duplicates:
             return Response(
                 {'saved': 0, 'errors': errors, 'detail': 'No valid fixes.'},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # --- Mirror the newest fix onto the Vehicle -------------------
-        if vehicle is not None:
+        # --- Mirror the newest fix onto the Vehicle (latest state) ----
+        if vehicle is not None and saved:
             latest = max(saved, key=lambda p: p.recorded_at)
             vehicle.lat = latest.lat
             vehicle.lng = latest.lng
             # Vehicle.speed is a whole-number field the UI reads as km/h;
             # GPS speed is m/s, so convert.
             vehicle.speed = max(0, round((latest.speed or 0) * 3.6))
-            vehicle.save(update_fields=['lat', 'lng', 'speed'])
+            vehicle.last_seen_at = timezone.now()
+            vehicle.save(update_fields=['lat', 'lng', 'speed', 'last_seen_at'])
 
         return Response(
             {
                 'saved': len(saved),
+                'duplicates': duplicates,
                 'errors': errors,
                 'vehicle': vehicle.plate_number if vehicle else None,
+                'trip': trip.id if trip else None,
             },
             status=status.HTTP_201_CREATED,
         )
