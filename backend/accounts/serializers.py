@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
-from .models import Company, Driver, ContactMessage, SiteSettings, Profile, Alert, Vehicle, Trip, Expense, LocationPing, DriverInvitation, Cargo
+from .models import Company, Driver, ContactMessage, SiteSettings, Profile, Alert, Vehicle, Trip, Expense, LocationPing, DriverInvitation, Cargo, FleetAlert
 from djoser.serializers import UserSerializer as DjoserUserSerializer, UserCreateSerializer as DjoserUserCreateSerializer
 
 class UserSerializer(serializers.ModelSerializer):
@@ -299,6 +299,19 @@ class CargoSerializer(serializers.ModelSerializer):
         model = Cargo
         fields = '__all__'
         read_only_fields = ('id', 'company', 'created_at')
+
+
+class FleetAlertSerializer(serializers.ModelSerializer):
+    vehicle_plate = serializers.SerializerMethodField()
+
+    class Meta:
+        model = FleetAlert
+        fields = ('id', 'severity', 'alert_type', 'title', 'message', 'vehicle',
+                  'vehicle_plate', 'driver', 'trip', 'created_at', 'acknowledged_at')
+        read_only_fields = fields
+
+    def get_vehicle_plate(self, obj):
+        return obj.vehicle.plate_number if obj.vehicle_id else None
 
 
 class TripSerializer(serializers.ModelSerializer):

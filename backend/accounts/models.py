@@ -465,3 +465,42 @@ class Cargo(models.Model):
 
     def __str__(self):
         return f"cargo<{self.description} x{self.quantity}>"
+
+
+class FleetAlert(models.Model):
+    """Operational fleet alert, derived from real telemetry/fleet data (never
+    fabricated). Company-scoped; one OPEN alert per (vehicle, type) at a time."""
+    class Severity(models.TextChoices):
+        LOW = "low", "Low"
+        MEDIUM = "medium", "Medium"
+        HIGH = "high", "High"
+        CRITICAL = "critical", "Critical"
+
+    class Type(models.TextChoices):
+        VEHICLE_OFFLINE = "VEHICLE_OFFLINE", "Vehicle offline"
+        MAINTENANCE_DUE = "MAINTENANCE_DUE", "Maintenance due"
+        LOW_FUEL = "LOW_FUEL", "Low fuel"
+        SPEEDING = "SPEEDING", "Excessive speed"
+        GPS_UNAVAILABLE = "GPS_UNAVAILABLE", "GPS unavailable"
+        OTHER = "OTHER", "Other"
+
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="fleet_alerts")
+    severity = models.CharField(max_length=10, choices=Severity.choices, default=Severity.MEDIUM)
+    alert_type = models.CharField(max_length=32, choices=Type.choices, default=Type.OTHER)
+    title = models.CharField(max_length=255)
+    message = models.TextField(blank=True)
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.SET_NULL, null=True, blank=True, related_name="fleet_alerts")
+    driver = models.ForeignKey(Driver, on_delete=models.SET_NULL, null=True, blank=True, related_name="fleet_alerts")
+    trip = models.ForeignKey(Trip, on_delete=models.SET_NULL, null=True, blank=True, related_name="fleet_alerts")
+    created_at = models.DateTimeField(auto_now_add=True)
+    acknowledged_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["company", "acknowledged_at"]),
+            models.Index(fields=["vehicle", "alert_type", "acknowledged_at"]),
+        ]
+
+    def __str__(self):
+        return f"alert<{self.alert_type} / {self.severity}>"

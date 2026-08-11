@@ -9,6 +9,7 @@ import {
   Bell, CreditCard, LifeBuoy, Settings, ShieldCheck, Menu, LogOut, X,
 } from "lucide-react";
 import { useAuth, logout } from "@/lib/auth";
+import { useFleetAlerts } from "@/lib/api-data";
 import type { LucideIcon } from "lucide-react";
 
 interface NavItem {
@@ -89,8 +90,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const router = useRouter();
   const pathname = usePathname();
 
-  // Alerts are wired to the real API in a later slice; no demo badge for now.
-  const unread = 0;
+  // Real open (unacknowledged) fleet-alert count.
+  const { data: alerts } = useFleetAlerts();
+  const unread = alerts.filter((a) => !a.read).length;
 
   useEffect(() => {
     if (ready && !user) router.push("/login");

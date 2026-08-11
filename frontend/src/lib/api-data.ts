@@ -6,7 +6,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import api from "@/app/api";
-import type { Driver, Vehicle, Trip, Expense } from "./types";
+import type { Driver, Vehicle, Trip, Expense, Alert } from "./types";
 
 // ---- Mapping backend rows -> UI types -------------------------------------
 
@@ -226,6 +226,27 @@ export function useDrivers() {
 
 export function useVehicles() {
   return useResource<Vehicle>("accounts/vehicles/", mapVehicle);
+}
+
+function mapAlert(a: any): Alert {
+  const plate = a.vehicle_plate ? ` (${a.vehicle_plate})` : "";
+  return {
+    id: String(a.id),
+    alert_type: a.alert_type || "OTHER",
+    title: a.title || "",
+    message: (a.message || "") + plate,
+    priority: (a.severity || "medium") as Alert["priority"],
+    read: !!a.acknowledged_at,
+    timestamp: a.created_at || new Date().toISOString(),
+  };
+}
+
+export function useFleetAlerts() {
+  return useResource<Alert>("accounts/fleet-alerts/", mapAlert);
+}
+
+export async function acknowledgeAlert(id: string): Promise<void> {
+  await api.post(`accounts/fleet-alerts/${id}/acknowledge/`);
 }
 
 export function useTrips() {

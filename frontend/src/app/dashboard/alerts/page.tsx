@@ -5,7 +5,7 @@ import {
   Check, Trash2, CheckCheck, ShieldAlert,
 } from "lucide-react";
 import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
-import { useCollection, update, remove, setAll } from "@/lib/store";
+import { useFleetAlerts, acknowledgeAlert } from "@/lib/api-data";
 import type { AlertPriority } from "@/lib/types";
 
 const tone: Record<AlertPriority, string> = { low: "gray", medium: "blue", high: "amber", critical: "red" };
@@ -22,7 +22,7 @@ function timeAgo(iso: string) {
 }
 
 export default function AlertsPage() {
-  const [alerts] = useCollection("alerts");
+  const { data: alerts, refetch } = useFleetAlerts();
   const [filter, setFilter] = useState<"all" | "unread">("all");
   const [search, setSearch] = useState("");
 
@@ -40,7 +40,11 @@ export default function AlertsPage() {
   const unread = alerts.filter((a) => !a.read).length;
   const critical = alerts.filter((a) => a.priority === "critical").length;
 
-  const markAllRead = () => setAll("alerts", alerts.map((a) => ({ ...a, read: true })));
+  const markAllRead = async () => {
+    await Promise.all(alerts.filter((a) => !a.read).map((a) => acknowledgeAlert(a.id)));
+    await refetch();
+  };
+  const ack = async (id: string) => { await acknowledgeAlert(id); await refetch(); };
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -98,11 +102,11 @@ export default function AlertsPage() {
                 </div>
                 <div className="flex items-center gap-1.5">
                   {!a.read && (
-                    <button onClick={() => update("alerts", a.id, { read: true })} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-emerald-50 hover:text-emerald-600 transition" title="Mark read">
+                    <button onClick={() => ack(a.id)} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-emerald-50 hover:text-emerald-600 transition" title="Mark read">
                       <Check className="w-4 h-4" />
                     </button>
                   )}
-                  <button onClick={() => remove("alerts", a.id)} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition" title="Delete">
+                  <button onClick={() => ack(a.id)} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition" title="Delete">
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>

@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import (
     Company, Driver, ContactMessage, SiteSettings,
     Alert, Vehicle, Trip, Expense, LocationPing, Membership, DriverInvitation,
-    DriverVehicleAssignment, Cargo,
+    DriverVehicleAssignment, Cargo, FleetAlert,
 )
 
 admin.site.register(Company)
@@ -73,3 +73,9 @@ class CargoAdmin(admin.ModelAdmin):
     list_display = ("description", "trip", "company", "quantity", "weight_kg")
     list_filter = ("company",)
     search_fields = ("description", "trip__origin", "trip__destination")
+
+
+@admin.register(FleetAlert)
+class FleetAlertAdmin(admin.ModelAdmin):
+    list_display = ("alert_type", "severity", "company", "vehicle", "created_at", "acknowledged_at")
+    list_filter = ("severity", "alert_type", "company")

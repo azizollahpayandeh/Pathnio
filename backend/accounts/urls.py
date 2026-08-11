@@ -9,7 +9,7 @@ from .views import (
     DriverDetailView, UserListView, UserRoleUpdateView, AllMessagesView, ProfileAPIView,
     UserCreateView, UserUpdateView, UserDeleteView,
     UserAlertsView, AdminAlertsView,
-    VehicleViewSet, TripViewSet, ExpenseViewSet, DriverViewSet, CargoViewSet,
+    VehicleViewSet, TripViewSet, ExpenseViewSet, DriverViewSet, CargoViewSet, FleetAlertViewSet,
     LocationIngestView,
     DriverRegisterMobileView, DriverMeView, DriverActivateView,
     DriverInvitationView, DriverInvitationRevokeView, DriverInvitationRegenerateView,
@@ -22,6 +22,7 @@ router.register(r'trips', TripViewSet, basename='trip')
 router.register(r'expenses', ExpenseViewSet, basename='expense')
 router.register(r'drivers', DriverViewSet, basename='driver')
 router.register(r'cargo', CargoViewSet, basename='cargo')
+router.register(r'fleet-alerts', FleetAlertViewSet, basename='fleet-alert')
 
 urlpatterns = [
     # Authentication

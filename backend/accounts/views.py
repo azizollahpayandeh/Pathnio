@@ -24,18 +24,19 @@ from .models import (
     Company, Driver, ContactMessage, SiteSettings,
     ActivityLog, UserSession, SecuritySettings, LoginAttempt, Profile, Alert,
     Vehicle, Trip, Expense, LocationPing, Membership, DriverInvitation,
-    DriverVehicleAssignment, Cargo,
+    DriverVehicleAssignment, Cargo, FleetAlert,
 )
 from .serializers import (
     CompanySerializer, CompanyUpdateSerializer, CompanyUserSerializer, DriverSerializer, ContactMessageSerializer,
     SiteSettingsSerializer, LoginSerializer, PasswordChangeSerializer,
     UserProfileUpdateSerializer, ActivityLogSerializer, AlertSerializer,
     VehicleSerializer, TripSerializer, ExpenseSerializer, LocationPingSerializer,
-    DriverInvitationSerializer, CargoSerializer,
+    DriverInvitationSerializer, CargoSerializer, FleetAlertSerializer,
 )
 from .invitations import issue_invitation, hash_token
 from .assignments import assign as assign_driver_vehicle, unassign as unassign_vehicle, AssignmentError
 from .fleet_status import vehicle_live_status, driver_status
+from .alerts_engine import refresh_fleet_alerts
 from .tenancy import (
     company_for, role_for, is_owner,
     CompanyScopedQuerysetMixin, IsCompanyMember, IsCompanyOwner,
@@ -1300,6 +1301,35 @@ class CargoViewSet(CompanyScopedViewSet):
         if trip and trip.company_id != company.id:
             raise serializers.ValidationError({'trip': 'Trip is not in your company.'})
         serializer.save(company=company)
+
+
+class FleetAlertViewSet(CompanyScopedQuerysetMixin, viewsets.ReadOnlyModelViewSet):
+    """Company-scoped operational alerts (read + acknowledge). Alerts are derived
+    from real fleet conditions; ?open=1 filters to unacknowledged."""
+    permission_classes = [IsCompanyMember]
+    queryset = FleetAlert.objects.all().select_related('vehicle', 'driver', 'trip')
+    serializer_class = FleetAlertSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if self.request.query_params.get('open') == '1':
+            qs = qs.filter(acknowledged_at__isnull=True)
+        return qs
+
+    def list(self, request, *args, **kwargs):
+        # Refresh from live data before returning (idempotent).
+        company = company_for(request.user)
+        if company is not None:
+            refresh_fleet_alerts(company)
+        return super().list(request, *args, **kwargs)
+
+    @action(detail=True, methods=['post'])
+    def acknowledge(self, request, pk=None):
+        alert = self.get_object()
+        if alert.acknowledged_at is None:
+            alert.acknowledged_at = timezone.now()
+            alert.save(update_fields=['acknowledged_at'])
+        return Response(self.get_serializer(alert).data)
 
 
 class ExpenseViewSet(CompanyScopedViewSet):
