@@ -424,3 +424,25 @@ class DriverVehicleAssignment(models.Model):
     def __str__(self):
         state = "active" if self.is_active else "ended"
         return f"assign<{self.driver.full_name} -> {self.vehicle.plate_number} ({state})>"
+
+
+class Cargo(models.Model):
+    """A load/cargo item carried on a trip. Tenant-isolated via company (and the
+    parent trip's company). A trip may carry several cargo items."""
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="cargos")
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name="cargos")
+    description = models.CharField(max_length=255)
+    cargo_type = models.CharField(max_length=64, blank=True)
+    weight_kg = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    quantity = models.PositiveIntegerField(default=1)
+    pickup_location = models.CharField(max_length=255, blank=True)
+    delivery_location = models.CharField(max_length=255, blank=True)
+    notes = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [models.Index(fields=["company"]), models.Index(fields=["trip"])]
+
+    def __str__(self):
+        return f"cargo<{self.description} x{self.quantity}>"

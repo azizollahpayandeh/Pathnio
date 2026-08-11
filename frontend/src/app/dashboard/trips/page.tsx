@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import AddTripModal, { NewTrip } from "@/components/AddTripModal";
 import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
-import { useTrips, createTrip, deleteTrip } from "@/lib/api-data";
+import { useTrips, createTrip, deleteTrip, createCargo } from "@/lib/api-data";
 import type { TripStatus } from "@/lib/types";
 
 const tone: Record<TripStatus, string> = { COMPLETED: "green", ACTIVE: "blue", PLANNED: "amber", CANCELLED: "red" };
@@ -43,7 +43,13 @@ export default function TripsPage() {
   };
 
   const addTrip = async (t: NewTrip) => {
-    await createTrip(t as unknown as Record<string, unknown>);
+    const trip = await createTrip(t as unknown as Record<string, unknown>);
+    // Capture the load as a real Cargo record when provided.
+    if (t.cargo?.trim()) {
+      try {
+        await createCargo({ trip: trip.id, description: t.cargo.trim(), quantity: 1 });
+      } catch { /* trip is still created */ }
+    }
     await refetch();
   };
 

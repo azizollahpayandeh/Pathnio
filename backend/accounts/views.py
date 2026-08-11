@@ -24,14 +24,14 @@ from .models import (
     Company, Driver, ContactMessage, SiteSettings,
     ActivityLog, UserSession, SecuritySettings, LoginAttempt, Profile, Alert,
     Vehicle, Trip, Expense, LocationPing, Membership, DriverInvitation,
-    DriverVehicleAssignment,
+    DriverVehicleAssignment, Cargo,
 )
 from .serializers import (
     CompanySerializer, CompanyUpdateSerializer, CompanyUserSerializer, DriverSerializer, ContactMessageSerializer,
     SiteSettingsSerializer, LoginSerializer, PasswordChangeSerializer,
     UserProfileUpdateSerializer, ActivityLogSerializer, AlertSerializer,
     VehicleSerializer, TripSerializer, ExpenseSerializer, LocationPingSerializer,
-    DriverInvitationSerializer,
+    DriverInvitationSerializer, CargoSerializer,
 )
 from .invitations import issue_invitation, hash_token
 from .assignments import assign as assign_driver_vehicle, unassign as unassign_vehicle, AssignmentError
@@ -1247,6 +1247,25 @@ class TripViewSet(CompanyScopedViewSet):
         company = company_for(self.request.user)
         sync = self._validate_and_sync(serializer, company, instance=serializer.instance)
         serializer.save(**sync)
+
+
+class CargoViewSet(CompanyScopedViewSet):
+    """Company-scoped cargo. Filterable by ?trip=<id>. Create validates the
+    parent trip belongs to the owner's company."""
+    queryset = Cargo.objects.all().select_related('trip')
+    serializer_class = CargoSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        trip_id = self.request.query_params.get('trip')
+        return qs.filter(trip_id=trip_id) if trip_id else qs
+
+    def perform_create(self, serializer):
+        company = company_for(self.request.user)
+        trip = serializer.validated_data.get('trip')
+        if trip and trip.company_id != company.id:
+            raise serializers.ValidationError({'trip': 'Trip is not in your company.'})
+        serializer.save(company=company)
 
 
 class ExpenseViewSet(CompanyScopedViewSet):

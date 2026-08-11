@@ -126,6 +126,15 @@ export async function updateTrip(id: string, patch: Record<string, unknown>): Pr
   return mapTrip(r.data);
 }
 
+export async function createCargo(input: Record<string, unknown>): Promise<{ id: number }> {
+  const r = await api.post("accounts/cargo/", input);
+  return r.data;
+}
+
+export async function deleteCargo(id: string): Promise<void> {
+  await api.delete(`accounts/cargo/${id}/`);
+}
+
 function mapExpense(e: any): Expense {
   return {
     id: String(e.id),
