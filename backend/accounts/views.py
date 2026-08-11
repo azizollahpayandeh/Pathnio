@@ -116,10 +116,11 @@ def record_login_attempt(username, ip_address, user_agent, success, user=None):
 # Custom JWT Login View for frontend compatibility
 class CustomTokenObtainPairView(TokenObtainPairView):
     permission_classes = [AllowAny]
+    throttle_scope = 'login'
     
     def post(self, request, *args, **kwargs):
         # Log the request data for debugging
-        logger.info(f"Login attempt with data: {request.data}")
+        logger.info("Login attempt for username=%s", request.data.get("username"))
         
         # Extract username and password from request
         username = request.data.get('username')
@@ -517,11 +518,12 @@ class CompanyRegisterView(generics.CreateAPIView):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
     permission_classes = [AllowAny]
+    throttle_scope = 'register'
     
     def create(self, request, *args, **kwargs):
         try:
             # Log the incoming request data for debugging
-            logger.info(f"Company registration attempt with data: {request.data}")
+            logger.info("Company registration attempt for company=%s", request.data.get("company_name"))
             
             # Create the company using the serializer
             serializer = self.get_serializer(data=request.data)
@@ -629,7 +631,7 @@ class CompanyMeView(APIView):
             return Response({'detail': 'Company profile not found.'}, status=status.HTTP_404_NOT_FOUND)
         
         # Log the incoming request data for debugging
-        logger.info(f"Company profile update attempt with data: {request.data}")
+        logger.info("Company profile update attempt (fields=%s)", list(request.data.keys()))
         logger.info(f"Files in request: {request.FILES}")
         
         # Use the update serializer for PATCH requests
@@ -1548,6 +1550,7 @@ def _owned_driver_or_response(request, driver_id):
 
 
 class DriverRegisterMobileView(APIView):
+    throttle_scope = 'register'
     """Public: a driver creates a bare login account from the mobile app.
 
     The account has NO company/driver/role until it is activated with a valid
@@ -1650,6 +1653,7 @@ class DriverInvitationRegenerateView(APIView):
 
 
 class DriverActivateView(APIView):
+    throttle_scope = 'activate'
     """Mobile: bind the authenticated user -> Driver -> Company using a token.
 
     company_id / driver_id are NEVER accepted from the client — both are derived

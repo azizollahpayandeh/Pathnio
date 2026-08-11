@@ -30,7 +30,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-255do%edf3=ek&q^y*mviqh_84yed+g(d*$83*xfkqe4f1sedr')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'True').lower() in ['1', 'true', 'yes']
+# Safer default: production is secure even if the DEBUG env var is missing.
+# Local dev sets DEBUG=True explicitly.
+DEBUG = os.environ.get('DEBUG', 'False').lower() in ['1', 'true', 'yes']
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,0.0.0.0,.vercel.app').split(',')
 
@@ -191,6 +193,18 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
+    # Rate limiting. Scoped throttles guard the sensitive auth/activation
+    # endpoints (each sets throttle_scope); a global anon cap adds defense.
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.ScopedRateThrottle',
+        'rest_framework.throttling.AnonRateThrottle',
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '120/min',
+        'login': '10/min',
+        'activate': '10/min',
+        'register': '5/min',
+    },
 }
 
 # JWT Settings - 5 days token expiration
