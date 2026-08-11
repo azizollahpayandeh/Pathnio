@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Wallet } from "lucide-react";
 import { Modal, Field } from "./ui";
-import { useCollection } from "@/lib/store";
+import { useVehicles } from "@/lib/api-data";
 import type { Expense } from "@/lib/types";
 
 export type NewExpense = Omit<Expense, "id" | "createdAt">;
@@ -14,10 +14,10 @@ interface Props {
   initial?: Expense;
 }
 
-const CATS = ["Fuel", "Maintenance", "Tolls", "Insurance", "Salary", "Other"];
+const CATS = ["Fuel", "Maintenance", "Tolls", "Parking", "Insurance", "Salary", "Repair", "Other"];
 
 export default function AddExpenseModal({ isOpen, onClose, onAddExpense, initial }: Props) {
-  const [vehicles] = useCollection("vehicles");
+  const { data: vehicles } = useVehicles();
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState<NewExpense>(
     initial ?? {

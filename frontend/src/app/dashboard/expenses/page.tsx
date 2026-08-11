@@ -7,8 +7,8 @@ import {
 } from "lucide-react";
 import AddExpenseModal, { NewExpense } from "@/components/AddExpenseModal";
 import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
-import { useCollection, insert, remove, uid } from "@/lib/store";
-import type { Expense, ExpenseCategory } from "@/lib/types";
+import { useExpenses, createExpense, deleteExpense } from "@/lib/api-data";
+import type { ExpenseCategory } from "@/lib/types";
 
 const catIcon: Record<ExpenseCategory, typeof Fuel> = {
   Fuel, Maintenance: Wrench, Tolls: Receipt, Insurance: Shield, Salary: Users, Other: MoreHorizontal,
@@ -27,7 +27,7 @@ const catIconBg: Record<ExpenseCategory, string> = {
 const currency = (n: number) => "€" + n.toLocaleString(undefined, { minimumFractionDigits: 0 });
 
 export default function ExpensesPage() {
-  const [expenses] = useCollection("expenses");
+  const { data: expenses, refetch } = useExpenses();
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [showAdd, setShowAdd] = useState(false);
@@ -52,8 +52,14 @@ export default function ExpensesPage() {
     return { total, pending, fuel, count: expenses.length };
   }, [expenses]);
 
-  const addExpense = (x: NewExpense) =>
-    insert("expenses", { ...x, id: uid("exp"), createdAt: new Date().toISOString() } as Expense);
+  const addExpense = async (x: NewExpense) => {
+    await createExpense(x as unknown as Record<string, unknown>);
+    await refetch();
+  };
+  const handleDelete = async (id: string) => {
+    await deleteExpense(id);
+    await refetch();
+  };
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -109,18 +115,18 @@ export default function ExpensesPage() {
               </thead>
               <tbody>
                 {filtered.map((x) => {
-                  const Icon = catIcon[x.category];
+                  const Icon = (catIcon[x.category] || catIcon["Other"]);
                   return (
                     <tr key={x.id} className="border-b border-slate-50 last:border-0 hover:bg-slate-50/70 transition">
                       <td className="py-3.5 px-6">
                         <div className="flex items-center gap-3">
-                          <span className={`w-9 h-9 rounded-xl flex items-center justify-center ${catIconBg[x.category]}`}>
+                          <span className={`w-9 h-9 rounded-xl flex items-center justify-center ${(catIconBg[x.category] || catIconBg["Other"])}`}>
                             <Icon className="w-4 h-4" />
                           </span>
                           <span className="font-semibold text-slate-800">{x.title}</span>
                         </div>
                       </td>
-                      <td className="py-3.5 px-4"><Badge tone={catTone[x.category]}>{x.category}</Badge></td>
+                      <td className="py-3.5 px-4"><Badge tone={(catTone[x.category] || "gray")}>{x.category}</Badge></td>
                       <td className="py-3.5 px-4 text-slate-500 hidden sm:table-cell whitespace-nowrap">{new Date(x.date).toLocaleDateString()}</td>
                       <td className="py-3.5 px-4 text-slate-600 font-mono hidden md:table-cell">{x.plate_number || "—"}</td>
                       <td className="py-3.5 px-4 font-bold text-slate-900">{currency(x.amount)}</td>
@@ -130,7 +136,7 @@ export default function ExpensesPage() {
                           <Link href={`/dashboard/expenses/${x.id}`} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-violet-50 hover:text-violet-600 transition" aria-label="View">
                             <Eye className="w-4 h-4" />
                           </Link>
-                          <button onClick={() => remove("expenses", x.id)} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition" aria-label="Delete">
+                          <button onClick={() => handleDelete(x.id)} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition" aria-label="Delete">
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </div>

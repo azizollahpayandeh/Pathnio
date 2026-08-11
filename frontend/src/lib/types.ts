@@ -69,13 +69,9 @@ export interface Trip {
   createdAt: string;
 }
 
-export type ExpenseCategory =
-  | "Fuel"
-  | "Maintenance"
-  | "Tolls"
-  | "Insurance"
-  | "Salary"
-  | "Other";
+// Backend-driven categories (Fuel/Maintenance/Tolls/Parking/Insurance/Salary/
+// Repair/Other, extensible) — kept as string to avoid frontend/backend drift.
+export type ExpenseCategory = string;
 export type ExpenseStatus = "Paid" | "Pending";
 
 export interface Expense {

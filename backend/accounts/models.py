@@ -265,7 +265,8 @@ class Trip(models.Model):
 class Expense(models.Model):
     CATEGORY_CHOICES = [
         ("Fuel", "Fuel"), ("Maintenance", "Maintenance"), ("Tolls", "Tolls"),
-        ("Insurance", "Insurance"), ("Salary", "Salary"), ("Other", "Other"),
+        ("Parking", "Parking"), ("Insurance", "Insurance"), ("Salary", "Salary"),
+        ("Repair", "Repair"), ("Other", "Other"),
     ]
     STATUS_CHOICES = [("Paid", "Paid"), ("Pending", "Pending")]
 
@@ -273,7 +274,12 @@ class Expense(models.Model):
     title = models.CharField(max_length=255)
     category = models.CharField(max_length=16, choices=CATEGORY_CHOICES, default="Fuel")
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    currency = models.CharField(max_length=8, default="EUR")
     date = models.DateField(default=timezone.now)
+    # Optional real references (kept alongside legacy display strings).
+    vehicle_ref = models.ForeignKey(Vehicle, on_delete=models.SET_NULL, null=True, blank=True, related_name="expenses")
+    driver_ref = models.ForeignKey(Driver, on_delete=models.SET_NULL, null=True, blank=True, related_name="expenses")
+    trip = models.ForeignKey(Trip, on_delete=models.SET_NULL, null=True, blank=True, related_name="expenses")
     plate_number = models.CharField(max_length=32, blank=True)
     driver = models.CharField(max_length=255, blank=True)
     status = models.CharField(max_length=16, choices=STATUS_CHOICES, default="Paid")
