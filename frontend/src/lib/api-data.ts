@@ -249,6 +249,37 @@ export async function acknowledgeAlert(id: string): Promise<void> {
   await api.post(`accounts/fleet-alerts/${id}/acknowledge/`);
 }
 
+export type SupportTicket = {
+  id: string;
+  subject: string;
+  message: string;
+  reply?: string;
+  status: string;
+  created_at: string;
+  answered_at?: string;
+};
+
+function mapTicket(t: any): SupportTicket {
+  return {
+    id: String(t.id),
+    subject: t.subject || "",
+    message: t.message || "",
+    reply: t.reply || undefined,
+    status: t.status || "open",
+    created_at: t.created_at || new Date().toISOString(),
+    answered_at: t.answered_at || undefined,
+  };
+}
+
+export function useSupportTickets() {
+  return useResource<SupportTicket>("accounts/support/tickets/", mapTicket);
+}
+
+export async function createSupportTicket(subject: string, message: string): Promise<SupportTicket> {
+  const r = await api.post("accounts/support/tickets/", { subject, message });
+  return mapTicket(r.data);
+}
+
 export type CompanySettings = {
   timezone: string;
   distance_unit: string;
@@ -257,6 +288,30 @@ export type CompanySettings = {
   moving_speed_kmh: number;
   telemetry_interval_seconds: number;
 };
+
+export type SubscriptionInfo = {
+  plan: { code: string; name: string; max_drivers: number; max_vehicles: number; price_monthly: string };
+  status: string;
+  usage: { drivers: number; vehicles: number };
+  plans: { code: string; name: string; max_drivers: number; max_vehicles: number; price_monthly: string }[];
+};
+
+export function useSubscription() {
+  const [data, setData] = useState<SubscriptionInfo | null>(null);
+  const [ready, setReady] = useState(false);
+  const refetch = useCallback(async () => {
+    try {
+      const r = await api.get("accounts/subscription/");
+      setData(r.data);
+    } catch { /* ignore */ } finally { setReady(true); }
+  }, []);
+  useEffect(() => { refetch(); }, [refetch]);
+  return { data, ready, refetch };
+}
+
+export async function changePlan(code: string): Promise<void> {
+  await api.post("accounts/subscription/", { plan: code });
+}
 
 export async function getCompanySettings(): Promise<CompanySettings> {
   const r = await api.get("accounts/company/settings/");

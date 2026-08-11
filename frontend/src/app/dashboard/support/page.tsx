@@ -6,30 +6,29 @@ import {
 } from "lucide-react";
 import { PageHeader, Badge, EmptyState, Field } from "@/components/ui";
 import FloatingAlert from "@/components/FloatingAlert";
-import { useCollection, insert, uid } from "@/lib/store";
+import { useSupportTickets, createSupportTicket } from "@/lib/api-data";
 import type { Ticket } from "@/lib/types";
 
 const tone: Record<string, string> = { open: "amber", answered: "green", closed: "gray" };
 
 export default function SupportPage() {
-  const [tickets] = useCollection("tickets");
+  const { data: tickets, refetch } = useSupportTickets();
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [alert, setAlert] = useState<{ type: "success" | "error"; msg: string } | null>(null);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!subject.trim() || !message.trim()) return;
-    insert("tickets", {
-      id: uid("tic"),
-      subject: subject.trim(),
-      message: message.trim(),
-      status: "open",
-      created_at: new Date().toISOString(),
-    } as Ticket);
-    setSubject("");
-    setMessage("");
-    setAlert({ type: "success", msg: "Ticket submitted — our team will respond soon." });
+    try {
+      await createSupportTicket(subject.trim(), message.trim());
+      await refetch();
+      setSubject("");
+      setMessage("");
+      setAlert({ type: "success", msg: "Ticket submitted — our team will respond soon." });
+    } catch {
+      setAlert({ type: "error", msg: "Could not submit ticket. Please try again." });
+    }
     setTimeout(() => setAlert(null), 3000);
   };
 

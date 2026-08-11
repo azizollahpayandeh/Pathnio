@@ -3,6 +3,11 @@ import { useState } from "react";
 import { CreditCard, Check, Crown, Zap, Rocket, Sparkles } from "lucide-react";
 import { PageHeader } from "@/components/ui";
 import FloatingAlert from "@/components/FloatingAlert";
+import { useSubscription, changePlan } from "@/lib/api-data";
+
+// Map the display cards to backend plan codes.
+const ID_TO_CODE: Record<string, string> = { starter: "STARTER", pro: "PRO", enterprise: "BUSINESS" };
+const CODE_TO_ID: Record<string, string> = { FREE: "starter", STARTER: "starter", PRO: "pro", BUSINESS: "enterprise" };
 
 const PLANS = [
   {
@@ -23,18 +28,43 @@ const PLANS = [
 ];
 
 export default function SubscriptionPage() {
-  const [current, setCurrent] = useState("pro");
+  const { data: sub, refetch } = useSubscription();
   const [alert, setAlert] = useState<{ type: "success" | "error"; msg: string } | null>(null);
+  const current = sub ? (CODE_TO_ID[sub.plan.code] || "pro") : "pro";
 
-  const choose = (id: string, name: string) => {
-    setCurrent(id);
-    setAlert({ type: "success", msg: `You're now on the ${name} plan.` });
+  const choose = async (id: string, name: string) => {
+    try {
+      await changePlan(ID_TO_CODE[id] || "PRO");
+      await refetch();
+      setAlert({ type: "success", msg: `You're now on the ${name} plan.` });
+    } catch {
+      setAlert({ type: "error", msg: "Could not change plan." });
+    }
     setTimeout(() => setAlert(null), 2600);
   };
 
   return (
     <div className="space-y-6 animate-fade-in">
       <PageHeader icon={CreditCard} title="Subscription" subtitle="Choose the plan that fits your fleet" gradient="from-teal-500 to-emerald-600" />
+
+      {sub && (
+        <div className="card p-5 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div className="text-sm text-slate-500">Current plan</div>
+            <div className="font-bold text-lg text-slate-900">{sub.plan.name} <span className="text-xs font-medium text-slate-400">· {sub.status}</span></div>
+          </div>
+          <div className="flex gap-6 text-sm">
+            <div>
+              <div className="text-slate-500">Drivers</div>
+              <div className="font-semibold text-slate-800">{sub.usage.drivers} / {sub.plan.max_drivers}</div>
+            </div>
+            <div>
+              <div className="text-slate-500">Vehicles</div>
+              <div className="font-semibold text-slate-800">{sub.usage.vehicles} / {sub.plan.max_vehicles}</div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 stagger">
         {PLANS.map((p) => {

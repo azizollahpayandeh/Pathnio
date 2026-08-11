@@ -38,6 +38,8 @@ from .invitations import issue_invitation, hash_token
 from .assignments import assign as assign_driver_vehicle, unassign as unassign_vehicle, AssignmentError
 from .fleet_status import vehicle_live_status, driver_status
 from .alerts_engine import refresh_fleet_alerts
+from .subscriptions import check_can_add, usage as subscription_usage, get_or_create_subscription
+from .models import Plan, Subscription
 from .tenancy import (
     company_for, role_for, is_owner,
     CompanyScopedQuerysetMixin, IsCompanyMember, IsCompanyOwner,
@@ -579,6 +581,7 @@ class DriverRegisterView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         company = company_for(self.request.user)
+        check_can_add(company, 'driver')  # enforce plan limit
         with transaction.atomic():
             driver = serializer.save(company=company)
             # Only profile-with-account drivers get a Membership now; a
@@ -1220,6 +1223,11 @@ class VehicleViewSet(CompanyScopedViewSet):
     queryset = Vehicle.objects.all()
     serializer_class = VehicleSerializer
 
+    def perform_create(self, serializer):
+        company = company_for(self.request.user)
+        check_can_add(company, 'vehicle')  # enforce plan limit
+        serializer.save(company=company)
+
     @action(detail=False, methods=['get'])
     def live(self, request):
         """VehicleLatestState feed for the Live Map — position, speed, driver,
@@ -1352,6 +1360,11 @@ class DriverViewSet(CompanyScopedViewSet):
         if self.action in ('list', 'retrieve'):
             return [IsCompanyMember()]
         return [IsCompanyOwner()]
+
+    def perform_create(self, serializer):
+        company = company_for(self.request.user)
+        check_can_add(company, 'driver')  # enforce plan limit
+        serializer.save(company=company)
 
 
 class LocationIngestView(APIView):
@@ -1748,3 +1761,37 @@ class CompanySettingsView(APIView):
         ser.is_valid(raise_exception=True)
         ser.save()
         return Response(ser.data)
+
+
+class SubscriptionView(APIView):
+    """Company subscription: current plan, status, usage vs limits, and an
+    internal plan change (no payment provider)."""
+    permission_classes = [IsCompanyMember]
+
+    def get(self, request):
+        company = company_for(request.user)
+        if company is None:
+            return Response({'detail': 'No company.'}, status=status.HTTP_404_NOT_FOUND)
+        data = subscription_usage(company)
+        data['plans'] = [
+            {'code': p.code, 'name': p.name, 'max_drivers': p.max_drivers,
+             'max_vehicles': p.max_vehicles, 'price_monthly': str(p.price_monthly)}
+            for p in Plan.objects.all().order_by('price_monthly')
+        ]
+        return Response(data)
+
+    def post(self, request):
+        # Owner-only internal plan change.
+        if not is_owner(request.user):
+            return Response({'detail': 'Only the company owner can change the plan.'},
+                            status=status.HTTP_403_FORBIDDEN)
+        company = company_for(request.user)
+        code = request.data.get('plan')
+        plan = Plan.objects.filter(code=code).first()
+        if not plan:
+            return Response({'detail': 'Unknown plan.'}, status=status.HTTP_400_BAD_REQUEST)
+        sub = get_or_create_subscription(company)
+        sub.plan = plan
+        sub.status = Subscription.Status.ACTIVE
+        sub.save(update_fields=['plan', 'status'])
+        return Response(subscription_usage(company))

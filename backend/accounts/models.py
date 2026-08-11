@@ -523,3 +523,32 @@ class CompanySettings(models.Model):
 
     def __str__(self):
         return f"settings<{self.company.company_name}>"
+
+
+class Plan(models.Model):
+    """Subscription plan with configurable resource limits (Phase 18). Internal
+    only — no payment provider integration."""
+    code = models.CharField(max_length=20, unique=True)  # FREE / STARTER / PRO / BUSINESS
+    name = models.CharField(max_length=64)
+    max_drivers = models.PositiveIntegerField(default=2)
+    max_vehicles = models.PositiveIntegerField(default=2)
+    price_monthly = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    def __str__(self):
+        return self.name
+
+
+class Subscription(models.Model):
+    class Status(models.TextChoices):
+        TRIAL = "TRIAL", "Trial"
+        ACTIVE = "ACTIVE", "Active"
+        CANCELLED = "CANCELLED", "Cancelled"
+
+    company = models.OneToOneField(Company, on_delete=models.CASCADE, related_name="subscription")
+    plan = models.ForeignKey(Plan, on_delete=models.PROTECT, related_name="subscriptions")
+    status = models.CharField(max_length=12, choices=Status.choices, default=Status.TRIAL)
+    started_at = models.DateTimeField(auto_now_add=True)
+    current_period_end = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"sub<{self.company.company_name} / {self.plan.code} / {self.status}>"

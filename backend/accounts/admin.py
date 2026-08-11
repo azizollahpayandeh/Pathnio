@@ -80,3 +80,6 @@ class FleetAlertAdmin(admin.ModelAdmin):
     list_display = ("alert_type", "severity", "company", "vehicle", "created_at", "acknowledged_at")
     list_filter = ("severity", "alert_type", "company")
 admin.site.register(CompanySettings)
+from .models import Plan, Subscription
+admin.site.register(Plan)
+admin.site.register(Subscription)
