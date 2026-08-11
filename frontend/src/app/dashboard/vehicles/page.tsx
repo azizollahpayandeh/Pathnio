@@ -3,21 +3,26 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import {
   Car, Search, Plus, Eye, User, Weight, Palette, Truck, Wrench,
-  CheckCircle, XCircle, Trash2, Fuel, Gauge,
+  CheckCircle, XCircle, Trash2, Fuel, Gauge, UserCheck,
 } from "lucide-react";
 import AddVehicleModal, { NewVehicle } from "@/components/AddVehicleModal";
+import AssignVehicleModal from "@/components/AssignVehicleModal";
 import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
-import { useVehicles, createVehicle, deleteVehicle } from "@/lib/api-data";
+import { useVehicles, useDrivers, createVehicle, deleteVehicle } from "@/lib/api-data";
 
 const statusTone: Record<string, string> = { Active: "green", Inactive: "gray", Maintenance: "blue" };
 const statusIcon: Record<string, typeof CheckCircle> = { Active: CheckCircle, Inactive: XCircle, Maintenance: Wrench };
 
 export default function VehiclesPage() {
   const { data: vehicles, refetch } = useVehicles();
+  const { data: allDrivers } = useDrivers();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
   const [type, setType] = useState("all");
   const [showAdd, setShowAdd] = useState(false);
+  const [assignFor, setAssignFor] = useState<
+    { id: string; plate: string; driverId?: string | null } | null
+  >(null);
 
   const filtered = useMemo(
     () =>
@@ -136,6 +141,14 @@ export default function VehiclesPage() {
                     <Eye className="w-4 h-4" /> View details
                   </Link>
                   <button
+                    onClick={() => setAssignFor({ id: v.id, plate: v.plate_number, driverId: v.assignedDriverId })}
+                    className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 hover:bg-orange-100 transition"
+                    aria-label="Assign driver"
+                    title="Assign / change driver"
+                  >
+                    <UserCheck className="w-4 h-4" />
+                  </button>
+                  <button
                     onClick={() => handleDelete(v.id)}
                     className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
                     aria-label="Delete"
@@ -150,6 +163,18 @@ export default function VehiclesPage() {
       )}
 
       <AddVehicleModal isOpen={showAdd} onClose={() => setShowAdd(false)} onAddVehicle={addVehicle} />
+
+      {assignFor && (
+        <AssignVehicleModal
+          isOpen={!!assignFor}
+          onClose={() => setAssignFor(null)}
+          vehicleId={assignFor.id}
+          vehiclePlate={assignFor.plate}
+          currentDriverId={assignFor.driverId}
+          drivers={allDrivers}
+          onChanged={refetch}
+        />
+      )}
     </div>
   );
 }

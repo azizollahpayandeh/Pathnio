@@ -23,7 +23,8 @@ from rest_framework.permissions import IsAdminUser
 from .models import (
     Company, Driver, ContactMessage, SiteSettings,
     ActivityLog, UserSession, SecuritySettings, LoginAttempt, Profile, Alert,
-    Vehicle, Trip, Expense, LocationPing, Membership, DriverInvitation
+    Vehicle, Trip, Expense, LocationPing, Membership, DriverInvitation,
+    DriverVehicleAssignment,
 )
 from .serializers import (
     CompanySerializer, CompanyUpdateSerializer, CompanyUserSerializer, DriverSerializer, ContactMessageSerializer,
@@ -33,6 +34,7 @@ from .serializers import (
     DriverInvitationSerializer,
 )
 from .invitations import issue_invitation, hash_token
+from .assignments import assign as assign_driver_vehicle, unassign as unassign_vehicle, AssignmentError
 from .tenancy import (
     company_for, role_for, is_owner,
     CompanyScopedQuerysetMixin, IsCompanyMember, IsCompanyOwner,
@@ -1266,18 +1268,28 @@ class LocationIngestView(APIView):
         driver = getattr(user, 'driver_profile', None)
         company = getattr(driver, 'company', None) or getattr(user, 'company_profile', None)
 
-        # Vehicle: prefer the driver's plate; allow an explicit override for
-        # managers/staff testing from a dashboard or curl.
-        plate = (request.data.get('plate_number')
-                 or getattr(driver, 'plate_number', None))
+        # Vehicle is derived SERVER-SIDE from the driver's active assignment —
+        # the client's vehicle_id is never trusted. Plate is only a fallback for
+        # legacy/unassigned drivers and manager/staff overrides.
         vehicle = None
-        if plate:
-            vq = Vehicle.objects.filter(plate_number=plate)
-            if company is not None:
-                vq = vq.filter(company=company)
-            vehicle = vq.first()
-            if vehicle and company is None:
-                company = vehicle.company
+        if driver is not None:
+            active = (DriverVehicleAssignment.objects
+                      .filter(driver=driver, is_active=True)
+                      .select_related('vehicle').first())
+            if active:
+                vehicle = active.vehicle
+                if company is None:
+                    company = vehicle.company
+        if vehicle is None:
+            plate = (request.data.get('plate_number')
+                     or getattr(driver, 'plate_number', None))
+            if plate:
+                vq = Vehicle.objects.filter(plate_number=plate)
+                if company is not None:
+                    vq = vq.filter(company=company)
+                vehicle = vq.first()
+                if vehicle and company is None:
+                    company = vehicle.company
 
         # --- Normalise payload to a list ------------------------------
         raw = request.data.get('locations')
@@ -1337,7 +1349,15 @@ def _driver_context(user):
     """
     driver = getattr(user, 'driver_profile', None)
     if not driver:
-        return {'activated': False, 'driver': None, 'company': None}
+        return {'activated': False, 'driver': None, 'company': None, 'vehicle': None}
+    active = (DriverVehicleAssignment.objects
+              .filter(driver=driver, is_active=True)
+              .select_related('vehicle').first())
+    vehicle = None
+    if active:
+        v = active.vehicle
+        vehicle = {'id': v.id, 'plate_number': v.plate_number,
+                   'model': v.model, 'vehicle_type': v.vehicle_type}
     return {
         'activated': True,
         'driver': {
@@ -1352,6 +1372,7 @@ def _driver_context(user):
             {'id': driver.company_id, 'name': getattr(driver.company, 'company_name', None)}
             if driver.company_id else None
         ),
+        'vehicle': vehicle,
     }
 
 
@@ -1526,3 +1547,43 @@ class DriverActivateView(APIView):
             )
 
         return Response(_driver_context(user), status=status.HTTP_200_OK)
+
+
+# ===========================================================================
+# Phase 4 — Driver <-> Vehicle assignment
+# ===========================================================================
+
+class VehicleAssignView(APIView):
+    """Owner: assign a driver to a vehicle. Both must be in the owner's company;
+    cross-company assignment is impossible."""
+    permission_classes = [IsCompanyOwner]
+
+    def post(self, request, vehicle_id):
+        company = company_for(request.user)
+        vehicle = Vehicle.objects.filter(id=vehicle_id, company=company).first()
+        if not vehicle:
+            return Response({'detail': 'Vehicle not found.'}, status=status.HTTP_404_NOT_FOUND)
+        driver = Driver.objects.filter(id=request.data.get('driver_id'), company=company).first()
+        if not driver:
+            return Response({'detail': 'Driver not found in your company.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        try:
+            assign_driver_vehicle(vehicle, driver, request.user)
+        except AssignmentError as e:
+            return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        vehicle.refresh_from_db()
+        return Response(VehicleSerializer(vehicle).data, status=status.HTTP_200_OK)
+
+
+class VehicleUnassignView(APIView):
+    """Owner: remove the vehicle's active driver assignment."""
+    permission_classes = [IsCompanyOwner]
+
+    def post(self, request, vehicle_id):
+        company = company_for(request.user)
+        vehicle = Vehicle.objects.filter(id=vehicle_id, company=company).first()
+        if not vehicle:
+            return Response({'detail': 'Vehicle not found.'}, status=status.HTTP_404_NOT_FOUND)
+        unassign_vehicle(vehicle)
+        vehicle.refresh_from_db()
+        return Response(VehicleSerializer(vehicle).data, status=status.HTTP_200_OK)

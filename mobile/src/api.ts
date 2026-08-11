@@ -62,6 +62,12 @@ export type DriverContext = {
     vehicle_type?: string;
   } | null;
   company: { id: number; name: string } | null;
+  vehicle?: {
+    id: number;
+    plate_number: string;
+    model?: string;
+    vehicle_type?: string;
+  } | null;
 };
 
 /** Register a bare driver login account (no company/driver until activated). */

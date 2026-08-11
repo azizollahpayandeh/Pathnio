@@ -13,6 +13,7 @@ from .views import (
     LocationIngestView,
     DriverRegisterMobileView, DriverMeView, DriverActivateView,
     DriverInvitationView, DriverInvitationRevokeView, DriverInvitationRegenerateView,
+    VehicleAssignView, VehicleUnassignView,
 )
 
 router = DefaultRouter()
@@ -73,6 +74,10 @@ urlpatterns = [
     path('drivers/<int:driver_id>/invitation/', DriverInvitationView.as_view(), name='driver-invitation'),
     path('drivers/<int:driver_id>/invitation/revoke/', DriverInvitationRevokeView.as_view(), name='driver-invitation-revoke'),
     path('drivers/<int:driver_id>/invitation/regenerate/', DriverInvitationRegenerateView.as_view(), name='driver-invitation-regenerate'),
+
+    # Phase 4 — driver <-> vehicle assignment
+    path('vehicles/<int:vehicle_id>/assign/', VehicleAssignView.as_view(), name='vehicle-assign'),
+    path('vehicles/<int:vehicle_id>/unassign/', VehicleUnassignView.as_view(), name='vehicle-unassign'),
 
     # Fleet resources (vehicles / trips / expenses / drivers)
     path('', include(router.urls)),

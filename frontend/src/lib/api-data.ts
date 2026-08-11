@@ -65,7 +65,6 @@ function mapVehicle(v: any): Vehicle {
     plate_number: v.plate_number || "",
     vehicle_type: (v.vehicle_type || "Truck") as Vehicle["vehicle_type"],
     model: v.model || "",
-    driver: v.driver || "",
     company: String(v.company ?? ""),
     status: (v.status || "Active") as Vehicle["status"],
     capacity: v.capacity || "",
@@ -78,8 +77,19 @@ function mapVehicle(v: any): Vehicle {
     lat: v.lat ?? 0,
     lng: v.lng ?? 0,
     speed: v.speed ?? 0,
+    // Real assignment (source of truth); falls back to legacy display string.
+    driver: v.assigned_driver?.full_name || v.driver || "",
+    assignedDriverId: v.assigned_driver ? String(v.assigned_driver.id) : null,
     createdAt: v.created_at || new Date().toISOString(),
-  };
+  } as Vehicle;
+}
+
+export async function assignDriver(vehicleId: string, driverId: string): Promise<void> {
+  await api.post(`accounts/vehicles/${vehicleId}/assign/`, { driver_id: driverId });
+}
+
+export async function unassignVehicle(vehicleId: string): Promise<void> {
+  await api.post(`accounts/vehicles/${vehicleId}/unassign/`);
 }
 
 function mapTrip(t: any): Trip {

@@ -12,6 +12,7 @@ export interface Vehicle {
   model: string;
   driver: string; // driver full name (denormalized for display)
   driverId?: ID;
+  assignedDriverId?: ID | null; // active DriverVehicleAssignment driver (Phase 4)
   company: string;
   status: VehicleStatus;
   capacity: string;

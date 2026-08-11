@@ -382,3 +382,35 @@ class DriverInvitation(models.Model):
 
     def __str__(self):
         return f"invite<{self.driver.full_name} / {self.company.company_name} / {self.status}>"
+
+
+class DriverVehicleAssignment(models.Model):
+    """History of which driver is assigned to which vehicle. Exactly one row per
+    (vehicle) and per (driver) may be active at a time — enforced by partial
+    unique constraints. Cross-company assignment is impossible (validated in the
+    service layer, and both FKs carry the same company)."""
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="assignments")
+    driver = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name="assignments")
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name="assignments")
+    assigned_at = models.DateTimeField(default=timezone.now)
+    unassigned_at = models.DateTimeField(null=True, blank=True)
+    assigned_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="made_assignments")
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["-assigned_at"]
+        constraints = [
+            models.UniqueConstraint(fields=["vehicle"], condition=models.Q(is_active=True),
+                                    name="uniq_active_vehicle_assignment"),
+            models.UniqueConstraint(fields=["driver"], condition=models.Q(is_active=True),
+                                    name="uniq_active_driver_assignment"),
+        ]
+        indexes = [
+            models.Index(fields=["company", "is_active"]),
+            models.Index(fields=["vehicle", "is_active"]),
+            models.Index(fields=["driver", "is_active"]),
+        ]
+
+    def __str__(self):
+        state = "active" if self.is_active else "ended"
+        return f"assign<{self.driver.full_name} -> {self.vehicle.plate_number} ({state})>"

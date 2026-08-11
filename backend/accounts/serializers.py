@@ -280,10 +280,18 @@ class AlertSerializer(serializers.ModelSerializer):
 
 # Fleet resource serializers
 class VehicleSerializer(serializers.ModelSerializer):
+    # Real driver relationship, derived from the active assignment (source of
+    # truth). The legacy `driver` string stays for display but is kept in sync.
+    assigned_driver = serializers.SerializerMethodField()
+
     class Meta:
         model = Vehicle
         fields = '__all__'
         read_only_fields = ('id', 'company', 'created_at')
+
+    def get_assigned_driver(self, obj):
+        a = obj.assignments.filter(is_active=True).select_related('driver').first()
+        return {'id': a.driver_id, 'full_name': a.driver.full_name} if a else None
 
 
 class TripSerializer(serializers.ModelSerializer):
