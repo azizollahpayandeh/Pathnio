@@ -249,6 +249,25 @@ export async function acknowledgeAlert(id: string): Promise<void> {
   await api.post(`accounts/fleet-alerts/${id}/acknowledge/`);
 }
 
+export type CompanySettings = {
+  timezone: string;
+  distance_unit: string;
+  currency: string;
+  offline_timeout_seconds: number;
+  moving_speed_kmh: number;
+  telemetry_interval_seconds: number;
+};
+
+export async function getCompanySettings(): Promise<CompanySettings> {
+  const r = await api.get("accounts/company/settings/");
+  return r.data;
+}
+
+export async function updateCompanySettings(patch: Partial<CompanySettings>): Promise<CompanySettings> {
+  const r = await api.patch("accounts/company/settings/", patch);
+  return r.data;
+}
+
 export function useTrips() {
   return useResource<Trip>("accounts/trips/", mapTrip);
 }

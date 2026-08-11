@@ -24,7 +24,7 @@ from .models import (
     Company, Driver, ContactMessage, SiteSettings,
     ActivityLog, UserSession, SecuritySettings, LoginAttempt, Profile, Alert,
     Vehicle, Trip, Expense, LocationPing, Membership, DriverInvitation,
-    DriverVehicleAssignment, Cargo, FleetAlert,
+    DriverVehicleAssignment, Cargo, FleetAlert, CompanySettings,
 )
 from .serializers import (
     CompanySerializer, CompanyUpdateSerializer, CompanyUserSerializer, DriverSerializer, ContactMessageSerializer,
@@ -32,6 +32,7 @@ from .serializers import (
     UserProfileUpdateSerializer, ActivityLogSerializer, AlertSerializer,
     VehicleSerializer, TripSerializer, ExpenseSerializer, LocationPingSerializer,
     DriverInvitationSerializer, CargoSerializer, FleetAlertSerializer,
+    CompanySettingsSerializer,
 )
 from .invitations import issue_invitation, hash_token
 from .assignments import assign as assign_driver_vehicle, unassign as unassign_vehicle, AssignmentError
@@ -1719,3 +1720,31 @@ class VehicleUnassignView(APIView):
         unassign_vehicle(vehicle)
         vehicle.refresh_from_db()
         return Response(VehicleSerializer(vehicle).data, status=status.HTTP_200_OK)
+
+
+class CompanySettingsView(APIView):
+    """Owner-only per-company settings (Phase 15). GET/PATCH; scoped to the
+    caller's company — a tenant can never read/modify another's config."""
+    permission_classes = [IsCompanyOwner]
+
+    def _settings(self, request):
+        company = company_for(request.user)
+        if company is None:
+            return None
+        obj, _ = CompanySettings.objects.get_or_create(company=company)
+        return obj
+
+    def get(self, request):
+        obj = self._settings(request)
+        if obj is None:
+            return Response({'detail': 'No company.'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(CompanySettingsSerializer(obj).data)
+
+    def patch(self, request):
+        obj = self._settings(request)
+        if obj is None:
+            return Response({'detail': 'No company.'}, status=status.HTTP_404_NOT_FOUND)
+        ser = CompanySettingsSerializer(obj, data=request.data, partial=True)
+        ser.is_valid(raise_exception=True)
+        ser.save()
+        return Response(ser.data)

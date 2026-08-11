@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import FloatingAlert from "@/components/FloatingAlert";
 import { PageHeader } from "@/components/ui";
+import FleetSettingsCard from "@/components/FleetSettingsCard";
 import { useSettings, resetDatabase } from "@/lib/store";
 
 const COLORS = ["#7c3aed", "#7c3aed", "#0d9488", "#ea580c", "#e11d48", "#0284c7"];
@@ -50,6 +51,8 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6 animate-fade-in max-w-3xl">
       <PageHeader icon={SettingsIcon} title="Settings" subtitle="Personalize your workspace" gradient="from-slate-500 to-slate-700" />
+
+      <FleetSettingsCard />
 
       <div className="card p-6">
         <h2 className="font-bold text-slate-800 mb-2">Preferences</h2>

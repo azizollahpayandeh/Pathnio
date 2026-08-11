@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
-from .models import Company, Driver, ContactMessage, SiteSettings, Profile, Alert, Vehicle, Trip, Expense, LocationPing, DriverInvitation, Cargo, FleetAlert
+from .models import Company, Driver, ContactMessage, SiteSettings, Profile, Alert, Vehicle, Trip, Expense, LocationPing, DriverInvitation, Cargo, FleetAlert, CompanySettings
 from djoser.serializers import UserSerializer as DjoserUserSerializer, UserCreateSerializer as DjoserUserCreateSerializer
 
 class UserSerializer(serializers.ModelSerializer):
@@ -370,3 +370,12 @@ class LocationPingSerializer(serializers.ModelSerializer):
         # count), so strip DRF's auto uniqueness validator that would otherwise
         # 400 a legitimate offline retransmit.
         extra_kwargs = {'event_id': {'validators': []}}
+
+
+class CompanySettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CompanySettings
+        fields = ('id', 'timezone', 'distance_unit', 'currency',
+                  'offline_timeout_seconds', 'moving_speed_kmh',
+                  'telemetry_interval_seconds', 'updated_at')
+        read_only_fields = ('id', 'updated_at')
