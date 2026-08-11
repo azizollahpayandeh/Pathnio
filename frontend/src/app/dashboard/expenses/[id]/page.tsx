@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
   ArrowLeft, Calendar, User, Truck, Tag, Receipt, FileText,
 } from "lucide-react";
-import { useCollection } from "@/lib/store";
+import { useExpenses } from "@/lib/api-data";
 import { Badge, EmptyState } from "@/components/ui";
 
 const currency = (n: number) => "€" + n.toLocaleString(undefined, { minimumFractionDigits: 2 });
@@ -14,7 +14,7 @@ export default function ExpenseDetail() {
   const params = useParams();
   const router = useRouter();
   const id = String(params.id);
-  const [expenses] = useCollection("expenses");
+  const { data: expenses } = useExpenses();
   const expense = useMemo(() => expenses.find((e) => e.id === id), [expenses, id]);
 
   if (!expense) {

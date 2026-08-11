@@ -1,25 +1,27 @@
 "use client";
 import dynamic from "next/dynamic";
 import { useState } from "react";
-import { Map as MapIcon, Navigation, Signal, Fuel, Search } from "lucide-react";
+import { Map as MapIcon, Navigation, Signal, Search } from "lucide-react";
 import { PageHeader, Badge } from "@/components/ui";
-import { useCollection } from "@/lib/store";
-import type { Vehicle } from "@/lib/types";
+import { useLiveVehicles, type LiveVehicle } from "@/lib/api-data";
 
 const LiveMap = dynamic(() => import("@/components/LiveMapWidget"), { ssr: false });
 
-function liveStatus(v: Vehicle): "moving" | "stopped" | "offline" {
-  if (v.status !== "Active") return "offline";
-  return v.speed > 0 ? "moving" : "stopped";
+function bucket(v: LiveVehicle): "moving" | "stopped" | "offline" {
+  if (v.live_status === "MOVING") return "moving";
+  if (v.live_status === "STOPPED") return "stopped";
+  return "offline";
 }
 const tone: Record<string, string> = { moving: "green", stopped: "amber", offline: "gray" };
 
 export default function LiveMapPage() {
-  const [vehicles] = useCollection("vehicles");
+  const { data: vehicles } = useLiveVehicles();
   const [search, setSearch] = useState("");
 
   const list = vehicles.filter(
-    (v) => v.plate_number.toLowerCase().includes(search.toLowerCase()) || v.driver.toLowerCase().includes(search.toLowerCase())
+    (v) =>
+      v.plate_number.toLowerCase().includes(search.toLowerCase()) ||
+      (v.driver?.full_name || "").toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -40,18 +42,20 @@ export default function LiveMapPage() {
             <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search vehicle…" className="field pl-10" />
           </div>
           <div className="space-y-2 overflow-y-auto scroll-slim max-h-[420px] pr-1">
+            {list.length === 0 && (
+              <p className="text-sm text-slate-400">No vehicles yet. Add vehicles and assign drivers to see them here.</p>
+            )}
             {list.map((v) => {
-              const st = liveStatus(v);
+              const st = bucket(v);
               return (
                 <div key={v.id} className="p-3 rounded-2xl border border-slate-100 hover:border-violet-200 hover:shadow-soft transition bg-white">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-slate-800">{v.plate_number}</span>
                     <Badge tone={tone[st]}>{st}</Badge>
                   </div>
-                  <div className="text-sm text-slate-500 mt-1 truncate">{v.driver} · {v.model}</div>
+                  <div className="text-sm text-slate-500 mt-1 truncate">{v.driver?.full_name || "Unassigned"}{v.model ? ` · ${v.model}` : ""}</div>
                   <div className="flex items-center gap-4 mt-2 text-xs text-slate-500">
                     <span className="flex items-center gap-1"><Navigation className="w-3.5 h-3.5" />{v.speed} km/h</span>
-                    <span className="flex items-center gap-1"><Fuel className="w-3.5 h-3.5" />{v.fuel_level}%</span>
                     <span className="flex items-center gap-1"><Signal className="w-3.5 h-3.5" />{st === "offline" ? "No signal" : "Online"}</span>
                   </div>
                 </div>

@@ -6,7 +6,7 @@ import {
   ArrowLeft, Truck, User, Palette, Weight, Fuel, Gauge, Route as RouteIcon,
   Wrench, CheckCircle, XCircle, Calendar,
 } from "lucide-react";
-import { useCollection } from "@/lib/store";
+import { useExpenses, useTrips, useVehicles } from "@/lib/api-data";
 import { Badge, EmptyState } from "@/components/ui";
 
 const statusTone: Record<string, string> = { Active: "green", Inactive: "gray", Maintenance: "blue" };
@@ -16,9 +16,9 @@ export default function VehicleDetail() {
   const params = useParams();
   const router = useRouter();
   const plate = decodeURIComponent(String(params.id));
-  const [vehicles] = useCollection("vehicles");
-  const [trips] = useCollection("trips");
-  const [expenses] = useCollection("expenses");
+  const { data: vehicles } = useVehicles();
+  const { data: trips } = useTrips();
+  const { data: expenses } = useExpenses();
 
   const vehicle = useMemo(() => vehicles.find((v) => v.plate_number === plate), [vehicles, plate]);
   const vTrips = useMemo(() => trips.filter((t) => t.plate_number === plate), [trips, plate]);

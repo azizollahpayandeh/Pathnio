@@ -6,7 +6,7 @@ import {
   ArrowLeft, Users, Phone, Mail, Star, Route as RouteIcon, IdCard,
   Truck, Calendar, CheckCircle, Navigation, XCircle,
 } from "lucide-react";
-import { useCollection } from "@/lib/store";
+import { useDrivers, useTrips } from "@/lib/api-data";
 import { Badge, EmptyState } from "@/components/ui";
 
 const statusTone: Record<string, string> = { Active: "green", "On Trip": "blue", Inactive: "gray" };
@@ -16,8 +16,8 @@ export default function DriverDetail() {
   const params = useParams();
   const router = useRouter();
   const id = String(params.id);
-  const [drivers] = useCollection("drivers");
-  const [trips] = useCollection("trips");
+  const { data: drivers } = useDrivers();
+  const { data: trips } = useTrips();
 
   const driver = useMemo(() => drivers.find((d) => d.id === id), [drivers, id]);
   const dTrips = useMemo(() => (driver ? trips.filter((t) => t.driver === driver.full_name) : []), [trips, driver]);

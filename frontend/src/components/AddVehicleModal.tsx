@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Truck } from "lucide-react";
 import { Modal, Field } from "./ui";
-import { useCollection } from "@/lib/store";
+import { useDrivers } from "@/lib/api-data";
 import type { Vehicle } from "@/lib/types";
 
 export type NewVehicle = Omit<Vehicle, "id" | "createdAt">;
@@ -17,7 +17,7 @@ interface Props {
 const COLORS = ["White", "Black", "Blue", "Red", "Green", "Gray", "Yellow", "Silver"];
 
 export default function AddVehicleModal({ isOpen, onClose, onAddVehicle, initial }: Props) {
-  const [drivers] = useCollection("drivers");
+  const { data: drivers } = useDrivers();
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState<NewVehicle>(
     initial ?? {
