@@ -781,7 +781,7 @@ class UserListView(APIView):
         user = request.user
         
         # فقط ادمین یا مدیر (کسی که company_profile دارد)
-        if not (user.is_staff or hasattr(user, 'company_profile')):
+        if not user.is_staff:
             return Response({'detail': 'Permission denied.'}, status=403)
         
         users = User.objects.all().order_by('-date_joined')
@@ -819,7 +819,7 @@ class UserRoleUpdateView(APIView):
 
     def post(self, request, user_id):
         user = request.user
-        if not (user.is_staff or hasattr(user, 'company_profile')):
+        if not user.is_staff:
             return Response({'detail': 'Permission denied.'}, status=403)
         target = User.objects.filter(id=user_id).first()
         if not target:
@@ -837,7 +837,7 @@ class AllMessagesView(APIView):
 
     def get(self, request):
         user = request.user
-        if not (user.is_staff or hasattr(user, 'company_profile')):
+        if not user.is_staff:
             return Response({'detail': 'Permission denied.'}, status=403)
         contacts = ContactMessage.objects.all().order_by('-created_at')
         tickets = ContactMessage.objects.all().order_by('-created_at')
@@ -879,7 +879,7 @@ class UserCreateView(APIView):
         user = request.user
         
         # فقط ادمین یا مدیر می‌تواند کاربر جدید ایجاد کند
-        if not (user.is_staff or hasattr(user, 'company_profile')):
+        if not user.is_staff:
             return Response({'detail': 'Permission denied.'}, status=403)
         
         try:
@@ -1005,7 +1005,7 @@ class UserUpdateView(APIView):
     def patch(self, request, user_id):
         user = request.user
         # فقط ادمین یا مدیر می‌تواند کاربران را ویرایش کند
-        if not (user.is_staff or hasattr(user, 'company_profile')):
+        if not user.is_staff:
             return Response({'detail': 'Permission denied.'}, status=403)
         
         try:
@@ -1127,7 +1127,7 @@ class UserDeleteView(APIView):
     def delete(self, request, user_id):
         user = request.user
         # فقط ادمین یا مدیر می‌تواند کاربران را حذف کند
-        if not (user.is_staff or hasattr(user, 'company_profile')):
+        if not user.is_staff:
             return Response({'detail': 'Permission denied.'}, status=403)
         
         try:
@@ -1195,7 +1195,7 @@ class AdminAlertsView(APIView):
     def get(self, request):
         """Get all alerts for admin"""
         user = request.user
-        if not (user.is_staff or hasattr(user, 'company_profile')):
+        if not user.is_staff:
             return Response({'detail': 'Permission denied.'}, status=403)
 
         alerts = Alert.objects.all().order_by('-timestamp')[:100]

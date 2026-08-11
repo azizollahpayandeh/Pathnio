@@ -61,7 +61,7 @@ function SidebarLink({ item, onNavigate }: { item: NavItem; onNavigate?: () => v
   );
 }
 
-function SidebarContent({ isAdmin, onNavigate }: { isAdmin: boolean; onNavigate?: () => void }) {
+function SidebarContent({ isPlatformAdmin, onNavigate }: { isPlatformAdmin: boolean; onNavigate?: () => void }) {
   return (
     <>
       <div className="flex items-center h-20 px-6 border-b border-slate-200/70">
@@ -76,7 +76,7 @@ function SidebarContent({ isAdmin, onNavigate }: { isAdmin: boolean; onNavigate?
         </Link>
       </div>
       <nav className="flex-1 py-6 px-3 space-y-1.5 overflow-y-auto scroll-slim">
-        {NAV.filter((i) => !i.admin || isAdmin).map((item) => (
+        {NAV.filter((i) => !i.admin || isPlatformAdmin).map((item) => (
           <SidebarLink key={item.href} item={item} onNavigate={onNavigate} />
         ))}
       </nav>
@@ -109,7 +109,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     };
   }, [sidebarOpen]);
 
-  const isAdmin = !!(user?.is_manager || user?.is_staff);
+  const isPlatformAdmin = !!user?.is_staff;  // platform admin only
   const displayName = user?.company_name || user?.manager_full_name || "Pathnio";
   const avatar = user?.profile_photo;
 
@@ -130,7 +130,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="flex h-screen bg-[var(--background)] text-slate-800">
       {/* Desktop sidebar */}
       <aside className="hidden lg:flex fixed inset-y-0 left-0 z-40 w-64 flex-col bg-gradient-to-b from-slate-50 to-violet-50/70 border-r border-slate-200 shadow-sm">
-        <SidebarContent isAdmin={isAdmin} />
+        <SidebarContent isPlatformAdmin={isPlatformAdmin} />
       </aside>
 
       {/* Mobile overlay + drawer */}
@@ -142,7 +142,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <SidebarContent isAdmin={isAdmin} onNavigate={() => setSidebarOpen(false)} />
+        <SidebarContent isPlatformAdmin={isPlatformAdmin} onNavigate={() => setSidebarOpen(false)} />
       </aside>
 
       {/* Main */}

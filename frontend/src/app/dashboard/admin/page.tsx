@@ -1,5 +1,6 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   ShieldCheck, Users, Search, Trash2, Shield, User as UserIcon,
   Mail, Phone, Truck, Route, Wallet, Activity,
@@ -9,7 +10,12 @@ import { useCollection, update, remove } from "@/lib/store";
 import { useAuth } from "@/lib/auth";
 
 export default function AdminPage() {
-  const { user } = useAuth();
+  const { user, ready } = useAuth();
+  const router = useRouter();
+  // Platform-admin only — company owners cannot reach this even by deep link.
+  useEffect(() => {
+    if (ready && user && !user.is_staff) router.replace("/dashboard");
+  }, [ready, user, router]);
   const [users] = useCollection("users");
   const [vehicles] = useCollection("vehicles");
   const [trips] = useCollection("trips");
