@@ -3,7 +3,7 @@ import { useEffect, useState, useMemo } from "react";
 import { FaCarSide, FaCheckCircle, FaRegClock, FaTimesCircle } from "react-icons/fa";
 import dynamic from "next/dynamic";
 import type { LatLngExpression } from "leaflet";
-import { useCollection } from "@/lib/store";
+import { useLiveVehicles } from "@/lib/api-data";
 import type { Vehicle } from "@/lib/types";
 
 const MapContainer = dynamic(() => import("react-leaflet").then((m) => m.MapContainer), { ssr: false });
@@ -32,7 +32,7 @@ interface LiveMapWidgetProps {
 export default function LiveMapWidget({ fullscreen = false }: LiveMapWidgetProps) {
   const [isClient, setIsClient] = useState(false);
   const [statusIcons, setStatusIcons] = useState<Record<string, unknown>>({});
-  const [vehicles] = useCollection("vehicles");
+  const { data: vehicles } = useLiveVehicles();
 
   const center = useMemo<LatLngExpression>(() => {
     if (!vehicles.length) return [52.52, 13.405];

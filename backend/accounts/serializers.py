@@ -222,19 +222,15 @@ class CompanyUpdateSerializer(serializers.ModelSerializer):
         return representation
 
 class DriverSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    # user is display-only (may be null for a profile-only driver). The login
+    # account is linked at activation (Phase 3), never chosen by the client.
+    user = UserSerializer(read_only=True)
     class Meta:
         model = Driver
-        fields = ('id', 'user', 'full_name', 'mobile', 'plate_number', 'vehicle_type', 'profile_photo', 'company')
+        fields = ('id', 'user', 'full_name', 'mobile', 'email', 'plate_number', 'vehicle_type', 'profile_photo', 'company')
         # company is assigned server-side from the authenticated owner — a
         # driver/client must never be able to pick which company they join.
-        read_only_fields = ('id', 'company')
-
-    def create(self, validated_data):
-        user_data = validated_data.pop('user')
-        user = User.objects.create_user(**user_data)
-        driver = Driver.objects.create(user=user, **validated_data)
-        return driver 
+        read_only_fields = ('id', 'company', 'user')
 
 class ContactMessageSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)

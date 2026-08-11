@@ -6,7 +6,7 @@ import {
   Users, Truck, Route, Wallet, TrendingUp, ArrowUpRight,
   CheckCircle2, Clock, Maximize2,
 } from "lucide-react";
-import { useCollection } from "@/lib/store";
+import { useVehicles, useDrivers, useTrips, useExpenses } from "@/lib/api-data";
 import { StatCard, Badge } from "@/components/ui";
 import type { TripStatus } from "@/lib/types";
 
@@ -23,10 +23,10 @@ const tripTone: Record<TripStatus, string> = {
 };
 
 export default function Dashboard() {
-  const [vehicles] = useCollection("vehicles");
-  const [drivers] = useCollection("drivers");
-  const [trips] = useCollection("trips");
-  const [expenses] = useCollection("expenses");
+  const { data: vehicles } = useVehicles();
+  const { data: drivers } = useDrivers();
+  const { data: trips } = useTrips();
+  const { data: expenses } = useExpenses();
 
   const stats = useMemo(() => {
     const now = Date.now();

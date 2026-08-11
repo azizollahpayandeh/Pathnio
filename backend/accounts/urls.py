@@ -9,7 +9,7 @@ from .views import (
     DriverDetailView, UserListView, UserRoleUpdateView, AllMessagesView, ProfileAPIView,
     UserCreateView, UserUpdateView, UserDeleteView,
     UserAlertsView, AdminAlertsView,
-    VehicleViewSet, TripViewSet, ExpenseViewSet,
+    VehicleViewSet, TripViewSet, ExpenseViewSet, DriverViewSet,
     LocationIngestView,
 )
 
@@ -17,6 +17,7 @@ router = DefaultRouter()
 router.register(r'vehicles', VehicleViewSet, basename='vehicle')
 router.register(r'trips', TripViewSet, basename='trip')
 router.register(r'expenses', ExpenseViewSet, basename='expense')
+router.register(r'drivers', DriverViewSet, basename='driver')
 
 urlpatterns = [
     # Authentication
@@ -38,8 +39,7 @@ urlpatterns = [
     # Profile
     path('company/me/', CompanyMeView.as_view(), name='company-me'),
     path('contact/', ContactMessageCreateView.as_view(), name='contact-message'),
-    path('drivers/', DriverListView.as_view(), name='drivers-list'),
-    path('drivers/<int:pk>/', DriverDetailView.as_view(), name='driver-detail'),
+    # Drivers CRUD is now served by DriverViewSet via the router below.
 
     # Alerts
     path('alerts/', UserAlertsView.as_view(), name='user-alerts'),

@@ -7,14 +7,13 @@ import {
 } from "lucide-react";
 import AddDriverModal, { NewDriver } from "@/components/AddDriverModal";
 import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
-import { useCollection, insert, remove, uid } from "@/lib/store";
-import type { Driver } from "@/lib/types";
+import { useDrivers, createDriver, deleteDriver } from "@/lib/api-data";
 
 const statusTone: Record<string, string> = { Active: "green", "On Trip": "blue", Inactive: "gray" };
 const statusIcon: Record<string, typeof CheckCircle> = { Active: CheckCircle, "On Trip": Navigation, Inactive: XCircle };
 
 export default function DriversPage() {
-  const [drivers] = useCollection("drivers");
+  const { data: drivers, refetch } = useDrivers();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
   const [showAdd, setShowAdd] = useState(false);
@@ -40,8 +39,21 @@ export default function DriversPage() {
       : "0.0",
   };
 
-  const addDriver = (d: NewDriver) =>
-    insert("drivers", { ...d, id: uid("drv"), createdAt: new Date().toISOString() } as Driver);
+  const addDriver = async (d: NewDriver) => {
+    await createDriver({
+      full_name: d.full_name,
+      mobile: d.mobile,
+      email: d.email,
+      plate_number: d.plate_number,
+      vehicle_type: d.vehicle_type,
+    });
+    await refetch();
+  };
+
+  const handleDelete = async (id: string) => {
+    await deleteDriver(id);
+    await refetch();
+  };
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -111,7 +123,7 @@ export default function DriversPage() {
                     <Eye className="w-4 h-4" /> Profile
                   </Link>
                   <button
-                    onClick={() => remove("drivers", d.id)}
+                    onClick={() => handleDelete(d.id)}
                     className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
                     aria-label="Delete"
                   >

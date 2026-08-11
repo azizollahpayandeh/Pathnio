@@ -132,8 +132,13 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 'code': 'too_many_attempts',
             }, status=status.HTTP_429_TOO_MANY_REQUESTS)
         
-        # Try to get user object
+        # Try to get user object — accept an email in the username field too,
+        # since owners register/sign in with their email.
         user_obj = User.objects.filter(username=username).first()
+        if user_obj is None and '@' in (username or ''):
+            user_obj = User.objects.filter(email__iexact=username).first()
+            if user_obj is not None:
+                username = user_obj.username
         user = authenticate(username=username, password=password)
         
         if user is not None:
@@ -569,15 +574,17 @@ class DriverRegisterView(generics.CreateAPIView):
         company = company_for(self.request.user)
         with transaction.atomic():
             driver = serializer.save(company=company)
-            # Authoritative role/tenant record for the new driver's account.
-            Membership.objects.update_or_create(
-                user=driver.user,
-                defaults={'company': company, 'role': Membership.Role.DRIVER},
-            )
+            # Only profile-with-account drivers get a Membership now; a
+            # profile-only driver (user is None) gets one at activation.
+            if driver.user_id:
+                Membership.objects.update_or_create(
+                    user=driver.user,
+                    defaults={'company': company, 'role': Membership.Role.DRIVER},
+                )
             log_activity(self.request, 'register', {
                 'user_type': 'driver',
                 'driver_name': driver.full_name
-            }, driver.user)
+            }, getattr(driver, 'user', None))
 
 class ContactMessageCreateView(generics.CreateAPIView):
     queryset = ContactMessage.objects.all()
@@ -1215,6 +1222,22 @@ class TripViewSet(CompanyScopedViewSet):
 class ExpenseViewSet(CompanyScopedViewSet):
     queryset = Expense.objects.all()
     serializer_class = ExpenseSerializer
+
+
+class DriverViewSet(CompanyScopedViewSet):
+    """Company-scoped driver CRUD for the owner dashboard.
+
+    Reads: any company member. Create/update/delete: owner only.
+    Drivers are created profile-only (no login account) — Phase 3's invitation
+    flow links a real user at activation.
+    """
+    queryset = Driver.objects.all().order_by('id')
+    serializer_class = DriverSerializer
+
+    def get_permissions(self):
+        if self.action in ('list', 'retrieve'):
+            return [IsCompanyMember()]
+        return [IsCompanyOwner()]
 
 
 class LocationIngestView(APIView):

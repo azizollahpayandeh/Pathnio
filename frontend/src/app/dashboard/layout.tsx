@@ -9,7 +9,6 @@ import {
   Bell, CreditCard, LifeBuoy, Settings, ShieldCheck, Menu, LogOut, X,
 } from "lucide-react";
 import { useAuth, logout } from "@/lib/auth";
-import { useCollection } from "@/lib/store";
 import type { LucideIcon } from "lucide-react";
 
 interface NavItem {
@@ -87,11 +86,11 @@ function SidebarContent({ isAdmin, onNavigate }: { isAdmin: boolean; onNavigate?
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user, ready } = useAuth();
-  const [alerts] = useCollection("alerts");
   const router = useRouter();
   const pathname = usePathname();
 
-  const unread = alerts.filter((a) => !a.read).length;
+  // Alerts are wired to the real API in a later slice; no demo badge for now.
+  const unread = 0;
 
   useEffect(() => {
     if (ready && !user) router.push("/login");

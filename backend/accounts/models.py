@@ -17,9 +17,12 @@ class Company(models.Model):
         return self.company_name
 
 class Driver(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='driver_profile')
+    # user is nullable: an owner can create a driver PROFILE first; the login
+    # account is linked later at activation (Phase 3 invitation flow).
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name='driver_profile')
     full_name = models.CharField(max_length=255)
     mobile = models.CharField(max_length=20)
+    email = models.EmailField(blank=True)
     plate_number = models.CharField(max_length=32)
     vehicle_type = models.CharField(max_length=64, blank=True)
     profile_photo = models.ImageField(upload_to='profiles/', blank=True, null=True)

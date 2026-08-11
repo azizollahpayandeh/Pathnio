@@ -7,14 +7,13 @@ import {
 } from "lucide-react";
 import AddVehicleModal, { NewVehicle } from "@/components/AddVehicleModal";
 import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
-import { useCollection, insert, remove, uid } from "@/lib/store";
-import type { Vehicle } from "@/lib/types";
+import { useVehicles, createVehicle, deleteVehicle } from "@/lib/api-data";
 
 const statusTone: Record<string, string> = { Active: "green", Inactive: "gray", Maintenance: "blue" };
 const statusIcon: Record<string, typeof CheckCircle> = { Active: CheckCircle, Inactive: XCircle, Maintenance: Wrench };
 
 export default function VehiclesPage() {
-  const [vehicles] = useCollection("vehicles");
+  const { data: vehicles, refetch } = useVehicles();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
   const [type, setType] = useState("all");
@@ -40,8 +39,15 @@ export default function VehiclesPage() {
     maintenance: vehicles.filter((v) => v.status === "Maintenance").length,
   };
 
-  const addVehicle = (v: NewVehicle) =>
-    insert("vehicles", { ...v, id: uid("veh"), createdAt: new Date().toISOString() } as Vehicle);
+  const addVehicle = async (v: NewVehicle) => {
+    await createVehicle(v as unknown as Record<string, unknown>);
+    await refetch();
+  };
+
+  const handleDelete = async (id: string) => {
+    await deleteVehicle(id);
+    await refetch();
+  };
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -130,7 +136,7 @@ export default function VehiclesPage() {
                     <Eye className="w-4 h-4" /> View details
                   </Link>
                   <button
-                    onClick={() => remove("vehicles", v.id)}
+                    onClick={() => handleDelete(v.id)}
                     className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
                     aria-label="Delete"
                   >

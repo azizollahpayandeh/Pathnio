@@ -2,15 +2,16 @@
 
 import { useEffect, useState } from "react";
 import type { User } from "./types";
-import { getAll, insert, update, uid, subscribe, findById } from "./store";
+import { API_BASE_URL } from "@/app/api";
 
-// Client-side demo authentication. Credentials live in the local store; a
-// lightweight session token is kept in localStorage + a cookie so the Next.js
-// middleware can gate the auth routes. This keeps the deployed demo fully
-// functional without depending on a server that can't persist on serverless.
+// Real backend authentication (JWT). Access/refresh tokens live in
+// localStorage; the access token is mirrored to a cookie so the Next.js
+// middleware can gate the auth routes. The api.ts axios client attaches the
+// access token to every request and refreshes it on 401.
 
-const SESSION_KEY = "pathnio_session";
-const TOKEN_KEY = "access";
+const ACCESS_KEY = "access";
+const REFRESH_KEY = "refresh";
+const USER_KEY = "user";
 const AUTH_EVENT = "pathnio:auth";
 
 function isBrowser() {
@@ -22,14 +23,42 @@ function setCookie(name: string, value: string, days = 5) {
   const expires = new Date(Date.now() + days * 86400000).toUTCString();
   document.cookie = `${name}=${value}; expires=${expires}; path=/; SameSite=Lax`;
 }
-
 function clearCookie(name: string) {
   if (!isBrowser()) return;
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
 }
-
 function emit() {
   if (isBrowser()) window.dispatchEvent(new Event(AUTH_EVENT));
+}
+
+// Map a backend user (+ optional company profile) to the UI User shape.
+function toUser(apiUser: any, company?: any): User {
+  const isManager = !!(apiUser?.is_manager || apiUser?.is_staff || apiUser?.is_company);
+  return {
+    id: String(apiUser?.id ?? ""),
+    company_name: company?.company_name || "",
+    manager_full_name: company?.manager_full_name || apiUser?.username || "",
+    email: apiUser?.email || "",
+    phone: company?.phone || "",
+    address: company?.address || "",
+    password: "",
+    role: apiUser?.is_staff ? "Admin" : "Manager",
+    is_staff: !!apiUser?.is_staff,
+    is_manager: isManager,
+    profile_photo: company?.profile_photo || undefined,
+    date_joined: company?.date_joined || new Date().toISOString(),
+  };
+}
+
+async function fetchCompanyProfile(access: string): Promise<any | null> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/accounts/company/me/`, {
+      headers: { Authorization: `Bearer ${access}` },
+    });
+    return res.ok ? await res.json() : null;
+  } catch {
+    return null;
+  }
 }
 
 export interface RegisterInput {
@@ -41,92 +70,101 @@ export interface RegisterInput {
   address?: string;
 }
 
-export function register(input: RegisterInput): User {
+export async function register(input: RegisterInput): Promise<void> {
   const email = input.email.trim().toLowerCase();
-  const exists = getAll("users").some((u) => u.email.toLowerCase() === email);
-  if (exists) {
-    throw new Error("An account with this email already exists.");
+  const res = await fetch(`${API_BASE_URL}/api/accounts/register/company/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      user: { username: email, email, password: input.password },
+      company_name: input.company_name.trim(),
+      manager_full_name: input.manager_full_name.trim(),
+      phone: input.phone.trim(),
+      address: input.address?.trim() || "",
+    }),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    const err = data?.errors?.user
+      ? Object.values(data.errors.user)[0]
+      : data?.detail;
+    throw new Error((err as string) || "Registration failed.");
   }
-  const user: User = {
-    id: uid("user"),
-    company_name: input.company_name.trim(),
-    manager_full_name: input.manager_full_name.trim(),
-    email,
-    phone: input.phone.trim(),
-    address: input.address?.trim() || "",
-    password: input.password,
-    role: "Manager",
-    is_staff: false,
-    is_manager: true,
-    date_joined: new Date().toISOString(),
-  };
-  insert("users", user);
-  return user;
 }
 
-export function login(email: string, password: string): User {
-  const id = email.trim().toLowerCase();
-  const user = getAll("users").find(
-    (u) => u.email.toLowerCase() === id || u.company_name.toLowerCase() === id
-  );
-  if (!user) throw new Error("No account found with this email.");
-  if (user.password !== password) throw new Error("Incorrect password. Please try again.");
-  startSession(user);
-  return user;
-}
+export async function login(identifier: string, password: string): Promise<User> {
+  const res = await fetch(`${API_BASE_URL}/api/token/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username: identifier.trim(), password }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data?.detail || "Login failed.");
 
-function startSession(user: User) {
-  if (!isBrowser()) return;
-  const token = `demo.${user.id}.${Date.now().toString(36)}`;
-  window.localStorage.setItem(TOKEN_KEY, token);
-  window.localStorage.setItem(SESSION_KEY, user.id);
-  window.localStorage.setItem("user", JSON.stringify(safeUser(user)));
-  setCookie(TOKEN_KEY, token);
+  if (isBrowser()) {
+    window.localStorage.setItem(ACCESS_KEY, data.access);
+    window.localStorage.setItem(REFRESH_KEY, data.refresh);
+    setCookie(ACCESS_KEY, data.access);
+  }
+  const company = await fetchCompanyProfile(data.access);
+  const user = toUser(data.user, company);
+  if (isBrowser()) window.localStorage.setItem(USER_KEY, JSON.stringify(user));
   emit();
+  return user;
 }
 
 export function logout() {
   if (!isBrowser()) return;
-  window.localStorage.removeItem(TOKEN_KEY);
-  window.localStorage.removeItem(SESSION_KEY);
-  window.localStorage.removeItem("user");
-  window.localStorage.removeItem("refresh");
-  clearCookie(TOKEN_KEY);
+  window.localStorage.removeItem(ACCESS_KEY);
+  window.localStorage.removeItem(REFRESH_KEY);
+  window.localStorage.removeItem(USER_KEY);
+  clearCookie(ACCESS_KEY);
   emit();
 }
 
 export function isAuthenticated(): boolean {
   if (!isBrowser()) return false;
-  return !!window.localStorage.getItem(TOKEN_KEY) && !!currentUserId();
-}
-
-function currentUserId(): string | null {
-  if (!isBrowser()) return null;
-  return window.localStorage.getItem(SESSION_KEY);
-}
-
-// Strip the password before exposing a user to the UI layer.
-function safeUser(u: User): User {
-  return { ...u, password: "" };
+  return !!window.localStorage.getItem(ACCESS_KEY);
 }
 
 export function getCurrentUser(): User | null {
-  const id = currentUserId();
-  if (!id) return null;
-  const u = findById("users", id);
-  return u ? safeUser(u) : null;
+  if (!isBrowser()) return null;
+  const raw = window.localStorage.getItem(USER_KEY);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as User;
+  } catch {
+    return null;
+  }
 }
 
-export function updateProfile(patch: Partial<User>) {
-  const id = currentUserId();
-  if (!id) return;
-  const clean = { ...patch };
-  delete clean.id;
-  update("users", id, clean);
-  const u = findById("users", id);
-  if (u && isBrowser()) {
-    window.localStorage.setItem("user", JSON.stringify(safeUser(u)));
-    emit();
+// Best-effort profile update: patch the backend company profile and refresh
+// the locally cached user.
+export async function updateProfile(patch: Partial<User>) {
+  if (!isBrowser()) return;
+  const access = window.localStorage.getItem(ACCESS_KEY);
+  const current = getCurrentUser();
+  const merged = { ...(current || {}), ...patch } as User;
+  window.localStorage.setItem(USER_KEY, JSON.stringify(merged));
+  emit();
+  if (access) {
+    try {
+      await fetch(`${API_BASE_URL}/api/accounts/company/me/`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${access}`,
+        },
+        body: JSON.stringify({
+          company_name: patch.company_name,
+          manager_full_name: patch.manager_full_name,
+          phone: patch.phone,
+          address: patch.address,
+        }),
+      });
+    } catch {
+      /* keep local update even if the network call fails */
+    }
   }
 }
 
@@ -138,11 +176,14 @@ export function useAuth(): { user: User | null; ready: boolean } {
     const sync = () => setUser(getCurrentUser());
     sync();
     setReady(true);
-    const off = subscribe(sync);
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === USER_KEY || e.key === ACCESS_KEY) sync();
+    };
     window.addEventListener(AUTH_EVENT, sync);
+    window.addEventListener("storage", onStorage);
     return () => {
-      off();
       window.removeEventListener(AUTH_EVENT, sync);
+      window.removeEventListener("storage", onStorage);
     };
   }, []);
 

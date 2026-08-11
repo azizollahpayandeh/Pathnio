@@ -33,7 +33,7 @@ export default function LoginPage() {
     try {
       const password = fd.get("password") as string;
       if (password.length < 6) throw new Error("Password must be at least 6 characters.");
-      register({
+      await register({
         company_name: fd.get("companyName") as string,
         manager_full_name: fd.get("fullName") as string,
         phone: fd.get("phone") as string,
@@ -42,10 +42,8 @@ export default function LoginPage() {
         address: (fd.get("address") as string) || "",
       });
       setAlert({ type: "success", msg: "Account created! Signing you in…" });
-      setTimeout(() => {
-        login(fd.get("email") as string, password);
-        router.push("/dashboard");
-      }, 900);
+      await login(fd.get("email") as string, password);
+      router.push("/dashboard");
     } catch (err) {
       setAlert({ type: "error", msg: err instanceof Error ? err.message : "Registration failed." });
     } finally {
@@ -58,9 +56,9 @@ export default function LoginPage() {
     setLoginLoading(true);
     const fd = new FormData(e.currentTarget);
     try {
-      login(fd.get("login-username") as string, fd.get("login-password") as string);
+      await login(fd.get("login-username") as string, fd.get("login-password") as string);
       setAlert({ type: "success", msg: "Welcome back! Redirecting…" });
-      setTimeout(() => router.push("/dashboard"), 800);
+      router.push("/dashboard");
     } catch (err) {
       setAlert({ type: "error", msg: err instanceof Error ? err.message : "Login failed." });
     } finally {
@@ -71,8 +69,8 @@ export default function LoginPage() {
   const fillDemo = () => {
     setTab("login");
     setTimeout(() => {
-      (document.getElementById("login-username") as HTMLInputElement).value = "demo@pathnio.com";
-      (document.getElementById("login-password") as HTMLInputElement).value = "demo1234";
+      (document.getElementById("login-username") as HTMLInputElement).value = "manager@pathnio.demo";
+      (document.getElementById("login-password") as HTMLInputElement).value = "Pathnio#Manager1";
     }, 0);
   };
 
