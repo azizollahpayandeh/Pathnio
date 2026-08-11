@@ -227,13 +227,29 @@ export function useExpenses() {
   return useResource<Expense>("accounts/expenses/", mapExpense);
 }
 
+export type LiveVehicle = {
+  id: number;
+  plate_number: string;
+  model?: string;
+  vehicle_type?: string;
+  status?: string;
+  lat: number;
+  lng: number;
+  speed: number;
+  last_seen_at?: string | null;
+  live_status: "MOVING" | "STOPPED" | "OFFLINE" | "MAINTENANCE" | "INACTIVE";
+  driver?: { id: number; full_name: string } | null;
+  trip?: { id: number; origin: string; destination: string; status: string } | null;
+  cargo?: { description: string; quantity: number; cargo_type?: string }[];
+};
+
 /**
- * Live vehicle positions. MVP = polling the latest vehicle state. This is the
- * single seam to change later: swap the interval poll for SSE/WebSocket/Pusher
- * here and every map/consumer updates automatically — no other file changes.
+ * Live vehicle state for the map — enriched (driver/trip/cargo/status) from the
+ * backend's VehicleLatestState feed. MVP transport = polling; this hook is the
+ * single seam to swap for SSE/WebSocket/Pusher later with no other changes.
  */
 export function useLiveVehicles(intervalMs = 4000) {
-  const [data, setData] = useState<Vehicle[]>([]);
+  const [data, setData] = useState<LiveVehicle[]>([]);
   const [ready, setReady] = useState(false);
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -241,10 +257,8 @@ export function useLiveVehicles(intervalMs = 4000) {
     let alive = true;
     const tick = async () => {
       try {
-        const r = await api.get("accounts/vehicles/");
-        if (alive) {
-          setData(rows(r.data).map(mapVehicle));
-        }
+        const r = await api.get("accounts/vehicles/live/");
+        if (alive) setData(Array.isArray(r.data) ? r.data : []);
       } catch {
         /* transient — keep last known positions */
       } finally {

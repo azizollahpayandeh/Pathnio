@@ -2,6 +2,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import type { LatLngExpression } from "leaflet";
+import type { LiveVehicle } from "@/lib/api-data";
+
+export type { LiveVehicle } from "@/lib/api-data";
 
 const MapContainer = dynamic(() => import("react-leaflet").then((m) => m.MapContainer), { ssr: false });
 const TileLayer = dynamic(() => import("react-leaflet").then((m) => m.TileLayer), { ssr: false });
@@ -9,52 +12,44 @@ const Marker = dynamic(() => import("react-leaflet").then((m) => m.Marker), { ss
 const Popup = dynamic(() => import("react-leaflet").then((m) => m.Popup), { ssr: false });
 const Tooltip = dynamic(() => import("react-leaflet").then((m) => m.Tooltip), { ssr: false });
 
-export type LiveVehicle = {
-  id: number;
-  plate_number: string;
-  model?: string;
-  driver?: string;
-  status?: string;
-  lat: number;
-  lng: number;
-  speed: number;
-};
-
-type LiveStatus = "moving" | "stopped" | "offline";
-
-function liveStatus(v: LiveVehicle): LiveStatus {
-  if (v.status && v.status !== "Active") return "offline";
-  return v.speed > 0 ? "moving" : "stopped";
+// live_status -> marker bucket (icons only cover moving/stopped/offline)
+function bucket(v: LiveVehicle): "moving" | "stopped" | "offline" {
+  if (v.live_status === "MOVING") return "moving";
+  if (v.live_status === "STOPPED") return "stopped";
+  return "offline";
 }
 
-// Fit the map to the markers once, on first data — then leave the user alone.
-function FitOnce({ vehicles }: { vehicles: LiveVehicle[] }) {
-  const done = useRef(false);
+// Fit to markers once; then pan to a focused vehicle when it changes.
+function MapController({ vehicles, focusId }: { vehicles: LiveVehicle[]; focusId?: number | null }) {
   const [useMapHook, setHook] = useState<any>(null);
-  useEffect(() => {
-    import("react-leaflet").then((m) => setHook(() => m.useMap));
-  }, []);
-  return useMapHook ? <FitOnceInner useMap={useMapHook} vehicles={vehicles} done={done} /> : null;
+  useEffect(() => { import("react-leaflet").then((m) => setHook(() => m.useMap)); }, []);
+  return useMapHook ? <Inner useMap={useMapHook} vehicles={vehicles} focusId={focusId} /> : null;
 }
-
-function FitOnceInner({ useMap, vehicles, done }: any) {
+function Inner({ useMap, vehicles, focusId }: any) {
   const map = useMap();
+  const fitted = useRef(false);
   useEffect(() => {
-    if (done.current || vehicles.length === 0) return;
-    done.current = true;
-    if (vehicles.length === 1) {
-      map.setView([vehicles[0].lat, vehicles[0].lng], 14);
-    } else {
-      import("leaflet").then((L) => {
-        const bounds = L.latLngBounds(vehicles.map((v: LiveVehicle) => [v.lat, v.lng]));
-        map.fitBounds(bounds, { padding: [50, 50] });
-      });
-    }
-  }, [vehicles, map, done]);
+    if (fitted.current || vehicles.length === 0) return;
+    fitted.current = true;
+    if (vehicles.length === 1) map.setView([vehicles[0].lat, vehicles[0].lng], 14);
+    else import("leaflet").then((L) => {
+      map.fitBounds(L.latLngBounds(vehicles.map((v: LiveVehicle) => [v.lat, v.lng])), { padding: [50, 50] });
+    });
+  }, [vehicles, map]);
+  useEffect(() => {
+    if (!focusId) return;
+    const v = vehicles.find((x: LiveVehicle) => x.id === focusId);
+    if (v) map.setView([v.lat, v.lng], 15, { animate: true });
+  }, [focusId, vehicles, map]);
   return null;
 }
 
-export default function LiveTrackMap({ vehicles }: { vehicles: LiveVehicle[] }) {
+const STATUS_LABEL: Record<string, string> = {
+  MOVING: "Moving", STOPPED: "Stopped", OFFLINE: "Offline",
+  MAINTENANCE: "Maintenance", INACTIVE: "Inactive",
+};
+
+export default function LiveTrackMap({ vehicles, focusId }: { vehicles: LiveVehicle[]; focusId?: number | null }) {
   const [isClient, setIsClient] = useState(false);
   const [icons, setIcons] = useState<Record<string, unknown>>({});
 
@@ -66,12 +61,10 @@ export default function LiveTrackMap({ vehicles }: { vehicles: LiveVehicle[] }) 
   }, [vehicles]);
 
   useEffect(() => setIsClient(true), []);
-
   useEffect(() => {
     if (!isClient) return;
     import("leaflet").then((L) => {
-      const mk = (url: string) =>
-        L.icon({ iconUrl: url, iconSize: [34, 34], iconAnchor: [17, 34], popupAnchor: [0, -32] });
+      const mk = (url: string) => L.icon({ iconUrl: url, iconSize: [34, 34], iconAnchor: [17, 34], popupAnchor: [0, -32] });
       setIcons({
         moving: mk("https://cdn-icons-png.flaticon.com/512/854/854894.png"),
         stopped: mk("https://cdn-icons-png.flaticon.com/512/854/854866.png"),
@@ -94,27 +87,26 @@ export default function LiveTrackMap({ vehicles }: { vehicles: LiveVehicle[] }) 
   return (
     <div className="w-full h-full min-h-[320px] relative rounded-2xl overflow-hidden">
       <MapContainer center={center} zoom={12} scrollWheelZoom style={{ height: "100%", width: "100%" }}>
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <FitOnce vehicles={vehicles} />
-        {vehicles.map((v) => {
-          const st = liveStatus(v);
-          return (
-            <Marker key={v.id} position={[v.lat, v.lng] as LatLngExpression} icon={icons[st] as never}>
-              <Popup>
-                <div className="font-bold text-violet-800 text-base mb-1">{v.model || v.plate_number}</div>
-                <div className="text-slate-600 mb-0.5">Driver: <span className="font-semibold">{v.driver || "—"}</span></div>
-                <div className="text-slate-600 mb-0.5">Plate: <span className="font-mono">{v.plate_number}</span></div>
-                <div>Speed: <span className="font-mono text-violet-700">{v.speed} km/h</span></div>
-              </Popup>
-              <Tooltip direction="top" offset={[0, -22]} opacity={0.95}>
-                {v.plate_number} · {v.speed} km/h
-              </Tooltip>
-            </Marker>
-          );
-        })}
+        <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        <MapController vehicles={vehicles} focusId={focusId} />
+        {vehicles.map((v) => (
+          <Marker key={v.id} position={[v.lat, v.lng] as LatLngExpression} icon={icons[bucket(v)] as never}>
+            <Popup>
+              <div className="font-bold text-violet-800 text-base mb-1">{v.model || v.plate_number}</div>
+              <div className="text-slate-600 mb-0.5">Plate: <span className="font-mono">{v.plate_number}</span></div>
+              <div className="text-slate-600 mb-0.5">Driver: <span className="font-semibold">{v.driver?.full_name || "Unassigned"}</span></div>
+              <div className="mb-0.5">Status: <span className="font-semibold">{STATUS_LABEL[v.live_status] || v.live_status}</span></div>
+              <div className="mb-0.5">Speed: <span className="font-mono text-violet-700">{v.speed} km/h</span></div>
+              {v.trip && <div className="text-slate-600 mb-0.5">Trip: {v.trip.origin} → {v.trip.destination}</div>}
+              {v.cargo && v.cargo.length > 0 && (
+                <div className="text-slate-600">Cargo: {v.cargo.map((c) => `${c.description} ×${c.quantity}`).join(", ")}</div>
+              )}
+            </Popup>
+            <Tooltip direction="top" offset={[0, -22]} opacity={0.95}>
+              {v.plate_number} · {v.speed} km/h
+            </Tooltip>
+          </Marker>
+        ))}
       </MapContainer>
     </div>
   );

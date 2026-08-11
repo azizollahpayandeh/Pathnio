@@ -18,8 +18,9 @@ const POLL_MS = 3000;
 
 type LiveStatus = "moving" | "stopped" | "offline";
 function statusOf(v: LiveVehicle): LiveStatus {
-  if (v.status && v.status !== "Active") return "offline";
-  return v.speed > 0 ? "moving" : "stopped";
+  if (v.live_status === "MOVING") return "moving";
+  if (v.live_status === "STOPPED") return "stopped";
+  return "offline";
 }
 const dot: Record<LiveStatus, string> = {
   moving: "bg-emerald-500",
@@ -32,6 +33,7 @@ export default function LivePage() {
   const [vehicles, setVehicles] = useState<LiveVehicle[]>([]);
   const [lastSync, setLastSync] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [focusId, setFocusId] = useState<number | null>(null);
 
   // login form
   const [username, setUsername] = useState("manager");
@@ -48,7 +50,7 @@ export default function LivePage() {
 
   const fetchVehicles = useCallback(async (tk: string) => {
     try {
-      const res = await fetch(`${API_BASE}/api/accounts/vehicles/`, {
+      const res = await fetch(`${API_BASE}/api/accounts/vehicles/live/`, {
         headers: { Authorization: `Bearer ${tk}` },
       });
       if (res.status === 401) {
@@ -180,7 +182,7 @@ export default function LivePage() {
       <div className="px-6 pb-6 grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4">
         {/* Map */}
         <div className="rounded-2xl overflow-hidden h-[72vh] bg-violet-50">
-          <LiveTrackMap vehicles={vehicles} />
+          <LiveTrackMap vehicles={vehicles} focusId={focusId} />
         </div>
 
         {/* Side panel */}
@@ -201,12 +203,19 @@ export default function LivePage() {
             {vehicles.map((v) => {
               const st = statusOf(v);
               return (
-                <li key={v.id} className="rounded-xl bg-[#241a40] px-4 py-3">
+                <li
+                  key={v.id}
+                  onClick={() => setFocusId(v.id)}
+                  className={`rounded-xl px-4 py-3 cursor-pointer transition ${focusId === v.id ? "bg-violet-700/40 ring-1 ring-violet-400" : "bg-[#241a40] hover:bg-[#2c2050]"}`}
+                >
                   <div className="flex items-center justify-between">
                     <span className="font-mono font-semibold">{v.plate_number}</span>
                     <span className={`w-2.5 h-2.5 rounded-full ${dot[st]}`} />
                   </div>
-                  <div className="text-violet-300 text-xs mt-1">{v.driver || "—"}</div>
+                  <div className="text-violet-300 text-xs mt-1">{v.driver?.full_name || "Unassigned"}</div>
+                  {v.trip && (
+                    <div className="text-violet-400 text-xs mt-0.5">{v.trip.origin} → {v.trip.destination}</div>
+                  )}
                   <div className="flex justify-between text-xs mt-2">
                     <span className="text-violet-200">{v.speed} km/h</span>
                     <span className="text-violet-400 font-mono">

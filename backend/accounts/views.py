@@ -35,6 +35,7 @@ from .serializers import (
 )
 from .invitations import issue_invitation, hash_token
 from .assignments import assign as assign_driver_vehicle, unassign as unassign_vehicle, AssignmentError
+from .fleet_status import vehicle_live_status, driver_status
 from .tenancy import (
     company_for, role_for, is_owner,
     CompanyScopedQuerysetMixin, IsCompanyMember, IsCompanyOwner,
@@ -1216,6 +1217,39 @@ class CompanyScopedViewSet(CompanyScopedQuerysetMixin, viewsets.ModelViewSet):
 class VehicleViewSet(CompanyScopedViewSet):
     queryset = Vehicle.objects.all()
     serializer_class = VehicleSerializer
+
+    @action(detail=False, methods=['get'])
+    def live(self, request):
+        """VehicleLatestState feed for the Live Map — position, speed, driver,
+        active trip + cargo, last update, and the backend-computed live status.
+        Single efficient query set (no N+1); driven by polling."""
+        company = company_for(request.user)
+        vehicles = list(self.get_queryset().prefetch_related('assignments__driver'))
+        active_trips = (Trip.objects.filter(company=company, status='ACTIVE')
+                        .prefetch_related('cargos'))
+        trip_by_vehicle = {t.vehicle_ref_id: t for t in active_trips if t.vehicle_ref_id}
+
+        data = []
+        for v in vehicles:
+            assign = next((a for a in v.assignments.all() if a.is_active), None)
+            drv = assign.driver if assign else None
+            trip = trip_by_vehicle.get(v.id)
+            cargo = ([{'description': c.description, 'quantity': c.quantity,
+                       'cargo_type': c.cargo_type} for c in trip.cargos.all()]
+                     if trip else [])
+            data.append({
+                'id': v.id, 'plate_number': v.plate_number, 'model': v.model,
+                'vehicle_type': v.vehicle_type, 'status': v.status,
+                'lat': v.lat, 'lng': v.lng, 'speed': v.speed,
+                'last_seen_at': v.last_seen_at,
+                'live_status': vehicle_live_status(v),
+                'driver': ({'id': drv.id, 'full_name': drv.full_name} if drv else None),
+                'trip': ({'id': trip.id, 'origin': trip.origin,
+                          'destination': trip.destination, 'status': trip.status}
+                         if trip else None),
+                'cargo': cargo,
+            })
+        return Response(data)
 
 
 class TripViewSet(CompanyScopedViewSet):
