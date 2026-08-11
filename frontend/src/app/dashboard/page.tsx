@@ -6,7 +6,7 @@ import {
   Users, Truck, Route, Wallet, TrendingUp, ArrowUpRight,
   CheckCircle2, Clock, Maximize2,
 } from "lucide-react";
-import { useVehicles, useDrivers, useTrips, useExpenses } from "@/lib/api-data";
+import { useVehicles, useDrivers, useTrips, useExpenses, useFleetAlerts } from "@/lib/api-data";
 import { StatCard, Badge } from "@/components/ui";
 import type { TripStatus } from "@/lib/types";
 
@@ -27,6 +27,8 @@ export default function Dashboard() {
   const { data: drivers } = useDrivers();
   const { data: trips } = useTrips();
   const { data: expenses } = useExpenses();
+  const { data: alerts } = useFleetAlerts();
+  const openAlerts = alerts.filter((a) => !a.read).slice(0, 4);
 
   const stats = useMemo(() => {
     const now = Date.now();
@@ -165,6 +167,26 @@ export default function Dashboard() {
                 View
               </Link>
             </div>
+          </div>
+
+          {/* Recent alerts (real) */}
+          <div className="card p-6">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="font-bold text-slate-800">Recent alerts</h2>
+              <Link href="/dashboard/alerts" className="text-violet-600 text-sm font-semibold hover:text-violet-800">View all →</Link>
+            </div>
+            {openAlerts.length === 0 ? (
+              <p className="text-sm text-slate-400">No open alerts — fleet looks healthy.</p>
+            ) : (
+              <ul className="space-y-2">
+                {openAlerts.map((a) => (
+                  <li key={a.id} className="flex items-start gap-2 text-sm">
+                    <span className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${a.priority === "critical" ? "bg-rose-500" : a.priority === "high" ? "bg-amber-500" : "bg-violet-500"}`} />
+                    <span className="text-slate-700">{a.title}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
       </div>

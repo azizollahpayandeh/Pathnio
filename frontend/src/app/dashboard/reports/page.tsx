@@ -7,7 +7,7 @@ import {
 import { Line, Doughnut, Bar } from "react-chartjs-2";
 import { BarChart3, TrendingUp, TrendingDown, Percent, Download } from "lucide-react";
 import { PageHeader, StatCard } from "@/components/ui";
-import { useCollection } from "@/lib/store";
+import { useTrips, useExpenses, useVehicles } from "@/lib/api-data";
 
 ChartJS.register(
   CategoryScale, LinearScale, PointElement, LineElement,
@@ -18,9 +18,9 @@ const currency = (n: number) => "€" + Math.round(n).toLocaleString();
 const monthLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 export default function ReportsPage() {
-  const [trips] = useCollection("trips");
-  const [expenses] = useCollection("expenses");
-  const [vehicles] = useCollection("vehicles");
+  const { data: trips } = useTrips();
+  const { data: expenses } = useExpenses();
+  const { data: vehicles } = useVehicles();
 
   const totals = useMemo(() => {
     const revenue = trips.filter((t) => t.status !== "CANCELLED").reduce((s, t) => s + t.revenue, 0);
