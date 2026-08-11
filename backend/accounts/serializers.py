@@ -295,10 +295,20 @@ class VehicleSerializer(serializers.ModelSerializer):
 
 
 class TripSerializer(serializers.ModelSerializer):
+    driver_name = serializers.SerializerMethodField()
+    vehicle_plate = serializers.SerializerMethodField()
+
     class Meta:
         model = Trip
         fields = '__all__'
-        read_only_fields = ('id', 'company', 'created_at')
+        read_only_fields = ('id', 'company', 'created_by', 'created_at', 'updated_at',
+                            'driver', 'plate_number')
+
+    def get_driver_name(self, obj):
+        return obj.driver_ref.full_name if obj.driver_ref_id else (obj.driver or None)
+
+    def get_vehicle_plate(self, obj):
+        return obj.vehicle_ref.plate_number if obj.vehicle_ref_id else (obj.plate_number or None)
 
 
 class ExpenseSerializer(serializers.ModelSerializer):

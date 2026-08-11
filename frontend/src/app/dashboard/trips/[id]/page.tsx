@@ -10,8 +10,8 @@ import { useCollection } from "@/lib/store";
 import { Badge, EmptyState } from "@/components/ui";
 import type { TripStatus } from "@/lib/types";
 
-const tone: Record<TripStatus, string> = { Completed: "green", Ongoing: "blue", Scheduled: "amber", Cancelled: "red" };
-const icon: Record<TripStatus, typeof Clock> = { Completed: CheckCircle2, Ongoing: Navigation, Scheduled: CalendarClock, Cancelled: XCircle };
+const tone: Record<TripStatus, string> = { COMPLETED: "green", ACTIVE: "blue", PLANNED: "amber", CANCELLED: "red" };
+const icon: Record<TripStatus, typeof Clock> = { COMPLETED: CheckCircle2, ACTIVE: Navigation, PLANNED: CalendarClock, CANCELLED: XCircle };
 const currency = (n: number) => "€" + n.toLocaleString();
 
 export default function TripDetail() {

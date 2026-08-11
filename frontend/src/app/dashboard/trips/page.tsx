@@ -7,15 +7,16 @@ import {
 } from "lucide-react";
 import AddTripModal, { NewTrip } from "@/components/AddTripModal";
 import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
-import { useCollection, insert, remove, uid } from "@/lib/store";
-import type { Trip, TripStatus } from "@/lib/types";
+import { useTrips, createTrip, deleteTrip } from "@/lib/api-data";
+import type { TripStatus } from "@/lib/types";
 
-const tone: Record<TripStatus, string> = { Completed: "green", Ongoing: "blue", Scheduled: "amber", Cancelled: "red" };
-const icon: Record<TripStatus, typeof Clock> = { Completed: CheckCircle2, Ongoing: Navigation, Scheduled: CalendarClock, Cancelled: XCircle };
+const tone: Record<TripStatus, string> = { COMPLETED: "green", ACTIVE: "blue", PLANNED: "amber", CANCELLED: "red" };
+const icon: Record<TripStatus, typeof Clock> = { COMPLETED: CheckCircle2, ACTIVE: Navigation, PLANNED: CalendarClock, CANCELLED: XCircle };
+const label: Record<TripStatus, string> = { COMPLETED: "Completed", ACTIVE: "Active", PLANNED: "Planned", CANCELLED: "Cancelled" };
 const currency = (n: number) => "€" + n.toLocaleString();
 
 export default function TripsPage() {
-  const [trips] = useCollection("trips");
+  const { data: trips, refetch } = useTrips();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
   const [showAdd, setShowAdd] = useState(false);
@@ -36,13 +37,20 @@ export default function TripsPage() {
 
   const stats = {
     total: trips.length,
-    ongoing: trips.filter((t) => t.status === "Ongoing").length,
-    completed: trips.filter((t) => t.status === "Completed").length,
-    revenue: trips.filter((t) => t.status !== "Cancelled").reduce((s, t) => s + t.revenue, 0),
+    ongoing: trips.filter((t) => t.status === "ACTIVE").length,
+    completed: trips.filter((t) => t.status === "COMPLETED").length,
+    revenue: trips.filter((t) => t.status !== "CANCELLED").reduce((s, t) => s + t.revenue, 0),
   };
 
-  const addTrip = (t: NewTrip) =>
-    insert("trips", { ...t, id: uid("trip"), createdAt: new Date().toISOString() } as Trip);
+  const addTrip = async (t: NewTrip) => {
+    await createTrip(t as unknown as Record<string, unknown>);
+    await refetch();
+  };
+
+  const handleDelete = async (id: string) => {
+    await deleteTrip(id);
+    await refetch();
+  };
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -60,7 +68,7 @@ export default function TripsPage() {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 stagger">
         <StatCard icon={Route} label="Total Trips" value={stats.total} gradient="from-purple-500 to-fuchsia-600" />
-        <StatCard icon={Navigation} label="Ongoing" value={stats.ongoing} gradient="from-violet-500 to-purple-600" />
+        <StatCard icon={Navigation} label="Active" value={stats.ongoing} gradient="from-violet-500 to-purple-600" />
         <StatCard icon={CheckCircle2} label="Completed" value={stats.completed} gradient="from-emerald-500 to-teal-600" />
         <StatCard icon={TrendingUp} label="Revenue" value={currency(stats.revenue)} gradient="from-amber-500 to-orange-600" />
       </div>
@@ -72,7 +80,10 @@ export default function TripsPage() {
         </div>
         <select value={status} onChange={(e) => setStatus(e.target.value)} className="field sm:w-48">
           <option value="all">All Status</option>
-          <option>Ongoing</option><option>Completed</option><option>Scheduled</option><option>Cancelled</option>
+          <option value="PLANNED">Planned</option>
+          <option value="ACTIVE">Active</option>
+          <option value="COMPLETED">Completed</option>
+          <option value="CANCELLED">Cancelled</option>
         </select>
       </div>
 
@@ -112,13 +123,13 @@ export default function TripsPage() {
                       <td className="py-3.5 px-4 text-slate-600 font-mono hidden md:table-cell">{t.plate_number || "—"}</td>
                       <td className="py-3.5 px-4 text-slate-600 hidden sm:table-cell">{t.distance} km</td>
                       <td className="py-3.5 px-4 font-semibold text-slate-800">{currency(t.revenue)}</td>
-                      <td className="py-3.5 px-4"><Badge tone={tone[t.status]} icon={SIcon}>{t.status}</Badge></td>
+                      <td className="py-3.5 px-4"><Badge tone={tone[t.status]} icon={SIcon}>{label[t.status]}</Badge></td>
                       <td className="py-3.5 px-6">
                         <div className="flex items-center justify-end gap-2">
                           <Link href={`/dashboard/trips/${t.id}`} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-violet-50 hover:text-violet-600 transition" aria-label="View">
                             <Eye className="w-4 h-4" />
                           </Link>
-                          <button onClick={() => remove("trips", t.id)} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition" aria-label="Delete">
+                          <button onClick={() => handleDelete(t.id)} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition" aria-label="Delete">
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </div>

@@ -85,9 +85,9 @@ const ROUTES: [string, string, number][] = [
 ];
 
 const TRIP_STATUSES: Trip["status"][] = [
-  "Ongoing", "Completed", "Completed", "Scheduled", "Ongoing",
-  "Completed", "Cancelled", "Completed", "Scheduled", "Ongoing",
-  "Completed", "Completed",
+  "ACTIVE", "COMPLETED", "COMPLETED", "PLANNED", "ACTIVE",
+  "COMPLETED", "CANCELLED", "COMPLETED", "PLANNED", "ACTIVE",
+  "COMPLETED", "COMPLETED",
 ];
 
 const TRIPS: Trip[] = ROUTES.map((r, i) => {
@@ -106,7 +106,7 @@ const TRIPS: Trip[] = ROUTES.map((r, i) => {
     cargo: ["Electronics", "Furniture", "Food", "Machinery", "Textiles", "Auto parts"][i % 6],
     revenue: Math.round(r[2] * (3.2 + (i % 4) * 0.4)),
     start_time: start,
-    end_time: status === "Completed" ? hoursAgo(48 - i * 3 - 6) : undefined,
+    end_time: status === "COMPLETED" ? hoursAgo(48 - i * 3 - 6) : undefined,
     createdAt: start,
   };
 });

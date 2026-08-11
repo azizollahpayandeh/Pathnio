@@ -47,13 +47,15 @@ export interface Driver {
   createdAt: string;
 }
 
-export type TripStatus = "Ongoing" | "Completed" | "Scheduled" | "Cancelled";
+export type TripStatus = "PLANNED" | "ACTIVE" | "COMPLETED" | "CANCELLED";
 
 export interface Trip {
   id: ID;
   origin: string;
   destination: string;
-  driver: string;
+  driver: string; // display
+  driver_ref?: ID | null; // real Driver FK id
+  vehicle_ref?: ID | null; // real Vehicle FK id
   driverId?: ID;
   plate_number: string;
   vehicleId?: ID;
@@ -61,6 +63,7 @@ export interface Trip {
   status: TripStatus;
   cargo: string;
   revenue: number; // currency units
+  notes?: string;
   start_time: string; // ISO datetime
   end_time?: string; // ISO datetime
   createdAt: string;

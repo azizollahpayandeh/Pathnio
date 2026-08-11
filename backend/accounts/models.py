@@ -226,25 +226,35 @@ class Vehicle(models.Model):
 
 class Trip(models.Model):
     STATUS_CHOICES = [
-        ("Ongoing", "Ongoing"), ("Completed", "Completed"),
-        ("Scheduled", "Scheduled"), ("Cancelled", "Cancelled"),
+        ("PLANNED", "Planned"), ("ACTIVE", "Active"),
+        ("COMPLETED", "Completed"), ("CANCELLED", "Cancelled"),
     ]
 
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="trips", null=True, blank=True)
     origin = models.CharField(max_length=128)
     destination = models.CharField(max_length=128)
-    driver = models.CharField(max_length=255, blank=True)
-    plate_number = models.CharField(max_length=32, blank=True)
+    # Real relationships (source of truth); legacy strings kept in sync for display.
+    driver_ref = models.ForeignKey(Driver, on_delete=models.SET_NULL, null=True, blank=True, related_name="trips")
+    vehicle_ref = models.ForeignKey(Vehicle, on_delete=models.SET_NULL, null=True, blank=True, related_name="trips")
+    driver = models.CharField(max_length=255, blank=True)       # legacy display
+    plate_number = models.CharField(max_length=32, blank=True)  # legacy display
     distance = models.PositiveIntegerField(default=0)
-    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default="Scheduled")
-    cargo = models.CharField(max_length=128, blank=True)
+    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default="PLANNED")
+    cargo = models.CharField(max_length=128, blank=True)        # legacy; Cargo model in Phase 6
     revenue = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    notes = models.TextField(blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="created_trips")
     start_time = models.DateTimeField(default=timezone.now)
     end_time = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ["-start_time"]
+        indexes = [
+            models.Index(fields=["company", "status"]),
+            models.Index(fields=["driver_ref", "status"]),
+        ]
 
     def __str__(self):
         return f"{self.origin} -> {self.destination} ({self.status})"

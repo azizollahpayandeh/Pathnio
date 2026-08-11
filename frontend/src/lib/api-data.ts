@@ -97,16 +97,33 @@ function mapTrip(t: any): Trip {
     id: String(t.id),
     origin: t.origin || "",
     destination: t.destination || "",
-    driver: t.driver || "",
-    plate_number: t.plate_number || "",
+    driver: t.driver_name || t.driver || "",
+    driver_ref: t.driver_ref ?? null,
+    vehicle_ref: t.vehicle_ref ?? null,
+    plate_number: t.vehicle_plate || t.plate_number || "",
     distance: t.distance ?? 0,
-    status: (t.status || "Scheduled") as Trip["status"],
+    status: (t.status || "PLANNED") as Trip["status"],
     cargo: t.cargo || "",
     revenue: Number(t.revenue) || 0,
+    notes: t.notes || "",
     start_time: t.start_time || new Date().toISOString(),
     end_time: t.end_time || undefined,
     createdAt: t.created_at || new Date().toISOString(),
   };
+}
+
+export async function createTrip(input: Record<string, unknown>): Promise<Trip> {
+  const r = await api.post("accounts/trips/", input);
+  return mapTrip(r.data);
+}
+
+export async function deleteTrip(id: string): Promise<void> {
+  await api.delete(`accounts/trips/${id}/`);
+}
+
+export async function updateTrip(id: string, patch: Record<string, unknown>): Promise<Trip> {
+  const r = await api.patch(`accounts/trips/${id}/`, patch);
+  return mapTrip(r.data);
 }
 
 function mapExpense(e: any): Expense {

@@ -1219,8 +1219,34 @@ class VehicleViewSet(CompanyScopedViewSet):
 
 
 class TripViewSet(CompanyScopedViewSet):
-    queryset = Trip.objects.all()
+    queryset = Trip.objects.all().select_related('driver_ref', 'vehicle_ref')
     serializer_class = TripSerializer
+
+    def _validate_and_sync(self, serializer, company, instance=None):
+        """Ensure any driver/vehicle refs belong to the company, and keep the
+        legacy display strings in sync. Returns the kwargs for save()."""
+        d = serializer.validated_data.get('driver_ref',
+                                          getattr(instance, 'driver_ref', None))
+        v = serializer.validated_data.get('vehicle_ref',
+                                          getattr(instance, 'vehicle_ref', None))
+        if d and d.company_id != company.id:
+            raise serializers.ValidationError({'driver_ref': 'Driver is not in your company.'})
+        if v and v.company_id != company.id:
+            raise serializers.ValidationError({'vehicle_ref': 'Vehicle is not in your company.'})
+        return {
+            'driver': d.full_name if d else serializer.validated_data.get('driver', ''),
+            'plate_number': v.plate_number if v else serializer.validated_data.get('plate_number', ''),
+        }
+
+    def perform_create(self, serializer):
+        company = company_for(self.request.user)
+        sync = self._validate_and_sync(serializer, company)
+        serializer.save(company=company, created_by=self.request.user, **sync)
+
+    def perform_update(self, serializer):
+        company = company_for(self.request.user)
+        sync = self._validate_and_sync(serializer, company, instance=serializer.instance)
+        serializer.save(**sync)
 
 
 class ExpenseViewSet(CompanyScopedViewSet):
@@ -1358,8 +1384,16 @@ def _driver_context(user):
         v = active.vehicle
         vehicle = {'id': v.id, 'plate_number': v.plate_number,
                    'model': v.model, 'vehicle_type': v.vehicle_type}
+    trip_obj = (Trip.objects.filter(driver_ref=driver, status='ACTIVE')
+                .order_by('-start_time').first())
+    trip = None
+    if trip_obj:
+        trip = {'id': trip_obj.id, 'origin': trip_obj.origin,
+                'destination': trip_obj.destination, 'status': trip_obj.status,
+                'cargo': trip_obj.cargo}
     return {
         'activated': True,
+        'trip': trip,
         'driver': {
             'id': driver.id,
             'full_name': driver.full_name,

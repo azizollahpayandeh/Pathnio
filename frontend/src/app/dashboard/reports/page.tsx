@@ -23,7 +23,7 @@ export default function ReportsPage() {
   const [vehicles] = useCollection("vehicles");
 
   const totals = useMemo(() => {
-    const revenue = trips.filter((t) => t.status !== "Cancelled").reduce((s, t) => s + t.revenue, 0);
+    const revenue = trips.filter((t) => t.status !== "CANCELLED").reduce((s, t) => s + t.revenue, 0);
     const cost = expenses.reduce((s, e) => s + e.amount, 0);
     const profit = revenue - cost;
     const margin = revenue ? (profit / revenue) * 100 : 0;
@@ -46,7 +46,7 @@ export default function ReportsPage() {
     };
     trips.forEach((t) => {
       const i = idx(t.start_time);
-      if (i >= 0 && t.status !== "Cancelled") rev[i] += t.revenue;
+      if (i >= 0 && t.status !== "CANCELLED") rev[i] += t.revenue;
     });
     expenses.forEach((e) => {
       const i = idx(e.date);

@@ -16,10 +16,10 @@ const currency = (n: number) =>
   "€" + n.toLocaleString(undefined, { maximumFractionDigits: 0 });
 
 const tripTone: Record<TripStatus, string> = {
-  Completed: "green",
-  Ongoing: "blue",
-  Scheduled: "amber",
-  Cancelled: "red",
+  COMPLETED: "green",
+  ACTIVE: "blue",
+  PLANNED: "amber",
+  CANCELLED: "red",
 };
 
 export default function Dashboard() {
@@ -36,7 +36,7 @@ export default function Dashboard() {
     monthStart.setHours(0, 0, 0, 0);
 
     const revenueWeek = trips
-      .filter((t) => new Date(t.start_time).getTime() >= weekAgo && t.status !== "Cancelled")
+      .filter((t) => new Date(t.start_time).getTime() >= weekAgo && t.status !== "CANCELLED")
       .reduce((s, t) => s + t.revenue, 0);
     const expensesMonth = expenses
       .filter((e) => new Date(e.date).getTime() >= monthStart.getTime())
@@ -47,8 +47,8 @@ export default function Dashboard() {
       totalDrivers: drivers.length,
       onlineVehicles: vehicles.filter((v) => v.status === "Active").length,
       totalVehicles: vehicles.length,
-      ongoingTrips: trips.filter((t) => t.status === "Ongoing").length,
-      completedTrips: trips.filter((t) => t.status === "Completed").length,
+      ongoingTrips: trips.filter((t) => t.status === "ACTIVE").length,
+      completedTrips: trips.filter((t) => t.status === "COMPLETED").length,
       revenueWeek,
       expensesMonth,
     };
@@ -91,7 +91,7 @@ export default function Dashboard() {
         />
         <StatCard
           icon={Route}
-          label="Ongoing Trips"
+          label="Active Trips"
           value={stats.ongoingTrips}
           hint={`${stats.completedTrips} completed`}
           gradient="from-purple-500 to-fuchsia-600"
@@ -200,7 +200,7 @@ export default function Dashboard() {
                   <td className="py-3.5 px-4 text-slate-600 hidden sm:table-cell">{t.distance} km</td>
                   <td className="py-3.5 px-4 font-semibold text-slate-800">{currency(t.revenue)}</td>
                   <td className="py-3.5 px-6">
-                    <Badge tone={tripTone[t.status]} icon={t.status === "Completed" ? CheckCircle2 : Clock}>
+                    <Badge tone={tripTone[t.status]} icon={t.status === "COMPLETED" ? CheckCircle2 : Clock}>
                       {t.status}
                     </Badge>
                   </td>
