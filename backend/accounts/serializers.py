@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
-from .models import Company, Driver, ContactMessage, SiteSettings, Profile, Alert, Vehicle, Trip, Expense, LocationPing
+from .models import Company, Driver, ContactMessage, SiteSettings, Profile, Alert, Vehicle, Trip, Expense, LocationPing, DriverInvitation
 from djoser.serializers import UserSerializer as DjoserUserSerializer, UserCreateSerializer as DjoserUserCreateSerializer
 
 class UserSerializer(serializers.ModelSerializer):
@@ -298,6 +298,19 @@ class ExpenseSerializer(serializers.ModelSerializer):
         model = Expense
         fields = '__all__'
         read_only_fields = ('id', 'company', 'created_at')
+
+
+class DriverInvitationSerializer(serializers.ModelSerializer):
+    """Read-only invitation status for the owner dashboard. Never exposes the
+    raw token (only the SHA-256 hash is stored, and even that is not returned)."""
+    is_active = serializers.BooleanField(read_only=True)
+    is_expired = serializers.BooleanField(read_only=True)
+
+    class Meta:
+        model = DriverInvitation
+        fields = ('id', 'driver', 'company', 'status', 'created_at', 'expires_at',
+                  'used_at', 'revoked_at', 'is_active', 'is_expired')
+        read_only_fields = fields
 
 
 class LocationPingSerializer(serializers.ModelSerializer):

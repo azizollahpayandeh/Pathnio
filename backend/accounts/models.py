@@ -341,3 +341,44 @@ class Membership(models.Model):
 
     def __str__(self):
         return f"{self.user.username} @ {self.company.company_name} ({self.role})"
+
+
+class DriverInvitation(models.Model):
+    """A secure, single-use, expiring token that binds a mobile user account to
+    a specific Driver + Company at activation time.
+
+    The RAW token is shown to the owner exactly once and never stored — only its
+    SHA-256 hash lives here, so a database read can't reveal usable codes.
+    """
+    class Status(models.TextChoices):
+        PENDING = "PENDING", "Pending"
+        USED = "USED", "Used"
+        REVOKED = "REVOKED", "Revoked"
+
+    driver = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name="invitations")
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="driver_invitations")
+    token_hash = models.CharField(max_length=64, unique=True, db_index=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="created_driver_invitations")
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    used_at = models.DateTimeField(null=True, blank=True)
+    revoked_at = models.DateTimeField(null=True, blank=True)
+    status = models.CharField(max_length=16, choices=Status.choices, default=Status.PENDING)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["company", "status"]),
+            models.Index(fields=["driver", "status"]),
+        ]
+
+    @property
+    def is_expired(self) -> bool:
+        return timezone.now() >= self.expires_at
+
+    @property
+    def is_active(self) -> bool:
+        return self.status == self.Status.PENDING and not self.is_expired
+
+    def __str__(self):
+        return f"invite<{self.driver.full_name} / {self.company.company_name} / {self.status}>"

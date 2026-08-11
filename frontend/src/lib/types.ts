@@ -40,6 +40,7 @@ export interface Driver {
   status: DriverStatus;
   rating: number; // 0..5
   total_trips: number;
+  activated?: boolean; // has claimed a mobile login via invitation (Phase 3)
   joined_at: string; // ISO date
   avatar?: string;
   createdAt: string;

@@ -3,20 +3,19 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import {
   Users, Search, Plus, Eye, Phone, Star, Trash2, Route,
-  CheckCircle, XCircle, Navigation,
+  CheckCircle, Navigation, KeyRound,
 } from "lucide-react";
 import AddDriverModal, { NewDriver } from "@/components/AddDriverModal";
+import InviteDriverModal from "@/components/InviteDriverModal";
 import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
-import { useDrivers, createDriver, deleteDriver } from "@/lib/api-data";
-
-const statusTone: Record<string, string> = { Active: "green", "On Trip": "blue", Inactive: "gray" };
-const statusIcon: Record<string, typeof CheckCircle> = { Active: CheckCircle, "On Trip": Navigation, Inactive: XCircle };
+import { useDrivers, createDriver, deleteDriver, createInvitation } from "@/lib/api-data";
 
 export default function DriversPage() {
   const { data: drivers, refetch } = useDrivers();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
   const [showAdd, setShowAdd] = useState(false);
+  const [invite, setInvite] = useState<{ id: string; name: string; token?: string } | null>(null);
 
   const filtered = useMemo(
     () =>
@@ -40,13 +39,20 @@ export default function DriversPage() {
   };
 
   const addDriver = async (d: NewDriver) => {
-    await createDriver({
+    const created = await createDriver({
       full_name: d.full_name,
       mobile: d.mobile,
       email: d.email,
       plate_number: d.plate_number,
       vehicle_type: d.vehicle_type,
     });
+    // Immediately mint an activation code and show it to the owner.
+    try {
+      const { token } = await createInvitation(created.id);
+      setInvite({ id: created.id, name: created.full_name, token });
+    } catch {
+      /* driver still created; owner can invite from the card */
+    }
     await refetch();
   };
 
@@ -99,7 +105,6 @@ export default function DriversPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 stagger">
           {filtered.map((d) => {
-            const SIcon = statusIcon[d.status] || CheckCircle;
             return (
               <div key={d.id} className="card card-hover p-5">
                 <div className="flex items-center gap-3">
@@ -112,7 +117,11 @@ export default function DriversPage() {
                       <Star className="w-3.5 h-3.5 fill-amber-400" /> {d.rating.toFixed(1)}
                     </div>
                   </div>
-                  <Badge tone={statusTone[d.status]} icon={SIcon}>{d.status}</Badge>
+                  {d.activated ? (
+                    <Badge tone="green" icon={CheckCircle}>Activated</Badge>
+                  ) : (
+                    <Badge tone="amber" icon={KeyRound}>Not activated</Badge>
+                  )}
                 </div>
                 <div className="mt-4 space-y-1.5 text-sm text-slate-600">
                   <span className="flex items-center gap-2"><Phone className="w-4 h-4 text-slate-400" />{d.mobile}</span>
@@ -122,6 +131,16 @@ export default function DriversPage() {
                   <Link href={`/dashboard/drivers/${d.id}`} className="btn btn-ghost flex-1 text-sm">
                     <Eye className="w-4 h-4" /> Profile
                   </Link>
+                  {!d.activated && (
+                    <button
+                      onClick={() => setInvite({ id: d.id, name: d.full_name })}
+                      className="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center text-violet-600 hover:bg-violet-100 transition"
+                      aria-label="Invite"
+                      title="Invite / activation code"
+                    >
+                      <KeyRound className="w-4 h-4" />
+                    </button>
+                  )}
                   <button
                     onClick={() => handleDelete(d.id)}
                     className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
@@ -137,6 +156,17 @@ export default function DriversPage() {
       )}
 
       <AddDriverModal isOpen={showAdd} onClose={() => setShowAdd(false)} onAddDriver={addDriver} />
+
+      {invite && (
+        <InviteDriverModal
+          isOpen={!!invite}
+          onClose={() => setInvite(null)}
+          driverId={invite.id}
+          driverName={invite.name}
+          initialToken={invite.token}
+          onChanged={refetch}
+        />
+      )}
     </div>
   );
 }

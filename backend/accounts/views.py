@@ -23,14 +23,16 @@ from rest_framework.permissions import IsAdminUser
 from .models import (
     Company, Driver, ContactMessage, SiteSettings,
     ActivityLog, UserSession, SecuritySettings, LoginAttempt, Profile, Alert,
-    Vehicle, Trip, Expense, LocationPing, Membership
+    Vehicle, Trip, Expense, LocationPing, Membership, DriverInvitation
 )
 from .serializers import (
     CompanySerializer, CompanyUpdateSerializer, CompanyUserSerializer, DriverSerializer, ContactMessageSerializer,
     SiteSettingsSerializer, LoginSerializer, PasswordChangeSerializer,
     UserProfileUpdateSerializer, ActivityLogSerializer, AlertSerializer,
-    VehicleSerializer, TripSerializer, ExpenseSerializer, LocationPingSerializer
+    VehicleSerializer, TripSerializer, ExpenseSerializer, LocationPingSerializer,
+    DriverInvitationSerializer,
 )
+from .invitations import issue_invitation, hash_token
 from .tenancy import (
     company_for, role_for, is_owner,
     CompanyScopedQuerysetMixin, IsCompanyMember, IsCompanyOwner,
@@ -1323,3 +1325,204 @@ class LocationIngestView(APIView):
             },
             status=status.HTTP_201_CREATED,
         )
+
+
+# ===========================================================================
+# Phase 3 — Secure driver invitation + mobile activation
+# ===========================================================================
+
+def _driver_context(user):
+    """Authenticated driver context — the single source of truth the mobile app
+    reads to decide login vs. activation vs. tracking. Never trusts local data.
+    """
+    driver = getattr(user, 'driver_profile', None)
+    if not driver:
+        return {'activated': False, 'driver': None, 'company': None}
+    return {
+        'activated': True,
+        'driver': {
+            'id': driver.id,
+            'full_name': driver.full_name,
+            'mobile': driver.mobile,
+            'email': driver.email,
+            'plate_number': driver.plate_number,
+            'vehicle_type': driver.vehicle_type,
+        },
+        'company': (
+            {'id': driver.company_id, 'name': getattr(driver.company, 'company_name', None)}
+            if driver.company_id else None
+        ),
+    }
+
+
+def _owned_driver_or_response(request, driver_id):
+    """Fetch a driver ONLY if it belongs to the authenticated owner's company.
+    Returns (driver, None) or (None, 404 Response) — closes cross-tenant access.
+    """
+    company = company_for(request.user)
+    driver = Driver.objects.filter(id=driver_id).select_related('company').first()
+    if not driver or company is None or driver.company_id != company.id:
+        return None, Response({'detail': 'Driver not found.'}, status=status.HTTP_404_NOT_FOUND)
+    return driver, None
+
+
+class DriverRegisterMobileView(APIView):
+    """Public: a driver creates a bare login account from the mobile app.
+
+    The account has NO company/driver/role until it is activated with a valid
+    invitation token, so an unlinked account can access nothing.
+    """
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        username = (request.data.get('username') or '').strip()
+        email = (request.data.get('email') or '').strip()
+        password = request.data.get('password') or ''
+        if not username or not password:
+            return Response({'detail': 'Username and password are required.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        if len(password) < 6:
+            return Response({'detail': 'Password must be at least 6 characters.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        if User.objects.filter(username=username).exists():
+            return Response({'detail': 'A user with this username already exists.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        if email and User.objects.filter(email__iexact=email).exists():
+            return Response({'detail': 'A user with this email already exists.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        user = User.objects.create_user(username=username, email=email, password=password)
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'access': str(refresh.access_token),
+            'refresh': str(refresh),
+            'user': {'id': user.id, 'username': user.username, 'email': user.email},
+            **_driver_context(user),
+        }, status=status.HTTP_201_CREATED)
+
+
+class DriverMeView(APIView):
+    """Authenticated driver context (activation status + driver/company)."""
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response(_driver_context(request.user))
+
+
+class DriverInvitationView(APIView):
+    """Owner: GET current invitation status / POST issue a new one for a driver
+    in the owner's own company. The raw token is returned only on POST, once.
+    """
+    permission_classes = [IsCompanyOwner]
+
+    def get(self, request, driver_id):
+        driver, err = _owned_driver_or_response(request, driver_id)
+        if err:
+            return err
+        inv = driver.invitations.first()  # latest (model ordering = -created_at)
+        return Response({
+            'invitation': DriverInvitationSerializer(inv).data if inv else None,
+        })
+
+    def post(self, request, driver_id):
+        driver, err = _owned_driver_or_response(request, driver_id)
+        if err:
+            return err
+        if driver.user_id:
+            return Response({'detail': 'Driver is already activated.'},
+                            status=status.HTTP_409_CONFLICT)
+        inv, raw = issue_invitation(driver, company_for(request.user), request.user)
+        return Response({
+            'invitation': DriverInvitationSerializer(inv).data,
+            'token': raw,  # shown exactly once
+        }, status=status.HTTP_201_CREATED)
+
+
+class DriverInvitationRevokeView(APIView):
+    permission_classes = [IsCompanyOwner]
+
+    def post(self, request, driver_id):
+        driver, err = _owned_driver_or_response(request, driver_id)
+        if err:
+            return err
+        n = DriverInvitation.objects.filter(
+            driver=driver, status=DriverInvitation.Status.PENDING
+        ).update(status=DriverInvitation.Status.REVOKED, revoked_at=timezone.now())
+        return Response({'revoked': n})
+
+
+class DriverInvitationRegenerateView(APIView):
+    permission_classes = [IsCompanyOwner]
+
+    def post(self, request, driver_id):
+        driver, err = _owned_driver_or_response(request, driver_id)
+        if err:
+            return err
+        if driver.user_id:
+            return Response({'detail': 'Driver is already activated.'},
+                            status=status.HTTP_409_CONFLICT)
+        inv, raw = issue_invitation(driver, company_for(request.user), request.user)
+        return Response({
+            'invitation': DriverInvitationSerializer(inv).data,
+            'token': raw,
+        }, status=status.HTTP_201_CREATED)
+
+
+class DriverActivateView(APIView):
+    """Mobile: bind the authenticated user -> Driver -> Company using a token.
+
+    company_id / driver_id are NEVER accepted from the client — both are derived
+    from the invitation. Runs atomically with a row lock so one token can never
+    be consumed twice, even under concurrent requests.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        token = (request.data.get('token') or '').strip()
+        if not token:
+            return Response({'detail': 'Activation code is required.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        user = request.user
+        # A user already bound to a driver can't re-activate into another.
+        if Driver.objects.filter(user=user).exists():
+            return Response({'detail': 'This account is already linked to a driver.'},
+                            status=status.HTTP_409_CONFLICT)
+
+        token_h = hash_token(token)
+        with transaction.atomic():
+            inv = (DriverInvitation.objects
+                   .select_for_update()
+                   .select_related('driver', 'company')
+                   .filter(token_hash=token_h)
+                   .first())
+            if inv is None:
+                return Response({'detail': 'Invalid activation code.'},
+                                status=status.HTTP_400_BAD_REQUEST)
+            if inv.status == DriverInvitation.Status.USED or inv.used_at:
+                return Response({'detail': 'This activation code has already been used.'},
+                                status=status.HTTP_400_BAD_REQUEST)
+            if inv.status == DriverInvitation.Status.REVOKED or inv.revoked_at:
+                return Response({'detail': 'This activation code has been revoked.'},
+                                status=status.HTTP_400_BAD_REQUEST)
+            if inv.is_expired:
+                return Response({'detail': 'This activation code has expired.'},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            driver = inv.driver
+            if driver.user_id:
+                return Response({'detail': 'This driver is already activated.'},
+                                status=status.HTTP_409_CONFLICT)
+
+            # Bind user -> driver -> company, and mark the token used.
+            driver.user = user
+            driver.save(update_fields=['user'])
+            inv.status = DriverInvitation.Status.USED
+            inv.used_at = timezone.now()
+            inv.save(update_fields=['status', 'used_at'])
+            Membership.objects.update_or_create(
+                user=user,
+                defaults={'company': inv.company, 'role': Membership.Role.DRIVER},
+            )
+
+        return Response(_driver_context(user), status=status.HTTP_200_OK)

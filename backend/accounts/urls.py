@@ -11,6 +11,8 @@ from .views import (
     UserAlertsView, AdminAlertsView,
     VehicleViewSet, TripViewSet, ExpenseViewSet, DriverViewSet,
     LocationIngestView,
+    DriverRegisterMobileView, DriverMeView, DriverActivateView,
+    DriverInvitationView, DriverInvitationRevokeView, DriverInvitationRegenerateView,
 )
 
 router = DefaultRouter()
@@ -64,6 +66,14 @@ urlpatterns = [
     # Mobile driver app — GPS ingest
     path('locations/', LocationIngestView.as_view(), name='location-ingest'),
 
-    # Fleet resources (vehicles / trips / expenses)
+    # Phase 3 — secure driver invitation + mobile activation
+    path('driver/register/', DriverRegisterMobileView.as_view(), name='driver-register-mobile'),
+    path('driver/me/', DriverMeView.as_view(), name='driver-me'),
+    path('driver-invitations/activate/', DriverActivateView.as_view(), name='driver-activate'),
+    path('drivers/<int:driver_id>/invitation/', DriverInvitationView.as_view(), name='driver-invitation'),
+    path('drivers/<int:driver_id>/invitation/revoke/', DriverInvitationRevokeView.as_view(), name='driver-invitation-revoke'),
+    path('drivers/<int:driver_id>/invitation/regenerate/', DriverInvitationRegenerateView.as_view(), name='driver-invitation-regenerate'),
+
+    # Fleet resources (vehicles / trips / expenses / drivers)
     path('', include(router.urls)),
 ]

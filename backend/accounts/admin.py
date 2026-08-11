@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
     Company, Driver, ContactMessage, SiteSettings,
-    Alert, Vehicle, Trip, Expense, LocationPing, Membership,
+    Alert, Vehicle, Trip, Expense, LocationPing, Membership, DriverInvitation,
 )
 
 admin.site.register(Company)
@@ -50,3 +50,11 @@ class MembershipAdmin(admin.ModelAdmin):
     list_display = ("user", "company", "role", "created_at")
     list_filter = ("role", "company")
     search_fields = ("user__username", "company__company_name")
+
+
+@admin.register(DriverInvitation)
+class DriverInvitationAdmin(admin.ModelAdmin):
+    list_display = ("driver", "company", "status", "created_at", "expires_at", "used_at")
+    list_filter = ("status", "company")
+    search_fields = ("driver__full_name", "company__company_name")
+    readonly_fields = ("token_hash", "created_at", "used_at", "revoked_at")

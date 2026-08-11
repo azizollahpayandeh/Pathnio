@@ -24,9 +24,39 @@ function mapDriver(d: any): Driver {
     status: "Active",
     rating: 0,
     total_trips: 0,
+    // Activated = the driver has claimed a login account via an invitation.
+    activated: !!d.user,
     joined_at: d.created_at || new Date().toISOString(),
     createdAt: d.created_at || new Date().toISOString(),
   };
+}
+
+// ---- Driver invitations (Phase 3) -----------------------------------------
+
+export type InvitationInfo = {
+  status: string;
+  is_active: boolean;
+  is_expired: boolean;
+  expires_at: string;
+} | null;
+
+export async function createInvitation(driverId: string): Promise<{ token: string; invitation: InvitationInfo }> {
+  const r = await api.post(`accounts/drivers/${driverId}/invitation/`);
+  return { token: r.data.token, invitation: r.data.invitation };
+}
+
+export async function regenerateInvitation(driverId: string): Promise<{ token: string; invitation: InvitationInfo }> {
+  const r = await api.post(`accounts/drivers/${driverId}/invitation/regenerate/`);
+  return { token: r.data.token, invitation: r.data.invitation };
+}
+
+export async function getInvitation(driverId: string): Promise<InvitationInfo> {
+  const r = await api.get(`accounts/drivers/${driverId}/invitation/`);
+  return r.data.invitation;
+}
+
+export async function revokeInvitation(driverId: string): Promise<void> {
+  await api.post(`accounts/drivers/${driverId}/invitation/revoke/`);
 }
 
 function mapVehicle(v: any): Vehicle {
