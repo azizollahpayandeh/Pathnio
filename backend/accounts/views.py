@@ -23,13 +23,17 @@ from rest_framework.permissions import IsAdminUser
 from .models import (
     Company, Driver, ContactMessage, SiteSettings,
     ActivityLog, UserSession, SecuritySettings, LoginAttempt, Profile, Alert,
-    Vehicle, Trip, Expense, LocationPing
+    Vehicle, Trip, Expense, LocationPing, Membership
 )
 from .serializers import (
     CompanySerializer, CompanyUpdateSerializer, CompanyUserSerializer, DriverSerializer, ContactMessageSerializer,
     SiteSettingsSerializer, LoginSerializer, PasswordChangeSerializer,
     UserProfileUpdateSerializer, ActivityLogSerializer, AlertSerializer,
     VehicleSerializer, TripSerializer, ExpenseSerializer, LocationPingSerializer
+)
+from .tenancy import (
+    company_for, role_for, is_owner,
+    CompanyScopedQuerysetMixin, IsCompanyMember, IsCompanyOwner,
 )
 
 logger = logging.getLogger(__name__)
@@ -511,7 +515,14 @@ class CompanyRegisterView(generics.CreateAPIView):
             
             with transaction.atomic():
                 company = serializer.save()
-                
+
+                # Authoritative role/tenant record for the new owner.
+                Membership.objects.update_or_create(
+                    user=company.user,
+                    defaults={'company': company,
+                              'role': Membership.Role.COMPANY_OWNER},
+                )
+
                 # Log the successful registration
                 log_activity(request, 'register', {
                     'user_type': 'company',
@@ -545,13 +556,24 @@ class CompanyRegisterView(generics.CreateAPIView):
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class DriverRegisterView(generics.CreateAPIView):
+    """Owner-only driver creation. company is FORCED to the authenticated
+    owner's company — the client can never choose it (this closes the
+    'driver joins any company' hole). Phase 3 will add one-time invitation
+    tokens for the mobile activation half of the flow.
+    """
     queryset = Driver.objects.all()
     serializer_class = DriverSerializer
-    permission_classes = [AllowAny]
-    
+    permission_classes = [IsCompanyOwner]
+
     def perform_create(self, serializer):
+        company = company_for(self.request.user)
         with transaction.atomic():
-            driver = serializer.save()
+            driver = serializer.save(company=company)
+            # Authoritative role/tenant record for the new driver's account.
+            Membership.objects.update_or_create(
+                user=driver.user,
+                defaults={'company': company, 'role': Membership.Role.DRIVER},
+            )
             log_activity(self.request, 'register', {
                 'user_type': 'driver',
                 'driver_name': driver.full_name
@@ -621,21 +643,25 @@ class CompanyMeView(APIView):
                 'errors': serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 
-class DriverListView(generics.ListAPIView):
-    queryset = Driver.objects.all()
+class DriverListView(CompanyScopedQuerysetMixin, generics.ListAPIView):
+    # Scoped to the caller's company by the mixin — an owner sees ONLY their
+    # own drivers, never another company's. Ordered for stable pagination.
+    queryset = Driver.objects.all().order_by('id')
     serializer_class = DriverSerializer
-    permission_classes = [IsAuthenticated]
-    
+    permission_classes = [IsCompanyMember]
+
     def get(self, request, *args, **kwargs):
         log_activity(request, 'dashboard_access', {
             'section': 'driver_list'
         })
         return super().get(request, *args, **kwargs)
 
-class DriverDetailView(generics.RetrieveAPIView):
+class DriverDetailView(CompanyScopedQuerysetMixin, generics.RetrieveAPIView):
+    # get_queryset() scoping also closes object-level (IDOR) access: a driver
+    # from another company simply isn't in the queryset -> 404.
     queryset = Driver.objects.all()
     serializer_class = DriverSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsCompanyMember]
 
 class SiteSettingsView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -1163,25 +1189,17 @@ class AdminAlertsView(APIView):
         return Response(serializer.data)
 
 
-class CompanyScopedViewSet(viewsets.ModelViewSet):
-    """Base viewset that scopes fleet resources to the requesting user's company."""
-    permission_classes = [IsAuthenticated]
+class CompanyScopedViewSet(CompanyScopedQuerysetMixin, viewsets.ModelViewSet):
+    """Base viewset that scopes fleet resources to the requesting user's company.
 
-    def _company(self):
-        return getattr(self.request.user, 'company_profile', None)
-
-    def get_queryset(self):
-        company = self._company()
-        qs = self.queryset
-        # Staff see everything; company managers see only their own records.
-        if self.request.user.is_staff:
-            return qs
-        if company is not None:
-            return qs.filter(company=company)
-        return qs.none()
+    Tenant isolation (incl. object-level / IDOR protection) is enforced by
+    CompanyScopedQuerysetMixin.get_queryset(). company is always set
+    server-side on create — never taken from the request body.
+    """
+    permission_classes = [IsCompanyMember]
 
     def perform_create(self, serializer):
-        serializer.save(company=self._company())
+        serializer.save(company=company_for(self.request.user))
 
 
 class VehicleViewSet(CompanyScopedViewSet):

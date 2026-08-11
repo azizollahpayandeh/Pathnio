@@ -306,3 +306,35 @@ class LocationPing(models.Model):
 
     def __str__(self):
         return f"{self.lat:.5f},{self.lng:.5f} @ {self.recorded_at:%Y-%m-%d %H:%M:%S}"
+
+
+class Membership(models.Model):
+    """Authoritative link between a user, the company (tenant) they belong to,
+    and their role. This is the single source of truth the backend uses to
+    decide tenant access — never trust a company_id from the client.
+
+    Kept as a OneToOne(user) for now (one company per user); can become a
+    ForeignKey later if multi-company membership is ever needed. The existing
+    Company.user / Driver.company relations remain as profile data and are kept
+    in sync with this model.
+    """
+    class Role(models.TextChoices):
+        COMPANY_OWNER = "COMPANY_OWNER", "Company Owner"
+        COMPANY_ADMIN = "COMPANY_ADMIN", "Company Admin"
+        DISPATCHER = "DISPATCHER", "Dispatcher"
+        FLEET_MANAGER = "FLEET_MANAGER", "Fleet Manager"
+        ACCOUNTANT = "ACCOUNTANT", "Accountant"
+        DRIVER = "DRIVER", "Driver"
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="membership")
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="memberships")
+    role = models.CharField(max_length=32, choices=Role.choices)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["company", "role"]),
+        ]
+
+    def __str__(self):
+        return f"{self.user.username} @ {self.company.company_name} ({self.role})"

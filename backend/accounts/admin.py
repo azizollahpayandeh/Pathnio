@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
     Company, Driver, ContactMessage, SiteSettings,
-    Alert, Vehicle, Trip, Expense, LocationPing,
+    Alert, Vehicle, Trip, Expense, LocationPing, Membership,
 )
 
 admin.site.register(Company)
@@ -43,3 +43,10 @@ class LocationPingAdmin(admin.ModelAdmin):
     list_filter = ("is_moving", "company")
     search_fields = ("vehicle__plate_number", "driver__full_name")
     date_hierarchy = "recorded_at"
+
+
+@admin.register(Membership)
+class MembershipAdmin(admin.ModelAdmin):
+    list_display = ("user", "company", "role", "created_at")
+    list_filter = ("role", "company")
+    search_fields = ("user__username", "company__company_name")

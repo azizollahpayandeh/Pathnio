@@ -226,6 +226,9 @@ class DriverSerializer(serializers.ModelSerializer):
     class Meta:
         model = Driver
         fields = ('id', 'user', 'full_name', 'mobile', 'plate_number', 'vehicle_type', 'profile_photo', 'company')
+        # company is assigned server-side from the authenticated owner — a
+        # driver/client must never be able to pick which company they join.
+        read_only_fields = ('id', 'company')
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')

@@ -11,7 +11,7 @@ Usage:  python manage.py seed_live_demo
 """
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
-from accounts.models import Company, Driver, Vehicle
+from accounts.models import Company, Driver, Vehicle, Membership
 
 MANAGER_USERNAME = "manager"
 MANAGER_PASSWORD = "Pathnio#Manager1"
@@ -58,6 +58,14 @@ class Command(BaseCommand):
                 "company": company,
             },
         )
+
+        # Authoritative role/tenant records.
+        Membership.objects.update_or_create(
+            user=mgr, defaults={"company": company,
+                                "role": Membership.Role.COMPANY_OWNER})
+        Membership.objects.update_or_create(
+            user=drv_user, defaults={"company": company,
+                                     "role": Membership.Role.DRIVER})
 
         # --- Vehicle (plate matches the driver) -------------------------
         Vehicle.objects.update_or_create(
