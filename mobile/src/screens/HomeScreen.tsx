@@ -19,6 +19,7 @@ import {
   stopTracking,
 } from "../location/tracker";
 import { queueSize, flush } from "../location/queue";
+import { computeStatus, STATUS_LABEL, STATUS_COLOR, StatusInfo } from "../location/status";
 
 type Fix = { lat: number; lng: number; speedKmh: number; at: string } | null;
 
@@ -28,7 +29,27 @@ export default function HomeScreen() {
   const [busy, setBusy] = useState(false);
   const [fix, setFix] = useState<Fix>(null);
   const [pending, setPending] = useState(0);
+  const [trk, setTrk] = useState<StatusInfo | null>(null);
   const poll = useRef<ReturnType<typeof setInterval> | null>(null);
+  const statusPoll = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Poll the real tracking status continuously (even off duty). When internet
+  // is back and fixes are queued, actively drain the buffer (reconnect sync).
+  useEffect(() => {
+    const tick = async () => {
+      const s = await computeStatus();
+      setTrk(s);
+      if (s.online && s.pending > 0) {
+        await flush();
+        setTrk(await computeStatus());
+      }
+    };
+    tick();
+    statusPoll.current = setInterval(tick, 4000);
+    return () => {
+      if (statusPoll.current) clearInterval(statusPoll.current);
+    };
+  }, [onDuty]);
 
   // Sync UI with the actual tracking state on mount.
   useEffect(() => {
@@ -134,9 +155,15 @@ export default function HomeScreen() {
             : "Tracking is off. Flip the switch to start your shift."}
         </Text>
         <View style={styles.switchRow}>
-          <Text style={styles.switchHint}>
-            {busy ? "Working…" : onDuty ? "Tracking" : "Not tracking"}
-          </Text>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            {trk && (
+              <View style={{ width: 9, height: 9, borderRadius: 5, marginRight: 7,
+                             backgroundColor: STATUS_COLOR[trk.status] }} />
+            )}
+            <Text style={styles.switchHint}>
+              {busy ? "Working…" : trk ? STATUS_LABEL[trk.status] : "…"}
+            </Text>
+          </View>
           <Switch
             value={onDuty}
             onValueChange={toggle}
