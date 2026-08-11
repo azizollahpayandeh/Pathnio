@@ -1220,7 +1220,9 @@ class CompanyScopedViewSet(CompanyScopedQuerysetMixin, viewsets.ModelViewSet):
 
 
 class VehicleViewSet(CompanyScopedViewSet):
-    queryset = Vehicle.objects.all()
+    # prefetch active assignments so the serializer's assigned_driver field does
+    # not issue a query per vehicle (avoids N+1 on the list endpoint).
+    queryset = Vehicle.objects.all().prefetch_related('assignments__driver')
     serializer_class = VehicleSerializer
 
     def perform_create(self, serializer):
@@ -1263,8 +1265,20 @@ class VehicleViewSet(CompanyScopedViewSet):
 
 
 class TripViewSet(CompanyScopedViewSet):
-    queryset = Trip.objects.all().select_related('driver_ref', 'vehicle_ref')
+    # select/prefetch to avoid N+1 (driver/vehicle refs + nested cargos).
+    queryset = Trip.objects.all().select_related('driver_ref', 'vehicle_ref').prefetch_related('cargos')
     serializer_class = TripSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        # Optional date range on start_time (?from=YYYY-MM-DD&to=YYYY-MM-DD).
+        d_from = self.request.query_params.get('from')
+        d_to = self.request.query_params.get('to')
+        if d_from:
+            qs = qs.filter(start_time__gte=d_from)
+        if d_to:
+            qs = qs.filter(start_time__lte=d_to)
+        return qs
 
     def _validate_and_sync(self, serializer, company, instance=None):
         """Ensure any driver/vehicle refs belong to the company, and keep the
