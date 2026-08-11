@@ -48,7 +48,7 @@ async function refreshAccessToken(): Promise<string | null> {
   if (!refresh) return null;
   if (!refreshing) {
     refreshing = axios
-      .post(`${API_BASE_URL}/api/auth/refresh/`, { refresh })
+      .post(`${API_BASE_URL}/api/auth/token/refresh/`, { refresh })
       .then((r) => {
         const access = r.data?.access as string | undefined;
         if (access) {

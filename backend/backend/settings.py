@@ -197,8 +197,12 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
-    'ROTATE_REFRESH_TOKENS': True,
-    'BLACKLIST_AFTER_ROTATION': True,
+    # Rotation requires the token_blacklist app + its models; keep it off so
+    # /api/auth/token/refresh/ works with a plain (non-rotating) refresh token.
+    # (Enable rotation later by adding 'rest_framework_simplejwt.token_blacklist'
+    # to INSTALLED_APPS and migrating.)
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': True,
     'ALGORITHM': 'HS256',
     'SIGNING_KEY': SECRET_KEY,
