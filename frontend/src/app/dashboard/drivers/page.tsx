@@ -2,13 +2,16 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import {
-  Users, Search, Plus, Eye, Phone, Star, Trash2, Route,
-  CheckCircle, Navigation, KeyRound,
+  Users, Search, Plus, Eye, Phone, Trash2, Route,
+  CheckCircle, Navigation, KeyRound, WifiOff,
 } from "lucide-react";
-import AddDriverModal, { NewDriver } from "@/components/AddDriverModal";
+import AddDriverModal, { DriverInput } from "@/components/AddDriverModal";
 import InviteDriverModal from "@/components/InviteDriverModal";
 import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
 import { useDrivers, createDriver, deleteDriver, createInvitation } from "@/lib/api-data";
+import { toast } from "@/components/Toast";
+
+const statusTone: Record<string, string> = { Active: "green", "On Trip": "blue", Offline: "amber", Inactive: "gray" };
 
 export default function DriversPage() {
   const { data: drivers, refetch } = useDrivers();
@@ -33,12 +36,11 @@ export default function DriversPage() {
     total: drivers.length,
     active: drivers.filter((d) => d.status === "Active").length,
     onTrip: drivers.filter((d) => d.status === "On Trip").length,
-    avgRating: drivers.length
-      ? (drivers.reduce((s, d) => s + d.rating, 0) / drivers.length).toFixed(1)
-      : "0.0",
+    activated: drivers.filter((d) => d.activated).length,
   };
 
-  const addDriver = async (d: NewDriver) => {
+  // Throws on failure so the modal can surface a friendly error and stay open.
+  const addDriver = async (d: DriverInput) => {
     const created = await createDriver({
       full_name: d.full_name,
       mobile: d.mobile,
@@ -56,9 +58,15 @@ export default function DriversPage() {
     await refetch();
   };
 
-  const handleDelete = async (id: string) => {
-    await deleteDriver(id);
-    await refetch();
+  const handleDelete = async (id: string, name: string) => {
+    if (typeof window !== "undefined" && !window.confirm(`Delete driver ${name}? This cannot be undone.`)) return;
+    try {
+      await deleteDriver(id);
+      await refetch();
+      toast.success(`Driver ${name} deleted.`);
+    } catch (err) {
+      toast.fromError(err, "Could not delete the driver.");
+    }
   };
 
   return (
@@ -79,7 +87,7 @@ export default function DriversPage() {
         <StatCard icon={Users} label="Total Drivers" value={stats.total} gradient="from-purple-500 to-violet-600" />
         <StatCard icon={CheckCircle} label="Available" value={stats.active} gradient="from-emerald-500 to-teal-600" />
         <StatCard icon={Navigation} label="On Trip" value={stats.onTrip} gradient="from-purple-500 to-fuchsia-600" />
-        <StatCard icon={Star} label="Avg. Rating" value={stats.avgRating} gradient="from-amber-500 to-orange-600" />
+        <StatCard icon={KeyRound} label="Activated" value={stats.activated} gradient="from-amber-500 to-orange-600" />
       </div>
 
       <div className="card p-4 flex flex-col sm:flex-row gap-3">
@@ -89,7 +97,7 @@ export default function DriversPage() {
         </div>
         <select value={status} onChange={(e) => setStatus(e.target.value)} className="field sm:w-44">
           <option value="all">All Status</option>
-          <option>Active</option><option>On Trip</option><option>Inactive</option>
+          <option>Active</option><option>On Trip</option><option>Offline</option><option>Inactive</option>
         </select>
       </div>
 
@@ -113,9 +121,12 @@ export default function DriversPage() {
                   </span>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-bold text-slate-900 truncate">{d.full_name}</h3>
-                    <div className="flex items-center gap-1 text-amber-500 text-sm">
-                      <Star className="w-3.5 h-3.5 fill-amber-400" /> {d.rating.toFixed(1)}
-                    </div>
+                    <Badge
+                      tone={statusTone[d.status] || "gray"}
+                      icon={d.status === "On Trip" ? Navigation : d.status === "Active" ? CheckCircle : WifiOff}
+                    >
+                      {d.status}
+                    </Badge>
                   </div>
                   {d.activated ? (
                     <Badge tone="green" icon={CheckCircle}>Activated</Badge>
@@ -142,7 +153,7 @@ export default function DriversPage() {
                     </button>
                   )}
                   <button
-                    onClick={() => handleDelete(d.id)}
+                    onClick={() => handleDelete(d.id, d.full_name)}
                     className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
                     aria-label="Delete"
                   >

@@ -28,7 +28,8 @@ export interface Vehicle {
   createdAt: string;
 }
 
-export type DriverStatus = "Active" | "Inactive" | "On Trip";
+// System-derived (backend is the source of truth); the UI only displays it.
+export type DriverStatus = "Active" | "Inactive" | "On Trip" | "Offline";
 
 export interface Driver {
   id: ID;
@@ -38,8 +39,7 @@ export interface Driver {
   license_no: string;
   vehicle_type: VehicleType | "";
   plate_number: string;
-  status: DriverStatus;
-  rating: number; // 0..5
+  status: DriverStatus; // derived by the backend, never set in the UI
   total_trips: number;
   activated?: boolean; // has claimed a mobile login via invitation (Phase 3)
   joined_at: string; // ISO date

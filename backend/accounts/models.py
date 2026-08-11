@@ -24,7 +24,8 @@ class Driver(models.Model):
     full_name = models.CharField(max_length=255)
     mobile = models.CharField(max_length=20)
     email = models.EmailField(blank=True)
-    plate_number = models.CharField(max_length=32)
+    # Optional: a driver profile can exist before any vehicle is assigned.
+    plate_number = models.CharField(max_length=32, blank=True)
     vehicle_type = models.CharField(max_length=64, blank=True)
     profile_photo = models.ImageField(upload_to='profiles/', blank=True, null=True)
     company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, blank=True, related_name='drivers')

@@ -36,7 +36,7 @@ from .serializers import (
 )
 from .invitations import issue_invitation, hash_token
 from .assignments import assign as assign_driver_vehicle, unassign as unassign_vehicle, AssignmentError
-from .fleet_status import vehicle_live_status, driver_status
+from .fleet_status import vehicle_live_status, driver_status, company_thresholds
 from .alerts_engine import refresh_fleet_alerts
 from .subscriptions import check_can_add, usage as subscription_usage, get_or_create_subscription
 from .models import Plan, Subscription
@@ -1238,6 +1238,8 @@ class VehicleViewSet(CompanyScopedViewSet):
         active trip + cargo, last update, and the backend-computed live status.
         Single efficient query set (no N+1); driven by polling."""
         company = company_for(request.user)
+        # Live status uses THIS company's configured thresholds (Settings page).
+        moving_speed, offline_timeout = company_thresholds(company)
         vehicles = list(self.get_queryset().prefetch_related('assignments__driver'))
         active_trips = (Trip.objects.filter(company=company, status='ACTIVE')
                         .prefetch_related('cargos'))
@@ -1256,7 +1258,7 @@ class VehicleViewSet(CompanyScopedViewSet):
                 'vehicle_type': v.vehicle_type, 'status': v.status,
                 'lat': v.lat, 'lng': v.lng, 'speed': v.speed,
                 'last_seen_at': v.last_seen_at,
-                'live_status': vehicle_live_status(v),
+                'live_status': vehicle_live_status(v, moving_speed, offline_timeout),
                 'driver': ({'id': drv.id, 'full_name': drv.full_name} if drv else None),
                 'trip': ({'id': trip.id, 'origin': trip.origin,
                           'destination': trip.destination, 'status': trip.status}

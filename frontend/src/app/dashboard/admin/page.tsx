@@ -1,13 +1,25 @@
 "use client";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import {
   ShieldCheck, Users, Search, Trash2, Shield, User as UserIcon,
-  Mail, Phone, Truck, Route, Wallet, Activity,
+  Mail, Phone, Activity,
 } from "lucide-react";
 import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
-import { useCollection, update, remove } from "@/lib/store";
+import api from "@/app/api";
 import { useAuth } from "@/lib/auth";
+
+type PlatformUser = {
+  id: number;
+  username: string;
+  email: string;
+  full_name: string;
+  phone: string;
+  company_name: string;
+  is_staff: boolean;
+  is_superuser: boolean;
+  date_joined: string;
+};
 
 export default function AdminPage() {
   const { user, ready } = useAuth();
@@ -16,28 +28,58 @@ export default function AdminPage() {
   useEffect(() => {
     if (ready && user && !user.is_staff) router.replace("/dashboard");
   }, [ready, user, router]);
-  const [users] = useCollection("users");
-  const [vehicles] = useCollection("vehicles");
-  const [trips] = useCollection("trips");
-  const [expenses] = useCollection("expenses");
+
+  const [users, setUsers] = useState<PlatformUser[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+
+  const refresh = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const { data } = await api.get("accounts/users/all/");
+      setUsers(Array.isArray(data) ? data : []);
+    } catch (e: any) {
+      // Never fall back to demo data — surface the failure honestly.
+      setUsers([]);
+      setError(e?.response?.data?.detail || "Could not load accounts.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (ready && user?.is_staff) refresh();
+  }, [ready, user, refresh]);
 
   const filtered = useMemo(
     () =>
       users.filter(
         (u) =>
-          u.company_name.toLowerCase().includes(search.toLowerCase()) ||
-          u.email.toLowerCase().includes(search.toLowerCase()) ||
-          u.manager_full_name.toLowerCase().includes(search.toLowerCase())
+          (u.company_name || "").toLowerCase().includes(search.toLowerCase()) ||
+          (u.email || "").toLowerCase().includes(search.toLowerCase()) ||
+          (u.full_name || "").toLowerCase().includes(search.toLowerCase())
       ),
     [users, search]
   );
 
-  const totalExpense = expenses.reduce((s, e) => s + e.amount, 0);
+  const toggleRole = async (id: number, isAdmin: boolean) => {
+    try {
+      await api.post(`accounts/users/${id}/role/`, { role: isAdmin ? "Manager" : "Admin" });
+      await refresh();
+    } catch (e: any) {
+      setError(e?.response?.data?.detail || "Could not update role.");
+    }
+  };
 
-  const toggleRole = (id: string, current: string) => {
-    const isAdmin = current === "Admin";
-    update("users", id, { role: isAdmin ? "Manager" : "Admin", is_staff: !isAdmin });
+  const removeUser = async (id: number) => {
+    try {
+      await api.delete(`accounts/users/${id}/delete/`);
+      await refresh();
+    } catch (e: any) {
+      setError(e?.response?.data?.detail || "Could not delete account.");
+    }
   };
 
   return (
@@ -46,10 +88,14 @@ export default function AdminPage() {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 stagger">
         <StatCard icon={Users} label="Accounts" value={users.length} gradient="from-rose-500 to-red-600" />
-        <StatCard icon={Truck} label="Vehicles" value={vehicles.length} gradient="from-orange-500 to-amber-600" />
-        <StatCard icon={Route} label="Trips" value={trips.length} gradient="from-purple-500 to-fuchsia-600" />
-        <StatCard icon={Wallet} label="Total Spend" value={"€" + totalExpense.toLocaleString()} gradient="from-emerald-500 to-teal-600" />
+        <StatCard icon={Shield} label="Admins" value={users.filter((u) => u.is_staff).length} gradient="from-violet-500 to-purple-600" />
+        <StatCard icon={UserIcon} label="Company owners" value={users.filter((u) => u.company_name).length} gradient="from-blue-500 to-indigo-600" />
+        <StatCard icon={Activity} label="Status" value="Operational" gradient="from-emerald-500 to-teal-600" />
       </div>
+
+      {error && (
+        <div className="card p-4 border-rose-200 bg-rose-50 text-rose-700 text-sm">{error}</div>
+      )}
 
       <div className="card overflow-hidden">
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -60,7 +106,9 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {filtered.length === 0 ? (
+        {loading ? (
+          <div className="p-10 text-center text-slate-400 text-sm">Loading accounts…</div>
+        ) : filtered.length === 0 ? (
           <EmptyState icon={Users} title="No users found" />
         ) : (
           <div className="overflow-x-auto scroll-slim">
@@ -75,44 +123,47 @@ export default function AdminPage() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((u) => (
-                  <tr key={u.id} className="border-b border-slate-50 last:border-0 hover:bg-slate-50/70 transition">
-                    <td className="py-3.5 px-6">
-                      <div className="flex items-center gap-3">
-                        <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 text-white font-bold flex items-center justify-center">
-                          {u.company_name.charAt(0)}
-                        </span>
-                        <div>
-                          <div className="font-semibold text-slate-800">{u.company_name}</div>
-                          <div className="text-xs text-slate-400 flex items-center gap-1"><UserIcon className="w-3 h-3" />{u.manager_full_name}</div>
+                {filtered.map((u) => {
+                  const label = u.company_name || u.full_name || u.username;
+                  return (
+                    <tr key={u.id} className="border-b border-slate-50 last:border-0 hover:bg-slate-50/70 transition">
+                      <td className="py-3.5 px-6">
+                        <div className="flex items-center gap-3">
+                          <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 text-white font-bold flex items-center justify-center">
+                            {label.charAt(0).toUpperCase()}
+                          </span>
+                          <div>
+                            <div className="font-semibold text-slate-800">{label}</div>
+                            <div className="text-xs text-slate-400 flex items-center gap-1"><UserIcon className="w-3 h-3" />{u.full_name || u.username}</div>
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td className="py-3.5 px-4 hidden md:table-cell">
-                      <div className="text-slate-600 flex items-center gap-1"><Mail className="w-3.5 h-3.5 text-slate-400" />{u.email}</div>
-                      <div className="text-slate-400 text-xs flex items-center gap-1"><Phone className="w-3 h-3" />{u.phone || "—"}</div>
-                    </td>
-                    <td className="py-3.5 px-4">
-                      <Badge tone={u.role === "Admin" ? "rose" : "blue"} icon={u.role === "Admin" ? Shield : UserIcon}>{u.role}</Badge>
-                    </td>
-                    <td className="py-3.5 px-4 text-slate-500 hidden sm:table-cell whitespace-nowrap">{new Date(u.date_joined).toLocaleDateString()}</td>
-                    <td className="py-3.5 px-6">
-                      <div className="flex items-center justify-end gap-2">
-                        <button onClick={() => toggleRole(u.id, u.role)} className="btn btn-ghost text-xs py-1.5 px-3">
-                          {u.role === "Admin" ? "Make Manager" : "Make Admin"}
-                        </button>
-                        <button
-                          onClick={() => remove("users", u.id)}
-                          disabled={u.id === user?.id}
-                          className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition disabled:opacity-40 disabled:cursor-not-allowed"
-                          title={u.id === user?.id ? "You can't delete yourself" : "Delete"}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                      <td className="py-3.5 px-4 hidden md:table-cell">
+                        <div className="text-slate-600 flex items-center gap-1"><Mail className="w-3.5 h-3.5 text-slate-400" />{u.email || "—"}</div>
+                        <div className="text-slate-400 text-xs flex items-center gap-1"><Phone className="w-3 h-3" />{u.phone || "—"}</div>
+                      </td>
+                      <td className="py-3.5 px-4">
+                        <Badge tone={u.is_staff ? "rose" : "blue"} icon={u.is_staff ? Shield : UserIcon}>{u.is_staff ? "Admin" : "Manager"}</Badge>
+                      </td>
+                      <td className="py-3.5 px-4 text-slate-500 hidden sm:table-cell whitespace-nowrap">{u.date_joined ? new Date(u.date_joined).toLocaleDateString() : "—"}</td>
+                      <td className="py-3.5 px-6">
+                        <div className="flex items-center justify-end gap-2">
+                          <button onClick={() => toggleRole(u.id, u.is_staff)} disabled={String(u.id) === String(user?.id)} className="btn btn-ghost text-xs py-1.5 px-3 disabled:opacity-40">
+                            {u.is_staff ? "Make Manager" : "Make Admin"}
+                          </button>
+                          <button
+                            onClick={() => removeUser(u.id)}
+                            disabled={String(u.id) === String(user?.id)}
+                            className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition disabled:opacity-40 disabled:cursor-not-allowed"
+                            title={String(u.id) === String(user?.id) ? "You can't delete yourself" : "Delete"}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

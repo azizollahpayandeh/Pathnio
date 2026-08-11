@@ -52,11 +52,7 @@ export default function ReportsPage() {
       const i = idx(e.date);
       if (i >= 0) exp[i] += e.amount;
     });
-    // Seed earlier months so the demo chart is never flat
-    for (let i = 0; i < 5; i++) {
-      if (rev[i] === 0) rev[i] = 4200 + i * 900;
-      if (exp[i] === 0) exp[i] = 2600 + i * 500;
-    }
+    // Real data only — the chart reflects actual trips/expenses (flat when none).
     return { labels: buckets.map((b) => b.label), rev, exp };
   }, [trips, expenses]);
 

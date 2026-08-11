@@ -6,7 +6,7 @@ single ongoing condition produces one open alert per (vehicle, type).
 from django.conf import settings
 
 from .models import FleetAlert, Vehicle
-from .fleet_status import vehicle_live_status, OFFLINE
+from .fleet_status import vehicle_live_status, company_thresholds, OFFLINE
 
 LOW_FUEL_THRESHOLD = getattr(settings, "FLEET_LOW_FUEL_THRESHOLD", 15)
 
@@ -22,6 +22,7 @@ def refresh_fleet_alerts(company) -> int:
     """Scan the company's vehicles and open alerts for current real conditions.
     Returns the number of new alerts created."""
     created = 0
+    moving_speed, offline_timeout = company_thresholds(company)
     for v in Vehicle.objects.filter(company=company):
         if v.status == "Maintenance" and not _open_exists(company, v, FleetAlert.Type.MAINTENANCE_DUE):
             FleetAlert.objects.create(
@@ -42,7 +43,7 @@ def refresh_fleet_alerts(company) -> int:
 
         # Only alert offline for vehicles that HAVE reported before (real signal).
         if (v.status == "Active" and v.last_seen_at is not None
-                and vehicle_live_status(v) == OFFLINE
+                and vehicle_live_status(v, moving_speed, offline_timeout) == OFFLINE
                 and not _open_exists(company, v, FleetAlert.Type.VEHICLE_OFFLINE)):
             FleetAlert.objects.create(
                 company=company, vehicle=v, alert_type=FleetAlert.Type.VEHICLE_OFFLINE,

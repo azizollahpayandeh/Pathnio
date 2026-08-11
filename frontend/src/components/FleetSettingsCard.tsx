@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Gauge, Save } from "lucide-react";
 import { getCompanySettings, updateCompanySettings, type CompanySettings } from "@/lib/api-data";
+import { toast } from "./Toast";
 
 export default function FleetSettingsCard() {
   const [s, setS] = useState<CompanySettings | null>(null);
@@ -22,15 +23,21 @@ export default function FleetSettingsCard() {
   const num = (k: keyof CompanySettings) => (e: React.ChangeEvent<HTMLInputElement>) => set(k, Number(e.target.value));
 
   const save = async () => {
+    // Client-side guard rails; the server validates authoritatively.
+    if (s.offline_timeout_seconds < 10 || s.telemetry_interval_seconds < 5 || s.moving_speed_kmh < 0) {
+      toast.error("Please enter valid thresholds (offline ≥ 10s, telemetry ≥ 5s, speed ≥ 0).");
+      return;
+    }
     setSaving(true);
     setMsg(null);
     try {
       const next = await updateCompanySettings(s);
       setS(next);
       setMsg("Saved.");
+      toast.success("Fleet settings saved.");
       setTimeout(() => setMsg(null), 2000);
-    } catch {
-      setMsg("Could not save.");
+    } catch (err) {
+      toast.fromError(err, "Could not save settings.");
     } finally {
       setSaving(false);
     }

@@ -19,13 +19,12 @@ function mapDriver(d: any): Driver {
     license_no: "",
     vehicle_type: (d.vehicle_type || "") as Driver["vehicle_type"],
     plate_number: d.plate_number || "",
-    // Real status/rating/trip metrics aren't tracked yet -> honest defaults
-    // (no fabricated numbers). These become real in a later slice.
-    status: "Active",
-    rating: 0,
+    // Status is SYSTEM-DERIVED by the backend (activation + active trip +
+    // telemetry recency). The UI only displays it — never sets it.
+    status: (d.status || "Inactive") as Driver["status"],
     total_trips: 0,
     // Activated = the driver has claimed a login account via an invitation.
-    activated: !!d.user,
+    activated: d.activated ?? !!d.user,
     joined_at: d.created_at || new Date().toISOString(),
     createdAt: d.created_at || new Date().toISOString(),
   };

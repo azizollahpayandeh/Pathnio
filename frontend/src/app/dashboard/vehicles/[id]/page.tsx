@@ -3,7 +3,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useMemo } from "react";
 import Link from "next/link";
 import {
-  ArrowLeft, Truck, User, Palette, Weight, Fuel, Gauge, Route as RouteIcon,
+  ArrowLeft, Truck, User, Palette, Weight, Route as RouteIcon,
   Wrench, CheckCircle, XCircle, Calendar,
 } from "lucide-react";
 import { useExpenses, useTrips, useVehicles } from "@/lib/api-data";
@@ -33,11 +33,9 @@ export default function VehicleDetail() {
   const specs = [
     { icon: User, label: "Driver", value: vehicle.driver || "Unassigned" },
     { icon: Weight, label: "Capacity", value: vehicle.capacity || "—" },
-    { icon: Palette, label: "Color", value: vehicle.color },
-    { icon: Gauge, label: "Odometer", value: `${vehicle.odometer.toLocaleString()} km` },
-    { icon: Fuel, label: "Efficiency", value: vehicle.efficiency },
-    { icon: RouteIcon, label: "Total trips", value: vehicle.total_trips },
-    { icon: Wrench, label: "Last service", value: new Date(vehicle.last_maintenance).toLocaleDateString() },
+    { icon: Palette, label: "Color", value: vehicle.color || "—" },
+    { icon: Truck, label: "Type", value: vehicle.vehicle_type },
+    { icon: RouteIcon, label: "Trips", value: vTrips.length },
     { icon: Calendar, label: "Added", value: new Date(vehicle.createdAt).toLocaleDateString() },
   ];
 
@@ -56,15 +54,11 @@ export default function VehicleDetail() {
               <Badge tone={statusTone[vehicle.status]} icon={vehicle.status === "Active" ? CheckCircle : vehicle.status === "Maintenance" ? Wrench : XCircle}>{vehicle.status}</Badge>
               <Badge tone="orange">{vehicle.vehicle_type}</Badge>
             </div>
-            <p className="text-slate-500 mt-1">{vehicle.model} · {vehicle.company}</p>
-          </div>
-          <div className="text-center px-6 py-3 rounded-2xl bg-slate-50 border border-slate-100">
-            <div className={`text-2xl font-bold ${vehicle.fuel_level < 20 ? "text-rose-600" : "text-emerald-600"}`}>{vehicle.fuel_level}%</div>
-            <div className="text-xs text-slate-500">Fuel</div>
+            <p className="text-slate-500 mt-1">{vehicle.model}</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
           {specs.map((s) => (
             <div key={s.label} className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
               <s.icon className="w-5 h-5 text-slate-400 mb-2" />

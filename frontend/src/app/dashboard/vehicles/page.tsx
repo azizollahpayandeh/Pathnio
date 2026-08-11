@@ -3,12 +3,13 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import {
   Car, Search, Plus, Eye, User, Weight, Palette, Truck, Wrench,
-  CheckCircle, XCircle, Trash2, Fuel, Gauge, UserCheck,
+  CheckCircle, XCircle, Trash2, UserCheck,
 } from "lucide-react";
-import AddVehicleModal, { NewVehicle } from "@/components/AddVehicleModal";
+import AddVehicleModal, { VehicleInput } from "@/components/AddVehicleModal";
 import AssignVehicleModal from "@/components/AssignVehicleModal";
 import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
 import { useVehicles, useDrivers, createVehicle, deleteVehicle } from "@/lib/api-data";
+import { toast } from "@/components/Toast";
 
 const statusTone: Record<string, string> = { Active: "green", Inactive: "gray", Maintenance: "blue" };
 const statusIcon: Record<string, typeof CheckCircle> = { Active: CheckCircle, Inactive: XCircle, Maintenance: Wrench };
@@ -44,14 +45,21 @@ export default function VehiclesPage() {
     maintenance: vehicles.filter((v) => v.status === "Maintenance").length,
   };
 
-  const addVehicle = async (v: NewVehicle) => {
+  // Throws on failure so the modal can surface a friendly error and stay open.
+  const addVehicle = async (v: VehicleInput) => {
     await createVehicle(v as unknown as Record<string, unknown>);
     await refetch();
   };
 
-  const handleDelete = async (id: string) => {
-    await deleteVehicle(id);
-    await refetch();
+  const handleDelete = async (id: string, plate: string) => {
+    if (typeof window !== "undefined" && !window.confirm(`Delete vehicle ${plate}? This cannot be undone.`)) return;
+    try {
+      await deleteVehicle(id);
+      await refetch();
+      toast.success(`Vehicle ${plate} deleted.`);
+    } catch (err) {
+      toast.fromError(err, "Could not delete the vehicle.");
+    }
   };
 
   return (
@@ -119,20 +127,8 @@ export default function VehiclesPage() {
                     <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 mt-3 text-sm text-slate-600">
                       <span className="flex items-center gap-1.5 truncate"><User className="w-4 h-4 text-slate-400" />{v.driver || "Unassigned"}</span>
                       <span className="flex items-center gap-1.5"><Weight className="w-4 h-4 text-slate-400" />{v.capacity || "—"}</span>
-                      <span className="flex items-center gap-1.5"><Palette className="w-4 h-4 text-slate-400" />{v.color}</span>
-                      <span className="flex items-center gap-1.5"><Gauge className="w-4 h-4 text-slate-400" />{v.odometer.toLocaleString()} km</span>
-                    </div>
-                    <div className="mt-3">
-                      <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
-                        <span className="flex items-center gap-1"><Fuel className="w-3.5 h-3.5" /> Fuel</span>
-                        <span className="font-semibold">{v.fuel_level}%</span>
-                      </div>
-                      <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
-                        <div
-                          className={`h-full rounded-full ${v.fuel_level < 20 ? "bg-rose-500" : v.fuel_level < 50 ? "bg-amber-500" : "bg-emerald-500"}`}
-                          style={{ width: `${v.fuel_level}%` }}
-                        />
-                      </div>
+                      <span className="flex items-center gap-1.5"><Palette className="w-4 h-4 text-slate-400" />{v.color || "—"}</span>
+                      <span className="flex items-center gap-1.5 truncate"><Truck className="w-4 h-4 text-slate-400" />{v.vehicle_type}</span>
                     </div>
                   </div>
                 </div>
@@ -149,7 +145,7 @@ export default function VehiclesPage() {
                     <UserCheck className="w-4 h-4" />
                   </button>
                   <button
-                    onClick={() => handleDelete(v.id)}
+                    onClick={() => handleDelete(v.id, v.plate_number)}
                     className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
                     aria-label="Delete"
                   >

@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useAuth, logout } from "@/lib/auth";
 import { useFleetAlerts } from "@/lib/api-data";
+import { ToastHost } from "@/components/Toast";
 import type { LucideIcon } from "lucide-react";
 
 interface NavItem {
@@ -98,6 +99,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     if (ready && !user) router.push("/login");
   }, [ready, user, router]);
 
+  // One-time purge of any legacy localStorage demo data (older builds seeded
+  // demo drivers/vehicles into localStorage). No page reads it anymore, but we
+  // actively remove it so nothing stale can ever surface.
+  useEffect(() => {
+    try {
+      ["pathnio_db_v4", "pathnio_db_v3", "pathnio_db_v2", "pathnio_db_v1", "pathnio_db"].forEach(
+        (k) => localStorage.removeItem(k)
+      );
+    } catch {
+      /* ignore storage errors */
+    }
+  }, []);
+
   useEffect(() => {
     setSidebarOpen(false);
   }, [pathname]);
@@ -128,6 +142,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="flex h-screen bg-[var(--background)] text-slate-800">
+      <ToastHost />
       {/* Desktop sidebar */}
       <aside className="hidden lg:flex fixed inset-y-0 left-0 z-40 w-64 flex-col bg-gradient-to-b from-slate-50 to-violet-50/70 border-r border-slate-200 shadow-sm">
         <SidebarContent isPlatformAdmin={isPlatformAdmin} />

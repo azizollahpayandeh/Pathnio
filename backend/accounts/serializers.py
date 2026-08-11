@@ -225,12 +225,44 @@ class DriverSerializer(serializers.ModelSerializer):
     # user is display-only (may be null for a profile-only driver). The login
     # account is linked at activation (Phase 3), never chosen by the client.
     user = UserSerializer(read_only=True)
+    # System-derived status — the client DISPLAYS it, never sets it. Computed
+    # from activation + active trip + assigned-vehicle telemetry recency.
+    status = serializers.SerializerMethodField()
+    activated = serializers.SerializerMethodField()
+
     class Meta:
         model = Driver
-        fields = ('id', 'user', 'full_name', 'mobile', 'email', 'plate_number', 'vehicle_type', 'profile_photo', 'company')
+        fields = ('id', 'user', 'full_name', 'mobile', 'email', 'plate_number', 'vehicle_type', 'profile_photo', 'company', 'status', 'activated')
         # company is assigned server-side from the authenticated owner — a
         # driver/client must never be able to pick which company they join.
+        # (status/activated are SerializerMethodFields — already read-only.)
         read_only_fields = ('id', 'company', 'user')
+
+    def get_activated(self, obj) -> bool:
+        return bool(obj.user_id)
+
+    def get_status(self, obj) -> str:
+        from .fleet_status import (
+            driver_status, company_thresholds,
+            AVAILABLE, ON_TRIP, DRIVER_OFFLINE, DRIVER_INACTIVE,
+        )
+        from .models import Trip, DriverVehicleAssignment
+        has_active_trip = Trip.objects.filter(driver_ref=obj, status="ACTIVE").exists()
+        assignment = (
+            DriverVehicleAssignment.objects
+            .filter(driver=obj, is_active=True)
+            .select_related("vehicle").first()
+        )
+        vehicle = assignment.vehicle if assignment else None
+        _, offline_timeout = company_thresholds(obj.company)
+        raw = driver_status(obj, has_active_trip, vehicle, offline_timeout)
+        # Map engine states -> stable UI labels (display only).
+        return {
+            AVAILABLE: "Active",
+            ON_TRIP: "On Trip",
+            DRIVER_OFFLINE: "Offline",
+            DRIVER_INACTIVE: "Inactive",
+        }.get(raw, "Inactive")
 
 class ContactMessageSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
@@ -292,6 +324,24 @@ class VehicleSerializer(serializers.ModelSerializer):
     def get_assigned_driver(self, obj):
         a = obj.assignments.filter(is_active=True).select_related('driver').first()
         return {'id': a.driver_id, 'full_name': a.driver.full_name} if a else None
+
+    def validate_plate_number(self, value):
+        """Plate numbers are unique WITHIN a company (different companies may
+        legitimately reuse a plate). Gives the owner a clear, human error."""
+        request = self.context.get('request')
+        if not request:
+            return value
+        from .tenancy import company_for
+        company = company_for(request.user)
+        if company is None:
+            return value
+        qs = Vehicle.objects.filter(company=company, plate_number__iexact=value)
+        if self.instance is not None:
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise serializers.ValidationError(
+                f"A vehicle with plate {value} already exists in your fleet.")
+        return value
 
 
 class CargoSerializer(serializers.ModelSerializer):
@@ -379,3 +429,23 @@ class CompanySettingsSerializer(serializers.ModelSerializer):
                   'offline_timeout_seconds', 'moving_speed_kmh',
                   'telemetry_interval_seconds', 'updated_at')
         read_only_fields = ('id', 'updated_at')
+
+    def validate_offline_timeout_seconds(self, v):
+        if v < 10 or v > 86400:
+            raise serializers.ValidationError("Offline timeout must be between 10 and 86400 seconds.")
+        return v
+
+    def validate_moving_speed_kmh(self, v):
+        if v < 0 or v > 300:
+            raise serializers.ValidationError("Moving-speed threshold must be between 0 and 300 km/h.")
+        return v
+
+    def validate_telemetry_interval_seconds(self, v):
+        if v < 5 or v > 3600:
+            raise serializers.ValidationError("Telemetry interval must be between 5 and 3600 seconds.")
+        return v
+
+    def validate_distance_unit(self, v):
+        if v not in ("km", "mi"):
+            raise serializers.ValidationError("Distance unit must be 'km' or 'mi'.")
+        return v

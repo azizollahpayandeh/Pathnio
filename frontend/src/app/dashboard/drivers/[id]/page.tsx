@@ -3,13 +3,13 @@ import { useParams, useRouter } from "next/navigation";
 import { useMemo } from "react";
 import Link from "next/link";
 import {
-  ArrowLeft, Users, Phone, Mail, Star, Route as RouteIcon, IdCard,
-  Truck, Calendar, CheckCircle, Navigation, XCircle,
+  ArrowLeft, Users, Phone, Mail, Route as RouteIcon, IdCard,
+  Truck, Calendar, CheckCircle, Navigation, XCircle, KeyRound, WifiOff,
 } from "lucide-react";
 import { useDrivers, useTrips } from "@/lib/api-data";
 import { Badge, EmptyState } from "@/components/ui";
 
-const statusTone: Record<string, string> = { Active: "green", "On Trip": "blue", Inactive: "gray" };
+const statusTone: Record<string, string> = { Active: "green", "On Trip": "blue", Offline: "amber", Inactive: "gray" };
 const currency = (n: number) => "€" + n.toLocaleString();
 
 export default function DriverDetail() {
@@ -34,7 +34,7 @@ export default function DriverDetail() {
     { icon: RouteIcon, label: "Total trips", value: driver.total_trips },
     { icon: Calendar, label: "Joined", value: new Date(driver.joined_at).toLocaleDateString() },
   ];
-  const SIcon = driver.status === "Active" ? CheckCircle : driver.status === "On Trip" ? Navigation : XCircle;
+  const SIcon = driver.status === "Active" ? CheckCircle : driver.status === "On Trip" ? Navigation : driver.status === "Offline" ? WifiOff : XCircle;
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -48,9 +48,13 @@ export default function DriverDetail() {
           <div className="flex-1">
             <div className="flex items-center gap-2 flex-wrap">
               <h1 className="text-3xl font-bold text-slate-900">{driver.full_name}</h1>
-              <Badge tone={statusTone[driver.status]} icon={SIcon}>{driver.status}</Badge>
+              <Badge tone={statusTone[driver.status] || "gray"} icon={SIcon}>{driver.status}</Badge>
+              {driver.activated ? (
+                <Badge tone="green" icon={CheckCircle}>Activated</Badge>
+              ) : (
+                <Badge tone="amber" icon={KeyRound}>Not activated</Badge>
+              )}
             </div>
-            <p className="text-amber-500 mt-1 flex items-center gap-1"><Star className="w-4 h-4 fill-amber-400" /> {driver.rating.toFixed(1)} rating</p>
           </div>
         </div>
 

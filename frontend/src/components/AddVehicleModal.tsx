@@ -3,14 +3,25 @@ import React, { useState } from "react";
 import { Truck } from "lucide-react";
 import { Modal, Field } from "./ui";
 import { useDrivers } from "@/lib/api-data";
+import { toast } from "./Toast";
 import type { Vehicle } from "@/lib/types";
 
-export type NewVehicle = Omit<Vehicle, "id" | "createdAt">;
+// A clean create/edit payload — only the fields a company owner actually sets.
+// System-derived data (position, fuel, odometer, live status) is never invented here.
+export type VehicleInput = {
+  plate_number: string;
+  model: string;
+  vehicle_type: string;
+  driver: string;
+  capacity: string;
+  color: string;
+  status: string;
+};
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  onAddVehicle: (v: NewVehicle) => void;
+  onAddVehicle: (v: VehicleInput) => Promise<void>;
   initial?: Vehicle;
 }
 
@@ -19,36 +30,31 @@ const COLORS = ["White", "Black", "Blue", "Red", "Green", "Gray", "Yellow", "Sil
 export default function AddVehicleModal({ isOpen, onClose, onAddVehicle, initial }: Props) {
   const { data: drivers } = useDrivers();
   const [saving, setSaving] = useState(false);
-  const [form, setForm] = useState<NewVehicle>(
-    initial ?? {
-      plate_number: "",
-      vehicle_type: "Truck",
-      model: "",
-      driver: "",
-      company: "Pathnio Logistics",
-      status: "Active",
-      capacity: "",
-      color: "White",
-      fuel_level: 100,
-      odometer: 0,
-      efficiency: "8.0 L/100km",
-      last_maintenance: new Date().toISOString(),
-      total_trips: 0,
-      lat: 52.52,
-      lng: 13.405,
-      speed: 0,
-    }
-  );
+  const [form, setForm] = useState<VehicleInput>({
+    plate_number: initial?.plate_number ?? "",
+    model: initial?.model ?? "",
+    vehicle_type: initial?.vehicle_type ?? "Truck",
+    driver: initial?.driver ?? "",
+    capacity: initial?.capacity ?? "",
+    color: initial?.color ?? "White",
+    status: initial?.status ?? "Active",
+  });
 
-  const set = (k: keyof NewVehicle, v: string | number) => setForm((p) => ({ ...p, [k]: v }));
+  const set = (k: keyof VehicleInput, v: string) => setForm((p) => ({ ...p, [k]: v }));
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    await new Promise((r) => setTimeout(r, 500));
-    onAddVehicle({ ...form, lat: 52.52 + (Math.random() - 0.5) * 0.1, lng: 13.405 + (Math.random() - 0.5) * 0.1 });
-    setSaving(false);
-    onClose();
+    try {
+      await onAddVehicle(form);
+      toast.success(initial ? "Vehicle updated." : `Vehicle ${form.plate_number} added.`);
+      onClose();
+    } catch (err) {
+      // Never fail silently and never expose a stack trace — a friendly message.
+      toast.fromError(err, "Could not save the vehicle. Please try again.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -56,10 +62,10 @@ export default function AddVehicleModal({ isOpen, onClose, onAddVehicle, initial
       <form onSubmit={submit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label="Plate Number" required>
-            <input className="field" required value={form.plate_number} onChange={(e) => set("plate_number", e.target.value)} placeholder="12-A-345" />
+            <input className="field" required value={form.plate_number} onChange={(e) => set("plate_number", e.target.value)} placeholder="e.g. 21-B-984" />
           </Field>
           <Field label="Model" required>
-            <input className="field" required value={form.model} onChange={(e) => set("model", e.target.value)} placeholder="Volvo FH16" />
+            <input className="field" required value={form.model} onChange={(e) => set("model", e.target.value)} placeholder="e.g. Volvo FH" />
           </Field>
           <Field label="Type">
             <select className="field" value={form.vehicle_type} onChange={(e) => set("vehicle_type", e.target.value)}>
@@ -73,7 +79,7 @@ export default function AddVehicleModal({ isOpen, onClose, onAddVehicle, initial
             </select>
           </Field>
           <Field label="Capacity">
-            <input className="field" value={form.capacity} onChange={(e) => set("capacity", e.target.value)} placeholder="10 t" />
+            <input className="field" value={form.capacity} onChange={(e) => set("capacity", e.target.value)} placeholder="e.g. 10 t" />
           </Field>
           <Field label="Color">
             <select className="field" value={form.color} onChange={(e) => set("color", e.target.value)}>
@@ -84,15 +90,6 @@ export default function AddVehicleModal({ isOpen, onClose, onAddVehicle, initial
             <select className="field" value={form.status} onChange={(e) => set("status", e.target.value)}>
               {["Active", "Inactive", "Maintenance"].map((s) => <option key={s}>{s}</option>)}
             </select>
-          </Field>
-          <Field label="Fuel Level (%)">
-            <input className="field" type="number" min={0} max={100} value={form.fuel_level} onChange={(e) => set("fuel_level", Number(e.target.value))} />
-          </Field>
-          <Field label="Efficiency">
-            <input className="field" value={form.efficiency} onChange={(e) => set("efficiency", e.target.value)} placeholder="8.2 L/100km" />
-          </Field>
-          <Field label="Odometer (km)">
-            <input className="field" type="number" min={0} value={form.odometer} onChange={(e) => set("odometer", Number(e.target.value))} />
           </Field>
         </div>
         <div className="flex justify-end gap-3 pt-2">
