@@ -11,7 +11,11 @@ from django.utils import timezone
 
 # Global defaults (used when a company has no CompanySettings row yet).
 MOVING_SPEED_KMH = getattr(settings, "FLEET_MOVING_SPEED_KMH", 5)
-OFFLINE_TIMEOUT_SECONDS = getattr(settings, "FLEET_OFFLINE_TIMEOUT_SECONDS", 120)
+# Must exceed the telemetry reporting interval (~45s on the Eco profile) with
+# enough headroom for Android batching / Doze, which routinely delays fixes by
+# several minutes. 120s was too tight and reported actively-tracking drivers as
+# OFFLINE between batched uploads.
+OFFLINE_TIMEOUT_SECONDS = getattr(settings, "FLEET_OFFLINE_TIMEOUT_SECONDS", 300)
 
 # Vehicle operational states
 MOVING, STOPPED, OFFLINE, MAINTENANCE, INACTIVE = (

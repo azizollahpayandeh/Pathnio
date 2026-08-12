@@ -524,7 +524,11 @@ class CompanySettings(models.Model):
     distance_unit = models.CharField(max_length=4, choices=UNIT_CHOICES, default="km")
     currency = models.CharField(max_length=8, default="EUR")
     # Tracking / status thresholds (per company).
-    offline_timeout_seconds = models.PositiveIntegerField(default=120)
+    # Must comfortably exceed telemetry_interval_seconds: the Eco profile
+    # reports about every 45s, but Android batching/Doze routinely stretches
+    # that to several minutes, so a tight window reported tracking drivers as
+    # OFFLINE. 300s ≈ 6-7 reporting intervals of headroom.
+    offline_timeout_seconds = models.PositiveIntegerField(default=300)
     moving_speed_kmh = models.PositiveIntegerField(default=5)
     telemetry_interval_seconds = models.PositiveIntegerField(default=45)
     updated_at = models.DateTimeField(auto_now=True)
