@@ -12,8 +12,10 @@ import {
 import { useAuth } from "../auth";
 import { isOnDuty, setOnDuty } from "../storage";
 import {
+  areServicesEnabled,
   getCurrentPosition,
   isTracking,
+  reconcileTracking,
   requestPermissions,
   startTracking,
   stopTracking,
@@ -51,9 +53,12 @@ export default function HomeScreen() {
     };
   }, [onDuty]);
 
-  // Sync UI with the actual tracking state on mount.
+  // Sync UI with the actual tracking state on mount. First reconcile: if a
+  // stale/invalid task survived (e.g. upgrade from the broken build, or
+  // permission revoked), stop it safely so nothing loops.
   useEffect(() => {
     (async () => {
+      await reconcileTracking();
       const running = await isTracking();
       const duty = await isOnDuty();
       setDuty(running && duty);
@@ -90,11 +95,20 @@ export default function HomeScreen() {
   }, [onDuty, refresh]);
 
   const goOnDuty = async () => {
+    // 1) Location services (GPS) must be on.
+    if (!(await areServicesEnabled())) {
+      Alert.alert(
+        "Turn on location",
+        "Location (GPS) is off. Turn it on in your device settings, then start tracking."
+      );
+      return;
+    }
+    // 2/3) Foreground then background permission (with explanation).
     const perm = await requestPermissions();
     if (!perm.granted) {
       Alert.alert(
         "Background location needed",
-        "Pathnio needs “Allow all the time” location access to track your trips while the app is closed. Please enable it in Settings.",
+        "Pathnio needs “Allow all the time” location to track your trip while the app is closed. Please grant it in Settings.",
         [
           { text: "Not now", style: "cancel" },
           { text: "Open Settings", onPress: () => Linking.openSettings() },
@@ -102,9 +116,20 @@ export default function HomeScreen() {
       );
       return;
     }
-    await startTracking("eco");
-    await setOnDuty(true);
-    setDuty(true);
+    // 4) Only now start — and if the native layer rejects it, show an error
+    //    and stay open (never crash).
+    try {
+      await startTracking("eco");
+      await setOnDuty(true);
+      setDuty(true);
+    } catch (e: any) {
+      await setOnDuty(false);
+      setDuty(false);
+      Alert.alert(
+        "Couldn't start tracking",
+        e?.message || "Android could not start the tracking service. Please try again."
+      );
+    }
   };
 
   const goOffDuty = async () => {
@@ -121,6 +146,10 @@ export default function HomeScreen() {
     try {
       if (next) await goOnDuty();
       else await goOffDuty();
+    } catch (e: any) {
+      // Belt-and-suspenders: nothing in the duty flow should ever bubble up
+      // unhandled and crash the screen.
+      Alert.alert("Something went wrong", e?.message || "Please try again.");
     } finally {
       setBusy(false);
     }

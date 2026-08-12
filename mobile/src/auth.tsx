@@ -18,7 +18,7 @@ import {
   DriverContext,
 } from "./api";
 import { clearTokens, getAccessToken, getUser, StoredUser } from "./storage";
-import { stopTracking } from "./location/tracker";
+import { reconcileTracking, stopTracking } from "./location/tracker";
 import { setOnDuty } from "./storage";
 
 type AuthState = {
@@ -43,6 +43,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     (async () => {
       try {
+        // Crash-loop recovery: never let a stale/invalid background task from a
+        // previous (broken) install keep running before we know it's valid.
+        // Never throws — startup must not be able to crash.
+        await reconcileTracking();
+
         const token = await getAccessToken();
         if (!token) return;
         const stored = await getUser();
