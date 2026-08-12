@@ -129,3 +129,70 @@ class TelemetryLiveMapSyncTests(APITestCase):
         self.vehicle.lat, self.vehicle.lng = 0, 0
         self.vehicle.last_seen_at = timezone.now()
         self.assertFalse(has_valid_position(self.vehicle))
+
+
+class VehicleCreateAssignmentTests(APITestCase):
+    """Setting a driver while creating/editing a vehicle must create a REAL
+    DriverVehicleAssignment. Previously the dashboard only wrote the legacy
+    `driver` name string, so the driver stayed unassigned: /driver/me returned
+    no vehicle, telemetry never bound, and Live Map stayed empty.
+    """
+    def setUp(self):
+        self.owner = User.objects.create_user("own2", password="pw123456")
+        self.company = Company.objects.create(
+            user=self.owner, company_name="Co2", manager_full_name="O", phone="1")
+        Membership.objects.create(user=self.owner, company=self.company,
+                                  role=Membership.Role.COMPANY_OWNER)
+        self.driver = Driver.objects.create(
+            full_name="Real Driver", mobile="1", company=self.company)
+        # a driver belonging to ANOTHER company
+        self.other_owner = User.objects.create_user("own3", password="pw123456")
+        self.other_company = Company.objects.create(
+            user=self.other_owner, company_name="Co3", manager_full_name="X", phone="2")
+        self.foreign_driver = Driver.objects.create(
+            full_name="Foreign", mobile="2", company=self.other_company)
+        self.client.force_authenticate(self.owner)
+
+    def test_create_vehicle_with_driver_creates_assignment(self):
+        r = self.client.post("/api/accounts/vehicles/", {
+            "plate_number": "NEW-1", "vehicle_type": "Van",
+            "driver_id": self.driver.id,
+        }, format="json")
+        self.assertIn(r.status_code, (200, 201))
+        v = Vehicle.objects.get(plate_number="NEW-1")
+        a = DriverVehicleAssignment.objects.filter(vehicle=v, is_active=True).first()
+        self.assertIsNotNone(a, "a real assignment must exist")
+        self.assertEqual(a.driver_id, self.driver.id)
+        self.assertEqual(r.json()["assigned_driver"]["full_name"], "Real Driver")
+
+    def test_edit_vehicle_can_assign_and_unassign(self):
+        v = Vehicle.objects.create(company=self.company, plate_number="E-1",
+                                   vehicle_type="Van")
+        self.client.patch(f"/api/accounts/vehicles/{v.id}/",
+                          {"driver_id": self.driver.id}, format="json")
+        self.assertTrue(DriverVehicleAssignment.objects
+                        .filter(vehicle=v, is_active=True).exists())
+        self.client.patch(f"/api/accounts/vehicles/{v.id}/",
+                          {"driver_id": None}, format="json")
+        self.assertFalse(DriverVehicleAssignment.objects
+                         .filter(vehicle=v, is_active=True).exists())
+
+    def test_cannot_assign_another_companys_driver(self):
+        r = self.client.post("/api/accounts/vehicles/", {
+            "plate_number": "X-1", "vehicle_type": "Van",
+            "driver_id": self.foreign_driver.id,
+        }, format="json")
+        self.assertEqual(r.status_code, 400)
+        self.assertFalse(DriverVehicleAssignment.objects
+                         .filter(driver=self.foreign_driver).exists())
+
+    def test_broken_linkage_reports_clear_error(self):
+        """A user with a DRIVER membership but no Driver record gets an
+        explicit message, not a pointless activation prompt."""
+        u = User.objects.create_user("orphan", password="pw123456")
+        Membership.objects.create(user=u, company=self.company,
+                                  role=Membership.Role.DRIVER)
+        self.client.force_authenticate(u)
+        body = self.client.get("/api/accounts/driver/me/").json()
+        self.assertFalse(body["activated"])
+        self.assertIn("removed", (body.get("linkage_error") or "").lower())

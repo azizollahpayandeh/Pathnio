@@ -1229,10 +1229,39 @@ class VehicleViewSet(CompanyScopedViewSet):
     queryset = Vehicle.objects.all().prefetch_related('assignments__driver')
     serializer_class = VehicleSerializer
 
+    def _apply_driver(self, vehicle, driver_id):
+        """Create/end a REAL assignment when the owner sets a driver while
+        creating or editing a vehicle. Same-company is enforced server-side.
+        """
+        from .assignments import assign, unassign, AssignmentError
+        company = company_for(self.request.user)
+        if driver_id in (None, "", 0):
+            unassign(vehicle)
+            return
+        driver = Driver.objects.filter(id=driver_id, company=company).first()
+        if driver is None:
+            # Never silently leave the driver unassigned — that is exactly how
+            # a vehicle ended up showing a driver name with no assignment.
+            raise serializers.ValidationError(
+                {'driver_id': 'That driver does not exist in your company.'})
+        try:
+            assign(vehicle=vehicle, driver=driver, by_user=self.request.user)
+        except AssignmentError as e:
+            raise serializers.ValidationError({'driver_id': str(e)})
+
     def perform_create(self, serializer):
         company = company_for(self.request.user)
         check_can_add(company, 'vehicle')  # enforce plan limit
-        serializer.save(company=company)
+        driver_id = serializer.validated_data.pop('driver_id', None)
+        vehicle = serializer.save(company=company)
+        if driver_id is not None:
+            self._apply_driver(vehicle, driver_id)
+
+    def perform_update(self, serializer):
+        driver_id = serializer.validated_data.pop('driver_id', "__absent__")
+        vehicle = serializer.save()
+        if driver_id != "__absent__":
+            self._apply_driver(vehicle, driver_id)
 
     @action(detail=False, methods=['get'])
     def live(self, request):
@@ -1521,7 +1550,20 @@ def _driver_context(user):
     """
     driver = getattr(user, 'driver_profile', None)
     if not driver:
-        return {'activated': False, 'driver': None, 'company': None, 'vehicle': None}
+        # Broken linkage: the account still carries a DRIVER membership but its
+        # Driver record is gone (e.g. deleted from the dashboard). Say so
+        # explicitly instead of asking for an activation code that can't work.
+        m = Membership.objects.filter(user=user, role=Membership.Role.DRIVER).first()
+        return {
+            'activated': False,
+            'driver': None,
+            'company': None,
+            'vehicle': None,
+            'linkage_error': (
+                'Your driver profile was removed from this company. '
+                'Ask your manager to add you again and send a new activation code.'
+            ) if m else None,
+        }
     active = (DriverVehicleAssignment.objects
               .filter(driver=driver, is_active=True)
               .select_related('vehicle').first())

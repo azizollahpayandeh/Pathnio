@@ -12,7 +12,9 @@ export type VehicleInput = {
   plate_number: string;
   model: string;
   vehicle_type: string;
-  driver: string;
+  /** Real Driver PK — the backend creates an actual assignment from this.
+   *  ("" = unassigned.) The old name-string alone never assigned anyone. */
+  driver_id: string;
   capacity: string;
   color: string;
   status: string;
@@ -34,7 +36,7 @@ export default function AddVehicleModal({ isOpen, onClose, onAddVehicle, initial
     plate_number: initial?.plate_number ?? "",
     model: initial?.model ?? "",
     vehicle_type: initial?.vehicle_type ?? "Truck",
-    driver: initial?.driver ?? "",
+    driver_id: initial?.assignedDriverId ?? "",
     capacity: initial?.capacity ?? "",
     color: initial?.color ?? "White",
     status: initial?.status ?? "Active",
@@ -73,9 +75,9 @@ export default function AddVehicleModal({ isOpen, onClose, onAddVehicle, initial
             </select>
           </Field>
           <Field label="Driver">
-            <select className="field" value={form.driver} onChange={(e) => set("driver", e.target.value)}>
+            <select className="field" value={form.driver_id} onChange={(e) => set("driver_id", e.target.value)}>
               <option value="">Unassigned</option>
-              {drivers.map((d) => <option key={d.id} value={d.full_name}>{d.full_name}</option>)}
+              {drivers.map((d) => <option key={d.id} value={d.id}>{d.full_name}</option>)}
             </select>
           </Field>
           <Field label="Capacity">

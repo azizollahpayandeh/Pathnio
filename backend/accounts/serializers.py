@@ -316,6 +316,10 @@ class VehicleSerializer(serializers.ModelSerializer):
     # Real driver relationship, derived from the active assignment (source of
     # truth). The legacy `driver` string stays for display but is kept in sync.
     assigned_driver = serializers.SerializerMethodField()
+    # Write-only: assigning a driver while creating/editing a vehicle creates a
+    # REAL DriverVehicleAssignment (the legacy `driver` name string alone never
+    # counts as an assignment — that silently left drivers unassigned).
+    driver_id = serializers.IntegerField(write_only=True, required=False, allow_null=True)
 
     class Meta:
         model = Vehicle
