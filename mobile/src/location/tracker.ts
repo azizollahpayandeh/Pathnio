@@ -119,6 +119,25 @@ export async function stopTracking(): Promise<void> {
 }
 
 /**
+ * Auto-start: begin tracking as soon as it is genuinely safe to do so, without
+ * asking the driver to flip anything. Silent no-op when permission/GPS are not
+ * ready — the UI shows why. Never throws.
+ *
+ * Returns true when tracking is running afterwards.
+ */
+export async function ensureTracking(profile: ProfileName = "eco"): Promise<boolean> {
+  try {
+    if (await isTracking()) return true;
+    if (!(await hasBackgroundPermission())) return false;
+    if (!(await areServicesEnabled())) return false;
+    await startTracking(profile);
+    return await isTracking();
+  } catch {
+    return false; // surfaced through computeStatus(), never as a crash
+  }
+}
+
+/**
  * Startup safety net. If a background task is somehow still registered but the
  * required permissions are no longer valid (revoked after install, upgraded
  * from a broken build, etc.), stop it cleanly so nothing loops. Never throws.

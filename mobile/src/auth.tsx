@@ -29,6 +29,8 @@ type AuthState = {
   signIn: (username: string, password: string) => Promise<void>;
   register: (username: string, email: string, password: string) => Promise<void>;
   activate: (code: string) => Promise<void>;
+  /** Re-pull driver/vehicle/trip from the backend (pull-to-refresh). */
+  refreshContext: () => Promise<void>;
   signOut: () => Promise<void>;
 };
 
@@ -84,6 +86,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       activate: async (code) => {
         const next = await apiActivate(code);
         setCtx(next);
+      },
+      refreshContext: async () => {
+        setCtx(await fetchDriverContext());
       },
       signOut: async () => {
         await stopTracking();

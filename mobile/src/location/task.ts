@@ -14,6 +14,7 @@ import type { LocationObject } from "expo-location";
 import { LOCATION_TASK } from "../config";
 import { Ping } from "../api";
 import { enqueue, flush } from "./queue";
+import { getLastFix, setLastFix } from "../storage";
 
 type LocationTaskData = { locations: LocationObject[] };
 
@@ -26,6 +27,40 @@ function uuidv4(): string {
   });
 }
 
+/** Great-circle distance in metres. */
+function haversine(aLat: number, aLng: number, bLat: number, bLng: number): number {
+  const R = 6371000;
+  const toRad = (d: number) => (d * Math.PI) / 180;
+  const dLat = toRad(bLat - aLat);
+  const dLng = toRad(bLng - aLng);
+  const s =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(aLat)) * Math.cos(toRad(bLat)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(s));
+}
+
+/**
+ * Real speed in m/s.
+ *
+ * Android reports `-1` (and iOS `null`) when speed is unknown — treating that
+ * as 0 wrongly marks a moving vehicle as stopped. When the OS gives us nothing
+ * usable we derive speed from the distance/time between consecutive fixes.
+ */
+function resolveSpeed(
+  loc: LocationObject,
+  prev: { lat: number; lng: number; t: number } | null
+): number {
+  const raw = loc.coords.speed;
+  if (typeof raw === "number" && raw >= 0 && Number.isFinite(raw)) return raw;
+  if (!prev) return 0;
+  const dt = (loc.timestamp - prev.t) / 1000;
+  if (dt <= 0 || dt > 300) return 0; // stale reference — don't invent a speed
+  const metres = haversine(prev.lat, prev.lng, loc.coords.latitude, loc.coords.longitude);
+  const derived = metres / dt;
+  // Guard against GPS jitter producing absurd values (>250 km/h).
+  return derived > 70 ? 0 : derived;
+}
+
 TaskManager.defineTask(LOCATION_TASK, async ({ data, error }) => {
   if (error) {
     console.warn("[pathnio] location task error:", error.message);
@@ -34,19 +69,29 @@ TaskManager.defineTask(LOCATION_TASK, async ({ data, error }) => {
   const { locations } = (data ?? {}) as LocationTaskData;
   if (!locations || locations.length === 0) return;
 
-  const pings: Ping[] = locations.map((loc) => ({
-    event_id: uuidv4(),
-    lat: loc.coords.latitude,
-    lng: loc.coords.longitude,
-    speed: Math.max(0, loc.coords.speed ?? 0), // m/s; -1 means "unknown"
-    heading: loc.coords.heading ?? null,
-    accuracy: loc.coords.accuracy ?? null,
-    altitude: loc.coords.altitude ?? null,
-    battery: null, // reserved for a later feature
-    is_moving: (loc.coords.speed ?? 0) > 0.5,
-    recorded_at: new Date(loc.timestamp).toISOString(),
-  }));
+  let prev = await getLastFix();
+  const pings: Ping[] = [];
 
+  // Process oldest -> newest so each fix can use the one before it.
+  const ordered = [...locations].sort((a, b) => a.timestamp - b.timestamp);
+  for (const loc of ordered) {
+    const speed = resolveSpeed(loc, prev);
+    pings.push({
+      event_id: uuidv4(),
+      lat: loc.coords.latitude,
+      lng: loc.coords.longitude,
+      speed, // m/s — backend converts to km/h
+      heading: loc.coords.heading ?? null,
+      accuracy: loc.coords.accuracy ?? null,
+      altitude: loc.coords.altitude ?? null,
+      battery: null,
+      is_moving: speed > 0.5,
+      recorded_at: new Date(loc.timestamp).toISOString(),
+    });
+    prev = { lat: loc.coords.latitude, lng: loc.coords.longitude, t: loc.timestamp };
+  }
+
+  if (prev) await setLastFix(prev);
   await enqueue(pings);
   await flush(); // best-effort; anything unsent stays queued for next time
 });

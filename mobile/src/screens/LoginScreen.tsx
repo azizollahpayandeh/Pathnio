@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import * as Network from "expo-network";
 import { useAuth } from "../auth";
 
 export default function LoginScreen() {
@@ -19,6 +20,26 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [online, setOnline] = useState(true);
+
+  // Sign-in needs the network — tell the driver up front instead of failing.
+  useEffect(() => {
+    let alive = true;
+    const check = async () => {
+      try {
+        const n = await Network.getNetworkStateAsync();
+        if (alive) setOnline(!!n.isConnected && n.isInternetReachable !== false);
+      } catch {
+        /* assume online if the check itself fails */
+      }
+    };
+    check();
+    const t = setInterval(check, 5000);
+    return () => {
+      alive = false;
+      clearInterval(t);
+    };
+  }, []);
 
   const onSubmit = async () => {
     setError(null);
@@ -28,6 +49,10 @@ export default function LoginScreen() {
     }
     if (mode === "register" && password.length < 6) {
       setError("Password must be at least 6 characters.");
+      return;
+    }
+    if (!online) {
+      setError("No internet connection. Connect and try again.");
       return;
     }
     setLoading(true);
@@ -53,6 +78,12 @@ export default function LoginScreen() {
         <Text style={styles.brand}>Pathnio</Text>
       </View>
       <Text style={styles.subtitle}>Driver access</Text>
+
+      {!online && (
+        <View style={styles.offlineBanner}>
+          <Text style={styles.offlineText}>No internet connection</Text>
+        </View>
+      )}
 
       <View style={styles.card}>
         <View style={styles.tabRow}>
@@ -168,6 +199,14 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 20,
   },
+  offlineBanner: {
+    backgroundColor: "#78350f",
+    borderRadius: 12,
+    paddingVertical: 9,
+    paddingHorizontal: 14,
+    marginBottom: 10,
+  },
+  offlineText: { color: "#fde68a", fontSize: 13, fontWeight: "700", textAlign: "center" },
   tabRow: {
     flexDirection: "row",
     backgroundColor: "#efeaff",

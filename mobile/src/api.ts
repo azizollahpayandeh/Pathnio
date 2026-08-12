@@ -61,6 +61,8 @@ export type DriverContext = {
     full_name: string;
     plate_number: string;
     vehicle_type?: string;
+    mobile?: string;
+    email?: string;
   } | null;
   company: { id: number; name: string } | null;
   vehicle?: {
@@ -68,6 +70,14 @@ export type DriverContext = {
     plate_number: string;
     model?: string;
     vehicle_type?: string;
+  } | null;
+  /** Server-derived active trip (never chosen by the client). */
+  trip?: {
+    id: number;
+    origin: string;
+    destination: string;
+    status: string;
+    cargo?: string;
   } | null;
 };
 

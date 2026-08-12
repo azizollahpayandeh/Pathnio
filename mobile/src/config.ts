@@ -23,14 +23,18 @@ export const LOCATION_TASK = "pathnio-location-task";
 export const PROFILES = {
   eco: {
     label: "Eco",
-    // Emit a fix roughly every 100 m of movement, or every 45 s as a fallback.
-    distanceInterval: 100, // metres
-    timeInterval: 45000, // ms
+    // A fix every ~30 m of movement, or every 20 s as a time fallback. Tight
+    // enough that real movement/speed is captured, loose enough to stay
+    // battery-friendly.
+    distanceInterval: 30, // metres
+    timeInterval: 20000, // ms
     // Batch fixes on the device before the OS wakes the app to deliver them.
-    deferredUpdatesInterval: 45000, // ms
-    deferredUpdatesDistance: 100, // metres
-    // "Balanced" = ~100 m accuracy, uses network/GPS blend → far cheaper than High.
-    accuracy: 3, // Location.Accuracy.Balanced (kept numeric to avoid an import here)
+    deferredUpdatesInterval: 20000, // ms
+    deferredUpdatesDistance: 50, // metres
+    // MUST be High: "Balanced" resolves via the fused/network provider, which
+    // frequently reports NO Doppler speed (null/-1) — that is why speed was
+    // never reported correctly. High uses GNSS, which carries real speed.
+    accuracy: 4, // Location.Accuracy.High (numeric to avoid importing here)
   },
 } as const;
 
@@ -46,4 +50,9 @@ export const KEYS = {
   user: "pathnio_user",
   duty: "pathnio_on_duty",
   queue: "pathnio_ping_queue",
+  lastSync: "pathnio_last_sync", // ISO time of the last successful upload
+  lastFix: "pathnio_last_fix",   // previous fix, for speed fallback
 } as const;
+
+/** Speed below this (km/h) counts as stationary in the UI. */
+export const STATIONARY_KMH = 3;
