@@ -42,6 +42,24 @@ def _is_recent(dt, timeout_seconds=OFFLINE_TIMEOUT_SECONDS) -> bool:
     return (timezone.now() - dt).total_seconds() <= timeout_seconds
 
 
+def has_valid_position(vehicle) -> bool:
+    """True only when the vehicle has a REAL reported GPS position.
+
+    A vehicle that has never sent telemetry has no position at all (lat/lng are
+    NULL) and must never be drawn on the map. 0,0 ("Null Island") is treated as
+    invalid because it is the classic uninitialised-coordinate value.
+    """
+    lat, lng = getattr(vehicle, "lat", None), getattr(vehicle, "lng", None)
+    if lat is None or lng is None:
+        return False
+    if lat == 0 and lng == 0:
+        return False
+    if not (-90 <= lat <= 90) or not (-180 <= lng <= 180):
+        return False
+    # A real position always comes with the telemetry timestamp that produced it.
+    return getattr(vehicle, "last_seen_at", None) is not None
+
+
 def vehicle_live_status(vehicle, moving_speed=MOVING_SPEED_KMH,
                         offline_timeout=OFFLINE_TIMEOUT_SECONDS) -> str:
     """Derive a vehicle's live status from its operational status + telemetry."""
@@ -56,12 +74,21 @@ def vehicle_live_status(vehicle, moving_speed=MOVING_SPEED_KMH,
 
 def driver_status(driver, has_active_trip: bool, vehicle=None,
                   offline_timeout=OFFLINE_TIMEOUT_SECONDS) -> str:
-    """Derive a driver's status. `has_active_trip` and the assigned vehicle's
-    recency are passed in to avoid extra queries in list contexts."""
+    """Derive a driver's status.
+
+    Presence is driven by the DRIVER's own telemetry first: an activated driver
+    whose phone is reporting real GPS is online even if no vehicle is assigned
+    yet (previously such a driver was wrongly reported OFFLINE). The assigned
+    vehicle's recency is still accepted as a fallback signal.
+    """
     if not driver.user_id:
         return DRIVER_INACTIVE  # not activated yet
+
     if has_active_trip:
         return ON_TRIP
-    if vehicle is not None and _is_recent(getattr(vehicle, "last_seen_at", None), offline_timeout):
-        return AVAILABLE
-    return DRIVER_OFFLINE
+
+    seen = _is_recent(getattr(driver, "last_seen_at", None), offline_timeout) or (
+        vehicle is not None
+        and _is_recent(getattr(vehicle, "last_seen_at", None), offline_timeout)
+    )
+    return AVAILABLE if seen else DRIVER_OFFLINE

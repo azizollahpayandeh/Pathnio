@@ -73,8 +73,9 @@ function mapVehicle(v: any): Vehicle {
     efficiency: v.efficiency || "",
     last_maintenance: v.last_maintenance || "",
     total_trips: v.total_trips ?? 0,
-    lat: v.lat ?? 0,
-    lng: v.lng ?? 0,
+    // No telemetry => NO position. Never fall back to 0,0 (Null Island).
+    lat: v.lat ?? null,
+    lng: v.lng ?? null,
     speed: v.speed ?? 0,
     // Real assignment (source of truth); falls back to legacy display string.
     driver: v.assigned_driver?.full_name || v.driver || "",
@@ -336,8 +337,10 @@ export type LiveVehicle = {
   model?: string;
   vehicle_type?: string;
   status?: string;
-  lat: number;
-  lng: number;
+  // null when the vehicle has never reported a real GPS fix.
+  lat: number | null;
+  lng: number | null;
+  has_valid_position?: boolean;
   speed: number;
   last_seen_at?: string | null;
   live_status: "MOVING" | "STOPPED" | "OFFLINE" | "MAINTENANCE" | "INACTIVE";

@@ -29,6 +29,10 @@ class Driver(models.Model):
     vehicle_type = models.CharField(max_length=64, blank=True)
     profile_photo = models.ImageField(upload_to='profiles/', blank=True, null=True)
     company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, blank=True, related_name='drivers')
+    # Last telemetry received from THIS driver (independent of any vehicle), so
+    # an activated driver who is reporting GPS is online even before/without a
+    # vehicle assignment.
+    last_seen_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.full_name
@@ -214,8 +218,11 @@ class Vehicle(models.Model):
     efficiency = models.CharField(max_length=32, blank=True)
     last_maintenance = models.DateField(null=True, blank=True)
     total_trips = models.PositiveIntegerField(default=0)
-    lat = models.FloatField(default=0)
-    lng = models.FloatField(default=0)
+    # NULL until the vehicle has reported a real GPS fix. Never defaults to
+    # 0,0 ("Null Island") — a vehicle with no telemetry has NO position, and
+    # must never be drawn on the map.
+    lat = models.FloatField(null=True, blank=True, default=None)
+    lng = models.FloatField(null=True, blank=True, default=None)
     speed = models.PositiveIntegerField(default=0)
     last_seen_at = models.DateTimeField(null=True, blank=True)  # last telemetry received
     created_at = models.DateTimeField(auto_now_add=True)

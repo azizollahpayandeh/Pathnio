@@ -19,6 +19,26 @@ function bucket(v: LiveVehicle): "moving" | "stopped" | "offline" {
   return "offline";
 }
 
+/**
+ * A vehicle is mappable ONLY when the backend reported a real GPS position.
+ * Vehicles that have never sent telemetry have lat/lng === null and are never
+ * drawn (this is what previously placed a marker at 0,0 in the ocean).
+ */
+export function hasRealPosition(
+  v: LiveVehicle
+): v is LiveVehicle & { lat: number; lng: number } {
+  if (v.has_valid_position === false) return false;
+  if (typeof v.lat !== "number" || typeof v.lng !== "number") return false;
+  if (v.lat === 0 && v.lng === 0) return false;
+  return Math.abs(v.lat) <= 90 && Math.abs(v.lng) <= 180 && !!v.last_seen_at;
+}
+
+function whenSeen(iso?: string | null): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  return isNaN(d.getTime()) ? "" : d.toLocaleString();
+}
+
 // Fit to markers once; then pan to a focused vehicle when it changes.
 function MapController({ vehicles, focusId }: { vehicles: LiveVehicle[]; focusId?: number | null }) {
   const [useMapHook, setHook] = useState<any>(null);
@@ -53,12 +73,18 @@ export default function LiveTrackMap({ vehicles, focusId }: { vehicles: LiveVehi
   const [isClient, setIsClient] = useState(false);
   const [icons, setIcons] = useState<Record<string, unknown>>({});
 
+  // Only vehicles with a REAL reported position are mapped.
+  const mappable = useMemo(() => vehicles.filter(hasRealPosition), [vehicles]);
+
+  // Centre on real data only. With nothing to show we zoom out to a neutral
+  // world view instead of inventing a location.
   const center = useMemo<LatLngExpression>(() => {
-    if (!vehicles.length) return [52.52, 13.405];
-    const lat = vehicles.reduce((s, v) => s + v.lat, 0) / vehicles.length;
-    const lng = vehicles.reduce((s, v) => s + v.lng, 0) / vehicles.length;
+    if (!mappable.length) return [20, 0];
+    const lat = mappable.reduce((s, v) => s + v.lat, 0) / mappable.length;
+    const lng = mappable.reduce((s, v) => s + v.lng, 0) / mappable.length;
     return [lat, lng];
-  }, [vehicles]);
+  }, [mappable]);
+  const initialZoom = mappable.length ? 12 : 2;
 
   useEffect(() => setIsClient(true), []);
   useEffect(() => {
@@ -86,24 +112,34 @@ export default function LiveTrackMap({ vehicles, focusId }: { vehicles: LiveVehi
 
   return (
     <div className="w-full h-full min-h-[320px] relative rounded-2xl overflow-hidden">
-      <MapContainer center={center} zoom={12} scrollWheelZoom style={{ height: "100%", width: "100%" }}>
+      <MapContainer center={center} zoom={initialZoom} scrollWheelZoom style={{ height: "100%", width: "100%" }}>
         <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        <MapController vehicles={vehicles} focusId={focusId} />
-        {vehicles.map((v) => (
+        <MapController vehicles={mappable} focusId={focusId} />
+        {mappable.map((v) => (
           <Marker key={v.id} position={[v.lat, v.lng] as LatLngExpression} icon={icons[bucket(v)] as never}>
             <Popup>
               <div className="font-bold text-violet-800 text-base mb-1">{v.model || v.plate_number}</div>
               <div className="text-slate-600 mb-0.5">Plate: <span className="font-mono">{v.plate_number}</span></div>
               <div className="text-slate-600 mb-0.5">Driver: <span className="font-semibold">{v.driver?.full_name || "Unassigned"}</span></div>
               <div className="mb-0.5">Status: <span className="font-semibold">{STATUS_LABEL[v.live_status] || v.live_status}</span></div>
-              <div className="mb-0.5">Speed: <span className="font-mono text-violet-700">{v.speed} km/h</span></div>
+              {v.live_status === "MOVING" || v.live_status === "STOPPED" ? (
+                <div className="mb-0.5">Speed: <span className="font-mono text-violet-700">{v.speed} km/h</span></div>
+              ) : (
+                // Not currently reporting: the pin is a historical fix, so say so.
+                <div className="mb-0.5 text-amber-700 font-semibold">
+                  Last known position · {whenSeen(v.last_seen_at)}
+                </div>
+              )}
               {v.trip && <div className="text-slate-600 mb-0.5">Trip: {v.trip.origin} → {v.trip.destination}</div>}
               {v.cargo && v.cargo.length > 0 && (
                 <div className="text-slate-600">Cargo: {v.cargo.map((c) => `${c.description} ×${c.quantity}`).join(", ")}</div>
               )}
             </Popup>
             <Tooltip direction="top" offset={[0, -22]} opacity={0.95}>
-              {v.plate_number} · {v.speed} km/h
+              {v.plate_number}
+              {v.live_status === "MOVING" || v.live_status === "STOPPED"
+                ? ` · ${v.speed} km/h`
+                : " · last known position"}
             </Tooltip>
           </Marker>
         ))}

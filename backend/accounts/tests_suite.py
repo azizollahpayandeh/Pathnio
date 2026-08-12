@@ -103,4 +103,8 @@ class CrossTenantTelemetryTests(TwoCompanies):
         }, format="json")
         self.assertEqual(r.json()["vehicle"], "A-1")
         vb.refresh_from_db()
-        self.assertEqual(vb.lat, 0)  # B untouched
+        # B untouched: a vehicle with no telemetry has NO position at all
+        # (never a 0,0 placeholder).
+        self.assertIsNone(vb.lat)
+        self.assertIsNone(vb.lng)
+        self.assertIsNone(vb.last_seen_at)

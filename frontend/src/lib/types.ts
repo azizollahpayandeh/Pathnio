@@ -22,8 +22,9 @@ export interface Vehicle {
   efficiency: string; // e.g. "8.2 L/100km"
   last_maintenance: string; // ISO date
   total_trips: number;
-  lat: number;
-  lng: number;
+  // null until the vehicle reports a real GPS fix — never a 0,0 placeholder.
+  lat: number | null;
+  lng: number | null;
   speed: number; // km/h (for live map)
   createdAt: string;
 }

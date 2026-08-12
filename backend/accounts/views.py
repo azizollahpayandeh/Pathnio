@@ -36,7 +36,9 @@ from .serializers import (
 )
 from .invitations import issue_invitation, hash_token
 from .assignments import assign as assign_driver_vehicle, unassign as unassign_vehicle, AssignmentError
-from .fleet_status import vehicle_live_status, driver_status, company_thresholds
+from .fleet_status import (
+    vehicle_live_status, driver_status, company_thresholds, has_valid_position,
+)
 from .alerts_engine import refresh_fleet_alerts
 from .subscriptions import check_can_add, usage as subscription_usage, get_or_create_subscription
 from .models import Plan, Subscription
@@ -1253,10 +1255,17 @@ class VehicleViewSet(CompanyScopedViewSet):
             cargo = ([{'description': c.description, 'quantity': c.quantity,
                        'cargo_type': c.cargo_type} for c in trip.cargos.all()]
                      if trip else [])
+            # A vehicle with no real GPS fix has NO position — we send null
+            # rather than a placeholder, so the map cannot draw a phantom
+            # marker (this is what put a vehicle in the ocean at 0,0).
+            valid = has_valid_position(v)
             data.append({
                 'id': v.id, 'plate_number': v.plate_number, 'model': v.model,
                 'vehicle_type': v.vehicle_type, 'status': v.status,
-                'lat': v.lat, 'lng': v.lng, 'speed': v.speed,
+                'lat': v.lat if valid else None,
+                'lng': v.lng if valid else None,
+                'speed': v.speed,
+                'has_valid_position': valid,
                 'last_seen_at': v.last_seen_at,
                 'live_status': vehicle_live_status(v, moving_speed, offline_timeout),
                 'driver': ({'id': drv.id, 'full_name': drv.full_name} if drv else None),
@@ -1409,9 +1418,10 @@ class LocationIngestView(APIView):
         driver = getattr(user, 'driver_profile', None)
         company = getattr(driver, 'company', None) or getattr(user, 'company_profile', None)
 
-        # Vehicle is derived SERVER-SIDE from the driver's active assignment —
-        # the client's vehicle_id is never trusted. Plate is only a fallback for
-        # legacy/unassigned drivers and manager/staff overrides.
+        # Vehicle is derived SERVER-SIDE from the driver's ACTIVE ASSIGNMENT and
+        # nothing else — never from a client-supplied vehicle_id, and never from
+        # a plate-string guess (a stale/mistyped Driver.plate_number silently
+        # attached telemetry to the wrong vehicle, or to none at all).
         vehicle = None
         if driver is not None:
             active = (DriverVehicleAssignment.objects
@@ -1421,16 +1431,12 @@ class LocationIngestView(APIView):
                 vehicle = active.vehicle
                 if company is None:
                     company = vehicle.company
-        if vehicle is None:
-            plate = (request.data.get('plate_number')
-                     or getattr(driver, 'plate_number', None))
-            if plate:
-                vq = Vehicle.objects.filter(plate_number=plate)
-                if company is not None:
-                    vq = vq.filter(company=company)
-                vehicle = vq.first()
-                if vehicle and company is None:
-                    company = vehicle.company
+        elif is_owner(user):
+            # Manager/staff may post on behalf of one of THEIR OWN vehicles.
+            plate = request.data.get('plate_number')
+            if plate and company is not None:
+                vehicle = Vehicle.objects.filter(company=company,
+                                                 plate_number=plate).first()
 
         # --- Normalise payload to a list ------------------------------
         raw = request.data.get('locations')
@@ -1473,15 +1479,22 @@ class LocationIngestView(APIView):
             )
 
         # --- Mirror the newest fix onto the Vehicle (latest state) ----
-        if vehicle is not None and saved:
+        if saved:
             latest = max(saved, key=lambda p: p.recorded_at)
-            vehicle.lat = latest.lat
-            vehicle.lng = latest.lng
-            # Vehicle.speed is a whole-number field the UI reads as km/h;
-            # GPS speed is m/s, so convert.
-            vehicle.speed = max(0, round((latest.speed or 0) * 3.6))
-            vehicle.last_seen_at = timezone.now()
-            vehicle.save(update_fields=['lat', 'lng', 'speed', 'last_seen_at'])
+            now = timezone.now()
+            if vehicle is not None:
+                vehicle.lat = latest.lat
+                vehicle.lng = latest.lng
+                # Vehicle.speed is a whole-number field the UI reads as km/h;
+                # GPS speed is m/s, so convert.
+                vehicle.speed = max(0, round((latest.speed or 0) * 3.6))
+                vehicle.last_seen_at = now
+                vehicle.save(update_fields=['lat', 'lng', 'speed', 'last_seen_at'])
+            # Driver presence is tracked independently of any vehicle, so a
+            # driver reporting real GPS is online even with no assignment.
+            if driver is not None:
+                driver.last_seen_at = now
+                driver.save(update_fields=['last_seen_at'])
 
         return Response(
             {
@@ -1489,6 +1502,9 @@ class LocationIngestView(APIView):
                 'duplicates': duplicates,
                 'errors': errors,
                 'vehicle': vehicle.plate_number if vehicle else None,
+                # Explicit so the app can tell the driver why their position is
+                # not on the fleet map yet.
+                'vehicle_assigned': vehicle is not None,
                 'trip': trip.id if trip else None,
             },
             status=status.HTTP_201_CREATED,

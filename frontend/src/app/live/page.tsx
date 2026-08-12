@@ -219,7 +219,9 @@ export default function LivePage() {
                   <div className="flex justify-between text-xs mt-2">
                     <span className="text-violet-200">{v.speed} km/h</span>
                     <span className="text-violet-400 font-mono">
-                      {v.lat.toFixed(4)}, {v.lng.toFixed(4)}
+                      {typeof v.lat === "number" && typeof v.lng === "number"
+                        ? `${v.lat.toFixed(4)}, ${v.lng.toFixed(4)}`
+                        : "no position yet"}
                     </span>
                   </div>
                 </li>
