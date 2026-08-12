@@ -232,11 +232,12 @@ class DriverSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Driver
-        fields = ('id', 'user', 'full_name', 'mobile', 'email', 'plate_number', 'vehicle_type', 'profile_photo', 'company', 'status', 'activated')
+        fields = ('id', 'user', 'full_name', 'mobile', 'email', 'plate_number', 'vehicle_type', 'profile_photo', 'company', 'status', 'activated', 'last_seen_at')
         # company is assigned server-side from the authenticated owner — a
         # driver/client must never be able to pick which company they join.
         # (status/activated are SerializerMethodFields — already read-only.)
-        read_only_fields = ('id', 'company', 'user')
+        # last_seen_at is set by telemetry ingest only.
+        read_only_fields = ('id', 'company', 'user', 'last_seen_at')
 
     def get_activated(self, obj) -> bool:
         return bool(obj.user_id)
