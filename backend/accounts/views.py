@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import generics, permissions, status, serializers
+from rest_framework import generics, permissions, status, serializers, mixins
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
@@ -1368,9 +1368,11 @@ class CargoViewSet(CompanyScopedViewSet):
         serializer.save(company=company)
 
 
-class FleetAlertViewSet(CompanyScopedQuerysetMixin, viewsets.ReadOnlyModelViewSet):
-    """Company-scoped operational alerts (read + acknowledge). Alerts are derived
-    from real fleet conditions; ?open=1 filters to unacknowledged."""
+class FleetAlertViewSet(CompanyScopedQuerysetMixin,
+                        mixins.ListModelMixin, mixins.RetrieveModelMixin,
+                        mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    """Company-scoped operational alerts (read, acknowledge, dismiss). Alerts are
+    derived from real fleet conditions; ?open=1 filters to unacknowledged."""
     permission_classes = [IsCompanyMember]
     queryset = FleetAlert.objects.all().select_related('vehicle', 'driver', 'trip')
     serializer_class = FleetAlertSerializer
@@ -1390,11 +1392,20 @@ class FleetAlertViewSet(CompanyScopedQuerysetMixin, viewsets.ReadOnlyModelViewSe
 
     @action(detail=True, methods=['post'])
     def acknowledge(self, request, pk=None):
+        """Mark one alert read. Read state never affects de-duplication, so an
+        acknowledged alert is not regenerated while its condition persists."""
         alert = self.get_object()
         if alert.acknowledged_at is None:
             alert.acknowledged_at = timezone.now()
             alert.save(update_fields=['acknowledged_at'])
         return Response(self.get_serializer(alert).data)
+
+    @action(detail=False, methods=['post'], url_path='acknowledge-all')
+    def acknowledge_all(self, request):
+        n = (self.get_queryset()
+             .filter(acknowledged_at__isnull=True)
+             .update(acknowledged_at=timezone.now()))
+        return Response({'acknowledged': n})
 
 
 class ExpenseViewSet(CompanyScopedViewSet):

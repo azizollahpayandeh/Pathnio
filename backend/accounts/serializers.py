@@ -362,7 +362,8 @@ class FleetAlertSerializer(serializers.ModelSerializer):
     class Meta:
         model = FleetAlert
         fields = ('id', 'severity', 'alert_type', 'title', 'message', 'vehicle',
-                  'vehicle_plate', 'driver', 'trip', 'created_at', 'acknowledged_at')
+                  'vehicle_plate', 'driver', 'trip', 'created_at',
+                  'acknowledged_at', 'resolved_at')
         read_only_fields = fields
 
     def get_vehicle_plate(self, obj):
@@ -392,6 +393,20 @@ class ExpenseSerializer(serializers.ModelSerializer):
         model = Expense
         fields = '__all__'
         read_only_fields = ('id', 'company', 'created_at')
+
+    def to_internal_value(self, data):
+        """Accept an ISO datetime for `date` and narrow it to a calendar date.
+
+        The model field is a DateField, so a client sending
+        "2026-08-12T00:00:00.000Z" was rejected outright ("Date has wrong
+        format") and the expense silently failed to save. Normalising here
+        makes the API forgiving without weakening validation.
+        """
+        raw = data.get('date') if hasattr(data, 'get') else None
+        if isinstance(raw, str) and 'T' in raw:
+            data = data.copy()
+            data['date'] = raw.split('T', 1)[0]
+        return super().to_internal_value(data)
 
 
 class DriverInvitationSerializer(serializers.ModelSerializer):

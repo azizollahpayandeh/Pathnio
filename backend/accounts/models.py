@@ -501,13 +501,21 @@ class FleetAlert(models.Model):
     driver = models.ForeignKey(Driver, on_delete=models.SET_NULL, null=True, blank=True, related_name="fleet_alerts")
     trip = models.ForeignKey(Trip, on_delete=models.SET_NULL, null=True, blank=True, related_name="fleet_alerts")
     created_at = models.DateTimeField(auto_now_add=True)
+    # User marked it read. Display state ONLY — it must never affect
+    # de-duplication, otherwise acknowledging an alert for a condition that is
+    # still true immediately spawns a duplicate.
     acknowledged_at = models.DateTimeField(null=True, blank=True)
+    # The underlying condition cleared. THIS is what de-duplication keys on:
+    # one alert per (vehicle, type) occurrence, from onset until it resolves.
+    resolved_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ["-created_at"]
         indexes = [
             models.Index(fields=["company", "acknowledged_at"]),
             models.Index(fields=["vehicle", "alert_type", "acknowledged_at"]),
+            models.Index(fields=["company", "resolved_at"]),
+            models.Index(fields=["vehicle", "alert_type", "resolved_at"]),
         ]
 
     def __str__(self):

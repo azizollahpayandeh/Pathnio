@@ -49,11 +49,21 @@ function Inner({ useMap, vehicles, focusId }: any) {
   const map = useMap();
   const fitted = useRef(false);
   useEffect(() => {
-    if (fitted.current || vehicles.length === 0) return;
-    fitted.current = true;
-    if (vehicles.length === 1) map.setView([vehicles[0].lat, vehicles[0].lng], 14);
-    else import("leaflet").then((L) => {
-      map.fitBounds(L.latLngBounds(vehicles.map((v: LiveVehicle) => [v.lat, v.lng])), { padding: [50, 50] });
+    if (vehicles.length === 0) return;
+    import("leaflet").then((L) => {
+      const bounds = L.latLngBounds(
+        vehicles.map((v: LiveVehicle) => [v.lat, v.lng] as [number, number])
+      );
+      // Keep the viewport anchored to where the fleet actually is: panning is
+      // constrained to a generous margin around the real vehicles instead of
+      // letting the user drift into empty ocean/world areas.
+      map.setMaxBounds(bounds.pad(2.5));
+      map.setMinZoom(Math.max(3, map.getBoundsZoom(bounds.pad(3))));
+      if (!fitted.current) {
+        fitted.current = true;
+        if (vehicles.length === 1) map.setView([vehicles[0].lat, vehicles[0].lng], 14);
+        else map.fitBounds(bounds, { padding: [50, 50] });
+      }
     });
   }, [vehicles, map]);
   useEffect(() => {
@@ -110,10 +120,38 @@ export default function LiveTrackMap({ vehicles, focusId }: { vehicles: LiveVehi
     );
   }
 
+  // Nothing real to show: an empty world map is meaningless, so say why.
+  if (mappable.length === 0) {
+    return (
+      <div className="w-full h-full min-h-[320px] bg-violet-50 rounded-2xl flex items-center justify-center p-6">
+        <div className="text-center max-w-xs">
+          <p className="font-semibold text-violet-800">No live positions yet</p>
+          <p className="text-sm text-slate-500 mt-1">
+            Vehicles appear here once an assigned driver’s app reports GPS.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-full min-h-[320px] relative rounded-2xl overflow-hidden">
-      <MapContainer center={center} zoom={initialZoom} scrollWheelZoom style={{ height: "100%", width: "100%" }}>
-        <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+      <MapContainer
+        center={center}
+        zoom={initialZoom}
+        scrollWheelZoom
+        minZoom={3}
+        // Sticky bounds + no world-wrap: the map cannot be dragged off into
+        // endless empty/ocean tiles away from the real fleet.
+        maxBoundsViscosity={1}
+        worldCopyJump={false}
+        style={{ height: "100%", width: "100%" }}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          noWrap
+        />
         <MapController vehicles={mappable} focusId={focusId} />
         {mappable.map((v) => (
           <Marker key={v.id} position={[v.lat, v.lng] as LatLngExpression} icon={icons[bucket(v)] as never}>
