@@ -5,6 +5,8 @@ import Link from "next/link";
 import FloatingAlert from "@/components/FloatingAlert";
 import { Lock, Truck, ArrowRight, Sparkles } from "lucide-react";
 import { register, login, isAuthenticated } from "@/lib/auth";
+import { useT } from "@/i18n";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const companyFields = [
   { label: "Company Name", name: "companyName", required: true, placeholder: "Acme Logistics" },
@@ -16,6 +18,7 @@ const companyFields = [
 ];
 
 export default function LoginPage() {
+  const tr = useT();
   const [tab, setTab] = useState<"login" | "register">("login");
   const [registerLoading, setRegisterLoading] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
@@ -95,10 +98,10 @@ export default function LoginPage() {
         </Link>
         <div className="relative z-10 max-w-md">
           <h1 className="text-4xl font-bold leading-tight mb-4">
-            Run your fleet from a single, beautiful dashboard.
+            {tr("auth.runFleet")}
           </h1>
           <p className="text-violet-100/90 text-lg">
-            Real-time tracking, drivers, trips, expenses and analytics — all in one place.
+            {tr("auth.realtimeTagline")}
           </p>
           <div className="mt-8 grid grid-cols-3 gap-4">
             {[["12+", "Vehicles"], ["10", "Drivers"], ["98%", "On-time"]].map(([v, l]) => (
@@ -115,6 +118,7 @@ export default function LoginPage() {
       {/* Form panel */}
       <div className="flex items-center justify-center p-6 sm:p-10 bg-[var(--background)]">
         <div className="w-full max-w-md">
+          <div className="flex justify-end mb-3"><LanguageSwitcher compact /></div>
           <div className="flex flex-col items-center mb-8">
             <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-brand mb-4">
               <Lock className="w-8 h-8 text-white" />
@@ -136,18 +140,18 @@ export default function LoginPage() {
 
           {tab === "login" ? (
             <form className="space-y-5 animate-fade-in-up" onSubmit={handleLogin}>
-              <h2 className="text-2xl font-bold text-slate-900 text-center">Welcome back</h2>
-              <p className="text-center text-slate-500 -mt-2 text-sm">Sign in to your Pathnio account</p>
+              <h2 className="text-2xl font-bold text-slate-900 text-center">{tr("auth.welcomeBack")}</h2>
+              <p className="text-center text-slate-500 -mt-2 text-sm">{tr("auth.signInSubtitle")}</p>
               <div>
-                <label htmlFor="login-username" className="block mb-1.5 text-sm font-semibold text-slate-700">Email</label>
+                <label htmlFor="login-username" className="block mb-1.5 text-sm font-semibold text-slate-700">{tr("auth.email")}</label>
                 <input id="login-username" name="login-username" type="email" required className="field" placeholder="you@company.com" defaultValue="" />
               </div>
               <div>
-                <label htmlFor="login-password" className="block mb-1.5 text-sm font-semibold text-slate-700">Password</label>
+                <label htmlFor="login-password" className="block mb-1.5 text-sm font-semibold text-slate-700">{tr("auth.password")}</label>
                 <input id="login-password" name="login-password" type="password" required className="field" placeholder="••••••••" />
               </div>
               <button type="submit" className="btn btn-primary w-full text-lg" disabled={loginLoading}>
-                {loginLoading ? "Signing In…" : (<>Sign In <ArrowRight className="w-5 h-5" /></>)}
+                {loginLoading ? tr("common.signingIn") : (<>{tr("common.signIn")} <ArrowRight className="w-5 h-5" /></>)}
               </button>
               <button type="button" onClick={fillDemo} className="w-full flex items-center justify-center gap-2 text-sm text-violet-600 font-medium hover:text-violet-800 transition">
                 <Sparkles className="w-4 h-4" /> Use demo account

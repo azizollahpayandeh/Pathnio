@@ -152,9 +152,21 @@ class LoginAttempt(models.Model):
         return f"{self.username} - {status} - {self.timestamp}"
 
 class Profile(models.Model):
+    """Per-user profile and UI preferences. Preferences live here (not in the
+    browser) so they follow the account across logout/login and devices."""
+    # Adding a language later = one more entry here + a matching JSON catalogue
+    # on the frontend. No component changes required.
+    LANGUAGE_CHOICES = [
+        ("en", "English"),
+        ("fa", "فارسی"),
+        ("de", "Deutsch"),
+        ("it", "Italiano"),
+    ]
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     profile_photo = models.ImageField(upload_to='profiles/', blank=True, null=True)
-    
+    language = models.CharField(max_length=5, choices=LANGUAGE_CHOICES, default="en")
+
     def __str__(self):
         return f"Profile - {self.user.username}"
 

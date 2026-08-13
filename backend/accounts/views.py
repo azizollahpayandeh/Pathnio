@@ -1583,6 +1583,14 @@ def _driver_context(user):
         v = active.vehicle
         vehicle = {'id': v.id, 'plate_number': v.plate_number,
                    'model': v.model, 'vehicle_type': v.vehicle_type}
+    # Company tracking config so the app follows the owner's Settings page
+    # instead of a hardcoded cadence.
+    from .models import CompanySettings
+    cs = CompanySettings.objects.filter(company=driver.company).first()
+    tracking = {
+        'telemetry_interval_seconds': getattr(cs, 'telemetry_interval_seconds', 45) or 45,
+        'distance_unit': getattr(cs, 'distance_unit', 'km') or 'km',
+    }
     trip_obj = (Trip.objects.filter(driver_ref=driver, status='ACTIVE')
                 .order_by('-start_time').first())
     trip = None
@@ -1606,6 +1614,7 @@ def _driver_context(user):
             if driver.company_id else None
         ),
         'vehicle': vehicle,
+        'tracking': tracking,
     }
 
 
@@ -1822,6 +1831,43 @@ class VehicleUnassignView(APIView):
         unassign_vehicle(vehicle)
         vehicle.refresh_from_db()
         return Response(VehicleSerializer(vehicle).data, status=status.HTTP_200_OK)
+
+
+class UserPreferencesView(APIView):
+    """Per-user UI preferences (currently language), stored in the database so
+    they persist across logout/login and follow the account to any device.
+
+    Available to ANY authenticated user (owners and drivers alike).
+    """
+    permission_classes = [IsAuthenticated]
+
+    def _profile(self, request):
+        obj, _ = Profile.objects.get_or_create(user=request.user)
+        return obj
+
+    def _payload(self, p):
+        return {
+            'language': p.language,
+            'available_languages': [
+                {'code': c, 'label': l} for c, l in Profile.LANGUAGE_CHOICES
+            ],
+        }
+
+    def get(self, request):
+        return Response(self._payload(self._profile(request)))
+
+    def patch(self, request):
+        p = self._profile(request)
+        lang = request.data.get('language')
+        if lang is not None:
+            valid = [c for c, _ in Profile.LANGUAGE_CHOICES]
+            if lang not in valid:
+                return Response(
+                    {'language': [f'Unsupported language. Choose one of: {", ".join(valid)}.']},
+                    status=status.HTTP_400_BAD_REQUEST)
+            p.language = lang
+            p.save(update_fields=['language'])
+        return Response(self._payload(p))
 
 
 class CompanySettingsView(APIView):

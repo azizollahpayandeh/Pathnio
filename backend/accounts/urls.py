@@ -13,7 +13,7 @@ from .views import (
     LocationIngestView,
     DriverRegisterMobileView, DriverMeView, DriverActivateView,
     DriverInvitationView, DriverInvitationRevokeView, DriverInvitationRegenerateView,
-    VehicleAssignView, VehicleUnassignView, CompanySettingsView, SubscriptionView,
+    VehicleAssignView, VehicleUnassignView, CompanySettingsView, UserPreferencesView, SubscriptionView,
 )
 
 router = DefaultRouter()
@@ -44,6 +44,7 @@ urlpatterns = [
     # Profile
     path('company/me/', CompanyMeView.as_view(), name='company-me'),
     path('company/settings/', CompanySettingsView.as_view(), name='company-settings'),
+    path('preferences/', UserPreferencesView.as_view(), name='user-preferences'),
     path('subscription/', SubscriptionView.as_view(), name='subscription'),
     path('contact/', ContactMessageCreateView.as_view(), name='contact-message'),
     # Drivers CRUD is now served by DriverViewSet via the router below.

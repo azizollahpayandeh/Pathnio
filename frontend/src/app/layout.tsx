@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { I18nProvider } from "@/i18n";
 
 
 const geistSans = Geist({
@@ -26,10 +27,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    // lang/dir are managed at runtime by I18nProvider (RTL for Persian).
+    <html lang="en" dir="ltr" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#f4f8fb] text-[#171717]`}>
 
-        {children}
+        <I18nProvider>{children}</I18nProvider>
 
       </body>
     </html>

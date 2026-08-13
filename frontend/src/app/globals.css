@@ -209,3 +209,50 @@ body {
   font-family: inherit;
   border-radius: 1.25rem;
 }
+
+/* ---------------------------------------------------------------------------
+   RTL support (Persian and any future RTL locale).
+   Direction is set on <html> by the i18n provider; these rules flip the few
+   places that are direction-aware. Everything else uses flex/grid and adapts
+   automatically.
+--------------------------------------------------------------------------- */
+[dir="rtl"] body {
+  /* Persian reads better with a slightly larger line-height */
+  line-height: 1.75;
+}
+
+/* Fixed sidebar sits on the right in RTL */
+[dir="rtl"] aside.fixed.left-0 {
+  left: auto;
+  right: 0;
+}
+[dir="rtl"] .lg\:ml-64 {
+  margin-left: 0;
+  margin-right: 16rem;
+}
+/* Mobile drawer slides in from the right */
+[dir="rtl"] aside.-translate-x-full {
+  transform: translateX(100%);
+}
+
+/* Inputs / text blocks follow the document direction */
+[dir="rtl"] .field,
+[dir="rtl"] input,
+[dir="rtl"] select,
+[dir="rtl"] textarea {
+  text-align: right;
+}
+
+/* Keep genuinely direction-neutral data readable left-to-right
+   (plates, coordinates, codes, numbers) */
+[dir="rtl"] .font-mono,
+[dir="rtl"] code {
+  direction: ltr;
+  unicode-bidi: embed;
+  display: inline-block;
+}
+
+/* Leaflet controls stay LTR — the map itself is not a text surface */
+[dir="rtl"] .leaflet-container {
+  direction: ltr;
+}

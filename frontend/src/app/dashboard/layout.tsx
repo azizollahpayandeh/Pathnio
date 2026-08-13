@@ -9,34 +9,37 @@ import {
   Bell, CreditCard, LifeBuoy, Settings, ShieldCheck, Menu, LogOut, X,
 } from "lucide-react";
 import { useAuth, logout } from "@/lib/auth";
+import { useT } from "@/i18n";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useFleetAlerts } from "@/lib/api-data";
 import { ToastHost } from "@/components/Toast";
 import type { LucideIcon } from "lucide-react";
 
 interface NavItem {
   href: string;
-  label: string;
+  labelKey: string;
   icon: LucideIcon;
   color: string;
   admin?: boolean;
 }
 
 const NAV: NavItem[] = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, color: "text-violet-500" },
-  { href: "/dashboard/live-map", label: "Live Map", icon: Map, color: "text-emerald-500" },
-  { href: "/dashboard/drivers", label: "Drivers", icon: Users, color: "text-purple-500" },
-  { href: "/dashboard/vehicles", label: "Vehicles", icon: Truck, color: "text-orange-500" },
-  { href: "/dashboard/trips", label: "Trips", icon: Route, color: "text-purple-500" },
-  { href: "/dashboard/expenses", label: "Expenses", icon: Wallet, color: "text-emerald-600" },
-  { href: "/dashboard/reports", label: "Reports", icon: BarChart3, color: "text-violet-600" },
-  { href: "/dashboard/alerts", label: "Alerts", icon: Bell, color: "text-amber-500" },
-  { href: "/dashboard/subscription", label: "Subscription", icon: CreditCard, color: "text-teal-500" },
-  { href: "/dashboard/support", label: "Support", icon: LifeBuoy, color: "text-teal-500" },
-  { href: "/dashboard/settings", label: "Settings", icon: Settings, color: "text-slate-500" },
-  { href: "/dashboard/admin", label: "Admin", icon: ShieldCheck, color: "text-rose-500", admin: true },
+  { href: "/dashboard", labelKey: "nav.dashboard", icon: LayoutDashboard, color: "text-violet-500" },
+  { href: "/dashboard/live-map", labelKey: "nav.liveMap", icon: Map, color: "text-emerald-500" },
+  { href: "/dashboard/drivers", labelKey: "nav.drivers", icon: Users, color: "text-purple-500" },
+  { href: "/dashboard/vehicles", labelKey: "nav.vehicles", icon: Truck, color: "text-orange-500" },
+  { href: "/dashboard/trips", labelKey: "nav.trips", icon: Route, color: "text-purple-500" },
+  { href: "/dashboard/expenses", labelKey: "nav.expenses", icon: Wallet, color: "text-emerald-600" },
+  { href: "/dashboard/reports", labelKey: "nav.reports", icon: BarChart3, color: "text-violet-600" },
+  { href: "/dashboard/alerts", labelKey: "nav.alerts", icon: Bell, color: "text-amber-500" },
+  { href: "/dashboard/subscription", labelKey: "nav.subscription", icon: CreditCard, color: "text-teal-500" },
+  { href: "/dashboard/support", labelKey: "nav.support", icon: LifeBuoy, color: "text-teal-500" },
+  { href: "/dashboard/settings", labelKey: "nav.settings", icon: Settings, color: "text-slate-500" },
+  { href: "/dashboard/admin", labelKey: "nav.admin", icon: ShieldCheck, color: "text-rose-500", admin: true },
 ];
 
 function SidebarLink({ item, onNavigate }: { item: NavItem; onNavigate?: () => void }) {
+  const t = useT();
   const pathname = usePathname();
   const isActive =
     pathname === item.href ||
@@ -57,7 +60,7 @@ function SidebarLink({ item, onNavigate }: { item: NavItem; onNavigate?: () => v
           isActive ? "text-violet-600" : item.color
         }`}
       />
-      <span>{item.label}</span>
+      <span>{t(item.labelKey)}</span>
     </Link>
   );
 }
@@ -86,6 +89,7 @@ function SidebarContent({ isPlatformAdmin, onNavigate }: { isPlatformAdmin: bool
 }
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const t = useT();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user, ready } = useAuth();
   const router = useRouter();
@@ -173,12 +177,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </button>
             <span className="flex items-center gap-2 font-bold text-slate-800">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="hidden sm:inline">Fleet Management</span>
-              <span className="sm:hidden">Fleet</span>
+              <span className="hidden sm:inline">{t("nav.fleetManagement")}</span>
+              <span className="sm:hidden">{t("nav.dashboard")}</span>
             </span>
           </div>
 
           <div className="flex items-center gap-2 lg:gap-3">
+            <LanguageSwitcher compact />
             <button
               onClick={() => router.push("/dashboard/alerts")}
               className="relative w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition"
