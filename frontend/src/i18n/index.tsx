@@ -39,6 +39,8 @@ export const LOCALES: Record<
 
 export const DEFAULT_LOCALE: LocaleCode = "en";
 const STORAGE_KEY = "pathnio_locale";
+// A choice made while signed out, to be adopted into the account on sign-in.
+const PENDING_KEY = "pathnio_locale_pending";
 
 function lookup(messages: Catalogue, key: string): string | undefined {
   const value = key
@@ -72,29 +74,58 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<LocaleCode>(DEFAULT_LOCALE);
   const [ready, setReady] = useState(false);
 
-  // 1) instant paint from the local mirror, 2) then trust the account value.
-  useEffect(() => {
-    const cached = (typeof window !== "undefined" &&
-      window.localStorage.getItem(STORAGE_KEY)) as LocaleCode | null;
+  /**
+   * Reconcile the local choice with the account.
+   *  - signed out: whatever is cached locally simply stands.
+   *  - signed in: a language picked BEFORE signing in (e.g. on the login
+   *    screen) is the user's latest explicit choice, so it is pushed up;
+   *    otherwise the account value wins, which is what makes the preference
+   *    follow the user onto a new device.
+   */
+  const sync = useCallback(async () => {
+    if (typeof window === "undefined") return;
+    const cached = window.localStorage.getItem(STORAGE_KEY) as LocaleCode | null;
     if (cached && LOCALES[cached]) setLocaleState(cached);
 
-    (async () => {
-      try {
-        if (typeof window !== "undefined" && window.localStorage.getItem("access")) {
-          const r = await api.get("accounts/preferences/");
-          const server = r.data?.language as LocaleCode | undefined;
-          if (server && LOCALES[server]) {
-            setLocaleState(server);
-            window.localStorage.setItem(STORAGE_KEY, server);
-          }
-        }
-      } catch {
-        /* not signed in / offline — the cached value stands */
-      } finally {
-        setReady(true);
+    if (!window.localStorage.getItem("access")) {
+      setReady(true);
+      return;
+    }
+    try {
+      const r = await api.get("accounts/preferences/");
+      const server = r.data?.language as LocaleCode | undefined;
+      const pending = window.localStorage.getItem(PENDING_KEY) as LocaleCode | null;
+
+      if (pending && LOCALES[pending] && pending !== server) {
+        await api.patch("accounts/preferences/", { language: pending });
+        window.localStorage.removeItem(PENDING_KEY);
+        setLocaleState(pending);
+        window.localStorage.setItem(STORAGE_KEY, pending);
+      } else if (server && LOCALES[server]) {
+        window.localStorage.removeItem(PENDING_KEY);
+        setLocaleState(server);
+        window.localStorage.setItem(STORAGE_KEY, server);
       }
-    })();
+    } catch {
+      /* offline — the cached value stands and re-syncs next load */
+    } finally {
+      setReady(true);
+    }
   }, []);
+
+  // Run on mount AND whenever auth changes, so signing in adopts the account
+  // language (or uploads a pre-login choice) without a page reload.
+  useEffect(() => {
+    sync();
+    if (typeof window === "undefined") return;
+    const onAuth = () => sync();
+    window.addEventListener("pathnio:auth", onAuth);
+    window.addEventListener("storage", onAuth);
+    return () => {
+      window.removeEventListener("pathnio:auth", onAuth);
+      window.removeEventListener("storage", onAuth);
+    };
+  }, [sync]);
 
   // Keep <html lang/dir> in sync so RTL applies to the whole document.
   useEffect(() => {
@@ -113,9 +144,13 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
       if (window.localStorage.getItem("access")) {
         try {
           await api.patch("accounts/preferences/", { language: code });
+          window.localStorage.removeItem(PENDING_KEY);
         } catch {
           /* keep the local change; it re-syncs on next load */
         }
+      } else {
+        // Chosen before signing in — adopt it into the account at sign-in.
+        window.localStorage.setItem(PENDING_KEY, code);
       }
     }
   }, []);
