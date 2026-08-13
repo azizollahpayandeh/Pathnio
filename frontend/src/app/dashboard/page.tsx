@@ -60,7 +60,7 @@ export default function Dashboard() {
 
   // Weekly trip distribution (Mon..Sun)
   const weekBars = useMemo(() => {
-    const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    const labels = ["mon","tue","wed","thu","fri","sat","sun"].map((d) => tr(`ui.wd_${d}`));
     const counts = new Array(7).fill(0);
     trips.forEach((t) => {
       const d = new Date(t.start_time).getDay(); // 0=Sun
@@ -69,7 +69,7 @@ export default function Dashboard() {
     });
     const max = Math.max(1, ...counts);
     return labels.map((l, i) => ({ label: l, value: counts[i], pct: (counts[i] / max) * 100 }));
-  }, [trips]);
+  }, [trips, tr]);
 
   const recentTrips = [...trips]
     .sort((a, b) => new Date(b.start_time).getTime() - new Date(a.start_time).getTime())
@@ -83,21 +83,21 @@ export default function Dashboard() {
           icon={Users}
           label={tr("ui.active_drivers")}
           value={stats.activeDrivers}
-          hint={`of ${stats.totalDrivers} total`}
+          hint={tr("dashboard.ofTotal", { count: stats.totalDrivers })}
           gradient="from-purple-500 to-violet-600"
         />
         <StatCard
           icon={Truck}
           label={tr("ui.online_vehicles")}
           value={stats.onlineVehicles}
-          hint={`of ${stats.totalVehicles} total`}
+          hint={tr("dashboard.ofTotal", { count: stats.totalVehicles })}
           gradient="from-orange-500 to-amber-600"
         />
         <StatCard
           icon={Route}
           label={tr("ui.active_trips")}
           value={stats.ongoingTrips}
-          hint={`${stats.completedTrips} completed`}
+          hint={tr("dashboard.completed", { count: stats.completedTrips })}
           gradient="from-purple-500 to-fuchsia-600"
         />
         <StatCard
@@ -134,7 +134,7 @@ export default function Dashboard() {
           {/* Weekly trips chart */}
           <div className="card p-6">
             <h2 className="font-bold text-slate-800 mb-1">{tr("ui.trips_this_week")}</h2>
-            <p className="text-sm text-slate-500 mb-4">{trips.length} total records</p>
+            <p className="text-sm text-slate-500 mb-4">{tr("dashboard.totalRecords", { count: trips.length })}</p>
             <div className="flex items-end justify-between gap-2 h-36">
               {weekBars.map((b) => (
                 <div key={b.label} className="flex-1 flex flex-col items-center gap-2">
@@ -175,7 +175,7 @@ export default function Dashboard() {
           <div className="card p-6">
             <div className="flex items-center justify-between mb-3">
               <h2 className="font-bold text-slate-800">{tr("ui.recent_alerts")}</h2>
-              <Link href="/dashboard/alerts" className="text-violet-600 text-sm font-semibold hover:text-violet-800">View all →</Link>
+              <Link href="/dashboard/alerts" className="text-violet-600 text-sm font-semibold hover:text-violet-800">{tr("common.viewAll")}</Link>
             </div>
             {openAlerts.length === 0 ? (
               <p className="text-sm text-slate-400">{tr("ui.no_open_alerts_fleet_looks_healthy")}</p>
@@ -198,7 +198,7 @@ export default function Dashboard() {
         <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100">
           <h2 className="font-bold text-slate-800 text-lg">{tr("ui.recent_trips")}</h2>
           <Link href="/dashboard/trips" className="text-violet-600 font-semibold text-sm hover:text-violet-800">
-            View all →
+            {tr("common.viewAll")}
           </Link>
         </div>
         <div className="overflow-x-auto scroll-slim">
