@@ -9,7 +9,7 @@ import AddExpenseModal, { NewExpense } from "@/components/AddExpenseModal";
 import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
 import { useExpenses, createExpense, deleteExpense } from "@/lib/api-data";
 import type { ExpenseCategory } from "@/lib/types";
-import { useT } from "@/i18n";
+import { useT, useTValue } from "@/i18n";
 import { useUnits } from "@/lib/format";
 
 const catIcon: Record<ExpenseCategory, typeof Fuel> = {
@@ -29,6 +29,7 @@ const catIconBg: Record<ExpenseCategory, string> = {
 
 export default function ExpensesPage() {
   const tr = useT();
+  const tv = useTValue();
   const { currency, distance } = useUnits();
   const { data: expenses, refetch } = useExpenses();
   const [search, setSearch] = useState("");
@@ -129,11 +130,11 @@ export default function ExpensesPage() {
                           <span className="font-semibold text-slate-800">{x.title}</span>
                         </div>
                       </td>
-                      <td className="py-3.5 px-4"><Badge tone={(catTone[x.category] || "gray")}>{x.category}</Badge></td>
+                      <td className="py-3.5 px-4"><Badge tone={(catTone[x.category] || "gray")}>{tv(x.category)}</Badge></td>
                       <td className="py-3.5 px-4 text-slate-500 hidden sm:table-cell whitespace-nowrap">{new Date(x.date).toLocaleDateString()}</td>
                       <td className="py-3.5 px-4 text-slate-600 font-mono hidden md:table-cell">{x.plate_number || "—"}</td>
                       <td className="py-3.5 px-4 font-bold text-slate-900">{currency(x.amount)}</td>
-                      <td className="py-3.5 px-4"><Badge tone={x.status === "Paid" ? "green" : "amber"}>{x.status}</Badge></td>
+                      <td className="py-3.5 px-4"><Badge tone={x.status === "Paid" ? "green" : "amber"}>{tv(x.status)}</Badge></td>
                       <td className="py-3.5 px-6">
                         <div className="flex items-center justify-end gap-2">
                           <Link href={`/dashboard/expenses/${x.id}`} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-violet-50 hover:text-violet-600 transition" aria-label={tr("ui.view")}>

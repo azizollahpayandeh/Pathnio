@@ -129,7 +129,7 @@ export default function LiveTrackMap({ vehicles, focusId }: { vehicles: LiveVehi
         <div className="text-center max-w-xs">
           <p className="font-semibold text-violet-800">{tr("ui.no_live_positions_yet")}</p>
           <p className="text-sm text-slate-500 mt-1">
-            Vehicles appear here once an assigned driver’s app reports GPS.
+            {tr("ui.vehicles_appear_hint")}
           </p>
         </div>
       </div>

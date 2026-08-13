@@ -194,3 +194,18 @@ export function useI18n(): Ctx {
 export function useT() {
   return useI18n().t;
 }
+
+/**
+ * Translate a value that comes from the API (status, category, type…).
+ * Data itself is never translated — only these known enum labels are, via
+ * `ui.val_<lowercased value>` with a fallback to the raw value.
+ */
+export function useTValue() {
+  const { t } = useI18n();
+  return (value?: string | null) => {
+    if (!value) return "";
+    const key = `ui.val_${String(value).toLowerCase().replace(/[^a-z0-9]+/g, "_")}`;
+    const hit = t(key);
+    return hit === key ? String(value) : hit;
+  };
+}

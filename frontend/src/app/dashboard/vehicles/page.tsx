@@ -10,13 +10,14 @@ import AssignVehicleModal from "@/components/AssignVehicleModal";
 import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
 import { useVehicles, useDrivers, createVehicle, deleteVehicle } from "@/lib/api-data";
 import { toast } from "@/components/Toast";
-import { useT } from "@/i18n";
+import { useT, useTValue } from "@/i18n";
 
 const statusTone: Record<string, string> = { Active: "green", Inactive: "gray", Maintenance: "blue" };
 const statusIcon: Record<string, typeof CheckCircle> = { Active: CheckCircle, Inactive: XCircle, Maintenance: Wrench };
 
 export default function VehiclesPage() {
   const tr = useT();
+  const tv = useTValue();
   const { data: vehicles, refetch } = useVehicles();
   const { data: allDrivers } = useDrivers();
   const [search, setSearch] = useState("");
@@ -122,15 +123,15 @@ export default function VehiclesPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <h3 className="text-lg font-bold text-slate-900">{v.plate_number}</h3>
-                      <Badge tone={statusTone[v.status]} icon={SIcon}>{v.status}</Badge>
-                      <Badge tone="orange">{v.vehicle_type}</Badge>
+                      <Badge tone={statusTone[v.status]} icon={SIcon}>{tv(v.status)}</Badge>
+                      <Badge tone="orange">{tv(v.vehicle_type)}</Badge>
                     </div>
                     <p className="text-sm text-slate-500 mt-0.5 truncate">{v.model}</p>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 mt-3 text-sm text-slate-600">
                       <span className="flex items-center gap-1.5 truncate"><User className="w-4 h-4 text-slate-400" />{v.driver || "Unassigned"}</span>
                       <span className="flex items-center gap-1.5"><Weight className="w-4 h-4 text-slate-400" />{v.capacity || "—"}</span>
                       <span className="flex items-center gap-1.5"><Palette className="w-4 h-4 text-slate-400" />{v.color || "—"}</span>
-                      <span className="flex items-center gap-1.5 truncate"><Truck className="w-4 h-4 text-slate-400" />{v.vehicle_type}</span>
+                      <span className="flex items-center gap-1.5 truncate"><Truck className="w-4 h-4 text-slate-400" />{tv(v.vehicle_type)}</span>
                     </div>
                   </div>
                 </div>

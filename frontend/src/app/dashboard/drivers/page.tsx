@@ -10,12 +10,13 @@ import InviteDriverModal from "@/components/InviteDriverModal";
 import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
 import { useDrivers, createDriver, deleteDriver, createInvitation } from "@/lib/api-data";
 import { toast } from "@/components/Toast";
-import { useT } from "@/i18n";
+import { useT, useTValue } from "@/i18n";
 
 const statusTone: Record<string, string> = { Active: "green", "On Trip": "blue", Offline: "amber", Inactive: "gray" };
 
 export default function DriversPage() {
   const tr = useT();
+  const tv = useTValue();
   const { data: drivers, refetch } = useDrivers();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
@@ -127,7 +128,7 @@ export default function DriversPage() {
                       tone={statusTone[d.status] || "gray"}
                       icon={d.status === "On Trip" ? Navigation : d.status === "Active" ? CheckCircle : WifiOff}
                     >
-                      {d.status}
+                      {tv(d.status)}
                     </Badge>
                   </div>
                   {d.activated ? (

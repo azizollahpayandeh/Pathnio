@@ -35,9 +35,9 @@ export default function SupportPage() {
   };
 
   const channels = [
-    { icon: Mail, label: "Email", value: "support@pathnio.com", tone: "from-violet-500 to-purple-600" },
-    { icon: Phone, label: "Phone", value: "+49 30 1234 5678", tone: "from-emerald-500 to-teal-600" },
-    { icon: Headphones, label: "Live chat", value: "Mon–Fri, 9–18 CET", tone: "from-purple-500 to-fuchsia-600" },
+    { icon: Mail, label: tr("ui.email"), value: "support@pathnio.com", tone: "from-violet-500 to-purple-600" },
+    { icon: Phone, label: tr("ui.phone"), value: "+49 30 1234 5678", tone: "from-emerald-500 to-teal-600" },
+    { icon: Headphones, label: tr("ui.live_chat"), value: tr("ui.support_hours"), tone: "from-purple-500 to-fuchsia-600" },
   ];
 
   return (
@@ -75,7 +75,7 @@ export default function SupportPage() {
         <div className="card p-6">
           <h2 className="font-bold text-slate-800 flex items-center gap-2 mb-4"><MessageCircle className="w-5 h-5 text-violet-600" /> Your tickets ({tickets.length})</h2>
           {tickets.length === 0 ? (
-            <EmptyState icon={BookOpen} title={tr("ui.no_tickets_yet")} description="Submit a ticket and it will appear here." />
+            <EmptyState icon={BookOpen} title={tr("ui.no_tickets_yet")} description={tr("ui.submit_ticket_hint")} />
           ) : (
             <div className="space-y-3 max-h-[420px] overflow-y-auto scroll-slim pr-1">
               {tickets.map((t) => (

@@ -9,7 +9,7 @@ import AddTripModal, { NewTrip } from "@/components/AddTripModal";
 import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
 import { useTrips, createTrip, deleteTrip, createCargo } from "@/lib/api-data";
 import type { TripStatus } from "@/lib/types";
-import { useT } from "@/i18n";
+import { useT, useTValue } from "@/i18n";
 import { useUnits } from "@/lib/format";
 
 const tone: Record<TripStatus, string> = { COMPLETED: "green", ACTIVE: "blue", PLANNED: "amber", CANCELLED: "red" };
@@ -18,6 +18,7 @@ const label: Record<TripStatus, string> = { COMPLETED: "Completed", ACTIVE: "Act
 
 export default function TripsPage() {
   const tr = useT();
+  const tv = useTValue();
   const { currency, distance } = useUnits();
   const { data: trips, refetch } = useTrips();
   const [search, setSearch] = useState("");

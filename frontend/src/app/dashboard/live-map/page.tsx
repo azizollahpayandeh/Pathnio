@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Map as MapIcon, Navigation, Signal, Search } from "lucide-react";
 import { PageHeader, Badge } from "@/components/ui";
 import { useLiveVehicles, type LiveVehicle } from "@/lib/api-data";
-import { useT } from "@/i18n";
+import { useT, useTValue } from "@/i18n";
 
 const LiveMap = dynamic(() => import("@/components/LiveMapWidget"), { ssr: false });
 
@@ -17,6 +17,7 @@ const tone: Record<string, string> = { moving: "green", stopped: "amber", offlin
 
 export default function LiveMapPage() {
   const tr = useT();
+  const tv = useTValue();
   const { data: vehicles } = useLiveVehicles();
   const [search, setSearch] = useState("");
 
@@ -38,7 +39,7 @@ export default function LiveMapPage() {
         </div>
 
         <div className="card p-5 flex flex-col">
-          <h2 className="font-bold text-slate-800 mb-3">Fleet ({list.length})</h2>
+          <h2 className="font-bold text-slate-800 mb-3">{tr("ui.fleet_count")} ({list.length})</h2>
           <div className="relative mb-3">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={tr("ui.search_vehicle")} className="field pl-10" />

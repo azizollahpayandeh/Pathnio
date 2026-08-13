@@ -7,7 +7,7 @@ import {
 import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
 import { useFleetAlerts, acknowledgeAlert } from "@/lib/api-data";
 import type { AlertPriority } from "@/lib/types";
-import { useT } from "@/i18n";
+import { useT, useTValue } from "@/i18n";
 
 const tone: Record<AlertPriority, string> = { low: "gray", medium: "blue", high: "amber", critical: "red" };
 const icon: Record<AlertPriority, typeof Info> = { low: Info, medium: Bell, high: AlertTriangle, critical: ShieldAlert };
@@ -24,6 +24,7 @@ function timeAgo(iso: string) {
 
 export default function AlertsPage() {
   const tr = useT();
+  const tv = useTValue();
   const { data: alerts, refetch } = useFleetAlerts();
   const [filter, setFilter] = useState<"all" | "unread">("all");
   const [search, setSearch] = useState("");
@@ -76,14 +77,14 @@ export default function AlertsPage() {
         <div className="flex p-1 bg-slate-100 rounded-xl">
           {(["all", "unread"] as const).map((f) => (
             <button key={f} onClick={() => setFilter(f)} className={`px-5 py-2 rounded-lg font-semibold capitalize text-sm transition ${filter === f ? "bg-white text-violet-700 shadow-sm" : "text-slate-500"}`}>
-              {f}
+              {f === "all" ? tr("ui.filter_all") : tr("ui.filter_unread")}
             </button>
           ))}
         </div>
       </div>
 
       {filtered.length === 0 ? (
-        <div className="card"><EmptyState icon={CheckCircle} title={tr("ui.you_re_all_caught_up")} description="No alerts match your filter." /></div>
+        <div className="card"><EmptyState icon={CheckCircle} title={tr("ui.you_re_all_caught_up")} description={tr("ui.no_alerts_match")} /></div>
       ) : (
         <div className="space-y-3 stagger">
           {filtered.map((a) => {

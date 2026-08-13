@@ -4,7 +4,7 @@ import { CreditCard, Check, Crown, Zap, Rocket, Sparkles } from "lucide-react";
 import { PageHeader } from "@/components/ui";
 import FloatingAlert from "@/components/FloatingAlert";
 import { useSubscription, changePlan } from "@/lib/api-data";
-import { useT } from "@/i18n";
+import { useT, useTValue } from "@/i18n";
 
 // Map the display cards to backend plan codes.
 const ID_TO_CODE: Record<string, string> = { starter: "STARTER", pro: "PRO", enterprise: "BUSINESS" };
@@ -30,6 +30,7 @@ const PLANS = [
 
 export default function SubscriptionPage() {
   const tr = useT();
+  const tv = useTValue();
   const { data: sub, refetch } = useSubscription();
   const [alert, setAlert] = useState<{ type: "success" | "error"; msg: string } | null>(null);
   const current = sub ? (CODE_TO_ID[sub.plan.code] || "pro") : "pro";
@@ -53,7 +54,7 @@ export default function SubscriptionPage() {
         <div className="card p-5 flex flex-wrap items-center justify-between gap-3">
           <div>
             <div className="text-sm text-slate-500">{tr("ui.current_plan")}</div>
-            <div className="font-bold text-lg text-slate-900">{sub.plan.name} <span className="text-xs font-medium text-slate-400">· {sub.status}</span></div>
+            <div className="font-bold text-lg text-slate-900">{sub.plan.name} <span className="text-xs font-medium text-slate-400">· {tv(sub.status)}</span></div>
           </div>
           <div className="flex gap-6 text-sm">
             <div>
@@ -89,7 +90,7 @@ export default function SubscriptionPage() {
               <p className="text-slate-500 text-sm mb-4">{p.tagline}</p>
               <div className="mb-5">
                 <span className="text-4xl font-bold text-slate-900">€{p.price}</span>
-                <span className="text-slate-400">/month</span>
+                <span className="text-slate-400">{tr("ui.per_month")}</span>
               </div>
               <ul className="space-y-2.5 flex-1 mb-6">
                 {p.features.map((f) => (
@@ -106,7 +107,7 @@ export default function SubscriptionPage() {
                 className={`btn w-full ${active ? "btn-ghost cursor-default" : "btn-primary"}`}
                 disabled={active}
               >
-                {active ? (<><Check className="w-4 h-4" /> {tr("ui.current_plan")}</>) : "Choose plan"}
+                {active ? (<><Check className="w-4 h-4" /> {tr("ui.current_plan")}</>) : tr("ui.choose_plan_btn")}
               </button>
             </div>
           );
