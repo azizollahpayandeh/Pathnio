@@ -93,7 +93,7 @@ export default function ExpensesPage() {
         </div>
         <select value={category} onChange={(e) => setCategory(e.target.value)} className="field sm:w-48">
           <option value="all">{tr("ui.all_categories")}</option>
-          {Object.keys(catIcon).map((c) => <option key={c}>{c}</option>)}
+          {Object.keys(catIcon).map((c) => <option key={c} value={c}>{tv(c)}</option>)}
         </select>
       </div>
 

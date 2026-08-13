@@ -46,7 +46,7 @@ export default function LiveMapPage() {
           </div>
           <div className="space-y-2 overflow-y-auto scroll-slim max-h-[420px] pr-1">
             {list.length === 0 && (
-              <p className="text-sm text-slate-400">No vehicles yet. Add vehicles and assign drivers to see them here.</p>
+              <p className="text-sm text-slate-400">{tr("ui.no_vehicles_yet_hint")}</p>
             )}
             {list.map((v) => {
               const st = bucket(v);

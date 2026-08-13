@@ -54,7 +54,7 @@ export default function SubscriptionPage() {
         <div className="card p-5 flex flex-wrap items-center justify-between gap-3">
           <div>
             <div className="text-sm text-slate-500">{tr("ui.current_plan")}</div>
-            <div className="font-bold text-lg text-slate-900">{sub.plan.name} <span className="text-xs font-medium text-slate-400">· {tv(sub.status)}</span></div>
+            <div className="font-bold text-lg text-slate-900">{tv(sub.plan.name)} <span className="text-xs font-medium text-slate-400">· {tv(sub.status)}</span></div>
           </div>
           <div className="flex gap-6 text-sm">
             <div>
@@ -86,8 +86,8 @@ export default function SubscriptionPage() {
               <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${p.tone} flex items-center justify-center shadow-md mb-4`}>
                 <Icon className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900">{p.name}</h3>
-              <p className="text-slate-500 text-sm mb-4">{p.tagline}</p>
+              <h3 className="text-xl font-bold text-slate-900">{tv(p.name)}</h3>
+              <p className="text-slate-500 text-sm mb-4">{tv(p.tagline)}</p>
               <div className="mb-5">
                 <span className="text-4xl font-bold text-slate-900">€{p.price}</span>
                 <span className="text-slate-400">{tr("ui.per_month")}</span>

@@ -517,6 +517,10 @@
     "filter_unread": "Unread",
     "no_alerts_match": "No alerts match your filter.",
     "submit_ticket_hint": "Submit a ticket and it will appear here.",
-    "vehicles_appear_hint": "Vehicles appear here once an assigned driver’s app reports GPS."
+    "vehicles_appear_hint": "Vehicles appear here once an assigned driver’s app reports GPS.",
+    "val_for_small_teams_getting_started": "For small teams getting started",
+    "val_for_growing_fleets": "For growing fleets",
+    "val_for_large_operations": "For large operations",
+    "no_vehicles_yet_hint": "No vehicles yet. Add vehicles and assign drivers to see them here."
   }
 }

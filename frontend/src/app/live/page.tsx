@@ -197,7 +197,7 @@ export default function LivePage() {
 
           {vehicles.length === 0 && (
             <p className="text-violet-300 text-sm">
-              No vehicles yet. Start the mobile app (driver1) and go On Duty.
+              {tr("ui.no_vehicles_yet_hint")}
             </p>
           )}
 
