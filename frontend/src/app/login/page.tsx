@@ -35,7 +35,7 @@ export default function LoginPage() {
     const fd = new FormData(e.currentTarget);
     try {
       const password = fd.get("password") as string;
-      if (password.length < 6) throw new Error("Password must be at least 6 characters.");
+      if (password.length < 6) throw new Error(tr("ui.password_must_be_at_least_6_characters"));
       await register({
         company_name: fd.get("companyName") as string,
         manager_full_name: fd.get("fullName") as string,
@@ -154,13 +154,13 @@ export default function LoginPage() {
                 {loginLoading ? tr("common.signingIn") : (<>{tr("common.signIn")} <ArrowRight className="w-5 h-5" /></>)}
               </button>
               <button type="button" onClick={fillDemo} className="w-full flex items-center justify-center gap-2 text-sm text-violet-600 font-medium hover:text-violet-800 transition">
-                <Sparkles className="w-4 h-4" /> Use demo account
+                <Sparkles className="w-4 h-4" /> {tr("ui.use_demo_account")}
               </button>
             </form>
           ) : (
             <form className="space-y-4 animate-fade-in-up" onSubmit={handleRegister}>
-              <h2 className="text-2xl font-bold text-slate-900 text-center">Create your company</h2>
-              <p className="text-center text-slate-500 -mt-1 text-sm mb-2">Start managing your fleet in seconds</p>
+              <h2 className="text-2xl font-bold text-slate-900 text-center">{tr("ui.create_your_company")}</h2>
+              <p className="text-center text-slate-500 -mt-1 text-sm mb-2">{tr("ui.start_managing_your_fleet_in_seconds")}</p>
               {companyFields.map((f) => (
                 <div key={f.name}>
                   <label htmlFor={f.name} className="block mb-1.5 text-sm font-semibold text-slate-700">
@@ -170,7 +170,7 @@ export default function LoginPage() {
                 </div>
               ))}
               <button type="submit" className="btn btn-primary w-full text-lg" disabled={registerLoading}>
-                {registerLoading ? "Creating…" : (<>Create Account <ArrowRight className="w-5 h-5" /></>)}
+                {registerLoading ? "Creating…" : (<>{tr("ui.create_account")} <ArrowRight className="w-5 h-5" /></>)}
               </button>
             </form>
           )}

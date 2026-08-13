@@ -1,5 +1,6 @@
 "use client";
 import { Bar, Line } from 'react-chartjs-2';
+import { useT } from "@/i18n";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -88,18 +89,19 @@ const PERFORMANCE_DATA = {
 };
 
 export default function VehiclePerformanceChart() {
+  const tr = useT();
   return (
     <div className="w-full space-y-8">
       {/* Health Overview Chart */}
       <div className="bg-gradient-to-br from-white to-violet-50 rounded-3xl p-8 shadow-xl border border-violet-100">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">Vehicle Health Overview</h3>
-            <p className="text-gray-600">Component health status and performance metrics</p>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">{tr("ui.vehicle_health_overview")}</h3>
+            <p className="text-gray-600">{tr("ui.component_health_status_and_performance_metrics")}</p>
           </div>
           <div className="flex items-center gap-2 px-4 py-2 bg-green-100 rounded-full">
             <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-            <span className="text-sm font-semibold text-green-700">Good Condition</span>
+            <span className="text-sm font-semibold text-green-700">{tr("ui.good_condition")}</span>
           </div>
         </div>
         
@@ -195,12 +197,12 @@ export default function VehiclePerformanceChart() {
       <div className="bg-gradient-to-br from-white to-purple-50 rounded-3xl p-8 shadow-xl border border-purple-100">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">Weekly Performance Trends</h3>
-            <p className="text-gray-600">Fuel efficiency and distance covered over the past week</p>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">{tr("ui.weekly_performance_trends")}</h3>
+            <p className="text-gray-600">{tr("ui.fuel_efficiency_and_distance_covered_over_the_pa")}</p>
           </div>
           <div className="flex items-center gap-2 px-4 py-2 bg-violet-100 rounded-full">
             <div className="w-3 h-3 bg-violet-500 rounded-full"></div>
-            <span className="text-sm font-semibold text-violet-700">Trending Up</span>
+            <span className="text-sm font-semibold text-violet-700">{tr("ui.trending_up")}</span>
           </div>
         </div>
         
@@ -279,7 +281,7 @@ export default function VehiclePerformanceChart() {
           <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-sm font-medium text-gray-600">Average Fuel Efficiency</div>
+                <div className="text-sm font-medium text-gray-600">{tr("ui.average_fuel_efficiency")}</div>
                 <div className="text-3xl font-bold text-violet-600">12.9 km/L</div>
               </div>
               <div className="w-12 h-12 bg-violet-100 rounded-2xl flex items-center justify-center">
@@ -293,7 +295,7 @@ export default function VehiclePerformanceChart() {
           <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-sm font-medium text-gray-600">Total Distance</div>
+                <div className="text-sm font-medium text-gray-600">{tr("ui.total_distance")}</div>
                 <div className="text-3xl font-bold text-purple-600">1,460 km</div>
               </div>
               <div className="w-12 h-12 bg-purple-100 rounded-2xl flex items-center justify-center">

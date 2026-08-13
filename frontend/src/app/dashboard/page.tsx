@@ -9,11 +9,11 @@ import {
 import { useVehicles, useDrivers, useTrips, useExpenses, useFleetAlerts } from "@/lib/api-data";
 import { StatCard, Badge } from "@/components/ui";
 import type { TripStatus } from "@/lib/types";
+import { useT } from "@/i18n";
+import { useUnits } from "@/lib/format";
 
 const LiveMap = dynamic(() => import("../../components/LiveMapWidget"), { ssr: false });
 
-const currency = (n: number) =>
-  "€" + n.toLocaleString(undefined, { maximumFractionDigits: 0 });
 
 const tripTone: Record<TripStatus, string> = {
   COMPLETED: "green",
@@ -23,6 +23,8 @@ const tripTone: Record<TripStatus, string> = {
 };
 
 export default function Dashboard() {
+  const tr = useT();
+  const { currency, distance } = useUnits();
   const { data: vehicles } = useVehicles();
   const { data: drivers } = useDrivers();
   const { data: trips } = useTrips();
@@ -79,28 +81,28 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 stagger">
         <StatCard
           icon={Users}
-          label="Active Drivers"
+          label={tr("ui.active_drivers")}
           value={stats.activeDrivers}
           hint={`of ${stats.totalDrivers} total`}
           gradient="from-purple-500 to-violet-600"
         />
         <StatCard
           icon={Truck}
-          label="Online Vehicles"
+          label={tr("ui.online_vehicles")}
           value={stats.onlineVehicles}
           hint={`of ${stats.totalVehicles} total`}
           gradient="from-orange-500 to-amber-600"
         />
         <StatCard
           icon={Route}
-          label="Active Trips"
+          label={tr("ui.active_trips")}
           value={stats.ongoingTrips}
           hint={`${stats.completedTrips} completed`}
           gradient="from-purple-500 to-fuchsia-600"
         />
         <StatCard
           icon={TrendingUp}
-          label="Revenue (7 days)"
+          label={tr("ui.revenue_7_days")}
           value={currency(stats.revenueWeek)}
           gradient="from-emerald-500 to-teal-600"
         />
@@ -111,13 +113,13 @@ export default function Dashboard() {
         <div className="lg:col-span-2 card overflow-hidden">
           <div className="flex items-center justify-between px-6 pt-5 pb-4">
             <h2 className="font-bold text-slate-800 text-lg flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> Live Vehicle Map
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> {tr("ui.live_vehicle_map")}
             </h2>
             <Link
               href="/dashboard/live-map"
               className="btn btn-ghost text-sm py-2"
             >
-              <Maximize2 className="w-4 h-4" /> Full map
+              <Maximize2 className="w-4 h-4" /> {tr("ui.full_map")}
             </Link>
           </div>
           <div className="px-4 pb-4 sm:px-6 sm:pb-6">
@@ -131,7 +133,7 @@ export default function Dashboard() {
         <div className="space-y-6">
           {/* Weekly trips chart */}
           <div className="card p-6">
-            <h2 className="font-bold text-slate-800 mb-1">Trips this week</h2>
+            <h2 className="font-bold text-slate-800 mb-1">{tr("ui.trips_this_week")}</h2>
             <p className="text-sm text-slate-500 mb-4">{trips.length} total records</p>
             <div className="flex items-end justify-between gap-2 h-36">
               {weekBars.map((b) => (
@@ -152,19 +154,19 @@ export default function Dashboard() {
           {/* Finance summary */}
           <div className="card p-6 bg-gradient-to-br from-violet-600 to-purple-700 text-white border-0 shadow-brand">
             <div className="flex items-center gap-2 text-violet-100 mb-1">
-              <Wallet className="w-4 h-4" /> Expenses this month
+              <Wallet className="w-4 h-4" /> {tr("ui.expenses_this_month")}
             </div>
             <div className="text-3xl font-bold">{currency(stats.expensesMonth)}</div>
             <div className="mt-4 pt-4 border-t border-white/20 flex items-center justify-between">
               <div>
-                <div className="text-violet-100 text-sm">Net (7d)</div>
+                <div className="text-violet-100 text-sm">{tr("ui.net_7d")}</div>
                 <div className="text-xl font-bold flex items-center gap-1">
                   <ArrowUpRight className="w-4 h-4" />
                   {currency(stats.revenueWeek)}
                 </div>
               </div>
               <Link href="/dashboard/expenses" className="btn bg-white/15 hover:bg-white/25 text-white text-sm">
-                View
+                {tr("ui.view")}
               </Link>
             </div>
           </div>
@@ -172,11 +174,11 @@ export default function Dashboard() {
           {/* Recent alerts (real) */}
           <div className="card p-6">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="font-bold text-slate-800">Recent alerts</h2>
+              <h2 className="font-bold text-slate-800">{tr("ui.recent_alerts")}</h2>
               <Link href="/dashboard/alerts" className="text-violet-600 text-sm font-semibold hover:text-violet-800">View all →</Link>
             </div>
             {openAlerts.length === 0 ? (
-              <p className="text-sm text-slate-400">No open alerts — fleet looks healthy.</p>
+              <p className="text-sm text-slate-400">{tr("ui.no_open_alerts_fleet_looks_healthy")}</p>
             ) : (
               <ul className="space-y-2">
                 {openAlerts.map((a) => (
@@ -194,7 +196,7 @@ export default function Dashboard() {
       {/* Recent trips */}
       <div className="card overflow-hidden">
         <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100">
-          <h2 className="font-bold text-slate-800 text-lg">Recent trips</h2>
+          <h2 className="font-bold text-slate-800 text-lg">{tr("ui.recent_trips")}</h2>
           <Link href="/dashboard/trips" className="text-violet-600 font-semibold text-sm hover:text-violet-800">
             View all →
           </Link>
@@ -203,12 +205,12 @@ export default function Dashboard() {
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-slate-400 border-b border-slate-100">
-                <th className="py-3 px-6 font-semibold">Route</th>
-                <th className="py-3 px-4 font-semibold">Driver</th>
-                <th className="py-3 px-4 font-semibold hidden md:table-cell">Vehicle</th>
-                <th className="py-3 px-4 font-semibold hidden sm:table-cell">Distance</th>
-                <th className="py-3 px-4 font-semibold">Revenue</th>
-                <th className="py-3 px-6 font-semibold">Status</th>
+                <th className="py-3 px-6 font-semibold">{tr("ui.route")}</th>
+                <th className="py-3 px-4 font-semibold">{tr("ui.driver")}</th>
+                <th className="py-3 px-4 font-semibold hidden md:table-cell">{tr("ui.vehicle")}</th>
+                <th className="py-3 px-4 font-semibold hidden sm:table-cell">{tr("ui.distance")}</th>
+                <th className="py-3 px-4 font-semibold">{tr("ui.revenue")}</th>
+                <th className="py-3 px-6 font-semibold">{tr("ui.status")}</th>
               </tr>
             </thead>
             <tbody>
@@ -219,7 +221,7 @@ export default function Dashboard() {
                   </td>
                   <td className="py-3.5 px-4 text-slate-600 whitespace-nowrap">{t.driver}</td>
                   <td className="py-3.5 px-4 text-slate-600 font-mono hidden md:table-cell">{t.plate_number}</td>
-                  <td className="py-3.5 px-4 text-slate-600 hidden sm:table-cell">{t.distance} km</td>
+                  <td className="py-3.5 px-4 text-slate-600 hidden sm:table-cell">{distance(t.distance)}</td>
                   <td className="py-3.5 px-4 font-semibold text-slate-800">{currency(t.revenue)}</td>
                   <td className="py-3.5 px-6">
                     <Badge tone={tripTone[t.status]} icon={t.status === "COMPLETED" ? CheckCircle2 : Clock}>

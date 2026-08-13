@@ -9,6 +9,8 @@ import AddExpenseModal, { NewExpense } from "@/components/AddExpenseModal";
 import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
 import { useExpenses, createExpense, deleteExpense } from "@/lib/api-data";
 import type { ExpenseCategory } from "@/lib/types";
+import { useT } from "@/i18n";
+import { useUnits } from "@/lib/format";
 
 const catIcon: Record<ExpenseCategory, typeof Fuel> = {
   Fuel, Maintenance: Wrench, Tolls: Receipt, Insurance: Shield, Salary: Users, Other: MoreHorizontal,
@@ -24,9 +26,10 @@ const catIconBg: Record<ExpenseCategory, string> = {
   Salary: "bg-purple-100 text-purple-600",
   Other: "bg-slate-100 text-slate-600",
 };
-const currency = (n: number) => "€" + n.toLocaleString(undefined, { minimumFractionDigits: 0 });
 
 export default function ExpensesPage() {
+  const tr = useT();
+  const { currency, distance } = useUnits();
   const { data: expenses, refetch } = useExpenses();
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
@@ -65,38 +68,38 @@ export default function ExpensesPage() {
     <div className="space-y-6 animate-fade-in">
       <PageHeader
         icon={Wallet}
-        title="Expenses"
-        subtitle="Track every cost across your fleet"
+        title={tr("ui.expenses")}
+        subtitle={tr("ui.track_every_cost_across_your_fleet")}
         gradient="from-emerald-500 to-teal-600"
         actions={
           <button onClick={() => setShowAdd(true)} className="btn btn-primary">
-            <Plus className="w-4 h-4" /> Add Expense
+            <Plus className="w-4 h-4" /> {tr("ui.add_expense")}
           </button>
         }
       />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 stagger">
-        <StatCard icon={Wallet} label="Total Spent" value={currency(stats.total)} gradient="from-emerald-500 to-teal-600" />
-        <StatCard icon={TrendingDown} label="Pending" value={currency(stats.pending)} gradient="from-amber-500 to-orange-600" />
-        <StatCard icon={Fuel} label="Fuel Costs" value={currency(stats.fuel)} gradient="from-violet-500 to-purple-600" />
-        <StatCard icon={Receipt} label="Records" value={stats.count} gradient="from-purple-500 to-fuchsia-600" />
+        <StatCard icon={Wallet} label={tr("ui.total_spent")} value={currency(stats.total)} gradient="from-emerald-500 to-teal-600" />
+        <StatCard icon={TrendingDown} label={tr("ui.pending")} value={currency(stats.pending)} gradient="from-amber-500 to-orange-600" />
+        <StatCard icon={Fuel} label={tr("ui.fuel_costs")} value={currency(stats.fuel)} gradient="from-violet-500 to-purple-600" />
+        <StatCard icon={Receipt} label={tr("ui.records")} value={stats.count} gradient="from-purple-500 to-fuchsia-600" />
       </div>
 
       <div className="card p-4 flex flex-col sm:flex-row gap-3">
         <div className="flex-1 relative">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search title or vehicle…" className="field pl-10" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={tr("ui.search_title_or_vehicle")} className="field pl-10" />
         </div>
         <select value={category} onChange={(e) => setCategory(e.target.value)} className="field sm:w-48">
-          <option value="all">All Categories</option>
+          <option value="all">{tr("ui.all_categories")}</option>
           {Object.keys(catIcon).map((c) => <option key={c}>{c}</option>)}
         </select>
       </div>
 
       {filtered.length === 0 ? (
         <div className="card">
-          <EmptyState icon={Wallet} title="No expenses found" description="Record your first fleet expense."
-            action={<button onClick={() => setShowAdd(true)} className="btn btn-primary mx-auto"><Plus className="w-4 h-4" /> Add Expense</button>} />
+          <EmptyState icon={Wallet} title={tr("ui.no_expenses_found")} description="Record your first fleet expense."
+            action={<button onClick={() => setShowAdd(true)} className="btn btn-primary mx-auto"><Plus className="w-4 h-4" /> {tr("ui.add_expense")}</button>} />
         </div>
       ) : (
         <div className="card overflow-hidden">
@@ -104,13 +107,13 @@ export default function ExpensesPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-slate-400 border-b border-slate-100">
-                  <th className="py-3.5 px-6 font-semibold">Expense</th>
-                  <th className="py-3.5 px-4 font-semibold">Category</th>
-                  <th className="py-3.5 px-4 font-semibold hidden sm:table-cell">Date</th>
-                  <th className="py-3.5 px-4 font-semibold hidden md:table-cell">Vehicle</th>
-                  <th className="py-3.5 px-4 font-semibold">Amount</th>
-                  <th className="py-3.5 px-4 font-semibold">Status</th>
-                  <th className="py-3.5 px-6 font-semibold text-right">Actions</th>
+                  <th className="py-3.5 px-6 font-semibold">{tr("ui.expense")}</th>
+                  <th className="py-3.5 px-4 font-semibold">{tr("ui.category")}</th>
+                  <th className="py-3.5 px-4 font-semibold hidden sm:table-cell">{tr("ui.date")}</th>
+                  <th className="py-3.5 px-4 font-semibold hidden md:table-cell">{tr("ui.vehicle")}</th>
+                  <th className="py-3.5 px-4 font-semibold">{tr("ui.amount")}</th>
+                  <th className="py-3.5 px-4 font-semibold">{tr("ui.status")}</th>
+                  <th className="py-3.5 px-6 font-semibold text-right">{tr("ui.actions")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -133,10 +136,10 @@ export default function ExpensesPage() {
                       <td className="py-3.5 px-4"><Badge tone={x.status === "Paid" ? "green" : "amber"}>{x.status}</Badge></td>
                       <td className="py-3.5 px-6">
                         <div className="flex items-center justify-end gap-2">
-                          <Link href={`/dashboard/expenses/${x.id}`} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-violet-50 hover:text-violet-600 transition" aria-label="View">
+                          <Link href={`/dashboard/expenses/${x.id}`} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-violet-50 hover:text-violet-600 transition" aria-label={tr("ui.view")}>
                             <Eye className="w-4 h-4" />
                           </Link>
-                          <button onClick={() => handleDelete(x.id)} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition" aria-label="Delete">
+                          <button onClick={() => handleDelete(x.id)} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition" aria-label={tr("ui.delete")}>
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </div>

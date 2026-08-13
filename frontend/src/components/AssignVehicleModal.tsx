@@ -3,6 +3,7 @@ import { useState } from "react";
 import { X, UserCheck, Ban } from "lucide-react";
 import { assignDriver, unassignVehicle } from "@/lib/api-data";
 import type { Driver } from "@/lib/types";
+import { useT } from "@/i18n";
 
 interface Props {
   isOpen: boolean;
@@ -17,6 +18,7 @@ interface Props {
 export default function AssignVehicleModal({
   isOpen, onClose, vehicleId, vehiclePlate, currentDriverId, drivers, onChanged,
 }: Props) {
+  const tr = useT();
   const [driverId, setDriverId] = useState<string>(currentDriverId || "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -46,7 +48,7 @@ export default function AssignVehicleModal({
               <UserCheck className="w-5 h-5 text-white" />
             </span>
             <div>
-              <h3 className="font-bold text-slate-900 leading-tight">Assign driver</h3>
+              <h3 className="font-bold text-slate-900 leading-tight">{tr("ui.assign_driver")}</h3>
               <p className="text-sm text-slate-500 font-mono">{vehiclePlate}</p>
             </div>
           </div>
@@ -55,7 +57,7 @@ export default function AssignVehicleModal({
           </button>
         </div>
 
-        <label className="block text-sm text-slate-600 mt-4 mb-1.5">Driver</label>
+        <label className="block text-sm text-slate-600 mt-4 mb-1.5">{tr("ui.driver")}</label>
         <select className="field w-full" value={driverId} onChange={(e) => setDriverId(e.target.value)}>
           <option value="">— Select a driver —</option>
           {drivers.map((d) => (
@@ -71,7 +73,7 @@ export default function AssignVehicleModal({
             disabled={loading || !driverId}
             className="btn btn-primary flex-1"
           >
-            <UserCheck className="w-4 h-4" /> Assign
+            <UserCheck className="w-4 h-4" /> {tr("ui.assign")}
           </button>
           {currentDriverId && (
             <button
@@ -79,7 +81,7 @@ export default function AssignVehicleModal({
               disabled={loading}
               className="btn bg-rose-50 text-rose-600 hover:bg-rose-100"
             >
-              <Ban className="w-4 h-4" /> Unassign
+              <Ban className="w-4 h-4" /> {tr("ui.unassign")}
             </button>
           )}
         </div>

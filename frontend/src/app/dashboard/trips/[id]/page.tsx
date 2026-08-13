@@ -9,12 +9,15 @@ import {
 import { useTrips } from "@/lib/api-data";
 import { Badge, EmptyState } from "@/components/ui";
 import type { TripStatus } from "@/lib/types";
+import { useT } from "@/i18n";
+import { useUnits } from "@/lib/format";
 
 const tone: Record<TripStatus, string> = { COMPLETED: "green", ACTIVE: "blue", PLANNED: "amber", CANCELLED: "red" };
 const icon: Record<TripStatus, typeof Clock> = { COMPLETED: CheckCircle2, ACTIVE: Navigation, PLANNED: CalendarClock, CANCELLED: XCircle };
-const currency = (n: number) => "€" + n.toLocaleString();
 
 export default function TripDetail() {
+  const tr = useT();
+  const { currency, distance } = useUnits();
   const params = useParams();
   const router = useRouter();
   const id = String(params.id);
@@ -22,13 +25,13 @@ export default function TripDetail() {
   const trip = useMemo(() => trips.find((t) => t.id === id), [trips, id]);
 
   if (!trip) {
-    return <div className="card"><EmptyState icon={RouteIcon} title="Trip not found" action={<Link href="/dashboard/trips" className="btn btn-primary mx-auto">Back to trips</Link>} /></div>;
+    return <div className="card"><EmptyState icon={RouteIcon} title={tr("ui.trip_not_found")} action={<Link href="/dashboard/trips" className="btn btn-primary mx-auto">{tr("ui.back_to_trips")}</Link>} /></div>;
   }
   const SIcon = icon[trip.status];
   const specs = [
     { icon: User, label: "Driver", value: trip.driver || "Unassigned" },
     { icon: Truck, label: "Vehicle", value: trip.plate_number || "—" },
-    { icon: RouteIcon, label: "Distance", value: `${trip.distance} km` },
+    { icon: RouteIcon, label: "Distance", value: `${distance(trip.distance)}` },
     { icon: Package, label: "Cargo", value: trip.cargo || "—" },
     { icon: TrendingUp, label: "Revenue", value: currency(trip.revenue) },
     { icon: Calendar, label: "Start", value: new Date(trip.start_time).toLocaleString() },
@@ -36,7 +39,7 @@ export default function TripDetail() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <button onClick={() => router.back()} className="btn btn-ghost"><ArrowLeft className="w-4 h-4" /> Back</button>
+      <button onClick={() => router.back()} className="btn btn-ghost"><ArrowLeft className="w-4 h-4" /> {tr("ui.back")}</button>
 
       <div className="card p-6 sm:p-8">
         <div className="flex items-center justify-between flex-wrap gap-4">

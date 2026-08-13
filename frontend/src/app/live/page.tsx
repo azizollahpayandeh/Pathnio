@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import type { LiveVehicle } from "@/components/LiveTrackMap";
+import { useT } from "@/i18n";
 
 const LiveTrackMap = dynamic(() => import("@/components/LiveTrackMap"), { ssr: false });
 
@@ -29,6 +30,7 @@ const dot: Record<LiveStatus, string> = {
 };
 
 export default function LivePage() {
+  const tr = useT();
   const [token, setToken] = useState<string | null>(null);
   const [vehicles, setVehicles] = useState<LiveVehicle[]>([]);
   const [lastSync, setLastSync] = useState<string>("");
@@ -56,7 +58,7 @@ export default function LivePage() {
       if (res.status === 401) {
         setToken(null);
         sessionStorage.removeItem(TOKEN_KEY);
-        setError("Session expired — please sign in again.");
+        setError(tr("ui.session_expired_please_sign_in_again"));
         return;
       }
       const data = await res.json();
@@ -115,16 +117,16 @@ export default function LivePage() {
       <div className="min-h-screen flex items-center justify-center bg-[#0f0720] p-6">
         <form onSubmit={signIn} className="w-full max-w-sm bg-white rounded-3xl p-7 shadow-xl">
           <h1 className="text-2xl font-extrabold text-violet-800 mb-1">Pathnio Live</h1>
-          <p className="text-slate-500 text-sm mb-6">Manager sign in — real-time fleet map</p>
+          <p className="text-slate-500 text-sm mb-6">{tr("ui.manager_sign_in_real_time_fleet_map")}</p>
 
-          <label className="block text-sm text-slate-600 mb-1">Username</label>
+          <label className="block text-sm text-slate-600 mb-1">{tr("ui.username")}</label>
           <input
             className="w-full border border-slate-200 rounded-xl px-4 py-3 mb-4"
             value={username}
             autoCapitalize="none"
             onChange={(e) => setUsername(e.target.value)}
           />
-          <label className="block text-sm text-slate-600 mb-1">Password</label>
+          <label className="block text-sm text-slate-600 mb-1">{tr("ui.password")}</label>
           <input
             type="password"
             className="w-full border border-slate-200 rounded-xl px-4 py-3 mb-4"
@@ -169,7 +171,7 @@ export default function LivePage() {
           </div>
         </div>
         <button onClick={signOut} className="text-rose-300 text-sm font-semibold">
-          Sign out
+          {tr("ui.sign_out")}
         </button>
       </header>
 

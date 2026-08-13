@@ -8,11 +8,14 @@ import {
 } from "lucide-react";
 import { useDrivers, useTrips } from "@/lib/api-data";
 import { Badge, EmptyState } from "@/components/ui";
+import { useT } from "@/i18n";
+import { useUnits } from "@/lib/format";
 
 const statusTone: Record<string, string> = { Active: "green", "On Trip": "blue", Offline: "amber", Inactive: "gray" };
-const currency = (n: number) => "€" + n.toLocaleString();
 
 export default function DriverDetail() {
+  const tr = useT();
+  const { currency, distance } = useUnits();
   const params = useParams();
   const router = useRouter();
   const id = String(params.id);
@@ -23,7 +26,7 @@ export default function DriverDetail() {
   const dTrips = useMemo(() => (driver ? trips.filter((t) => t.driver === driver.full_name) : []), [trips, driver]);
 
   if (!driver) {
-    return <div className="card"><EmptyState icon={Users} title="Driver not found" action={<Link href="/dashboard/drivers" className="btn btn-primary mx-auto">Back to drivers</Link>} /></div>;
+    return <div className="card"><EmptyState icon={Users} title={tr("ui.driver_not_found")} action={<Link href="/dashboard/drivers" className="btn btn-primary mx-auto">{tr("ui.back_to_drivers")}</Link>} /></div>;
   }
 
   const specs = [
@@ -38,7 +41,7 @@ export default function DriverDetail() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <button onClick={() => router.back()} className="btn btn-ghost"><ArrowLeft className="w-4 h-4" /> Back</button>
+      <button onClick={() => router.back()} className="btn btn-ghost"><ArrowLeft className="w-4 h-4" /> {tr("ui.back")}</button>
 
       <div className="card p-6 sm:p-8">
         <div className="flex flex-col sm:flex-row sm:items-center gap-5">
@@ -50,9 +53,9 @@ export default function DriverDetail() {
               <h1 className="text-3xl font-bold text-slate-900">{driver.full_name}</h1>
               <Badge tone={statusTone[driver.status] || "gray"} icon={SIcon}>{driver.status}</Badge>
               {driver.activated ? (
-                <Badge tone="green" icon={CheckCircle}>Activated</Badge>
+                <Badge tone="green" icon={CheckCircle}>{tr("ui.activated")}</Badge>
               ) : (
-                <Badge tone="amber" icon={KeyRound}>Not activated</Badge>
+                <Badge tone="amber" icon={KeyRound}>{tr("ui.not_activated")}</Badge>
               )}
             </div>
           </div>
@@ -71,13 +74,13 @@ export default function DriverDetail() {
 
       <div className="card p-6">
         <h2 className="font-bold text-slate-800 mb-3">Trip history ({dTrips.length})</h2>
-        {dTrips.length === 0 ? <p className="text-slate-400 text-sm py-6 text-center">No trips recorded for this driver.</p> : (
+        {dTrips.length === 0 ? <p className="text-slate-400 text-sm py-6 text-center">{tr("ui.no_trips_recorded_for_this_driver")}</p> : (
           <div className="space-y-2">
             {dTrips.map((t) => (
               <div key={t.id} className="flex items-center justify-between p-3 rounded-xl bg-slate-50">
                 <span className="text-sm font-medium text-slate-700">{t.origin} → {t.destination}</span>
                 <div className="flex items-center gap-3">
-                  <span className="text-sm text-slate-500">{t.distance} km</span>
+                  <span className="text-sm text-slate-500">{distance(t.distance)}</span>
                   <span className="text-sm font-semibold text-slate-800">{currency(t.revenue)}</span>
                 </div>
               </div>

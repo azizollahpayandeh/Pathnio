@@ -4,8 +4,10 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { useT } from "@/i18n";
 
 export default function FeaturesPage() {
+  const tr = useT();
   const logoText = 'Pathnio';
   const [visibleLetters, setVisibleLetters] = useState(0);
 
@@ -57,7 +59,7 @@ export default function FeaturesPage() {
       <main className="pt-20 sm:pt-24 md:pt-28 pb-16 px-4 sm:px-8 md:px-20 max-w-7xl mx-auto flex-grow">
         <section className="text-center mb-12 md:mb-16 px-2 sm:px-6 animate-fadeInUp">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-violet-700 mb-3 sm:mb-4 leading-tight tracking-tight">
-            Unleash the Power of Pathnio
+            {tr("ui.unleash_the_power_of_pathnio")}
           </h1>
           <p className="text-sm sm:text-base md:text-lg text-gray-700 max-w-4xl mx-auto leading-relaxed">
             Discover a suite of powerful features meticulously crafted to streamline your logistics, from real-time tracking to intelligent analytics.
@@ -160,7 +162,7 @@ export default function FeaturesPage() {
             href="/login"
             className="inline-block px-8 py-3 bg-gradient-to-r from-violet-600 to-violet-800 text-white font-bold rounded-full text-base shadow-xl hover:from-violet-700 hover:to-violet-900 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-2xl"
           >
-            Get Started Now
+            {tr("ui.get_started_now")}
           </Link>
         </div>
       </main>

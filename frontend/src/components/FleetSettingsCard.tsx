@@ -1,10 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
+import { invalidateUnits } from "@/lib/format";
 import { Gauge, Save } from "lucide-react";
 import { getCompanySettings, updateCompanySettings, type CompanySettings } from "@/lib/api-data";
 import { toast } from "./Toast";
+import { useT } from "@/i18n";
 
 export default function FleetSettingsCard() {
+  const tr = useT();
   const [s, setS] = useState<CompanySettings | null>(null);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
@@ -15,7 +18,7 @@ export default function FleetSettingsCard() {
 
   if (!s) {
     return (
-      <div className="card p-6 text-slate-400 text-sm">Loading fleet settings…</div>
+      <div className="card p-6 text-slate-400 text-sm">{tr("ui.loading_fleet_settings")}</div>
     );
   }
 
@@ -33,8 +36,9 @@ export default function FleetSettingsCard() {
     try {
       const next = await updateCompanySettings(s);
       setS(next);
-      setMsg("Saved.");
-      toast.success("Fleet settings saved.");
+      setMsg(tr("ui.saved"));
+      invalidateUnits();
+      toast.success(tr("ui.fleet_settings_saved"));
       setTimeout(() => setMsg(null), 2000);
     } catch (err) {
       toast.fromError(err, "Could not save settings.");
@@ -54,30 +58,30 @@ export default function FleetSettingsCard() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm text-slate-600 mb-1">Timezone</label>
+          <label className="block text-sm text-slate-600 mb-1">{tr("ui.timezone")}</label>
           <input className="field w-full" value={s.timezone} onChange={(e) => set("timezone", e.target.value)} placeholder="UTC" />
         </div>
         <div>
-          <label className="block text-sm text-slate-600 mb-1">Distance unit</label>
+          <label className="block text-sm text-slate-600 mb-1">{tr("ui.distance_unit")}</label>
           <select className="field w-full" value={s.distance_unit} onChange={(e) => set("distance_unit", e.target.value)}>
-            <option value="km">Kilometers</option>
-            <option value="mi">Miles</option>
+            <option value="km">{tr("ui.kilometers")}</option>
+            <option value="mi">{tr("ui.miles")}</option>
           </select>
         </div>
         <div>
-          <label className="block text-sm text-slate-600 mb-1">Currency</label>
+          <label className="block text-sm text-slate-600 mb-1">{tr("ui.currency")}</label>
           <input className="field w-full" value={s.currency} onChange={(e) => set("currency", e.target.value)} placeholder="EUR" />
         </div>
         <div>
-          <label className="block text-sm text-slate-600 mb-1">Moving speed threshold (km/h)</label>
+          <label className="block text-sm text-slate-600 mb-1">{tr("ui.moving_speed_threshold_km_h")}</label>
           <input type="number" min={0} className="field w-full" value={s.moving_speed_kmh} onChange={num("moving_speed_kmh")} />
         </div>
         <div>
-          <label className="block text-sm text-slate-600 mb-1">Offline timeout (seconds)</label>
+          <label className="block text-sm text-slate-600 mb-1">{tr("ui.offline_timeout_seconds")}</label>
           <input type="number" min={10} className="field w-full" value={s.offline_timeout_seconds} onChange={num("offline_timeout_seconds")} />
         </div>
         <div>
-          <label className="block text-sm text-slate-600 mb-1">Telemetry interval (seconds)</label>
+          <label className="block text-sm text-slate-600 mb-1">{tr("ui.telemetry_interval_seconds")}</label>
           <input type="number" min={5} className="field w-full" value={s.telemetry_interval_seconds} onChange={num("telemetry_interval_seconds")} />
         </div>
       </div>

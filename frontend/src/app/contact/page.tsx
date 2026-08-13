@@ -18,6 +18,7 @@ import {
 import { useEffect, useState } from 'react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import { useT } from "@/i18n";
 
 interface Alert {
   type: 'success' | 'error';
@@ -25,6 +26,7 @@ interface Alert {
 }
 
 export default function ContactUs() {
+  const tr = useT();
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [scrollPercent, setScrollPercent] = useState(0);
   const [alert, setAlert] = useState<Alert | null>(null);
@@ -164,7 +166,7 @@ export default function ContactUs() {
           {/* Hero Section */}
           <div className="text-center mb-20 animate-slide-up-fade">
             <h1 className="text-5xl md:text-7xl font-black mb-6 text-gray-900 leading-tight">
-              Contact Us
+              {tr("ui.contact_us")}
             </h1>
 
             <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
@@ -202,7 +204,7 @@ export default function ContactUs() {
                     <MessageCircle className="w-6 h-6 text-white" />
                   </div>
                   <h2 className="text-3xl font-bold text-gray-900">
-                    Contact Information
+                    {tr("ui.contact_information")}
                   </h2>
                 </div>
 
@@ -261,7 +263,7 @@ export default function ContactUs() {
                     <Heart className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900">
-                    What Our Clients Say
+                    {tr("ui.what_our_clients_say")}
                   </h3>
                 </div>
 
@@ -313,7 +315,7 @@ export default function ContactUs() {
                     <Send className="w-6 h-6 text-white" />
                   </div>
                   <h2 className="text-3xl font-bold text-gray-900">
-                    Send us a Message
+                    {tr("ui.send_us_a_message")}
                   </h2>
                 </div>
 
@@ -327,7 +329,7 @@ export default function ContactUs() {
                       name="name"
                       value={form.name}
                       onChange={handleChange}
-                      placeholder="What should we call you?"
+                      placeholder={tr("ui.what_should_we_call_you")}
                       className="w-full px-6 py-4 bg-gray-50 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-gray-900 placeholder-gray-500 text-lg transition-all duration-300 group-hover:bg-gray-100"
                     />
                   </div>
@@ -355,7 +357,7 @@ export default function ContactUs() {
                       value={form.message}
                       onChange={handleChange}
                       rows={6}
-                      placeholder="Tell us about your amazing project! We're excited to hear from you..."
+                      placeholder={tr("ui.tell_us_about_your_amazing_project_we_re_excited")}
                       className="w-full px-6 py-4 bg-gray-50 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent text-gray-900 placeholder-gray-500 text-lg resize-none transition-all duration-300 group-hover:bg-gray-100"
                     />
                   </div>
@@ -369,12 +371,12 @@ export default function ContactUs() {
                       {isSubmitting ? (
                         <>
                           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
-                          Sending your magic...
+                          {tr("ui.sending_your_magic")}
                         </>
                       ) : (
                         <>
                           <Send className="w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
-                          Send Message
+                          {tr("ui.send_message")}
                           <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                         </>
                       )}
@@ -386,7 +388,7 @@ export default function ContactUs() {
                   <div className="flex items-center gap-3 mb-2">
                     <Shield className="w-5 h-5 text-green-600" />
                     <span className="text-gray-900 font-semibold">
-                      We respect your privacy
+                      {tr("ui.we_respect_your_privacy")}
                     </span>
                   </div>
                   <p className="text-gray-700 text-sm">

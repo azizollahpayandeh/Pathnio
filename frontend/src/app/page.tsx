@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useT } from "@/i18n";
 import {
   MapPin, BarChart3, UserCheck, ArrowRight, Truck, Route,
   Wallet, Bell, ShieldCheck, Zap, Gauge, Star,
@@ -25,6 +26,7 @@ const STATS = [
 ];
 
 export default function HomePage() {
+  const tr = useT();
   return (
     <div className="text-slate-800">
       <Header />
@@ -38,20 +40,20 @@ export default function HomePage() {
         <div className="relative z-10 container mx-auto px-6 sm:px-10 py-28 grid lg:grid-cols-2 gap-12 items-center">
           <div className="animate-fade-in-up">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/15 text-sm font-medium mb-6">
-              <Zap className="w-4 h-4 text-amber-300" /> The modern fleet platform
+              <Zap className="w-4 h-4 text-amber-300" /> {tr("ui.the_modern_fleet_platform")}
             </span>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1] mb-6">
-              Fleet management,<br /><span className="bg-gradient-to-r from-violet-300 to-teal-300 bg-clip-text text-transparent">redefined.</span>
+              {tr("ui.fleet_management")}<br /><span className="bg-gradient-to-r from-violet-300 to-teal-300 bg-clip-text text-transparent">redefined.</span>
             </h1>
             <p className="text-lg text-violet-100/90 max-w-xl mb-8">
               Track, manage and optimize your entire fleet in real time — drivers, vehicles, trips and expenses in one beautiful dashboard.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/dashboard" className="btn btn-primary text-lg px-8 py-4">
-                Get Started <ArrowRight className="w-5 h-5" />
+                {tr("ui.get_started")} <ArrowRight className="w-5 h-5" />
               </Link>
               <Link href="/about" className="btn text-lg px-8 py-4 bg-white/10 border border-white/20 text-white hover:bg-white/20">
-                Learn More
+                {tr("ui.learn_more")}
               </Link>
             </div>
             <div className="flex items-center gap-6 mt-10">
@@ -62,7 +64,7 @@ export default function HomePage() {
               </div>
               <div>
                 <div className="flex text-amber-300">{[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-amber-300" />)}</div>
-                <div className="text-sm text-violet-100/80">Trusted by logistics teams</div>
+                <div className="text-sm text-violet-100/80">{tr("ui.trusted_by_logistics_teams")}</div>
               </div>
             </div>
           </div>
@@ -90,7 +92,7 @@ export default function HomePage() {
                 ))}
               </div>
               <div className="rounded-2xl bg-white p-4 border border-slate-100 shadow-sm">
-                <div className="text-sm font-semibold text-slate-600 mb-3">Weekly revenue</div>
+                <div className="text-sm font-semibold text-slate-600 mb-3">{tr("ui.weekly_revenue")}</div>
                 <div className="flex items-end gap-2 h-24">
                   {[40, 65, 45, 80, 55, 90, 70].map((h, i) => (
                     <div key={i} className="flex-1 rounded-lg bg-gradient-to-t from-violet-600 to-purple-400" style={{ height: `${h}%` }} />
@@ -118,7 +120,7 @@ export default function HomePage() {
       <section id="features" className="py-24 bg-[var(--background)]">
         <div className="container mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-14">
-            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">Everything you need to run a fleet</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">{tr("ui.everything_you_need_to_run_a_fleet")}</h2>
             <p className="text-lg text-slate-500">Powerful tools designed to make transportation efficient, transparent and profitable.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -138,7 +140,7 @@ export default function HomePage() {
       {/* Trusted brands */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-6 text-center">
-          <h3 className="text-2xl font-bold text-slate-800 mb-10">Trusted by leading companies</h3>
+          <h3 className="text-2xl font-bold text-slate-800 mb-10">{tr("ui.trusted_by_leading_companies")}</h3>
           <div className="flex flex-wrap justify-center items-center gap-10">
             {[
               { src: "/logos/DHL.png", alt: "DHL" },
@@ -158,10 +160,10 @@ export default function HomePage() {
       <section className="py-24 bg-gradient-to-br from-violet-700 to-purple-800 text-white">
         <div className="container mx-auto px-6 text-center max-w-2xl">
           <ShieldCheck className="w-14 h-14 mx-auto mb-6 text-violet-200" />
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Ready to transform your fleet?</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">{tr("ui.ready_to_transform_your_fleet")}</h2>
           <p className="text-lg text-violet-100/90 mb-8">Join hundreds of teams already optimizing their logistics with Pathnio.</p>
           <Link href="/login" className="btn text-lg px-8 py-4 bg-white text-violet-800 hover:-translate-y-0.5 shadow-xl">
-            Get Started Now <ArrowRight className="w-5 h-5" />
+            {tr("ui.get_started_now")} <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
       </section>

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Truck, Menu, X } from "lucide-react";
 import { isAuthenticated } from "@/lib/auth";
+import { useT } from "@/i18n";
 
 const LINKS = [
   { href: "/", label: "Home" },
@@ -14,6 +15,7 @@ const LINKS = [
 ];
 
 export default function Header() {
+  const tr = useT();
   const [loggedIn, setLoggedIn] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -50,7 +52,7 @@ export default function Header() {
         <button
           className="md:hidden w-10 h-10 flex items-center justify-center text-white"
           onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle menu"
+          aria-label={tr("ui.toggle_menu")}
         >
           {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>

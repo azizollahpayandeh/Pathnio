@@ -8,10 +8,12 @@ import { PageHeader, Badge, EmptyState, Field } from "@/components/ui";
 import FloatingAlert from "@/components/FloatingAlert";
 import { useSupportTickets, createSupportTicket } from "@/lib/api-data";
 import type { Ticket } from "@/lib/types";
+import { useT } from "@/i18n";
 
 const tone: Record<string, string> = { open: "amber", answered: "green", closed: "gray" };
 
 export default function SupportPage() {
+  const tr = useT();
   const { data: tickets, refetch } = useSupportTickets();
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
@@ -40,7 +42,7 @@ export default function SupportPage() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <PageHeader icon={LifeBuoy} title="Support" subtitle="We're here to help" gradient="from-teal-500 to-violet-600" />
+      <PageHeader icon={LifeBuoy} title={tr("ui.support")} subtitle={tr("ui.we_re_here_to_help")} gradient="from-teal-500 to-violet-600" />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 stagger">
         {channels.map((c) => (
@@ -59,21 +61,21 @@ export default function SupportPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* New ticket */}
         <form onSubmit={submit} className="card p-6 space-y-4">
-          <h2 className="font-bold text-slate-800 flex items-center gap-2"><Plus className="w-5 h-5 text-violet-600" /> New ticket</h2>
-          <Field label="Subject" required>
-            <input className="field" value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="How can we help?" />
+          <h2 className="font-bold text-slate-800 flex items-center gap-2"><Plus className="w-5 h-5 text-violet-600" /> {tr("ui.new_ticket")}</h2>
+          <Field label={tr("ui.subject")} required>
+            <input className="field" value={subject} onChange={(e) => setSubject(e.target.value)} placeholder={tr("ui.how_can_we_help")} />
           </Field>
-          <Field label="Message" required>
-            <textarea className="field min-h-[120px]" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Describe your issue…" />
+          <Field label={tr("ui.message")} required>
+            <textarea className="field min-h-[120px]" value={message} onChange={(e) => setMessage(e.target.value)} placeholder={tr("ui.describe_your_issue")} />
           </Field>
-          <button type="submit" className="btn btn-primary w-full"><Send className="w-4 h-4" /> Submit ticket</button>
+          <button type="submit" className="btn btn-primary w-full"><Send className="w-4 h-4" /> {tr("ui.submit_ticket")}</button>
         </form>
 
         {/* Ticket list */}
         <div className="card p-6">
           <h2 className="font-bold text-slate-800 flex items-center gap-2 mb-4"><MessageCircle className="w-5 h-5 text-violet-600" /> Your tickets ({tickets.length})</h2>
           {tickets.length === 0 ? (
-            <EmptyState icon={BookOpen} title="No tickets yet" description="Submit a ticket and it will appear here." />
+            <EmptyState icon={BookOpen} title={tr("ui.no_tickets_yet")} description="Submit a ticket and it will appear here." />
           ) : (
             <div className="space-y-3 max-h-[420px] overflow-y-auto scroll-slim pr-1">
               {tickets.map((t) => (
@@ -85,7 +87,7 @@ export default function SupportPage() {
                   <p className="text-sm text-slate-600 mt-1">{t.message}</p>
                   {t.reply && (
                     <div className="mt-3 pl-3 border-l-2 border-violet-300 text-sm text-slate-600">
-                      <span className="font-semibold text-violet-700">Support:</span> {t.reply}
+                      <span className="font-semibold text-violet-700">{tr("ui.support")}</span> {t.reply}
                     </div>
                   )}
                   <div className="text-xs text-slate-400 mt-2">{new Date(t.created_at).toLocaleDateString()}</div>

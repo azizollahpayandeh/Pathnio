@@ -8,11 +8,14 @@ import {
 } from "lucide-react";
 import { useExpenses, useTrips, useVehicles } from "@/lib/api-data";
 import { Badge, EmptyState } from "@/components/ui";
+import { useT } from "@/i18n";
+import { useUnits } from "@/lib/format";
 
 const statusTone: Record<string, string> = { Active: "green", Inactive: "gray", Maintenance: "blue" };
-const currency = (n: number) => "€" + n.toLocaleString();
 
 export default function VehicleDetail() {
+  const tr = useT();
+  const { currency, distance } = useUnits();
   const params = useParams();
   const router = useRouter();
   const plate = decodeURIComponent(String(params.id));
@@ -26,7 +29,7 @@ export default function VehicleDetail() {
 
   if (!vehicle) {
     return (
-      <div className="card"><EmptyState icon={Truck} title="Vehicle not found" description={`No vehicle with plate ${plate}.`} action={<Link href="/dashboard/vehicles" className="btn btn-primary mx-auto">Back to vehicles</Link>} /></div>
+      <div className="card"><EmptyState icon={Truck} title={tr("ui.vehicle_not_found")} description={`No vehicle with plate ${plate}.`} action={<Link href="/dashboard/vehicles" className="btn btn-primary mx-auto">{tr("ui.back_to_vehicles")}</Link>} /></div>
     );
   }
 
@@ -41,7 +44,7 @@ export default function VehicleDetail() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <button onClick={() => router.back()} className="btn btn-ghost"><ArrowLeft className="w-4 h-4" /> Back</button>
+      <button onClick={() => router.back()} className="btn btn-ghost"><ArrowLeft className="w-4 h-4" /> {tr("ui.back")}</button>
 
       <div className="card p-6 sm:p-8">
         <div className="flex flex-col sm:flex-row sm:items-center gap-5">
@@ -72,7 +75,7 @@ export default function VehicleDetail() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="card p-6">
           <h2 className="font-bold text-slate-800 mb-3">Recent trips ({vTrips.length})</h2>
-          {vTrips.length === 0 ? <p className="text-slate-400 text-sm py-6 text-center">No trips recorded.</p> : (
+          {vTrips.length === 0 ? <p className="text-slate-400 text-sm py-6 text-center">{tr("ui.no_trips_recorded")}</p> : (
             <div className="space-y-2">
               {vTrips.slice(0, 6).map((t) => (
                 <div key={t.id} className="flex items-center justify-between p-3 rounded-xl bg-slate-50">
@@ -85,7 +88,7 @@ export default function VehicleDetail() {
         </div>
         <div className="card p-6">
           <h2 className="font-bold text-slate-800 mb-3">Expenses ({vExpenses.length})</h2>
-          {vExpenses.length === 0 ? <p className="text-slate-400 text-sm py-6 text-center">No expenses recorded.</p> : (
+          {vExpenses.length === 0 ? <p className="text-slate-400 text-sm py-6 text-center">{tr("ui.no_expenses_recorded")}</p> : (
             <div className="space-y-2">
               {vExpenses.slice(0, 6).map((x) => (
                 <div key={x.id} className="flex items-center justify-between p-3 rounded-xl bg-slate-50">

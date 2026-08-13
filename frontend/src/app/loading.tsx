@@ -1,6 +1,8 @@
 "use client";
+import { useT } from "@/i18n";
 
 export default function Loading() {
+  const tr = useT();
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-violet-100 via-violet-200 to-violet-300">
       <div className="relative flex items-center justify-center">
@@ -17,7 +19,7 @@ export default function Loading() {
         </div>
       </div>
       <span className="mt-8 text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-violet-700 via-violet-600 to-violet-500 animate-pulse">
-        Loading...
+        {tr("ui.loading")}
       </span>
       <style jsx>{`
         @keyframes shine {

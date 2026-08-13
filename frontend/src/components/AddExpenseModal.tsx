@@ -5,6 +5,7 @@ import { Modal, Field } from "./ui";
 import { useVehicles } from "@/lib/api-data";
 import { toast } from "./Toast";
 import type { Expense } from "@/lib/types";
+import { useT } from "@/i18n";
 
 export type NewExpense = Omit<Expense, "id" | "createdAt">;
 
@@ -19,6 +20,7 @@ interface Props {
 const CATS = ["Fuel", "Maintenance", "Tolls", "Parking", "Insurance", "Salary", "Repair", "Other"];
 
 export default function AddExpenseModal({ isOpen, onClose, onAddExpense, initial }: Props) {
+  const tr = useT();
   const { data: vehicles } = useVehicles();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -43,14 +45,14 @@ export default function AddExpenseModal({ isOpen, onClose, onAddExpense, initial
 
     const amount = Number(form.amount);
     if (!Number.isFinite(amount) || amount <= 0) {
-      setError("Enter an amount greater than zero.");
+      setError(tr("ui.enter_an_amount_greater_than_zero"));
       return;
     }
     // The API field is a DATE (YYYY-MM-DD). Sending a full ISO datetime was
     // rejected with "Date has wrong format" — that is why saving failed.
     const date = String(form.date ?? "").slice(0, 10);
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-      setError("Choose a valid date.");
+      setError(tr("ui.choose_a_valid_date"));
       return;
     }
 
@@ -77,13 +79,13 @@ export default function AddExpenseModal({ isOpen, onClose, onAddExpense, initial
   };
 
   return (
-    <Modal open={isOpen} onClose={onClose} title={initial ? "Edit Expense" : "Add Expense"} subtitle="Record a fleet cost" icon={Wallet} gradient="from-emerald-500 to-teal-600" maxWidth="max-w-xl">
+    <Modal open={isOpen} onClose={onClose} title={initial ? "Edit Expense" : "Add Expense"} subtitle={tr("ui.record_a_fleet_cost")} icon={Wallet} gradient="from-emerald-500 to-teal-600" maxWidth="max-w-xl">
       <form onSubmit={submit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Field label="Title">
-            <input className="field" value={form.title} onChange={(e) => set("title", e.target.value)} placeholder="Fuel top-up" />
+          <Field label={tr("ui.title")}>
+            <input className="field" value={form.title} onChange={(e) => set("title", e.target.value)} placeholder={tr("ui.fuel_top_up")} />
           </Field>
-          <Field label="Category">
+          <Field label={tr("ui.category")}>
             <select className="field" value={form.category} onChange={(e) => set("category", e.target.value)}>
               {CATS.map((c) => <option key={c}>{c}</option>)}
             </select>
@@ -91,23 +93,23 @@ export default function AddExpenseModal({ isOpen, onClose, onAddExpense, initial
           <Field label="Amount (€)" required>
             <input className="field" type="number" min={0} step="0.01" required value={form.amount} onChange={(e) => set("amount", Number(e.target.value))} />
           </Field>
-          <Field label="Date">
+          <Field label={tr("ui.date")}>
             <input className="field" type="date" value={typeof form.date === "string" ? form.date.slice(0, 10) : ""} onChange={(e) => set("date", e.target.value)} />
           </Field>
-          <Field label="Vehicle">
+          <Field label={tr("ui.vehicle")}>
             <select className="field" value={form.plate_number} onChange={(e) => set("plate_number", e.target.value)}>
               <option value="">—</option>
               {vehicles.map((v) => <option key={v.id} value={v.plate_number}>{v.plate_number}</option>)}
             </select>
           </Field>
-          <Field label="Status">
+          <Field label={tr("ui.status")}>
             <select className="field" value={form.status} onChange={(e) => set("status", e.target.value)}>
               {["Paid", "Pending"].map((s) => <option key={s}>{s}</option>)}
             </select>
           </Field>
         </div>
-        <Field label="Description">
-          <textarea className="field min-h-[80px]" value={form.description} onChange={(e) => set("description", e.target.value)} placeholder="Optional notes…" />
+        <Field label={tr("ui.description")}>
+          <textarea className="field min-h-[80px]" value={form.description} onChange={(e) => set("description", e.target.value)} placeholder={tr("ui.optional_notes")} />
         </Field>
         {error && (
           <p className="text-sm text-rose-600 bg-rose-50 border border-rose-100 rounded-xl px-3 py-2">
@@ -115,7 +117,7 @@ export default function AddExpenseModal({ isOpen, onClose, onAddExpense, initial
           </p>
         )}
         <div className="flex justify-end gap-3 pt-2">
-          <button type="button" onClick={onClose} className="btn btn-ghost">Cancel</button>
+          <button type="button" onClick={onClose} className="btn btn-ghost">{tr("ui.cancel")}</button>
           <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? "Saving…" : initial ? "Save Changes" : "Add Expense"}</button>
         </div>
       </form>

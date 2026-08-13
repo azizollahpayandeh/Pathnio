@@ -4,6 +4,7 @@ import { CreditCard, Check, Crown, Zap, Rocket, Sparkles } from "lucide-react";
 import { PageHeader } from "@/components/ui";
 import FloatingAlert from "@/components/FloatingAlert";
 import { useSubscription, changePlan } from "@/lib/api-data";
+import { useT } from "@/i18n";
 
 // Map the display cards to backend plan codes.
 const ID_TO_CODE: Record<string, string> = { starter: "STARTER", pro: "PRO", enterprise: "BUSINESS" };
@@ -28,6 +29,7 @@ const PLANS = [
 ];
 
 export default function SubscriptionPage() {
+  const tr = useT();
   const { data: sub, refetch } = useSubscription();
   const [alert, setAlert] = useState<{ type: "success" | "error"; msg: string } | null>(null);
   const current = sub ? (CODE_TO_ID[sub.plan.code] || "pro") : "pro";
@@ -45,21 +47,21 @@ export default function SubscriptionPage() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <PageHeader icon={CreditCard} title="Subscription" subtitle="Choose the plan that fits your fleet" gradient="from-teal-500 to-emerald-600" />
+      <PageHeader icon={CreditCard} title={tr("ui.subscription")} subtitle={tr("ui.choose_the_plan_that_fits_your_fleet")} gradient="from-teal-500 to-emerald-600" />
 
       {sub && (
         <div className="card p-5 flex flex-wrap items-center justify-between gap-3">
           <div>
-            <div className="text-sm text-slate-500">Current plan</div>
+            <div className="text-sm text-slate-500">{tr("ui.current_plan")}</div>
             <div className="font-bold text-lg text-slate-900">{sub.plan.name} <span className="text-xs font-medium text-slate-400">· {sub.status}</span></div>
           </div>
           <div className="flex gap-6 text-sm">
             <div>
-              <div className="text-slate-500">Drivers</div>
+              <div className="text-slate-500">{tr("ui.drivers")}</div>
               <div className="font-semibold text-slate-800">{sub.usage.drivers} / {sub.plan.max_drivers}</div>
             </div>
             <div>
-              <div className="text-slate-500">Vehicles</div>
+              <div className="text-slate-500">{tr("ui.vehicles")}</div>
               <div className="font-semibold text-slate-800">{sub.usage.vehicles} / {sub.plan.max_vehicles}</div>
             </div>
           </div>
@@ -77,7 +79,7 @@ export default function SubscriptionPage() {
             >
               {p.popular && (
                 <span className="absolute -top-3 left-1/2 -translate-x-1/2 badge bg-violet-600 text-white border-0 shadow-md">
-                  <Sparkles className="w-3.5 h-3.5" /> Most popular
+                  <Sparkles className="w-3.5 h-3.5" /> {tr("ui.most_popular")}
                 </span>
               )}
               <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${p.tone} flex items-center justify-center shadow-md mb-4`}>
@@ -104,7 +106,7 @@ export default function SubscriptionPage() {
                 className={`btn w-full ${active ? "btn-ghost cursor-default" : "btn-primary"}`}
                 disabled={active}
               >
-                {active ? (<><Check className="w-4 h-4" /> Current plan</>) : "Choose plan"}
+                {active ? (<><Check className="w-4 h-4" /> {tr("ui.current_plan")}</>) : "Choose plan"}
               </button>
             </div>
           );
@@ -112,8 +114,8 @@ export default function SubscriptionPage() {
       </div>
 
       <div className="card p-6">
-        <h2 className="font-bold text-slate-800 mb-1">Billing</h2>
-        <p className="text-sm text-slate-500">You are currently on the <span className="font-semibold text-violet-600">{PLANS.find((p) => p.id === current)?.name}</span> plan. Invoices and payment methods would appear here in production.</p>
+        <h2 className="font-bold text-slate-800 mb-1">{tr("ui.billing")}</h2>
+        <p className="text-sm text-slate-500">{tr("ui.you_are_currently_on_the")} <span className="font-semibold text-violet-600">{PLANS.find((p) => p.id === current)?.name}</span> plan. Invoices and payment methods would appear here in production.</p>
       </div>
 
       {alert && <FloatingAlert type={alert.type} msg={alert.msg} onClose={() => setAlert(null)} />}

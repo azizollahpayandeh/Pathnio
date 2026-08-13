@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import type { LatLngExpression } from "leaflet";
 import type { LiveVehicle } from "@/lib/api-data";
+import { useT } from "@/i18n";
 
 export type { LiveVehicle } from "@/lib/api-data";
 
@@ -80,6 +81,7 @@ const STATUS_LABEL: Record<string, string> = {
 };
 
 export default function LiveTrackMap({ vehicles, focusId }: { vehicles: LiveVehicle[]; focusId?: number | null }) {
+  const tr = useT();
   const [isClient, setIsClient] = useState(false);
   const [icons, setIcons] = useState<Record<string, unknown>>({});
 
@@ -114,7 +116,7 @@ export default function LiveTrackMap({ vehicles, focusId }: { vehicles: LiveVehi
       <div className="w-full h-full min-h-[320px] bg-violet-50 rounded-2xl flex items-center justify-center">
         <div className="flex flex-col items-center gap-3 text-violet-500">
           <div className="w-9 h-9 rounded-full border-4 border-violet-200 border-t-violet-600 animate-spin" />
-          <span className="font-medium">Loading map…</span>
+          <span className="font-medium">{tr("ui.loading_map")}</span>
         </div>
       </div>
     );
@@ -125,7 +127,7 @@ export default function LiveTrackMap({ vehicles, focusId }: { vehicles: LiveVehi
     return (
       <div className="w-full h-full min-h-[320px] bg-violet-50 rounded-2xl flex items-center justify-center p-6">
         <div className="text-center max-w-xs">
-          <p className="font-semibold text-violet-800">No live positions yet</p>
+          <p className="font-semibold text-violet-800">{tr("ui.no_live_positions_yet")}</p>
           <p className="text-sm text-slate-500 mt-1">
             Vehicles appear here once an assigned driver’s app reports GPS.
           </p>
@@ -157,11 +159,11 @@ export default function LiveTrackMap({ vehicles, focusId }: { vehicles: LiveVehi
           <Marker key={v.id} position={[v.lat, v.lng] as LatLngExpression} icon={icons[bucket(v)] as never}>
             <Popup>
               <div className="font-bold text-violet-800 text-base mb-1">{v.model || v.plate_number}</div>
-              <div className="text-slate-600 mb-0.5">Plate: <span className="font-mono">{v.plate_number}</span></div>
-              <div className="text-slate-600 mb-0.5">Driver: <span className="font-semibold">{v.driver?.full_name || "Unassigned"}</span></div>
-              <div className="mb-0.5">Status: <span className="font-semibold">{STATUS_LABEL[v.live_status] || v.live_status}</span></div>
+              <div className="text-slate-600 mb-0.5">{tr("ui.plate")} <span className="font-mono">{v.plate_number}</span></div>
+              <div className="text-slate-600 mb-0.5">{tr("ui.driver")} <span className="font-semibold">{v.driver?.full_name || "Unassigned"}</span></div>
+              <div className="mb-0.5">{tr("ui.status")} <span className="font-semibold">{STATUS_LABEL[v.live_status] || v.live_status}</span></div>
               {v.live_status === "MOVING" || v.live_status === "STOPPED" ? (
-                <div className="mb-0.5">Speed: <span className="font-mono text-violet-700">{v.speed} km/h</span></div>
+                <div className="mb-0.5">{tr("ui.speed")} <span className="font-mono text-violet-700">{v.speed} km/h</span></div>
               ) : (
                 // Not currently reporting: the pin is a historical fix, so say so.
                 <div className="mb-0.5 text-amber-700 font-semibold">

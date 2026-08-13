@@ -10,10 +10,12 @@ import InviteDriverModal from "@/components/InviteDriverModal";
 import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
 import { useDrivers, createDriver, deleteDriver, createInvitation } from "@/lib/api-data";
 import { toast } from "@/components/Toast";
+import { useT } from "@/i18n";
 
 const statusTone: Record<string, string> = { Active: "green", "On Trip": "blue", Offline: "amber", Inactive: "gray" };
 
 export default function DriversPage() {
+  const tr = useT();
   const { data: drivers, refetch } = useDrivers();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
@@ -73,31 +75,31 @@ export default function DriversPage() {
     <div className="space-y-6 animate-fade-in">
       <PageHeader
         icon={Users}
-        title="Drivers"
-        subtitle="Your team on the road"
+        title={tr("ui.drivers")}
+        subtitle={tr("ui.your_team_on_the_road")}
         gradient="from-purple-500 to-violet-600"
         actions={
           <button onClick={() => setShowAdd(true)} className="btn btn-primary">
-            <Plus className="w-4 h-4" /> Add Driver
+            <Plus className="w-4 h-4" /> {tr("ui.add_driver")}
           </button>
         }
       />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 stagger">
-        <StatCard icon={Users} label="Total Drivers" value={stats.total} gradient="from-purple-500 to-violet-600" />
-        <StatCard icon={CheckCircle} label="Available" value={stats.active} gradient="from-emerald-500 to-teal-600" />
-        <StatCard icon={Navigation} label="On Trip" value={stats.onTrip} gradient="from-purple-500 to-fuchsia-600" />
-        <StatCard icon={KeyRound} label="Activated" value={stats.activated} gradient="from-amber-500 to-orange-600" />
+        <StatCard icon={Users} label={tr("ui.total_drivers")} value={stats.total} gradient="from-purple-500 to-violet-600" />
+        <StatCard icon={CheckCircle} label={tr("ui.available")} value={stats.active} gradient="from-emerald-500 to-teal-600" />
+        <StatCard icon={Navigation} label={tr("ui.on_trip")} value={stats.onTrip} gradient="from-purple-500 to-fuchsia-600" />
+        <StatCard icon={KeyRound} label={tr("ui.activated")} value={stats.activated} gradient="from-amber-500 to-orange-600" />
       </div>
 
       <div className="card p-4 flex flex-col sm:flex-row gap-3">
         <div className="flex-1 relative">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search name, plate, phone…" className="field pl-10" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={tr("ui.search_name_plate_phone")} className="field pl-10" />
         </div>
         <select value={status} onChange={(e) => setStatus(e.target.value)} className="field sm:w-44">
-          <option value="all">All Status</option>
-          <option>Active</option><option>On Trip</option><option>Offline</option><option>Inactive</option>
+          <option value="all">{tr("ui.all_status")}</option>
+          <option>{tr("ui.active")}</option><option>{tr("ui.on_trip")}</option><option>{tr("ui.offline")}</option><option>{tr("ui.inactive")}</option>
         </select>
       </div>
 
@@ -105,9 +107,9 @@ export default function DriversPage() {
         <div className="card">
           <EmptyState
             icon={Users}
-            title="No drivers found"
+            title={tr("ui.no_drivers_found")}
             description="Add drivers to start assigning vehicles and trips."
-            action={<button onClick={() => setShowAdd(true)} className="btn btn-primary mx-auto"><Plus className="w-4 h-4" /> Add Driver</button>}
+            action={<button onClick={() => setShowAdd(true)} className="btn btn-primary mx-auto"><Plus className="w-4 h-4" /> {tr("ui.add_driver")}</button>}
           />
         </div>
       ) : (
@@ -129,9 +131,9 @@ export default function DriversPage() {
                     </Badge>
                   </div>
                   {d.activated ? (
-                    <Badge tone="green" icon={CheckCircle}>Activated</Badge>
+                    <Badge tone="green" icon={CheckCircle}>{tr("ui.activated")}</Badge>
                   ) : (
-                    <Badge tone="amber" icon={KeyRound}>Not activated</Badge>
+                    <Badge tone="amber" icon={KeyRound}>{tr("ui.not_activated")}</Badge>
                   )}
                 </div>
                 <div className="mt-4 space-y-1.5 text-sm text-slate-600">
@@ -140,14 +142,14 @@ export default function DriversPage() {
                 </div>
                 <div className="flex items-center gap-2 mt-4 pt-4 border-t border-slate-100">
                   <Link href={`/dashboard/drivers/${d.id}`} className="btn btn-ghost flex-1 text-sm">
-                    <Eye className="w-4 h-4" /> Profile
+                    <Eye className="w-4 h-4" /> {tr("ui.profile")}
                   </Link>
                   {!d.activated && (
                     <button
                       onClick={() => setInvite({ id: d.id, name: d.full_name })}
                       className="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center text-violet-600 hover:bg-violet-100 transition"
-                      aria-label="Invite"
-                      title="Invite / activation code"
+                      aria-label={tr("ui.invite")}
+                      title={tr("ui.invite_activation_code")}
                     >
                       <KeyRound className="w-4 h-4" />
                     </button>
@@ -155,7 +157,7 @@ export default function DriversPage() {
                   <button
                     onClick={() => handleDelete(d.id, d.full_name)}
                     className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
-                    aria-label="Delete"
+                    aria-label={tr("ui.delete")}
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>

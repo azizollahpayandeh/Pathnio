@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Route } from "lucide-react";
 import { Modal, Field } from "./ui";
 import { useDrivers, useVehicles } from "@/lib/api-data";
+import { useT } from "@/i18n";
 
 export type NewTrip = {
   origin: string;
@@ -31,6 +32,7 @@ const STATUSES = [
 ];
 
 export default function AddTripModal({ isOpen, onClose, onAddTrip }: Props) {
+  const tr = useT();
   const { data: drivers } = useDrivers();
   const { data: vehicles } = useVehicles();
   const [saving, setSaving] = useState(false);
@@ -67,24 +69,24 @@ export default function AddTripModal({ isOpen, onClose, onAddTrip }: Props) {
   };
 
   return (
-    <Modal open={isOpen} onClose={onClose} title="New Trip" subtitle="Schedule or log a journey" icon={Route} gradient="from-purple-500 to-fuchsia-600" maxWidth="max-w-xl">
+    <Modal open={isOpen} onClose={onClose} title={tr("ui.new_trip")} subtitle={tr("ui.schedule_or_log_a_journey")} icon={Route} gradient="from-purple-500 to-fuchsia-600" maxWidth="max-w-xl">
       <form onSubmit={submit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Field label="Origin" required>
+          <Field label={tr("ui.origin")} required>
             <input className="field" required value={form.origin} onChange={(e) => set("origin", e.target.value)} placeholder="Berlin" />
           </Field>
-          <Field label="Destination" required>
+          <Field label={tr("ui.destination")} required>
             <input className="field" required value={form.destination} onChange={(e) => set("destination", e.target.value)} placeholder="Hamburg" />
           </Field>
-          <Field label="Driver">
+          <Field label={tr("ui.driver")}>
             <select className="field" value={form.driver_ref ?? ""} onChange={(e) => set("driver_ref", e.target.value || null)}>
-              <option value="">Unassigned</option>
+              <option value="">{tr("ui.unassigned")}</option>
               {drivers.map((d) => <option key={d.id} value={d.id}>{d.full_name}</option>)}
             </select>
           </Field>
-          <Field label="Vehicle">
+          <Field label={tr("ui.vehicle")}>
             <select className="field" value={form.vehicle_ref ?? ""} onChange={(e) => set("vehicle_ref", e.target.value || null)}>
-              <option value="">Unassigned</option>
+              <option value="">{tr("ui.unassigned")}</option>
               {vehicles.map((v) => <option key={v.id} value={v.id}>{v.plate_number}{v.model ? ` — ${v.model}` : ""}</option>)}
             </select>
           </Field>
@@ -94,20 +96,20 @@ export default function AddTripModal({ isOpen, onClose, onAddTrip }: Props) {
           <Field label="Revenue (€)">
             <input className="field" type="number" min={0} value={form.revenue} onChange={(e) => set("revenue", Number(e.target.value))} />
           </Field>
-          <Field label="Cargo">
+          <Field label={tr("ui.cargo")}>
             <input className="field" value={form.cargo} onChange={(e) => set("cargo", e.target.value)} placeholder="Electronics" />
           </Field>
-          <Field label="Status">
+          <Field label={tr("ui.status")}>
             <select className="field" value={form.status} onChange={(e) => set("status", e.target.value)}>
               {STATUSES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
             </select>
           </Field>
-          <Field label="Start Time">
+          <Field label={tr("ui.start_time")}>
             <input className="field" type="datetime-local" value={form.start_time.slice(0, 16)} onChange={(e) => set("start_time", e.target.value)} />
           </Field>
         </div>
         <div className="flex justify-end gap-3 pt-2">
-          <button type="button" onClick={onClose} className="btn btn-ghost">Cancel</button>
+          <button type="button" onClick={onClose} className="btn btn-ghost">{tr("ui.cancel")}</button>
           <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? "Saving…" : "Add Trip"}</button>
         </div>
       </form>

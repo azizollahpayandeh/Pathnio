@@ -7,6 +7,7 @@ import {
 import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
 import { useFleetAlerts, acknowledgeAlert } from "@/lib/api-data";
 import type { AlertPriority } from "@/lib/types";
+import { useT } from "@/i18n";
 
 const tone: Record<AlertPriority, string> = { low: "gray", medium: "blue", high: "amber", critical: "red" };
 const icon: Record<AlertPriority, typeof Info> = { low: Info, medium: Bell, high: AlertTriangle, critical: ShieldAlert };
@@ -22,6 +23,7 @@ function timeAgo(iso: string) {
 }
 
 export default function AlertsPage() {
+  const tr = useT();
   const { data: alerts, refetch } = useFleetAlerts();
   const [filter, setFilter] = useState<"all" | "unread">("all");
   const [search, setSearch] = useState("");
@@ -50,26 +52,26 @@ export default function AlertsPage() {
     <div className="space-y-6 animate-fade-in">
       <PageHeader
         icon={Bell}
-        title="Alerts"
-        subtitle="Notifications from across your fleet"
+        title={tr("ui.alerts")}
+        subtitle={tr("ui.notifications_from_across_your_fleet")}
         gradient="from-amber-500 to-orange-600"
         actions={
           <button onClick={markAllRead} className="btn btn-ghost" disabled={unread === 0}>
-            <CheckCheck className="w-4 h-4" /> Mark all read
+            <CheckCheck className="w-4 h-4" /> {tr("ui.mark_all_read")}
           </button>
         }
       />
 
       <div className="grid grid-cols-3 gap-4 stagger">
-        <StatCard icon={Bell} label="Total" value={alerts.length} gradient="from-violet-500 to-purple-600" />
-        <StatCard icon={Clock} label="Unread" value={unread} gradient="from-amber-500 to-orange-600" />
-        <StatCard icon={ShieldAlert} label="Critical" value={critical} gradient="from-rose-500 to-red-600" />
+        <StatCard icon={Bell} label={tr("ui.total")} value={alerts.length} gradient="from-violet-500 to-purple-600" />
+        <StatCard icon={Clock} label={tr("ui.unread")} value={unread} gradient="from-amber-500 to-orange-600" />
+        <StatCard icon={ShieldAlert} label={tr("ui.critical")} value={critical} gradient="from-rose-500 to-red-600" />
       </div>
 
       <div className="card p-4 flex flex-col sm:flex-row gap-3">
         <div className="flex-1 relative">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search alerts…" className="field pl-10" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={tr("ui.search_alerts")} className="field pl-10" />
         </div>
         <div className="flex p-1 bg-slate-100 rounded-xl">
           {(["all", "unread"] as const).map((f) => (
@@ -81,7 +83,7 @@ export default function AlertsPage() {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="card"><EmptyState icon={CheckCircle} title="You're all caught up" description="No alerts match your filter." /></div>
+        <div className="card"><EmptyState icon={CheckCircle} title={tr("ui.you_re_all_caught_up")} description="No alerts match your filter." /></div>
       ) : (
         <div className="space-y-3 stagger">
           {filtered.map((a) => {
@@ -102,11 +104,11 @@ export default function AlertsPage() {
                 </div>
                 <div className="flex items-center gap-1.5">
                   {!a.read && (
-                    <button onClick={() => ack(a.id)} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-emerald-50 hover:text-emerald-600 transition" title="Mark read">
+                    <button onClick={() => ack(a.id)} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-emerald-50 hover:text-emerald-600 transition" title={tr("ui.mark_read")}>
                       <Check className="w-4 h-4" />
                     </button>
                   )}
-                  <button onClick={() => ack(a.id)} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition" title="Delete">
+                  <button onClick={() => ack(a.id)} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition" title={tr("ui.delete")}>
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>

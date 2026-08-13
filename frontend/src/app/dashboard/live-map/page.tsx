@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Map as MapIcon, Navigation, Signal, Search } from "lucide-react";
 import { PageHeader, Badge } from "@/components/ui";
 import { useLiveVehicles, type LiveVehicle } from "@/lib/api-data";
+import { useT } from "@/i18n";
 
 const LiveMap = dynamic(() => import("@/components/LiveMapWidget"), { ssr: false });
 
@@ -15,6 +16,7 @@ function bucket(v: LiveVehicle): "moving" | "stopped" | "offline" {
 const tone: Record<string, string> = { moving: "green", stopped: "amber", offline: "gray" };
 
 export default function LiveMapPage() {
+  const tr = useT();
   const { data: vehicles } = useLiveVehicles();
   const [search, setSearch] = useState("");
 
@@ -26,7 +28,7 @@ export default function LiveMapPage() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <PageHeader icon={MapIcon} title="Live Map" subtitle="Real-time fleet positions" gradient="from-emerald-500 to-teal-600" />
+      <PageHeader icon={MapIcon} title={tr("ui.live_map")} subtitle={tr("ui.real_time_fleet_positions")} gradient="from-emerald-500 to-teal-600" />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 card overflow-hidden p-0">
@@ -39,7 +41,7 @@ export default function LiveMapPage() {
           <h2 className="font-bold text-slate-800 mb-3">Fleet ({list.length})</h2>
           <div className="relative mb-3">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search vehicle…" className="field pl-10" />
+            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={tr("ui.search_vehicle")} className="field pl-10" />
           </div>
           <div className="space-y-2 overflow-y-auto scroll-slim max-h-[420px] pr-1">
             {list.length === 0 && (

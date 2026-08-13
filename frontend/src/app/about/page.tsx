@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Code, Users, Target, Heart, Star, ArrowRight, Sparkles } from 'lucide-react';
+import { useT } from "@/i18n";
 
 // A custom hook to detect if an element is in view with TypeScript support
 function useInView<T extends HTMLElement>(
@@ -42,6 +43,7 @@ const joinOptions = { threshold: 0.3 };
 const teamOptions = { threshold: 0.3 };
 
 export default function AboutPage() {
+  const tr = useT();
   const [aboutSectionRef, aboutInView] = useInView<HTMLElement>(aboutOptions);
   const [teamSectionRef, teamInView] = useInView<HTMLElement>(teamOptions);
   const [joinSectionRef, joinInView] = useInView<HTMLElement>(joinOptions);
@@ -93,11 +95,11 @@ export default function AboutPage() {
           <div className="max-w-4xl mx-auto">
             <div className="inline-flex items-center px-4 py-2 bg-violet-100/80 backdrop-blur-sm rounded-full border border-violet-200/50 mb-8 animate-fade-in">
               <Sparkles className="w-5 h-5 text-violet-600 mr-2" />
-              <span className="text-sm font-medium text-violet-800">About Our Journey</span>
+              <span className="text-sm font-medium text-violet-800">{tr("ui.about_our_journey")}</span>
             </div>
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight">
               <span className="bg-gradient-to-r from-violet-600 via-violet-700 to-purple-700 bg-clip-text text-transparent animate-gradient">
-                About
+                {tr("ui.about")}
               </span>
               <br />
               <span className="text-gray-900">Pathnio</span>
@@ -122,7 +124,7 @@ export default function AboutPage() {
               >
                 <div className="space-y-6">
                   <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-violet-700 bg-clip-text text-transparent">
-                    Our Story
+                    {tr("ui.our_story")}
                   </h2>
                   <p className="text-lg text-gray-700 leading-relaxed">
                     Pathnio was born from a vision to transform the logistics industry. We saw the challenges 
@@ -139,13 +141,13 @@ export default function AboutPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-violet-100 hover:bg-white hover:shadow-lg transition-all duration-300">
                     <Code className="w-8 h-8 text-violet-600 mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Innovation</h3>
-                    <p className="text-gray-600 text-sm">Cutting-edge technology solutions</p>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{tr("ui.innovation")}</h3>
+                    <p className="text-gray-600 text-sm">{tr("ui.cutting_edge_technology_solutions")}</p>
                   </div>
                   <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-violet-100 hover:bg-white hover:shadow-lg transition-all duration-300">
                     <Target className="w-8 h-8 text-violet-600 mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Precision</h3>
-                    <p className="text-gray-600 text-sm">Accurate real-time monitoring</p>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{tr("ui.precision")}</h3>
+                    <p className="text-gray-600 text-sm">{tr("ui.accurate_real_time_monitoring")}</p>
                   </div>
                 </div>
               </div>
@@ -195,10 +197,10 @@ export default function AboutPage() {
             >
               <div className="inline-flex items-center px-4 py-2 bg-violet-100/80 backdrop-blur-sm rounded-full border border-violet-200/50 mb-8">
                 <Users className="w-5 h-5 text-violet-600 mr-2" />
-                <span className="text-sm font-medium text-violet-800">Meet Our Team</span>
+                <span className="text-sm font-medium text-violet-800">{tr("ui.meet_our_team")}</span>
               </div>
               <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-gray-900 via-violet-700 to-purple-700 bg-clip-text text-transparent mb-6 leading-tight">
-                Our Team
+                {tr("ui.our_team")}
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
                 Meet our passionate and expert team who work tirelessly every day to innovate in the logistics industry
@@ -335,7 +337,7 @@ export default function AboutPage() {
                 
                 <div className="relative z-10">
                   <h3 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 via-violet-700 to-purple-700 bg-clip-text text-transparent mb-8">
-                    Our Team Values
+                    {tr("ui.our_team_values")}
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
                     <div className="text-center group">
@@ -343,7 +345,7 @@ export default function AboutPage() {
                         <span className="text-white text-3xl">💡</span>
                         <div className="absolute inset-0 bg-gradient-to-br from-violet-400/50 to-teal-400/50 rounded-3xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       </div>
-                      <h4 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-violet-700 transition-colors duration-300">Innovation</h4>
+                      <h4 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-violet-700 transition-colors duration-300">{tr("ui.innovation")}</h4>
                       <p className="text-gray-600 text-sm leading-relaxed">Always seeking new and better solutions to push the boundaries of what's possible</p>
                     </div>
                     <div className="text-center group">
@@ -351,7 +353,7 @@ export default function AboutPage() {
                         <span className="text-white text-3xl">🤝</span>
                         <div className="absolute inset-0 bg-gradient-to-br from-green-400/50 to-emerald-400/50 rounded-3xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       </div>
-                      <h4 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-green-700 transition-colors duration-300">Collaboration</h4>
+                      <h4 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-green-700 transition-colors duration-300">{tr("ui.collaboration")}</h4>
                       <p className="text-gray-600 text-sm leading-relaxed">Teamwork and cooperation to achieve common goals and create amazing results</p>
                     </div>
                     <div className="text-center group">
@@ -359,7 +361,7 @@ export default function AboutPage() {
                         <span className="text-white text-3xl">🎯</span>
                         <div className="absolute inset-0 bg-gradient-to-br from-purple-400/50 to-pink-400/50 rounded-3xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       </div>
-                      <h4 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-purple-700 transition-colors duration-300">Quality</h4>
+                      <h4 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-purple-700 transition-colors duration-300">{tr("ui.quality")}</h4>
                       <p className="text-gray-600 text-sm leading-relaxed">Commitment to delivering the best quality in all products and services</p>
                     </div>
                   </div>
@@ -383,11 +385,11 @@ export default function AboutPage() {
               <div className="relative bg-white/90 backdrop-blur-xl rounded-3xl p-12 md:p-16 border border-violet-100">
                 <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-violet-100 to-teal-100 backdrop-blur-sm rounded-full border border-violet-200 mb-8">
                   <Heart className="w-5 h-5 text-red-500 mr-2" />
-                  <span className="text-sm font-medium text-violet-800">Join Our Mission</span>
+                  <span className="text-sm font-medium text-violet-800">{tr("ui.join_our_mission")}</span>
                 </div>
                 
                 <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-gray-900 via-violet-700 to-purple-700 bg-clip-text text-transparent mb-8 leading-tight">
-                  Join Our Mission
+                  {tr("ui.join_our_mission")}
                 </h2>
                 
                 <p className="text-xl md:text-2xl text-gray-600 leading-relaxed mb-12 max-w-3xl mx-auto">
@@ -400,7 +402,7 @@ export default function AboutPage() {
                     className="group relative inline-flex items-center px-8 py-4 bg-gradient-to-r from-violet-600 via-teal-600 to-violet-700 text-white font-bold rounded-full text-lg shadow-2xl hover:shadow-violet-500/50 transition-all duration-300 transform hover:-translate-y-2 hover:scale-105"
             >
                     <span className="relative z-10 flex items-center">
-              View Openings
+              {tr("ui.view_openings")}
                       <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
                     </span>
                     <div className="absolute inset-0 bg-gradient-to-r from-violet-500 via-teal-500 to-violet-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -411,7 +413,7 @@ export default function AboutPage() {
                     className="group inline-flex items-center px-8 py-4 bg-white/80 backdrop-blur-sm text-gray-900 font-semibold rounded-full text-lg border border-gray-200 hover:bg-white hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 hover:scale-105"
                   >
                     <span className="flex items-center">
-                      Get in Touch
+                      {tr("ui.get_in_touch")}
                       <Star className="w-5 h-5 ml-2 group-hover:rotate-12 transition-transform duration-300" />
                     </span>
                   </Link>

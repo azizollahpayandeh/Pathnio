@@ -1,8 +1,11 @@
+"use client";
 import React from "react";
 import Link from "next/link";
 import { Truck, Mail, Phone, MapPin } from "lucide-react";
+import { useT } from "@/i18n";
 
 export default function Footer() {
+  const tr = useT();
   return (
     <footer id="contact" className="bg-slate-950 text-slate-300 pt-16 pb-8 px-6 relative z-20">
       <div className="container mx-auto grid gap-10 md:grid-cols-4">
@@ -19,26 +22,26 @@ export default function Footer() {
         </div>
 
         <div>
-          <h6 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Product</h6>
+          <h6 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">{tr("ui.product")}</h6>
           <ul className="space-y-2.5 text-sm">
-            <li><Link href="/features" className="hover:text-white transition-colors">Features</Link></li>
-            <li><Link href="/dashboard" className="hover:text-white transition-colors">Dashboard</Link></li>
-            <li><Link href="/dashboard/reports" className="hover:text-white transition-colors">Analytics</Link></li>
-            <li><Link href="/dashboard/live-map" className="hover:text-white transition-colors">Live Map</Link></li>
+            <li><Link href="/features" className="hover:text-white transition-colors">{tr("ui.features")}</Link></li>
+            <li><Link href="/dashboard" className="hover:text-white transition-colors">{tr("ui.dashboard")}</Link></li>
+            <li><Link href="/dashboard/reports" className="hover:text-white transition-colors">{tr("ui.analytics")}</Link></li>
+            <li><Link href="/dashboard/live-map" className="hover:text-white transition-colors">{tr("ui.live_map")}</Link></li>
           </ul>
         </div>
 
         <div>
-          <h6 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Company</h6>
+          <h6 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">{tr("ui.company")}</h6>
           <ul className="space-y-2.5 text-sm">
-            <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
-            <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
-            <li><Link href="/login" className="hover:text-white transition-colors">Sign In</Link></li>
+            <li><Link href="/about" className="hover:text-white transition-colors">{tr("ui.about_us")}</Link></li>
+            <li><Link href="/contact" className="hover:text-white transition-colors">{tr("ui.contact")}</Link></li>
+            <li><Link href="/login" className="hover:text-white transition-colors">{tr("ui.sign_in")}</Link></li>
           </ul>
         </div>
 
         <div>
-          <h6 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Get in touch</h6>
+          <h6 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">{tr("ui.get_in_touch")}</h6>
           <ul className="space-y-2.5 text-sm text-slate-400">
             <li className="flex items-center gap-2"><Mail className="w-4 h-4" /> support@pathnio.com</li>
             <li className="flex items-center gap-2"><Phone className="w-4 h-4" /> +49 30 1234 5678</li>

@@ -10,11 +10,13 @@ import AssignVehicleModal from "@/components/AssignVehicleModal";
 import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
 import { useVehicles, useDrivers, createVehicle, deleteVehicle } from "@/lib/api-data";
 import { toast } from "@/components/Toast";
+import { useT } from "@/i18n";
 
 const statusTone: Record<string, string> = { Active: "green", Inactive: "gray", Maintenance: "blue" };
 const statusIcon: Record<string, typeof CheckCircle> = { Active: CheckCircle, Inactive: XCircle, Maintenance: Wrench };
 
 export default function VehiclesPage() {
+  const tr = useT();
   const { data: vehicles, refetch } = useVehicles();
   const { data: allDrivers } = useDrivers();
   const [search, setSearch] = useState("");
@@ -66,35 +68,35 @@ export default function VehiclesPage() {
     <div className="space-y-6 animate-fade-in">
       <PageHeader
         icon={Car}
-        title="Vehicles"
-        subtitle="Monitor and manage your fleet"
+        title={tr("ui.vehicles")}
+        subtitle={tr("ui.monitor_and_manage_your_fleet")}
         gradient="from-orange-500 to-amber-600"
         actions={
           <button onClick={() => setShowAdd(true)} className="btn btn-primary">
-            <Plus className="w-4 h-4" /> Add Vehicle
+            <Plus className="w-4 h-4" /> {tr("ui.add_vehicle")}
           </button>
         }
       />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 stagger">
-        <StatCard icon={Car} label="Total Vehicles" value={stats.total} gradient="from-orange-500 to-amber-600" />
-        <StatCard icon={CheckCircle} label="Active" value={stats.active} gradient="from-emerald-500 to-teal-600" />
-        <StatCard icon={XCircle} label="Inactive" value={stats.inactive} gradient="from-slate-400 to-slate-600" />
-        <StatCard icon={Wrench} label="Maintenance" value={stats.maintenance} gradient="from-violet-500 to-purple-600" />
+        <StatCard icon={Car} label={tr("ui.total_vehicles")} value={stats.total} gradient="from-orange-500 to-amber-600" />
+        <StatCard icon={CheckCircle} label={tr("ui.active")} value={stats.active} gradient="from-emerald-500 to-teal-600" />
+        <StatCard icon={XCircle} label={tr("ui.inactive")} value={stats.inactive} gradient="from-slate-400 to-slate-600" />
+        <StatCard icon={Wrench} label={tr("ui.maintenance")} value={stats.maintenance} gradient="from-violet-500 to-purple-600" />
       </div>
 
       <div className="card p-4 flex flex-col sm:flex-row gap-3">
         <div className="flex-1 relative">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search plate, model, driver…" className="field pl-10" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={tr("ui.search_plate_model_driver")} className="field pl-10" />
         </div>
         <select value={status} onChange={(e) => setStatus(e.target.value)} className="field sm:w-44">
-          <option value="all">All Status</option>
-          <option>Active</option><option>Inactive</option><option>Maintenance</option>
+          <option value="all">{tr("ui.all_status")}</option>
+          <option>{tr("ui.active")}</option><option>{tr("ui.inactive")}</option><option>{tr("ui.maintenance")}</option>
         </select>
         <select value={type} onChange={(e) => setType(e.target.value)} className="field sm:w-40">
-          <option value="all">All Types</option>
-          <option>Truck</option><option>Van</option><option>Sedan</option><option>Pickup</option>
+          <option value="all">{tr("ui.all_types")}</option>
+          <option>{tr("ui.truck")}</option><option>{tr("ui.van")}</option><option>{tr("ui.sedan")}</option><option>{tr("ui.pickup")}</option>
         </select>
       </div>
 
@@ -102,9 +104,9 @@ export default function VehiclesPage() {
         <div className="card">
           <EmptyState
             icon={Car}
-            title="No vehicles found"
+            title={tr("ui.no_vehicles_found")}
             description="Try adjusting your filters, or add a new vehicle to your fleet."
-            action={<button onClick={() => setShowAdd(true)} className="btn btn-primary mx-auto"><Plus className="w-4 h-4" /> Add Vehicle</button>}
+            action={<button onClick={() => setShowAdd(true)} className="btn btn-primary mx-auto"><Plus className="w-4 h-4" /> {tr("ui.add_vehicle")}</button>}
           />
         </div>
       ) : (
@@ -134,20 +136,20 @@ export default function VehiclesPage() {
                 </div>
                 <div className="flex items-center gap-2 mt-4 pt-4 border-t border-slate-100">
                   <Link href={`/dashboard/vehicles/${encodeURIComponent(v.plate_number)}`} className="btn btn-ghost flex-1 text-sm">
-                    <Eye className="w-4 h-4" /> View details
+                    <Eye className="w-4 h-4" /> {tr("ui.view_details")}
                   </Link>
                   <button
                     onClick={() => setAssignFor({ id: v.id, plate: v.plate_number, driverId: v.assignedDriverId })}
                     className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 hover:bg-orange-100 transition"
-                    aria-label="Assign driver"
-                    title="Assign / change driver"
+                    aria-label={tr("ui.assign_driver")}
+                    title={tr("ui.assign_change_driver")}
                   >
                     <UserCheck className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => handleDelete(v.id, v.plate_number)}
                     className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
-                    aria-label="Delete"
+                    aria-label={tr("ui.delete")}
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>

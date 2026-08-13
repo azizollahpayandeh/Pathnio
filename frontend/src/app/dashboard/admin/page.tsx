@@ -8,6 +8,7 @@ import {
 import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
 import api from "@/app/api";
 import { useAuth } from "@/lib/auth";
+import { useT } from "@/i18n";
 
 type PlatformUser = {
   id: number;
@@ -22,6 +23,7 @@ type PlatformUser = {
 };
 
 export default function AdminPage() {
+  const tr = useT();
   const { user, ready } = useAuth();
   const router = useRouter();
   // Platform-admin only — company owners cannot reach this even by deep link.
@@ -84,13 +86,13 @@ export default function AdminPage() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <PageHeader icon={ShieldCheck} title="Admin Console" subtitle="Manage accounts and monitor the platform" gradient="from-rose-500 to-red-600" />
+      <PageHeader icon={ShieldCheck} title={tr("ui.admin_console")} subtitle={tr("ui.manage_accounts_and_monitor_the_platform")} gradient="from-rose-500 to-red-600" />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 stagger">
-        <StatCard icon={Users} label="Accounts" value={users.length} gradient="from-rose-500 to-red-600" />
-        <StatCard icon={Shield} label="Admins" value={users.filter((u) => u.is_staff).length} gradient="from-violet-500 to-purple-600" />
-        <StatCard icon={UserIcon} label="Company owners" value={users.filter((u) => u.company_name).length} gradient="from-blue-500 to-indigo-600" />
-        <StatCard icon={Activity} label="Status" value="Operational" gradient="from-emerald-500 to-teal-600" />
+        <StatCard icon={Users} label={tr("ui.accounts")} value={users.length} gradient="from-rose-500 to-red-600" />
+        <StatCard icon={Shield} label={tr("ui.admins")} value={users.filter((u) => u.is_staff).length} gradient="from-violet-500 to-purple-600" />
+        <StatCard icon={UserIcon} label={tr("ui.company_owners")} value={users.filter((u) => u.company_name).length} gradient="from-blue-500 to-indigo-600" />
+        <StatCard icon={Activity} label={tr("ui.status")} value="Operational" gradient="from-emerald-500 to-teal-600" />
       </div>
 
       {error && (
@@ -99,27 +101,27 @@ export default function AdminPage() {
 
       <div className="card overflow-hidden">
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <h2 className="font-bold text-slate-800 flex items-center gap-2"><Users className="w-5 h-5 text-rose-500" /> User accounts</h2>
+          <h2 className="font-bold text-slate-800 flex items-center gap-2"><Users className="w-5 h-5 text-rose-500" /> {tr("ui.user_accounts")}</h2>
           <div className="relative sm:w-72">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search users…" className="field pl-10" />
+            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={tr("ui.search_users")} className="field pl-10" />
           </div>
         </div>
 
         {loading ? (
-          <div className="p-10 text-center text-slate-400 text-sm">Loading accounts…</div>
+          <div className="p-10 text-center text-slate-400 text-sm">{tr("ui.loading_accounts")}</div>
         ) : filtered.length === 0 ? (
-          <EmptyState icon={Users} title="No users found" />
+          <EmptyState icon={Users} title={tr("ui.no_users_found")} />
         ) : (
           <div className="overflow-x-auto scroll-slim">
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-slate-400 border-b border-slate-100">
-                  <th className="py-3.5 px-6 font-semibold">Account</th>
-                  <th className="py-3.5 px-4 font-semibold hidden md:table-cell">Contact</th>
-                  <th className="py-3.5 px-4 font-semibold">Role</th>
-                  <th className="py-3.5 px-4 font-semibold hidden sm:table-cell">Joined</th>
-                  <th className="py-3.5 px-6 font-semibold text-right">Actions</th>
+                  <th className="py-3.5 px-6 font-semibold">{tr("ui.account")}</th>
+                  <th className="py-3.5 px-4 font-semibold hidden md:table-cell">{tr("ui.contact")}</th>
+                  <th className="py-3.5 px-4 font-semibold">{tr("ui.role")}</th>
+                  <th className="py-3.5 px-4 font-semibold hidden sm:table-cell">{tr("ui.joined")}</th>
+                  <th className="py-3.5 px-6 font-semibold text-right">{tr("ui.actions")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -171,7 +173,7 @@ export default function AdminPage() {
       </div>
 
       <div className="card p-6">
-        <h2 className="font-bold text-slate-800 flex items-center gap-2 mb-4"><Activity className="w-5 h-5 text-emerald-500" /> System status</h2>
+        <h2 className="font-bold text-slate-800 flex items-center gap-2 mb-4"><Activity className="w-5 h-5 text-emerald-500" /> {tr("ui.system_status")}</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
             ["API", "Operational", "bg-emerald-500"],

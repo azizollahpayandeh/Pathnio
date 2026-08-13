@@ -8,8 +8,10 @@ import {
 import FloatingAlert from "@/components/FloatingAlert";
 import { useAuth, updateProfile, logout } from "@/lib/auth";
 import { Field } from "@/components/ui";
+import { useT } from "@/i18n";
 
 export default function ProfilePage() {
+  const tr = useT();
   const router = useRouter();
   const { user, ready } = useAuth();
   const [alert, setAlert] = useState<{ type: "success" | "error"; msg: string } | null>(null);
@@ -66,7 +68,7 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-[var(--background)] py-8 px-4">
       <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
         <button onClick={() => router.push("/dashboard")} className="btn btn-ghost">
-          <ArrowLeft className="w-4 h-4" /> Back to dashboard
+          <ArrowLeft className="w-4 h-4" /> {tr("ui.back_to_dashboard")}
         </button>
 
         {/* Header card */}
@@ -102,34 +104,34 @@ export default function ProfilePage() {
 
         {/* Edit form */}
         <form onSubmit={save} className="card p-6 sm:p-8 space-y-5">
-          <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2"><Building2 className="w-5 h-5 text-violet-600" /> Company details</h2>
+          <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2"><Building2 className="w-5 h-5 text-violet-600" /> {tr("ui.company_details")}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Field label="Company Name"><input className="field" value={form.company_name} onChange={(e) => set("company_name", e.target.value)} /></Field>
-            <Field label="Manager Full Name"><input className="field" value={form.manager_full_name} onChange={(e) => set("manager_full_name", e.target.value)} /></Field>
-            <Field label="Email"><div className="relative"><Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" /><input className="field pl-10" type="email" value={form.email} onChange={(e) => set("email", e.target.value)} /></div></Field>
-            <Field label="Phone"><div className="relative"><Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" /><input className="field pl-10" value={form.phone} onChange={(e) => set("phone", e.target.value)} /></div></Field>
+            <Field label={tr("ui.company_name")}><input className="field" value={form.company_name} onChange={(e) => set("company_name", e.target.value)} /></Field>
+            <Field label={tr("ui.manager_full_name")}><input className="field" value={form.manager_full_name} onChange={(e) => set("manager_full_name", e.target.value)} /></Field>
+            <Field label={tr("ui.email")}><div className="relative"><Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" /><input className="field pl-10" type="email" value={form.email} onChange={(e) => set("email", e.target.value)} /></div></Field>
+            <Field label={tr("ui.phone")}><div className="relative"><Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" /><input className="field pl-10" value={form.phone} onChange={(e) => set("phone", e.target.value)} /></div></Field>
             <div className="sm:col-span-2">
-              <Field label="Address"><div className="relative"><MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" /><input className="field pl-10" value={form.address} onChange={(e) => set("address", e.target.value)} /></div></Field>
+              <Field label={tr("ui.address")}><div className="relative"><MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" /><input className="field pl-10" value={form.address} onChange={(e) => set("address", e.target.value)} /></div></Field>
             </div>
           </div>
           <div className="flex items-center gap-3 pt-2">
-            <button type="submit" className="btn btn-primary"><Save className="w-4 h-4" /> Save changes</button>
+            <button type="submit" className="btn btn-primary"><Save className="w-4 h-4" /> {tr("ui.save_changes")}</button>
             <span className="text-sm text-slate-400 flex items-center gap-1"><Calendar className="w-4 h-4" /> Joined {new Date(user.date_joined).toLocaleDateString()}</span>
           </div>
         </form>
 
         {/* Security */}
         <div className="card p-6 sm:p-8">
-          <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2 mb-4"><Lock className="w-5 h-5 text-violet-600" /> Security</h2>
+          <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2 mb-4"><Lock className="w-5 h-5 text-violet-600" /> {tr("ui.security")}</h2>
           <div className="flex flex-col sm:flex-row gap-3">
             <button
               onClick={() => setAlert({ type: "success", msg: "In the demo, passwords are managed locally." })}
               className="btn btn-ghost flex-1"
             >
-              <KeyRound className="w-4 h-4" /> Change password
+              <KeyRound className="w-4 h-4" /> {tr("ui.change_password")}
             </button>
             <button onClick={() => { logout(); router.push("/login"); }} className="btn flex-1 bg-rose-50 text-rose-600 hover:bg-rose-100">
-              <LogOut className="w-4 h-4" /> Sign out
+              <LogOut className="w-4 h-4" /> {tr("ui.sign_out")}
             </button>
           </div>
         </div>

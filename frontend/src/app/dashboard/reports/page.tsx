@@ -8,16 +8,20 @@ import { Line, Doughnut, Bar } from "react-chartjs-2";
 import { BarChart3, TrendingUp, TrendingDown, Percent, Download } from "lucide-react";
 import { PageHeader, StatCard } from "@/components/ui";
 import { useTrips, useExpenses, useVehicles } from "@/lib/api-data";
+import { useT } from "@/i18n";
+import { useUnits } from "@/lib/format";
 
 ChartJS.register(
   CategoryScale, LinearScale, PointElement, LineElement,
   BarElement, ArcElement, Tooltip, Legend, Filler
 );
 
-const currency = (n: number) => "€" + Math.round(n).toLocaleString();
+
 const monthLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 export default function ReportsPage() {
+  const tr = useT();
+  const { currency, distance } = useUnits();
   const { data: trips } = useTrips();
   const { data: expenses } = useExpenses();
   const { data: vehicles } = useVehicles();
@@ -79,26 +83,26 @@ export default function ReportsPage() {
     <div className="space-y-6 animate-fade-in">
       <PageHeader
         icon={BarChart3}
-        title="Reports & Analytics"
-        subtitle="Financial and operational insights"
+        title={tr("ui.reports_analytics")}
+        subtitle={tr("ui.financial_and_operational_insights")}
         gradient="from-violet-500 to-purple-600"
         actions={
           <button onClick={() => window.print()} className="btn btn-ghost">
-            <Download className="w-4 h-4" /> Export
+            <Download className="w-4 h-4" /> {tr("ui.export")}
           </button>
         }
       />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 stagger">
-        <StatCard icon={TrendingUp} label="Total Revenue" value={currency(totals.revenue)} gradient="from-emerald-500 to-teal-600" />
-        <StatCard icon={TrendingDown} label="Total Costs" value={currency(totals.cost)} gradient="from-rose-500 to-red-600" />
-        <StatCard icon={BarChart3} label="Net Profit" value={currency(totals.profit)} gradient="from-violet-500 to-purple-600" />
-        <StatCard icon={Percent} label="Profit Margin" value={`${totals.margin.toFixed(1)}%`} gradient="from-purple-500 to-fuchsia-600" />
+        <StatCard icon={TrendingUp} label={tr("ui.total_revenue")} value={currency(totals.revenue)} gradient="from-emerald-500 to-teal-600" />
+        <StatCard icon={TrendingDown} label={tr("ui.total_costs")} value={currency(totals.cost)} gradient="from-rose-500 to-red-600" />
+        <StatCard icon={BarChart3} label={tr("ui.net_profit")} value={currency(totals.profit)} gradient="from-violet-500 to-purple-600" />
+        <StatCard icon={Percent} label={tr("ui.profit_margin")} value={`${totals.margin.toFixed(1)}%`} gradient="from-purple-500 to-fuchsia-600" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 card p-6">
-          <h2 className="font-bold text-slate-800 mb-4">Revenue vs Expenses</h2>
+          <h2 className="font-bold text-slate-800 mb-4">{tr("ui.revenue_vs_expenses")}</h2>
           <div className="h-72">
             <Line
               data={{
@@ -127,7 +131,7 @@ export default function ReportsPage() {
         </div>
 
         <div className="card p-6">
-          <h2 className="font-bold text-slate-800 mb-4">Expenses by Category</h2>
+          <h2 className="font-bold text-slate-800 mb-4">{tr("ui.expenses_by_category")}</h2>
           <div className="h-72 flex items-center justify-center">
             <Doughnut
               data={{
@@ -148,7 +152,7 @@ export default function ReportsPage() {
       </div>
 
       <div className="card p-6">
-        <h2 className="font-bold text-slate-800 mb-4">Top Vehicles by Revenue</h2>
+        <h2 className="font-bold text-slate-800 mb-4">{tr("ui.top_vehicles_by_revenue")}</h2>
         <div className="h-72">
           <Bar
             data={{

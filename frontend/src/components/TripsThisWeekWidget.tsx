@@ -1,5 +1,6 @@
 "use client";
 import Link from 'next/link';
+import { useT } from "@/i18n";
 
 // تعریف type مناسب برای Trip
 interface Trip {
@@ -14,22 +15,23 @@ interface Trip {
 }
 
 export default function TripsThisWeekWidget({ trips }: { trips: Trip[] }) {
+  const tr = useT();
   return (
     <>
       <h2 className="font-extrabold mb-6 text-violet-700 text-xl flex items-center gap-2">
         <span className="inline-block w-2 h-2 bg-violet-500 rounded-full animate-pulse"></span>
-        Trips This Week
+        {tr("ui.trips_this_week")}
       </h2>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white rounded-xl shadow text-base">
           <thead>
             <tr className="bg-gradient-to-r from-violet-50 to-violet-100 text-violet-800">
-              <th className="py-3 px-4 text-left">Trip ID</th>
-              <th className="py-3 px-4 text-left">Driver</th>
-              <th className="py-3 px-4 text-left">Vehicle</th>
-              <th className="py-3 px-4 text-left">Origin</th>
-              <th className="py-3 px-4 text-left">Destination</th>
-              <th className="py-3 px-4 text-left">Status</th>
+              <th className="py-3 px-4 text-left">{tr("ui.trip_id")}</th>
+              <th className="py-3 px-4 text-left">{tr("ui.driver")}</th>
+              <th className="py-3 px-4 text-left">{tr("ui.vehicle")}</th>
+              <th className="py-3 px-4 text-left">{tr("ui.origin")}</th>
+              <th className="py-3 px-4 text-left">{tr("ui.destination")}</th>
+              <th className="py-3 px-4 text-left">{tr("ui.status")}</th>
             </tr>
           </thead>
           <tbody>
