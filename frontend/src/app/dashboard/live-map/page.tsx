@@ -54,11 +54,11 @@ export default function LiveMapPage() {
                 <div key={v.id} className="p-3 rounded-2xl border border-slate-100 hover:border-violet-200 hover:shadow-soft transition bg-white">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-slate-800">{v.plate_number}</span>
-                    <Badge tone={tone[st]}>{st}</Badge>
+                    <Badge tone={tone[st]}>{tv(st)}</Badge>
                   </div>
                   <div className="text-sm text-slate-500 mt-1 truncate">{v.driver?.full_name || tr("ui.unassigned")}{v.model ? ` · ${v.model}` : ""}</div>
                   <div className="flex items-center gap-4 mt-2 text-xs text-slate-500">
-                    <span className="flex items-center gap-1"><Navigation className="w-3.5 h-3.5" />{v.speed} km/h</span>
+                    <span className="flex items-center gap-1"><Navigation className="w-3.5 h-3.5" /><span className="ltr-inline">{v.speed} km/h</span></span>
                     <span className="flex items-center gap-1"><Signal className="w-3.5 h-3.5" />{st === "offline" ? tr("ui.no_signal") : tr("ui.online_lbl")}</span>
                   </div>
                 </div>

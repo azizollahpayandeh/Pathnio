@@ -288,8 +288,6 @@ body {
   padding-inline-start: 2.5rem;
 }
 
-/* Map overlays sit on the logical end edge; Leaflet's zoom control is always
-   physically top-left, so this keeps them from colliding in either direction. */
-.leaflet-container ~ * .end-3, .end-3 { }
-[dir="ltr"] .absolute.end-3 { right: 0.75rem; left: auto; }
-[dir="rtl"] .absolute.end-3 { left: 0.75rem; right: auto; }
+/* Leaflet's zoom control is always physically top-left, so map overlays are
+   pinned to the physical right in both directions to avoid colliding. */
+[dir="rtl"] .leaflet-container .leaflet-control-zoom { direction: ltr; }
