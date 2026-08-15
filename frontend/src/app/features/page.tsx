@@ -62,7 +62,7 @@ export default function FeaturesPage() {
             {tr("ui.unleash_the_power_of_pathnio")}
           </h1>
           <p className="text-sm sm:text-base md:text-lg text-gray-700 max-w-4xl mx-auto leading-relaxed">
-            Discover a suite of powerful features meticulously crafted to streamline your logistics, from real-time tracking to intelligent analytics.
+            {tr("ui.features_sub")}
           </p>
         </section>
 
@@ -141,6 +141,7 @@ export default function FeaturesPage() {
               animate-fade-in
             "
             aria-label="Pathnio logo animation"
+            dir="ltr"
           >
             {logoText.split('').map((char, index) => (
               <span
