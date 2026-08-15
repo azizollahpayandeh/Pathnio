@@ -50,6 +50,27 @@ function Inner({ useMap, vehicles, focusId }: any) {
   const map = useMap();
   const fitted = useRef(false);
 
+  // Leaflet measures its container on init. Inside a flex/grid card the final
+  // size often arrives a frame later, leaving the tile pane at 0x0 — the map
+  // then renders in a small band with grey gutters and zoom/pan misbehave.
+  // Re-measure on mount and whenever the container resizes.
+  useEffect(() => {
+    const fix = () => map.invalidateSize({ animate: false });
+    fix();
+    const raf = requestAnimationFrame(fix);
+    const t = setTimeout(fix, 300);
+    const ro = new ResizeObserver(fix);
+    const el = map.getContainer?.();
+    if (el) ro.observe(el);
+    window.addEventListener("resize", fix);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(t);
+      ro.disconnect();
+      window.removeEventListener("resize", fix);
+    };
+  }, [map]);
+
   // Fit to the real fleet exactly ONCE, when the first real positions arrive.
   // The viewport is never locked afterwards: the user keeps full world zoom
   // and pan (an earlier max-bounds/min-zoom clamp trapped them in one region).

@@ -280,3 +280,10 @@ body {
 
 /* The language dropdown anchors to the correct edge in both directions */
 [dir="rtl"] .end-0 { right: auto; left: 0; }
+
+/* The .field base class sets its own horizontal padding, which out-specifies
+   the ps-10 utility and made the placeholder sit underneath the search icon.
+   Re-assert the inline-start padding for icon inputs (works in LTR and RTL). */
+.field.ps-10 {
+  padding-inline-start: 2.5rem;
+}
