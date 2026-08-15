@@ -36,30 +36,30 @@ export default function ContactUs() {
 
   const testimonials = [
     {
-      text: 'Pathnio completely transformed our fleet management system!',
-      author: 'Sarah Johnson',
-      role: 'Fleet Manager',
+      text: tr('ui.tm1'),
+      author: tr('ui.tm1_a'),
+      role: tr('ui.tm1_r'),
       rating: 5,
     },
     {
-      text: 'Best customer support I have ever experienced.',
-      author: 'Ahmad Rezaei',
-      role: 'Operations Director',
+      text: tr('ui.tm2'),
+      author: tr('ui.tm2_a'),
+      role: tr('ui.tm2_r'),
       rating: 5,
     },
     {
-      text: 'The team is incredibly responsive and helpful.',
-      author: 'Maria Garcia',
-      role: 'Transport Coordinator',
+      text: tr('ui.tm3'),
+      author: tr('ui.tm3_a'),
+      role: tr('ui.tm3_r'),
       rating: 5,
     },
   ];
 
   const stats = [
-    { icon: Users, value: '10K+', label: 'Happy Clients' },
-    { icon: Zap, value: '99.9%', label: 'Uptime' },
-    { icon: Clock, value: '<1hr', label: 'Response Time' },
-    { icon: Star, value: '4.9/5', label: 'Rating' },
+    { icon: Users, value: '10K+', label: tr('ui.cs_clients') },
+    { icon: Zap, value: '99.9%', label: tr('ui.cs_uptime') },
+    { icon: Clock, value: '<1hr', label: tr('ui.cs_response') },
+    { icon: Star, value: '4.9/5', label: tr('ui.cs_rating') },
   ];
 
   const handleChange = (
@@ -221,7 +221,7 @@ export default function ContactUs() {
                     },
                     {
                       icon: MapPin,
-                      text: 'Vakilabad St, Mashhad, Iran',
+                      text: tr('ui.cs_address'),
                       color: 'bg-violet-500',
                     },
                     {

@@ -194,7 +194,7 @@ export default function AboutPage() {
                 {tr("ui.our_team")}
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                Meet our passionate and expert team who work tirelessly every day to innovate in the logistics industry
+                {tr("ui.about_team_intro")}
               </p>
             </div>
 

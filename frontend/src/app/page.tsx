@@ -10,19 +10,19 @@ import {
 } from "lucide-react";
 
 const FEATURES = [
-  { icon: MapPin, title: "Real-Time GPS", desc: "Track every vehicle live on an interactive map with accurate positioning.", tone: "from-emerald-500 to-teal-600" },
-  { icon: BarChart3, title: "Fleet Analytics", desc: "Revenue, expenses and performance — visualized in beautiful reports.", tone: "from-violet-500 to-purple-600" },
-  { icon: UserCheck, title: "Driver Insights", desc: "Monitor ratings, trips and behavior to keep your team performing.", tone: "from-purple-500 to-fuchsia-600" },
-  { icon: Route, title: "Trip Management", desc: "Schedule, track and complete journeys with cargo and revenue tracking.", tone: "from-orange-500 to-amber-600" },
-  { icon: Wallet, title: "Expense Control", desc: "Log fuel, maintenance and tolls — always know where money goes.", tone: "from-teal-500 to-violet-600" },
-  { icon: Bell, title: "Smart Alerts", desc: "Get notified about maintenance, low fuel and critical events instantly.", tone: "from-rose-500 to-red-600" },
+  { icon: MapPin, titleKey: "ui.hf_gps", descKey: "ui.hf_gps_d", tone: "from-emerald-500 to-teal-600" },
+  { icon: BarChart3, titleKey: "ui.hf_analytics", descKey: "ui.hf_analytics_d", tone: "from-violet-500 to-purple-600" },
+  { icon: UserCheck, titleKey: "ui.hf_driver", descKey: "ui.hf_driver_d", tone: "from-purple-500 to-fuchsia-600" },
+  { icon: Route, titleKey: "ui.hf_trip", descKey: "ui.hf_trip_d", tone: "from-orange-500 to-amber-600" },
+  { icon: Wallet, titleKey: "ui.hf_expense", descKey: "ui.hf_expense_d", tone: "from-teal-500 to-violet-600" },
+  { icon: Bell, titleKey: "ui.hf_alerts", descKey: "ui.hf_alerts_d", tone: "from-rose-500 to-red-600" },
 ];
 
 const STATS = [
-  { value: "12+", label: "Vehicles tracked" },
-  { value: "98%", label: "On-time rate" },
-  { value: "24/7", label: "Live monitoring" },
-  { value: "€1.2M", label: "Revenue managed" },
+  { value: "12+", labelKey: "ui.hs_vehicles" },
+  { value: "98%", labelKey: "ui.hs_ontime" },
+  { value: "24/7", labelKey: "ui.hs_live" },
+  { value: "€1.2M", labelKey: "ui.hs_revenue" },
 ];
 
 export default function HomePage() {
@@ -78,9 +78,9 @@ export default function HomePage() {
               </div>
               <div className="grid grid-cols-3 gap-3 mb-4">
                 {([
-                  { Icon: Truck, v: "12", l: "Vehicles", g: "from-orange-500 to-amber-600" },
-                  { Icon: Route, v: "8", l: "Trips", g: "from-purple-500 to-fuchsia-600" },
-                  { Icon: Gauge, v: "98%", l: "Uptime", g: "from-emerald-500 to-teal-600" },
+                  { Icon: Truck, v: "12", l: tr("ui.hm_vehicles"), g: "from-orange-500 to-amber-600" },
+                  { Icon: Route, v: "8", l: tr("ui.hm_trips"), g: "from-purple-500 to-fuchsia-600" },
+                  { Icon: Gauge, v: "98%", l: tr("ui.hm_uptime"), g: "from-emerald-500 to-teal-600" },
                 ] as const).map(({ Icon, v, l, g }, i) => (
                   <div key={i} className="rounded-2xl bg-white p-3 border border-slate-100 shadow-sm">
                     <div className={`w-8 h-8 rounded-xl bg-gradient-to-br ${g} flex items-center justify-center mb-2`}><Icon className="w-4 h-4 text-white" /></div>
@@ -106,9 +106,9 @@ export default function HomePage() {
       <section className="bg-white py-14 border-b border-slate-100">
         <div className="container mx-auto px-6 grid grid-cols-2 lg:grid-cols-4 gap-8">
           {STATS.map((s) => (
-            <div key={s.label} className="text-center">
+            <div key={s.labelKey} className="text-center">
               <div className="text-4xl font-extrabold text-violet-700">{s.value}</div>
-              <div className="text-slate-500 mt-1">{s.label}</div>
+              <div className="text-slate-500 mt-1">{tr(s.labelKey)}</div>
             </div>
           ))}
         </div>
@@ -123,12 +123,12 @@ export default function HomePage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {FEATURES.map((f) => (
-              <div key={f.title} className="card card-hover p-7">
+              <div key={f.titleKey} className="card card-hover p-7">
                 <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${f.tone} flex items-center justify-center shadow-md mb-5`}>
                   <f.icon className="w-7 h-7 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">{f.title}</h3>
-                <p className="text-slate-500">{f.desc}</p>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">{tr(f.titleKey)}</h3>
+                <p className="text-slate-500">{tr(f.descKey)}</p>
               </div>
             ))}
           </div>
