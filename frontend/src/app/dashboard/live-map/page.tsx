@@ -59,7 +59,7 @@ export default function LiveMapPage() {
                   <div className="text-sm text-slate-500 mt-1 truncate">{v.driver?.full_name || tr("ui.unassigned")}{v.model ? ` · ${v.model}` : ""}</div>
                   <div className="flex items-center gap-4 mt-2 text-xs text-slate-500">
                     <span className="flex items-center gap-1"><Navigation className="w-3.5 h-3.5" />{v.speed} km/h</span>
-                    <span className="flex items-center gap-1"><Signal className="w-3.5 h-3.5" />{st === "offline" ? "No signal" : "Online"}</span>
+                    <span className="flex items-center gap-1"><Signal className="w-3.5 h-3.5" />{st === "offline" ? tr("ui.no_signal") : tr("ui.online_lbl")}</span>
                   </div>
                 </div>
               );

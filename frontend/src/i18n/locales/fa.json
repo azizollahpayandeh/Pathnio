@@ -611,6 +611,12 @@
     "cs_uptime": "در دسترس بودن",
     "cs_response": "زمان پاسخ",
     "cs_rating": "امتیاز",
-    "cs_address": "خیابان وکیل‌آباد، مشهد، ایران"
+    "cs_address": "خیابان وکیل‌آباد، مشهد، ایران",
+    "cnt_total": "{count} مورد",
+    "cnt_moving": "{count} در حرکت",
+    "cnt_stopped": "{count} متوقف",
+    "cnt_offline": "{count} آفلاین",
+    "no_signal": "بدون سیگنال",
+    "online_lbl": "آنلاین"
   }
 }

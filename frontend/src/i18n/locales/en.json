@@ -611,6 +611,12 @@
     "cs_uptime": "Uptime",
     "cs_response": "Response Time",
     "cs_rating": "Rating",
-    "cs_address": "Vakilabad St, Mashhad, Iran"
+    "cs_address": "Vakilabad St, Mashhad, Iran",
+    "cnt_total": "{count} total",
+    "cnt_moving": "{count} moving",
+    "cnt_stopped": "{count} stopped",
+    "cnt_offline": "{count} offline",
+    "no_signal": "No signal",
+    "online_lbl": "Online"
   }
 }
