@@ -21,33 +21,33 @@ export default function FeaturesPage() {
 
   const features = [
     {
-      title: 'Real-Time Tracking',
-      desc: 'Monitor your fleet and shipments live with pinpoint GPS precision.',
+      title: tr('ui.feat_rt_tracking'),
+      desc: tr('ui.feat_rt_tracking_d'),
       icon: '🛰️',
     },
     {
-      title: 'Smart Analytics',
-      desc: 'Make informed decisions using powerful AI-driven data insights.',
+      title: tr('ui.feat_analytics'),
+      desc: tr('ui.feat_analytics_d'),
       icon: '📊',
     },
     {
-      title: 'Driver App',
-      desc: 'Equip your drivers with a user-friendly app for efficient delivery management.',
+      title: tr('ui.feat_driver_app'),
+      desc: tr('ui.feat_driver_app_d'),
       icon: '📱',
     },
     {
-      title: 'Custom Alerts',
-      desc: 'Receive instant notifications on key events and anomalies to stay ahead.',
+      title: tr('ui.feat_alerts'),
+      desc: tr('ui.feat_alerts_d'),
       icon: '🔔',
     },
     {
-      title: 'Route Optimization',
-      desc: 'Automatically find the fastest and most fuel-efficient delivery paths.',
+      title: tr('ui.feat_routes'),
+      desc: tr('ui.feat_routes_d'),
       icon: '🗺️',
     },
     {
-      title: 'Secure Access',
-      desc: 'Protect your data with enterprise-grade security and role-based permissions.',
+      title: tr('ui.feat_secure'),
+      desc: tr('ui.feat_secure_d'),
       icon: '🔐',
     },
   ];

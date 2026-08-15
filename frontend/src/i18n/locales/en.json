@@ -565,6 +565,18 @@
     "driver_added": "Driver {name} added.",
     "vehicle_added": "Vehicle {plate} added.",
     "expense_saved": "Expense “{title}” saved.",
-    "cannot_delete_self": "You can't delete yourself"
+    "cannot_delete_self": "You can't delete yourself",
+    "feat_rt_tracking": "Real-Time Tracking",
+    "feat_rt_tracking_d": "Monitor your fleet and shipments live with pinpoint GPS precision.",
+    "feat_analytics": "Smart Analytics",
+    "feat_analytics_d": "Make informed decisions using powerful AI-driven data insights.",
+    "feat_driver_app": "Driver App",
+    "feat_driver_app_d": "Equip your drivers with a user-friendly app for efficient delivery management.",
+    "feat_alerts": "Custom Alerts",
+    "feat_alerts_d": "Receive instant notifications on key events and anomalies to stay ahead.",
+    "feat_routes": "Route Optimization",
+    "feat_routes_d": "Automatically find the fastest and most fuel-efficient delivery paths.",
+    "feat_secure": "Secure Access",
+    "feat_secure_d": "Protect your data with enterprise-grade security and role-based permissions."
   }
 }
