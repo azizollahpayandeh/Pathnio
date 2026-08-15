@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import type { LatLngExpression } from "leaflet";
 import type { LiveVehicle } from "@/lib/api-data";
-import { useT } from "@/i18n";
+import { useT, useTValue } from "@/i18n";
 
 export type { LiveVehicle } from "@/lib/api-data";
 
@@ -49,39 +49,39 @@ function MapController({ vehicles, focusId }: { vehicles: LiveVehicle[]; focusId
 function Inner({ useMap, vehicles, focusId }: any) {
   const map = useMap();
   const fitted = useRef(false);
+
+  // Fit to the real fleet exactly ONCE, when the first real positions arrive.
+  // The viewport is never locked afterwards: the user keeps full world zoom
+  // and pan (an earlier max-bounds/min-zoom clamp trapped them in one region).
   useEffect(() => {
-    if (vehicles.length === 0) return;
+    if (fitted.current || vehicles.length === 0) return;
+    fitted.current = true;
     import("leaflet").then((L) => {
-      const bounds = L.latLngBounds(
-        vehicles.map((v: LiveVehicle) => [v.lat, v.lng] as [number, number])
-      );
-      // Keep the viewport anchored to where the fleet actually is: panning is
-      // constrained to a generous margin around the real vehicles instead of
-      // letting the user drift into empty ocean/world areas.
-      map.setMaxBounds(bounds.pad(2.5));
-      map.setMinZoom(Math.max(3, map.getBoundsZoom(bounds.pad(3))));
-      if (!fitted.current) {
-        fitted.current = true;
-        if (vehicles.length === 1) map.setView([vehicles[0].lat, vehicles[0].lng], 14);
-        else map.fitBounds(bounds, { padding: [50, 50] });
+      if (vehicles.length === 1) {
+        map.setView([vehicles[0].lat, vehicles[0].lng], 13, { animate: true });
+      } else {
+        const bounds = L.latLngBounds(
+          vehicles.map((v: LiveVehicle) => [v.lat, v.lng] as [number, number])
+        );
+        map.fitBounds(bounds, { padding: [60, 60], maxZoom: 14 });
       }
     });
   }, [vehicles, map]);
+
   useEffect(() => {
     if (!focusId) return;
     const v = vehicles.find((x: LiveVehicle) => x.id === focusId);
     if (v) map.setView([v.lat, v.lng], 15, { animate: true });
   }, [focusId, vehicles, map]);
+
   return null;
 }
 
-const STATUS_LABEL: Record<string, string> = {
-  MOVING: "Moving", STOPPED: "Stopped", OFFLINE: "Offline",
-  MAINTENANCE: "Maintenance", INACTIVE: "Inactive",
-};
+
 
 export default function LiveTrackMap({ vehicles, focusId }: { vehicles: LiveVehicle[]; focusId?: number | null }) {
   const tr = useT();
+  const tv = useTValue();
   const [isClient, setIsClient] = useState(false);
   const [icons, setIcons] = useState<Record<string, unknown>>({});
 
@@ -111,7 +111,10 @@ export default function LiveTrackMap({ vehicles, focusId }: { vehicles: LiveVehi
     });
   }, [isClient]);
 
-  if (!isClient || Object.keys(icons).length === 0) {
+  // Only the (very brief) server/first-client frame shows a placeholder; the
+  // map itself renders immediately after mount so it never appears blank or
+  // late. Markers are added as soon as icons + real positions are available.
+  if (!isClient) {
     return (
       <div className="w-full h-full min-h-[320px] bg-violet-50 rounded-2xl flex items-center justify-center">
         <div className="flex flex-col items-center gap-3 text-violet-500">
@@ -122,64 +125,63 @@ export default function LiveTrackMap({ vehicles, focusId }: { vehicles: LiveVehi
     );
   }
 
-  // Nothing real to show: an empty world map is meaningless, so say why.
-  if (mappable.length === 0) {
-    return (
-      <div className="w-full h-full min-h-[320px] bg-violet-50 rounded-2xl flex items-center justify-center p-6">
-        <div className="text-center max-w-xs">
-          <p className="font-semibold text-violet-800">{tr("ui.no_live_positions_yet")}</p>
-          <p className="text-sm text-slate-500 mt-1">
-            {tr("ui.vehicles_appear_hint")}
-          </p>
-        </div>
-      </div>
-    );
-  }
+  const iconsReady = Object.keys(icons).length > 0;
 
   return (
     <div className="w-full h-full min-h-[320px] relative rounded-2xl overflow-hidden">
+      {/* Empty state is an overlay, not a replacement: the map still renders
+          immediately and stays fully pannable/zoomable. */}
+      {mappable.length === 0 && (
+        <div className="absolute inset-x-0 top-3 z-[1000] flex justify-center pointer-events-none px-4">
+          <div className="bg-white/95 backdrop-blur rounded-2xl shadow-soft px-4 py-2.5 text-center max-w-sm">
+            <p className="font-semibold text-violet-800 text-sm">{tr("ui.no_live_positions_yet")}</p>
+            <p className="text-xs text-slate-500 mt-0.5">{tr("ui.vehicles_appear_hint")}</p>
+          </div>
+        </div>
+      )}
       <MapContainer
         center={center}
         zoom={initialZoom}
         scrollWheelZoom
-        minZoom={3}
-        // Sticky bounds + no world-wrap: the map cannot be dragged off into
-        // endless empty/ocean tiles away from the real fleet.
-        maxBoundsViscosity={1}
-        worldCopyJump={false}
+        // Full world navigation: zoom right out and pan anywhere (Brazil, any
+        // country). Bounds are the WORLD only, purely so the user cannot drag
+        // off into blank grey space above/below the map.
+        minZoom={2}
+        maxBounds={[[-85, -180], [85, 180]]}
+        maxBoundsViscosity={0.3}
+        worldCopyJump
         style={{ height: "100%", width: "100%" }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          noWrap
         />
         <MapController vehicles={mappable} focusId={focusId} />
-        {mappable.map((v) => (
+        {iconsReady && mappable.map((v) => (
           <Marker key={v.id} position={[v.lat, v.lng] as LatLngExpression} icon={icons[bucket(v)] as never}>
             <Popup>
               <div className="font-bold text-violet-800 text-base mb-1">{v.model || v.plate_number}</div>
               <div className="text-slate-600 mb-0.5">{tr("ui.plate")} <span className="font-mono">{v.plate_number}</span></div>
               <div className="text-slate-600 mb-0.5">{tr("ui.driver")} <span className="font-semibold">{v.driver?.full_name || tr("ui.unassigned")}</span></div>
-              <div className="mb-0.5">{tr("ui.status")} <span className="font-semibold">{STATUS_LABEL[v.live_status] || v.live_status}</span></div>
+              <div className="mb-0.5">{tr("ui.status")} <span className="font-semibold">{tv(v.live_status)}</span></div>
               {v.live_status === "MOVING" || v.live_status === "STOPPED" ? (
                 <div className="mb-0.5">{tr("ui.speed")} <span className="font-mono text-violet-700">{v.speed} km/h</span></div>
               ) : (
                 // Not currently reporting: the pin is a historical fix, so say so.
                 <div className="mb-0.5 text-amber-700 font-semibold">
-                  Last known position · {whenSeen(v.last_seen_at)}
+                  {tr("liveMap.lastKnownPosition")} · {whenSeen(v.last_seen_at)}
                 </div>
               )}
-              {v.trip && <div className="text-slate-600 mb-0.5">Trip: {v.trip.origin} → {v.trip.destination}</div>}
+              {v.trip && <div className="text-slate-600 mb-0.5">{tr("liveMap.trip")}: {v.trip.origin} → {v.trip.destination}</div>}
               {v.cargo && v.cargo.length > 0 && (
-                <div className="text-slate-600">Cargo: {v.cargo.map((c) => `${c.description} ×${c.quantity}`).join(", ")}</div>
+                <div className="text-slate-600">{tr("liveMap.cargo")}: {v.cargo.map((c) => `${c.description} ×${c.quantity}`).join(", ")}</div>
               )}
             </Popup>
             <Tooltip direction="top" offset={[0, -22]} opacity={0.95}>
               {v.plate_number}
               {v.live_status === "MOVING" || v.live_status === "STOPPED"
                 ? ` · ${v.speed} km/h`
-                : " · last known position"}
+                : ` · ${tr("liveMap.lastKnownPosition")}`}
             </Tooltip>
           </Marker>
         ))}
