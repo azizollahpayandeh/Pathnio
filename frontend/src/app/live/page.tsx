@@ -95,11 +95,11 @@ export default function LivePage() {
         body: JSON.stringify({ username: username.trim(), password }),
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data?.detail || "Login failed.");
+      if (!res.ok) throw new Error(data?.detail || tr("ui.login_failed"));
       sessionStorage.setItem(TOKEN_KEY, data.access);
       setToken(data.access);
     } catch (err: any) {
-      setError(err?.message || "Login failed.");
+      setError(err?.message || tr("ui.login_failed"));
     } finally {
       setLoading(false);
     }
@@ -141,7 +141,7 @@ export default function LivePage() {
             disabled={loading}
             className="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold rounded-xl py-3 disabled:opacity-60"
           >
-            {loading ? "Signing in…" : "Sign In"}
+            {loading ? "Signing in…" : tr("ui.sign_in")}
           </button>
           <p className="text-xs text-slate-400 mt-4 text-center">
             Backend: {API_BASE}
@@ -214,7 +214,7 @@ export default function LivePage() {
                     <span className="font-mono font-semibold">{v.plate_number}</span>
                     <span className={`w-2.5 h-2.5 rounded-full ${dot[st]}`} />
                   </div>
-                  <div className="text-violet-300 text-xs mt-1">{v.driver?.full_name || "Unassigned"}</div>
+                  <div className="text-violet-300 text-xs mt-1">{v.driver?.full_name || tr("ui.unassigned")}</div>
                   {v.trip && (
                     <div className="text-violet-400 text-xs mt-0.5">{v.trip.origin} → {v.trip.destination}</div>
                   )}

@@ -45,7 +45,7 @@ export default function AdminPage() {
     } catch (e: any) {
       // Never fall back to demo data — surface the failure honestly.
       setUsers([]);
-      setError(e?.response?.data?.detail || "Could not load accounts.");
+      setError(e?.response?.data?.detail || tr("ui.could_not_load_accounts"));
     } finally {
       setLoading(false);
     }
@@ -71,7 +71,7 @@ export default function AdminPage() {
       await api.post(`accounts/users/${id}/role/`, { role: isAdmin ? "Manager" : "Admin" });
       await refresh();
     } catch (e: any) {
-      setError(e?.response?.data?.detail || "Could not update role.");
+      setError(e?.response?.data?.detail || tr("ui.could_not_update_role"));
     }
   };
 
@@ -80,7 +80,7 @@ export default function AdminPage() {
       await api.delete(`accounts/users/${id}/delete/`);
       await refresh();
     } catch (e: any) {
-      setError(e?.response?.data?.detail || "Could not delete account.");
+      setError(e?.response?.data?.detail || tr("ui.could_not_delete_account"));
     }
   };
 
@@ -103,8 +103,8 @@ export default function AdminPage() {
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <h2 className="font-bold text-slate-800 flex items-center gap-2"><Users className="w-5 h-5 text-rose-500" /> {tr("ui.user_accounts")}</h2>
           <div className="relative sm:w-72">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={tr("ui.search_users")} className="field pl-10" />
+            <Search className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={tr("ui.search_users")} className="field ps-10" />
           </div>
         </div>
 
@@ -157,7 +157,7 @@ export default function AdminPage() {
                             onClick={() => removeUser(u.id)}
                             disabled={String(u.id) === String(user?.id)}
                             className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition disabled:opacity-40 disabled:cursor-not-allowed"
-                            title={String(u.id) === String(user?.id) ? "You can't delete yourself" : "Delete"}
+                            title={String(u.id) === String(user?.id) ? "You can't delete yourself" : tr("ui.delete")}
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>

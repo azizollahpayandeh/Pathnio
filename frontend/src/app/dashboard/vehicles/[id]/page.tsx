@@ -34,7 +34,7 @@ export default function VehicleDetail() {
   }
 
   const specs = [
-    { icon: User, label: "Driver", value: vehicle.driver || "Unassigned" },
+    { icon: User, label: "Driver", value: vehicle.driver || tr("ui.unassigned") },
     { icon: Weight, label: "Capacity", value: vehicle.capacity || "—" },
     { icon: Palette, label: "Color", value: vehicle.color || "—" },
     { icon: Truck, label: "Type", value: vehicle.vehicle_type },

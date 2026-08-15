@@ -46,14 +46,14 @@ export default function AddDriverModal({ isOpen, onClose, onAddDriver, initial }
       toast.success(initial ? "Driver updated." : `Driver ${form.full_name} added.`);
       onClose();
     } catch (err) {
-      toast.fromError(err, "Could not save the driver. Please try again.");
+      toast.fromError(err, tr("ui.could_not_save_the_driver_please_try_again"));
     } finally {
       setSaving(false);
     }
   };
 
   return (
-    <Modal open={isOpen} onClose={onClose} title={initial ? "Edit Driver" : "Add Driver"} subtitle={tr("ui.add_a_driver_to_your_team")} icon={Users} gradient="from-purple-500 to-violet-600" maxWidth="max-w-xl">
+    <Modal open={isOpen} onClose={onClose} title={initial ? "Edit Driver" : tr("ui.add_driver")} subtitle={tr("ui.add_a_driver_to_your_team")} icon={Users} gradient="from-purple-500 to-violet-600" maxWidth="max-w-xl">
       <form onSubmit={submit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label={tr("ui.full_name")} required>
@@ -82,7 +82,7 @@ export default function AddDriverModal({ isOpen, onClose, onAddDriver, initial }
         </p>
         <div className="flex justify-end gap-3 pt-2">
           <button type="button" onClick={onClose} className="btn btn-ghost">{tr("ui.cancel")}</button>
-          <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? "Saving…" : initial ? "Save Changes" : "Add Driver"}</button>
+          <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? "Saving…" : initial ? tr("ui.save_changes") : tr("ui.add_driver")}</button>
         </div>
       </form>
     </Modal>

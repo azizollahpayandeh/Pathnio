@@ -33,7 +33,7 @@ export default function DriverDetail() {
     { icon: Phone, label: "Mobile", value: driver.mobile },
     { icon: Mail, label: "Email", value: driver.email || "—" },
     { icon: IdCard, label: "License", value: driver.license_no || "—" },
-    { icon: Truck, label: "Vehicle", value: driver.plate_number || "Unassigned" },
+    { icon: Truck, label: "Vehicle", value: driver.plate_number || tr("ui.unassigned") },
     { icon: RouteIcon, label: "Total trips", value: driver.total_trips },
     { icon: Calendar, label: "Joined", value: new Date(driver.joined_at).toLocaleDateString() },
   ];

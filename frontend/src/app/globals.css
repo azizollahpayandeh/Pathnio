@@ -256,3 +256,27 @@ body {
 [dir="rtl"] .leaflet-container {
   direction: ltr;
 }
+
+/* Technical values must read left-to-right even in RTL: emails, phone numbers,
+   license plates, coordinates, codes and any explicitly-marked value. */
+[dir="rtl"] a[href^="mailto:"],
+[dir="rtl"] a[href^="tel:"],
+[dir="rtl"] input[type="email"],
+[dir="rtl"] input[type="tel"],
+[dir="rtl"] input[type="url"],
+[dir="rtl"] input[type="number"],
+[dir="rtl"] input[type="date"],
+[dir="rtl"] .ltr {
+  direction: ltr;
+  text-align: start;
+  unicode-bidi: embed;
+}
+/* Keep a trailing/leading sign or symbol attached correctly in mixed text */
+[dir="rtl"] .ltr-inline {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+}
+
+/* The language dropdown anchors to the correct edge in both directions */
+[dir="rtl"] .end-0 { right: auto; left: 0; }

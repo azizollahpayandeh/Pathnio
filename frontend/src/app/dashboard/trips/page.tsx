@@ -85,8 +85,8 @@ export default function TripsPage() {
 
       <div className="card p-4 flex flex-col sm:flex-row gap-3">
         <div className="flex-1 relative">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={tr("ui.search_route_or_driver")} className="field pl-10" />
+          <Search className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={tr("ui.search_route_or_driver")} className="field ps-10" />
         </div>
         <select value={status} onChange={(e) => setStatus(e.target.value)} className="field sm:w-48">
           <option value="all">{tr("ui.all_status")}</option>
@@ -99,7 +99,7 @@ export default function TripsPage() {
 
       {filtered.length === 0 ? (
         <div className="card">
-          <EmptyState icon={Route} title={tr("ui.no_trips_found")} description="Schedule a new trip to get started."
+          <EmptyState icon={Route} title={tr("ui.no_trips_found")} description={tr("ui.schedule_a_new_trip_to_get_started")}
             action={<button onClick={() => setShowAdd(true)} className="btn btn-primary mx-auto"><Plus className="w-4 h-4" /> {tr("ui.new_trip")}</button>} />
         </div>
       ) : (

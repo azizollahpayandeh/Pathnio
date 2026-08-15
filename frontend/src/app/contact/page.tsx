@@ -169,10 +169,7 @@ export default function ContactUs() {
               {tr("ui.contact_us")}
             </h1>
 
-            <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Ready to revolutionize your fleet management? Our expert team is
-              here to help you succeed.
-            </p>
+            <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">{tr("ui.contact_hero_sub")}</p>
           </div>
 
           {/* Stats Section */}
@@ -208,10 +205,7 @@ export default function ContactUs() {
                   </h2>
                 </div>
 
-                <p className="text-gray-600 mb-8 text-lg">
-                  Ready to transform your business? Get in touch with our
-                  amazing team!
-                </p>
+                <p className="text-gray-600 mb-8 text-lg">{tr("ui.contact_form_sub")}</p>
 
                 <div className="space-y-6">
                   {[
@@ -322,7 +316,7 @@ export default function ContactUs() {
                 <div className="space-y-6">
                   <div className="group">
                     <label className="block text-gray-800 mb-3 font-semibold text-lg">
-                      Full Name ✨
+                      {tr("ui.contact_full_name")} ✨
                     </label>
                     <input
                       type="text"
@@ -336,7 +330,7 @@ export default function ContactUs() {
 
                   <div className="group">
                     <label className="block text-gray-800 mb-3 font-semibold text-lg">
-                      Email Address 📧
+                      {tr("ui.contact_email")} 📧
                     </label>
                     <input
                       type="email"
@@ -350,7 +344,7 @@ export default function ContactUs() {
 
                   <div className="group">
                     <label className="block text-gray-800 mb-3 font-semibold text-lg">
-                      Your Message 💭
+                      {tr("ui.contact_message")} 💭
                     </label>
                     <textarea
                       name="message"
@@ -391,10 +385,7 @@ export default function ContactUs() {
                       {tr("ui.we_respect_your_privacy")}
                     </span>
                   </div>
-                  <p className="text-gray-700 text-sm">
-                    Your information is secure with us and will never be shared
-                    with third parties.
-                  </p>
+                  <p className="text-gray-700 text-sm">{tr("ui.contact_privacy")}</p>
                 </div>
               </div>
             </div>

@@ -41,7 +41,7 @@ export default function FleetSettingsCard() {
       toast.success(tr("ui.fleet_settings_saved"));
       setTimeout(() => setMsg(null), 2000);
     } catch (err) {
-      toast.fromError(err, "Could not save settings.");
+      toast.fromError(err, tr("ui.could_not_save_settings"));
     } finally {
       setSaving(false);
     }

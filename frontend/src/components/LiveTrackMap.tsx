@@ -160,7 +160,7 @@ export default function LiveTrackMap({ vehicles, focusId }: { vehicles: LiveVehi
             <Popup>
               <div className="font-bold text-violet-800 text-base mb-1">{v.model || v.plate_number}</div>
               <div className="text-slate-600 mb-0.5">{tr("ui.plate")} <span className="font-mono">{v.plate_number}</span></div>
-              <div className="text-slate-600 mb-0.5">{tr("ui.driver")} <span className="font-semibold">{v.driver?.full_name || "Unassigned"}</span></div>
+              <div className="text-slate-600 mb-0.5">{tr("ui.driver")} <span className="font-semibold">{v.driver?.full_name || tr("ui.unassigned")}</span></div>
               <div className="mb-0.5">{tr("ui.status")} <span className="font-semibold">{STATUS_LABEL[v.live_status] || v.live_status}</span></div>
               {v.live_status === "MOVING" || v.live_status === "STOPPED" ? (
                 <div className="mb-0.5">{tr("ui.speed")} <span className="font-mono text-violet-700">{v.speed} km/h</span></div>

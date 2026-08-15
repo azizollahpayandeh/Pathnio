@@ -11,7 +11,7 @@ export default function NotFound() {
         <Frown className="w-16 h-16 text-violet-500 mb-2 animate-bounce" />
         <h1 className="text-6xl font-extrabold mb-2 tracking-tight">404</h1>
         <h2 className="text-2xl font-bold mb-2">{tr("ui.page_not_found")}</h2>
-        <p className="text-violet-700 mb-6 text-center max-w-xs">Sorry, the page you are looking for does not exist or may have been removed.</p>
+        <p className="text-violet-700 mb-6 text-center max-w-xs">{tr("ui.not_found_sub")}</p>
         <Link href="/" className="px-6 py-3 bg-violet-700 text-white rounded-xl font-semibold shadow hover:bg-violet-800 transition">{tr("ui.back_to_home")}</Link>
       </div>
     </div>

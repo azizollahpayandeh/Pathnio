@@ -41,8 +41,8 @@ export default function LiveMapPage() {
         <div className="card p-5 flex flex-col">
           <h2 className="font-bold text-slate-800 mb-3">{tr("ui.fleet_count")} ({list.length})</h2>
           <div className="relative mb-3">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={tr("ui.search_vehicle")} className="field pl-10" />
+            <Search className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={tr("ui.search_vehicle")} className="field ps-10" />
           </div>
           <div className="space-y-2 overflow-y-auto scroll-slim max-h-[420px] pr-1">
             {list.length === 0 && (
@@ -56,7 +56,7 @@ export default function LiveMapPage() {
                     <span className="font-bold text-slate-800">{v.plate_number}</span>
                     <Badge tone={tone[st]}>{st}</Badge>
                   </div>
-                  <div className="text-sm text-slate-500 mt-1 truncate">{v.driver?.full_name || "Unassigned"}{v.model ? ` · ${v.model}` : ""}</div>
+                  <div className="text-sm text-slate-500 mt-1 truncate">{v.driver?.full_name || tr("ui.unassigned")}{v.model ? ` · ${v.model}` : ""}</div>
                   <div className="flex items-center gap-4 mt-2 text-xs text-slate-500">
                     <span className="flex items-center gap-1"><Navigation className="w-3.5 h-3.5" />{v.speed} km/h</span>
                     <span className="flex items-center gap-1"><Signal className="w-3.5 h-3.5" />{st === "offline" ? "No signal" : "Online"}</span>

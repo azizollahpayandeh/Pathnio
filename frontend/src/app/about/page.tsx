@@ -104,9 +104,7 @@ export default function AboutPage() {
               <br />
               <span className="text-gray-900">Pathnio</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-600 leading-relaxed max-w-3xl mx-auto animate-slide-up">
-              Revolutionizing logistics through cutting-edge technology and innovative solutions
-            </p>
+            <p className="text-xl md:text-2xl text-gray-600 leading-relaxed max-w-3xl mx-auto animate-slide-up">{tr("ui.about_hero_sub")}</p>
           </div>
         </section>
 
@@ -126,15 +124,8 @@ export default function AboutPage() {
                   <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-violet-700 bg-clip-text text-transparent">
                     {tr("ui.our_story")}
                   </h2>
-                  <p className="text-lg text-gray-700 leading-relaxed">
-                    Pathnio was born from a vision to transform the logistics industry. We saw the challenges 
-                    faced by fleet managers and transportation companies worldwide, and we decided to build 
-                    the future of fleet management.
-                  </p>
-                  <p className="text-lg text-gray-700 leading-relaxed">
-                    From intuitive dashboards to AI-powered insights, every feature at Pathnio is meticulously 
-                    crafted to empower your transport operations and drive unprecedented efficiency.
-                  </p>
+                  <p className="text-lg text-gray-700 leading-relaxed">{tr("ui.about_story")}</p>
+                  <p className="text-lg text-gray-700 leading-relaxed">{tr("ui.about_craft")}</p>
                 </div>
 
                 {/* Feature Cards */}
@@ -241,13 +232,9 @@ export default function AboutPage() {
                     </h3>
                     <div className="inline-flex items-center px-4 py-2 bg-violet-100 rounded-full border border-violet-200 mb-6">
                       <Code className="w-4 h-4 text-violet-600 mr-2" />
-                      <span className="text-violet-800 font-semibold">Co-Founder &amp; Full Stack Developer</span>
+                      <span className="text-violet-800 font-semibold">{tr("ui.about_role_cofounder")}</span>
                     </div>
-                    <p className="text-gray-600 leading-relaxed mb-8 text-sm">
-                      Azizollah Payanda is a co-founder and full-stack developer of Pathnio.
-                      Together with his cousin Amir, he built Pathnio from the ground up —
-                      shaping its vision for intelligent, beautifully-designed fleet management.
-                    </p>
+                    <p className="text-gray-600 leading-relaxed mb-8 text-sm">{tr("ui.about_bio_aziz")}</p>
 
                     {/* Social Links */}
                     <div className="flex justify-center space-x-4">
@@ -298,13 +285,9 @@ export default function AboutPage() {
                     </h3>
                     <div className="inline-flex items-center px-4 py-2 bg-violet-100 rounded-full border border-violet-200 mb-6">
                       <Code className="w-4 h-4 text-violet-600 mr-2" />
-                      <span className="text-violet-800 font-semibold">Co-Founder &amp; Full Stack Developer</span>
+                      <span className="text-violet-800 font-semibold">{tr("ui.about_role_cofounder")}</span>
                     </div>
-                    <p className="text-gray-600 leading-relaxed mb-8 text-sm">
-                      Amir Mohammad Marwi is a co-founder and full-stack developer of Pathnio.
-                      He worked side by side with his cousin Azizollah on every part of the
-                      platform, bringing the same passion for engineering and design that powers Pathnio.
-                    </p>
+                    <p className="text-gray-600 leading-relaxed mb-8 text-sm">{tr("ui.about_bio_amir")}</p>
 
                     {/* Social Links */}
                     <div className="flex justify-center space-x-4">
@@ -346,7 +329,7 @@ export default function AboutPage() {
                         <div className="absolute inset-0 bg-gradient-to-br from-violet-400/50 to-teal-400/50 rounded-3xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       </div>
                       <h4 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-violet-700 transition-colors duration-300">{tr("ui.innovation")}</h4>
-                      <p className="text-gray-600 text-sm leading-relaxed">Always seeking new and better solutions to push the boundaries of what's possible</p>
+                      <p className="text-gray-600 text-sm leading-relaxed">{tr("ui.about_val_innovation")}</p>
                     </div>
                     <div className="text-center group">
                       <div className="relative w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-500 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-2xl shadow-green-500/25">
@@ -354,7 +337,7 @@ export default function AboutPage() {
                         <div className="absolute inset-0 bg-gradient-to-br from-green-400/50 to-emerald-400/50 rounded-3xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       </div>
                       <h4 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-green-700 transition-colors duration-300">{tr("ui.collaboration")}</h4>
-                      <p className="text-gray-600 text-sm leading-relaxed">Teamwork and cooperation to achieve common goals and create amazing results</p>
+                      <p className="text-gray-600 text-sm leading-relaxed">{tr("ui.about_val_collab")}</p>
                     </div>
                     <div className="text-center group">
                       <div className="relative w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-2xl shadow-purple-500/25">
@@ -362,7 +345,7 @@ export default function AboutPage() {
                         <div className="absolute inset-0 bg-gradient-to-br from-purple-400/50 to-pink-400/50 rounded-3xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       </div>
                       <h4 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-purple-700 transition-colors duration-300">{tr("ui.quality")}</h4>
-                      <p className="text-gray-600 text-sm leading-relaxed">Commitment to delivering the best quality in all products and services</p>
+                      <p className="text-gray-600 text-sm leading-relaxed">{tr("ui.about_val_quality")}</p>
                     </div>
                   </div>
                 </div>
@@ -392,9 +375,7 @@ export default function AboutPage() {
                   {tr("ui.join_our_mission")}
                 </h2>
                 
-                <p className="text-xl md:text-2xl text-gray-600 leading-relaxed mb-12 max-w-3xl mx-auto">
-                  We're always looking for talented individuals to help us build the next generation of logistics technology.
-                </p>
+                <p className="text-xl md:text-2xl text-gray-600 leading-relaxed mb-12 max-w-3xl mx-auto">{tr("ui.about_join_sub")}</p>
                 
                 <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <Link

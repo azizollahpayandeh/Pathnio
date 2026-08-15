@@ -5,7 +5,7 @@ import { Modal, Field } from "./ui";
 import { useVehicles } from "@/lib/api-data";
 import { toast } from "./Toast";
 import type { Expense } from "@/lib/types";
-import { useT } from "@/i18n";
+import { useT, useTValue } from "@/i18n";
 
 export type NewExpense = Omit<Expense, "id" | "createdAt">;
 
@@ -21,6 +21,7 @@ const CATS = ["Fuel", "Maintenance", "Tolls", "Parking", "Insurance", "Salary", 
 
 export default function AddExpenseModal({ isOpen, onClose, onAddExpense, initial }: Props) {
   const tr = useT();
+  const tv = useTValue();
   const { data: vehicles } = useVehicles();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -70,7 +71,7 @@ export default function AddExpenseModal({ isOpen, onClose, onAddExpense, initial
         detail && typeof detail === "object"
           ? Object.values(detail).flat()[0]
           : undefined;
-      const msg = (first as string) || "Could not save the expense. Please try again.";
+      const msg = (first as string) || tr("ui.could_not_save_the_expense_please_try_again");
       setError(msg);
       toast.error(msg);
     } finally {
@@ -79,7 +80,7 @@ export default function AddExpenseModal({ isOpen, onClose, onAddExpense, initial
   };
 
   return (
-    <Modal open={isOpen} onClose={onClose} title={initial ? "Edit Expense" : "Add Expense"} subtitle={tr("ui.record_a_fleet_cost")} icon={Wallet} gradient="from-emerald-500 to-teal-600" maxWidth="max-w-xl">
+    <Modal open={isOpen} onClose={onClose} title={initial ? "Edit Expense" : tr("ui.add_expense")} subtitle={tr("ui.record_a_fleet_cost")} icon={Wallet} gradient="from-emerald-500 to-teal-600" maxWidth="max-w-xl">
       <form onSubmit={submit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label={tr("ui.title")}>
@@ -87,10 +88,10 @@ export default function AddExpenseModal({ isOpen, onClose, onAddExpense, initial
           </Field>
           <Field label={tr("ui.category")}>
             <select className="field" value={form.category} onChange={(e) => set("category", e.target.value)}>
-              {CATS.map((c) => <option key={c}>{c}</option>)}
+              {CATS.map((c) => <option key={c} value={c}>{tv(c)}</option>)}
             </select>
           </Field>
-          <Field label="Amount (€)" required>
+          <Field label={tr("ui.amount_currency")} required>
             <input className="field" type="number" min={0} step="0.01" required value={form.amount} onChange={(e) => set("amount", Number(e.target.value))} />
           </Field>
           <Field label={tr("ui.date")}>
@@ -104,7 +105,7 @@ export default function AddExpenseModal({ isOpen, onClose, onAddExpense, initial
           </Field>
           <Field label={tr("ui.status")}>
             <select className="field" value={form.status} onChange={(e) => set("status", e.target.value)}>
-              {["Paid", "Pending"].map((s) => <option key={s}>{s}</option>)}
+              {["Paid", "Pending"].map((s) => <option key={s} value={s}>{tv(s)}</option>)}
             </select>
           </Field>
         </div>
@@ -118,7 +119,7 @@ export default function AddExpenseModal({ isOpen, onClose, onAddExpense, initial
         )}
         <div className="flex justify-end gap-3 pt-2">
           <button type="button" onClick={onClose} className="btn btn-ghost">{tr("ui.cancel")}</button>
-          <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? "Saving…" : initial ? "Save Changes" : "Add Expense"}</button>
+          <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? "Saving…" : initial ? tr("ui.save_changes") : tr("ui.add_expense")}</button>
         </div>
       </form>
     </Modal>

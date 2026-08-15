@@ -43,11 +43,9 @@ export default function HomePage() {
               <Zap className="w-4 h-4 text-amber-300" /> {tr("ui.the_modern_fleet_platform")}
             </span>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1] mb-6">
-              {tr("ui.fleet_management")}<br /><span className="bg-gradient-to-r from-violet-300 to-teal-300 bg-clip-text text-transparent">redefined.</span>
+              {tr("ui.fleet_management")}<br /><span className="bg-gradient-to-r from-violet-300 to-teal-300 bg-clip-text text-transparent">{tr("ui.home_redefined")}</span>
             </h1>
-            <p className="text-lg text-violet-100/90 max-w-xl mb-8">
-              Track, manage and optimize your entire fleet in real time — drivers, vehicles, trips and expenses in one beautiful dashboard.
-            </p>
+            <p className="text-lg text-violet-100/90 max-w-xl mb-8">{tr("ui.home_hero_sub")}</p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/dashboard" className="btn btn-primary text-lg px-8 py-4">
                 {tr("ui.get_started")} <ArrowRight className="w-5 h-5" />
@@ -121,7 +119,7 @@ export default function HomePage() {
         <div className="container mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">{tr("ui.everything_you_need_to_run_a_fleet")}</h2>
-            <p className="text-lg text-slate-500">Powerful tools designed to make transportation efficient, transparent and profitable.</p>
+            <p className="text-lg text-slate-500">{tr("ui.home_tools_sub")}</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {FEATURES.map((f) => (
@@ -161,7 +159,7 @@ export default function HomePage() {
         <div className="container mx-auto px-6 text-center max-w-2xl">
           <ShieldCheck className="w-14 h-14 mx-auto mb-6 text-violet-200" />
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">{tr("ui.ready_to_transform_your_fleet")}</h2>
-          <p className="text-lg text-violet-100/90 mb-8">Join hundreds of teams already optimizing their logistics with Pathnio.</p>
+          <p className="text-lg text-violet-100/90 mb-8">{tr("ui.home_join_sub")}</p>
           <Link href="/login" className="btn text-lg px-8 py-4 bg-white text-violet-800 hover:-translate-y-0.5 shadow-xl">
             {tr("ui.get_started_now")} <ArrowRight className="w-5 h-5" />
           </Link>

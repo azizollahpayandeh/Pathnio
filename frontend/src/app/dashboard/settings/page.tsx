@@ -21,7 +21,11 @@ export default function SettingsPage() {
         gradient="from-slate-500 to-slate-700"
       />
 
-      <LanguageSwitcher />
+      <div className="card p-5">
+        <h2 className="font-bold text-slate-800 mb-1">{tr("settings.languageTitle")}</h2>
+        <p className="text-sm text-slate-500 mb-4">{tr("settings.languageHint")}</p>
+        <LanguageSwitcher />
+      </div>
 
       <FleetSettingsCard />
 

@@ -62,13 +62,13 @@ export default function DriversPage() {
   };
 
   const handleDelete = async (id: string, name: string) => {
-    if (typeof window !== "undefined" && !window.confirm(`Delete driver ${name}? This cannot be undone.`)) return;
+    if (typeof window !== "undefined" && !window.confirm(tr("ui.confirm_delete_driver", { name }))) return;
     try {
       await deleteDriver(id);
       await refetch();
-      toast.success(`Driver ${name} deleted.`);
+      toast.success(tr("ui.driver_deleted", { name }));
     } catch (err) {
-      toast.fromError(err, "Could not delete the driver.");
+      toast.fromError(err, tr("ui.could_not_delete_the_driver"));
     }
   };
 
@@ -95,12 +95,12 @@ export default function DriversPage() {
 
       <div className="card p-4 flex flex-col sm:flex-row gap-3">
         <div className="flex-1 relative">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={tr("ui.search_name_plate_phone")} className="field pl-10" />
+          <Search className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={tr("ui.search_name_plate_phone")} className="field ps-10" />
         </div>
         <select value={status} onChange={(e) => setStatus(e.target.value)} className="field sm:w-44">
           <option value="all">{tr("ui.all_status")}</option>
-          <option>{tr("ui.active")}</option><option>{tr("ui.on_trip")}</option><option>{tr("ui.offline")}</option><option>{tr("ui.inactive")}</option>
+          <option value="Active">{tv("Active")}</option><option value="On Trip">{tv("On Trip")}</option><option value="Offline">{tv("Offline")}</option><option value="Inactive">{tv("Inactive")}</option>
         </select>
       </div>
 
@@ -109,7 +109,7 @@ export default function DriversPage() {
           <EmptyState
             icon={Users}
             title={tr("ui.no_drivers_found")}
-            description="Add drivers to start assigning vehicles and trips."
+            description={tr("ui.add_drivers_to_start_assigning_vehicles_and_trips")}
             action={<button onClick={() => setShowAdd(true)} className="btn btn-primary mx-auto"><Plus className="w-4 h-4" /> {tr("ui.add_driver")}</button>}
           />
         </div>
@@ -139,7 +139,7 @@ export default function DriversPage() {
                 </div>
                 <div className="mt-4 space-y-1.5 text-sm text-slate-600">
                   <span className="flex items-center gap-2"><Phone className="w-4 h-4 text-slate-400" />{d.mobile}</span>
-                  <span className="flex items-center gap-2"><Route className="w-4 h-4 text-slate-400" />{d.total_trips} trips · {d.plate_number || "no vehicle"}</span>
+                  <span className="flex items-center gap-2"><Route className="w-4 h-4 text-slate-400" />{tr("drivers.trips", { count: d.total_trips })} · {d.plate_number || tr("ui.no_vehicle")}</span>
                 </div>
                 <div className="flex items-center gap-2 mt-4 pt-4 border-t border-slate-100">
                   <Link href={`/dashboard/drivers/${d.id}`} className="btn btn-ghost flex-1 text-sm">

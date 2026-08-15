@@ -71,8 +71,8 @@ export default function AlertsPage() {
 
       <div className="card p-4 flex flex-col sm:flex-row gap-3">
         <div className="flex-1 relative">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={tr("ui.search_alerts")} className="field pl-10" />
+          <Search className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={tr("ui.search_alerts")} className="field ps-10" />
         </div>
         <div className="flex p-1 bg-slate-100 rounded-xl">
           {(["all", "unread"] as const).map((f) => (

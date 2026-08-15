@@ -29,7 +29,7 @@ export default function TripDetail() {
   }
   const SIcon = icon[trip.status];
   const specs = [
-    { icon: User, label: "Driver", value: trip.driver || "Unassigned" },
+    { icon: User, label: "Driver", value: trip.driver || tr("ui.unassigned") },
     { icon: Truck, label: "Vehicle", value: trip.plate_number || "—" },
     { icon: RouteIcon, label: "Distance", value: `${distance(trip.distance)}` },
     { icon: Package, label: "Cargo", value: trip.cargo || "—" },

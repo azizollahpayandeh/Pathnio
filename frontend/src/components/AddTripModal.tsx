@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Route } from "lucide-react";
 import { Modal, Field } from "./ui";
 import { useDrivers, useVehicles } from "@/lib/api-data";
-import { useT } from "@/i18n";
+import { useT, useTValue } from "@/i18n";
 
 export type NewTrip = {
   origin: string;
@@ -24,15 +24,12 @@ interface Props {
   onAddTrip: (t: NewTrip) => void | Promise<void>;
 }
 
-const STATUSES = [
-  { value: "PLANNED", label: "Planned" },
-  { value: "ACTIVE", label: "Active" },
-  { value: "COMPLETED", label: "Completed" },
-  { value: "CANCELLED", label: "Cancelled" },
-];
+// Raw API values; the visible label is localised at render time.
+const STATUSES = ["PLANNED", "ACTIVE", "COMPLETED", "CANCELLED"];
 
 export default function AddTripModal({ isOpen, onClose, onAddTrip }: Props) {
   const tr = useT();
+  const tv = useTValue();
   const { data: drivers } = useDrivers();
   const { data: vehicles } = useVehicles();
   const [saving, setSaving] = useState(false);
@@ -42,7 +39,7 @@ export default function AddTripModal({ isOpen, onClose, onAddTrip }: Props) {
     driver_ref: null,
     vehicle_ref: null,
     distance: 0,
-    status: "PLANNED",
+    status: tr("ui.planned"),
     cargo: "",
     revenue: 0,
     notes: "",
@@ -90,10 +87,10 @@ export default function AddTripModal({ isOpen, onClose, onAddTrip }: Props) {
               {vehicles.map((v) => <option key={v.id} value={v.id}>{v.plate_number}{v.model ? ` — ${v.model}` : ""}</option>)}
             </select>
           </Field>
-          <Field label="Distance (km)">
+          <Field label={tr("ui.distance_field")}>
             <input className="field" type="number" min={0} value={form.distance} onChange={(e) => set("distance", Number(e.target.value))} />
           </Field>
-          <Field label="Revenue (€)">
+          <Field label={tr("ui.revenue_currency")}>
             <input className="field" type="number" min={0} value={form.revenue} onChange={(e) => set("revenue", Number(e.target.value))} />
           </Field>
           <Field label={tr("ui.cargo")}>
@@ -101,7 +98,7 @@ export default function AddTripModal({ isOpen, onClose, onAddTrip }: Props) {
           </Field>
           <Field label={tr("ui.status")}>
             <select className="field" value={form.status} onChange={(e) => set("status", e.target.value)}>
-              {STATUSES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
+              {STATUSES.map((s) => <option key={s} value={s}>{tv(s)}</option>)}
             </select>
           </Field>
           <Field label={tr("ui.start_time")}>

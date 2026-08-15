@@ -92,7 +92,7 @@ export default function ProfilePage() {
                 </label>
               </div>
               <div className="flex-1 min-w-0 pb-1">
-                <h1 className="text-2xl font-bold text-slate-900 truncate">{form.company_name || "Your company"}</h1>
+                <h1 className="text-2xl font-bold text-slate-900 truncate">{form.company_name || tr("ui.your_company_fallback")}</h1>
                 <p className="text-slate-500 flex items-center gap-1.5"><UserIcon className="w-4 h-4" />{form.manager_full_name}</p>
               </div>
               <span className="badge bg-violet-50 text-violet-700 border-violet-200 self-start sm:self-auto">
@@ -108,10 +108,10 @@ export default function ProfilePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label={tr("ui.company_name")}><input className="field" value={form.company_name} onChange={(e) => set("company_name", e.target.value)} /></Field>
             <Field label={tr("ui.manager_full_name")}><input className="field" value={form.manager_full_name} onChange={(e) => set("manager_full_name", e.target.value)} /></Field>
-            <Field label={tr("ui.email")}><div className="relative"><Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" /><input className="field pl-10" type="email" value={form.email} onChange={(e) => set("email", e.target.value)} /></div></Field>
-            <Field label={tr("ui.phone")}><div className="relative"><Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" /><input className="field pl-10" value={form.phone} onChange={(e) => set("phone", e.target.value)} /></div></Field>
+            <Field label={tr("ui.email")}><div className="relative"><Mail className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" /><input className="field ps-10" type="email" value={form.email} onChange={(e) => set("email", e.target.value)} /></div></Field>
+            <Field label={tr("ui.phone")}><div className="relative"><Phone className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" /><input className="field ps-10" value={form.phone} onChange={(e) => set("phone", e.target.value)} /></div></Field>
             <div className="sm:col-span-2">
-              <Field label={tr("ui.address")}><div className="relative"><MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" /><input className="field pl-10" value={form.address} onChange={(e) => set("address", e.target.value)} /></div></Field>
+              <Field label={tr("ui.address")}><div className="relative"><MapPin className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" /><input className="field ps-10" value={form.address} onChange={(e) => set("address", e.target.value)} /></div></Field>
             </div>
           </div>
           <div className="flex items-center gap-3 pt-2">

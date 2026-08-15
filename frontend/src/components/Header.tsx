@@ -6,12 +6,13 @@ import { usePathname } from "next/navigation";
 import { Truck, Menu, X } from "lucide-react";
 import { isAuthenticated } from "@/lib/auth";
 import { useT } from "@/i18n";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const LINKS = [
-  { href: "/", label: "Home" },
-  { href: "/features", label: "Features" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
+  { href: "/", key: "nav.home" },
+  { href: "/features", key: "nav.features" },
+  { href: "/about", key: "nav.about" },
+  { href: "/contact", key: "nav.contact" },
 ];
 
 export default function Header() {
@@ -60,14 +61,15 @@ export default function Header() {
         <nav className="hidden md:flex items-center gap-8 text-white/90 font-medium">
           {LINKS.map((l) => (
             <Link key={l.href} href={l.href} className="hover:text-white transition-colors">
-              {l.label}
+              {tr(l.key)}
             </Link>
           ))}
+          <LanguageSwitcher compact variant="onDark" />
           <Link
             href={loggedIn ? "/dashboard" : "/login"}
             className="px-5 py-2 bg-white text-violet-800 font-semibold rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
           >
-            {loggedIn ? "Dashboard" : "Sign In"}
+            {loggedIn ? tr("nav.dashboard") : tr("common.signIn")}
           </Link>
         </nav>
       </div>
@@ -77,15 +79,16 @@ export default function Header() {
         <div className="flex flex-col px-6 gap-1 text-white/90 font-medium">
           {LINKS.map((l) => (
             <Link key={l.href} href={l.href} onClick={() => setMenuOpen(false)} className="py-2.5 hover:text-white transition-colors">
-              {l.label}
+              {tr(l.key)}
             </Link>
           ))}
+          <div className="py-2.5"><LanguageSwitcher compact variant="onDark" /></div>
           <Link
             href={loggedIn ? "/dashboard" : "/login"}
             onClick={() => setMenuOpen(false)}
             className="mt-3 px-4 py-2.5 bg-white text-violet-800 font-semibold rounded-xl text-center"
           >
-            {loggedIn ? "Dashboard" : "Sign In"}
+            {loggedIn ? tr("nav.dashboard") : tr("common.signIn")}
           </Link>
         </div>
       </div>

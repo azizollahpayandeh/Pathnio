@@ -16,9 +16,7 @@ export default function Footer() {
             </span>
             Pathnio
           </Link>
-          <p className="text-sm text-slate-400 leading-relaxed">
-            A modern solution to track, manage and optimize fleet operations in real time.
-          </p>
+          <p className="text-sm text-slate-400 leading-relaxed">{tr("ui.footer_tagline")}</p>
         </div>
 
         <div>

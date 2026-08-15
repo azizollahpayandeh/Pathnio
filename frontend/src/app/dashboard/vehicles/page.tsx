@@ -55,13 +55,13 @@ export default function VehiclesPage() {
   };
 
   const handleDelete = async (id: string, plate: string) => {
-    if (typeof window !== "undefined" && !window.confirm(`Delete vehicle ${plate}? This cannot be undone.`)) return;
+    if (typeof window !== "undefined" && !window.confirm(tr("ui.confirm_delete_vehicle", { plate }))) return;
     try {
       await deleteVehicle(id);
       await refetch();
-      toast.success(`Vehicle ${plate} deleted.`);
+      toast.success(tr("ui.vehicle_deleted", { plate }));
     } catch (err) {
-      toast.fromError(err, "Could not delete the vehicle.");
+      toast.fromError(err, tr("ui.could_not_delete_the_vehicle"));
     }
   };
 
@@ -88,16 +88,16 @@ export default function VehiclesPage() {
 
       <div className="card p-4 flex flex-col sm:flex-row gap-3">
         <div className="flex-1 relative">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={tr("ui.search_plate_model_driver")} className="field pl-10" />
+          <Search className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={tr("ui.search_plate_model_driver")} className="field ps-10" />
         </div>
         <select value={status} onChange={(e) => setStatus(e.target.value)} className="field sm:w-44">
           <option value="all">{tr("ui.all_status")}</option>
-          <option>{tr("ui.active")}</option><option>{tr("ui.inactive")}</option><option>{tr("ui.maintenance")}</option>
+          <option value="Active">{tv("Active")}</option><option value="Inactive">{tv("Inactive")}</option><option value="Maintenance">{tv("Maintenance")}</option>
         </select>
         <select value={type} onChange={(e) => setType(e.target.value)} className="field sm:w-40">
           <option value="all">{tr("ui.all_types")}</option>
-          <option>{tr("ui.truck")}</option><option>{tr("ui.van")}</option><option>{tr("ui.sedan")}</option><option>{tr("ui.pickup")}</option>
+          <option value="Truck">{tv("Truck")}</option><option value="Van">{tv("Van")}</option><option value="Sedan">{tv("Sedan")}</option><option value="Pickup">{tv("Pickup")}</option>
         </select>
       </div>
 
@@ -106,7 +106,7 @@ export default function VehiclesPage() {
           <EmptyState
             icon={Car}
             title={tr("ui.no_vehicles_found")}
-            description="Try adjusting your filters, or add a new vehicle to your fleet."
+            description={tr("ui.try_adjusting_your_filters_or_add_a_new_vehicle_t")}
             action={<button onClick={() => setShowAdd(true)} className="btn btn-primary mx-auto"><Plus className="w-4 h-4" /> {tr("ui.add_vehicle")}</button>}
           />
         </div>
@@ -128,7 +128,7 @@ export default function VehiclesPage() {
                     </div>
                     <p className="text-sm text-slate-500 mt-0.5 truncate">{v.model}</p>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 mt-3 text-sm text-slate-600">
-                      <span className="flex items-center gap-1.5 truncate"><User className="w-4 h-4 text-slate-400" />{v.driver || "Unassigned"}</span>
+                      <span className="flex items-center gap-1.5 truncate"><User className="w-4 h-4 text-slate-400" />{v.driver || tr("ui.unassigned")}</span>
                       <span className="flex items-center gap-1.5"><Weight className="w-4 h-4 text-slate-400" />{v.capacity || "—"}</span>
                       <span className="flex items-center gap-1.5"><Palette className="w-4 h-4 text-slate-400" />{v.color || "—"}</span>
                       <span className="flex items-center gap-1.5 truncate"><Truck className="w-4 h-4 text-slate-400" />{tv(v.vehicle_type)}</span>

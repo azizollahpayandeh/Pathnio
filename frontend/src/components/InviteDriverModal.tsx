@@ -51,7 +51,7 @@ export default function InviteDriverModal({
       await fn();
       onChanged?.();
     } catch (e: any) {
-      setError(e?.response?.data?.detail || e?.message || "Something went wrong.");
+      setError(e?.response?.data?.detail || e?.message || tr("ui.something_went_wrong"));
     } finally {
       setLoading(false);
     }
@@ -110,8 +110,7 @@ export default function InviteDriverModal({
 
         <p className="text-sm text-slate-500 mt-3">
           {tr("ui.share_this_one_time_code_with")} <span className="font-semibold">{driverName}</span>.
-          They enter it in the Pathnio mobile app to activate their account. It expires and
-          works only once.
+          {tr("ui.invite_enter_hint")}
         </p>
 
         {token ? (
@@ -129,21 +128,16 @@ export default function InviteDriverModal({
               </button>
             </div>
             {copied && <p className="text-xs text-emerald-600 mt-1.5">{tr("ui.copied_to_clipboard")}</p>}
-            <p className="text-xs text-slate-400 mt-2">
-              This code is shown once — copy it now. You can regenerate a new one anytime.
-            </p>
+            <p className="text-xs text-slate-400 mt-2">{tr("ui.invite_shown_once")}</p>
           </div>
         ) : (
           <div className="mt-4">
             {info?.status === "USED" ? (
               <div className="rounded-xl bg-emerald-50 border border-emerald-100 px-4 py-3 text-emerald-700 text-sm font-medium">
-                ✓ This driver has already activated their account.
+                ✓ {tr("ui.invite_already_active")}
               </div>
             ) : info?.is_active ? (
-              <div className="rounded-xl bg-amber-50 border border-amber-100 px-4 py-3 text-amber-700 text-sm">
-                An active invitation exists but the code is hidden for security.
-                Regenerate to get a fresh code.
-              </div>
+              <div className="rounded-xl bg-amber-50 border border-amber-100 px-4 py-3 text-amber-700 text-sm">{tr("ui.invite_hidden")}</div>
             ) : (
               <div className="rounded-xl bg-slate-50 border border-slate-100 px-4 py-3 text-slate-500 text-sm">
                 {tr("ui.no_active_invitation_generate_a_code_to_invite_t")}

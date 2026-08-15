@@ -33,7 +33,7 @@ export default function AssignVehicleModal({
       onChanged?.();
       onClose();
     } catch (e: any) {
-      setError(e?.response?.data?.detail || e?.message || "Something went wrong.");
+      setError(e?.response?.data?.detail || e?.message || tr("ui.something_went_wrong"));
     } finally {
       setLoading(false);
     }
