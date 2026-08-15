@@ -41,6 +41,31 @@ export const DEFAULT_LOCALE: LocaleCode = "en";
 const STORAGE_KEY = "pathnio_locale";
 // A choice made while signed out, to be adopted into the account on sign-in.
 const PENDING_KEY = "pathnio_locale_pending";
+export const LOCALE_COOKIE = "pathnio_lang";
+
+/** Mirror the choice into a cookie so the server can render the right
+ *  lang/dir on the very first paint (no flash of the wrong language). */
+function writeLocaleCookie(code: string) {
+  if (typeof document === "undefined") return;
+  document.cookie = `${LOCALE_COOKIE}=${code}; path=/; max-age=31536000; SameSite=Lax`;
+}
+
+function readCookieLocale(): LocaleCode | null {
+  if (typeof document === "undefined") return null;
+  const m = document.cookie.match(new RegExp(`(?:^|; )${LOCALE_COOKIE}=([^;]+)`));
+  const v = m?.[1] as LocaleCode | undefined;
+  return v && LOCALES[v] ? v : null;
+}
+
+/** Resolve the starting locale synchronously so the first client render is
+ *  already correct — an async effect here caused the UI to render in English
+ *  even though the stored preference was Persian. */
+function readInitialLocale(): LocaleCode {
+  if (typeof window === "undefined") return DEFAULT_LOCALE;
+  const stored = window.localStorage.getItem(STORAGE_KEY) as LocaleCode | null;
+  if (stored && LOCALES[stored]) return stored;
+  return readCookieLocale() ?? DEFAULT_LOCALE;
+}
 
 function lookup(messages: Catalogue, key: string): string | undefined {
   const value = key
@@ -70,8 +95,18 @@ type Ctx = {
 
 const I18nContext = createContext<Ctx | undefined>(undefined);
 
-export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocaleState] = useState<LocaleCode>(DEFAULT_LOCALE);
+export function I18nProvider({
+  children,
+  initialLocale,
+}: {
+  children: React.ReactNode;
+  /** Resolved on the SERVER from the language cookie, so the first paint is
+   *  already in the right language and hydration matches exactly. */
+  initialLocale?: LocaleCode;
+}) {
+  const [locale, setLocaleState] = useState<LocaleCode>(
+    () => initialLocale ?? readInitialLocale()
+  );
   const [ready, setReady] = useState(false);
 
   /**
@@ -84,9 +119,6 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
    */
   const sync = useCallback(async () => {
     if (typeof window === "undefined") return;
-    const cached = window.localStorage.getItem(STORAGE_KEY) as LocaleCode | null;
-    if (cached && LOCALES[cached]) setLocaleState(cached);
-
     if (!window.localStorage.getItem("access")) {
       setReady(true);
       return;
@@ -101,15 +133,30 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
         window.localStorage.removeItem(PENDING_KEY);
         setLocaleState(pending);
         window.localStorage.setItem(STORAGE_KEY, pending);
+        writeLocaleCookie(pending);
       } else if (server && LOCALES[server]) {
         window.localStorage.removeItem(PENDING_KEY);
         setLocaleState(server);
         window.localStorage.setItem(STORAGE_KEY, server);
+        writeLocaleCookie(server);
       }
     } catch {
       /* offline — the cached value stands and re-syncs next load */
     } finally {
       setReady(true);
+    }
+  }, []);
+
+  // One-time migration: users who chose a language before cookies were used
+  // still have it only in localStorage. Adopt it and write the cookie so every
+  // later request is server-rendered in the right language.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (readCookieLocale()) return;
+    const stored = window.localStorage.getItem(STORAGE_KEY) as LocaleCode | null;
+    if (stored && LOCALES[stored]) {
+      writeLocaleCookie(stored);
+      if (stored !== locale) setLocaleState(stored);
     }
   }, []);
 
@@ -140,6 +187,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     setLocaleState(code);
     if (typeof window !== "undefined") {
       window.localStorage.setItem(STORAGE_KEY, code);
+      writeLocaleCookie(code);
       // Persist to the account so it survives logout/login and other devices.
       if (window.localStorage.getItem("access")) {
         try {
