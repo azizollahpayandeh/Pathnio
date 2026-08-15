@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { I18nProvider, LOCALE_COOKIE, LOCALES, DEFAULT_LOCALE, type LocaleCode } from "@/i18n";
+import { I18nProvider } from "@/i18n";
+import { LOCALE_COOKIE, DEFAULT_LOCALE, isSupported, dirOf, type LocaleCode } from "@/i18n/config";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,9 +30,9 @@ export default async function RootLayout({
   // Resolve the language on the SERVER so the first paint is already correct
   // and hydration matches (rendering English then swapping to Persian caused
   // React to keep the server markup, leaving pages in English).
-  const cookieLang = (await cookies()).get(LOCALE_COOKIE)?.value as LocaleCode | undefined;
-  const locale: LocaleCode = cookieLang && LOCALES[cookieLang] ? cookieLang : DEFAULT_LOCALE;
-  const dir = LOCALES[locale]?.dir ?? "ltr";
+  const cookieLang = (await cookies()).get(LOCALE_COOKIE)?.value;
+  const locale: LocaleCode = isSupported(cookieLang) ? cookieLang : DEFAULT_LOCALE;
+  const dir = dirOf(locale);
 
   return (
     <html lang={locale} dir={dir} suppressHydrationWarning>

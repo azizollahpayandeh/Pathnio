@@ -24,24 +24,27 @@ import api from "@/app/api";
 import en from "./locales/en.json";
 import fa from "./locales/fa.json";
 
-export type LocaleCode = "en" | "fa" | "de" | "it";
+import { LOCALE_COOKIE, DEFAULT_LOCALE, LOCALE_META, type LocaleCode } from "./config";
+export { LOCALE_COOKIE, DEFAULT_LOCALE } from "./config";
+export type { LocaleCode } from "./config";
 
 type Catalogue = Record<string, unknown>;
 
 /** Register a language here (plus its JSON file) — nothing else to change. */
+const CATALOGUES: Record<string, Catalogue> = { en: en as Catalogue, fa: fa as Catalogue };
+
 export const LOCALES: Record<
   string,
   { label: string; dir: "ltr" | "rtl"; messages: Catalogue }
-> = {
-  en: { label: "English", dir: "ltr", messages: en as Catalogue },
-  fa: { label: "فارسی", dir: "rtl", messages: fa as Catalogue },
-};
+> = Object.fromEntries(
+  Object.entries(LOCALE_META)
+    .filter(([code]) => CATALOGUES[code])
+    .map(([code, meta]) => [code, { ...meta, messages: CATALOGUES[code] }])
+);
 
-export const DEFAULT_LOCALE: LocaleCode = "en";
 const STORAGE_KEY = "pathnio_locale";
 // A choice made while signed out, to be adopted into the account on sign-in.
 const PENDING_KEY = "pathnio_locale_pending";
-export const LOCALE_COOKIE = "pathnio_lang";
 
 /** Mirror the choice into a cookie so the server can render the right
  *  lang/dir on the very first paint (no flash of the wrong language). */
