@@ -228,7 +228,7 @@ export default function AboutPage() {
                   {/* Team Member Info */}
                   <div className="text-center relative z-10">
                     <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-violet-700 transition-colors duration-300">
-                      Azizollah Payanda
+                      {tr("ui.founder_aziz")}
                     </h3>
                     <div className="inline-flex items-center px-4 py-2 bg-violet-100 rounded-full border border-violet-200 mb-6">
                       <Code className="w-4 h-4 text-violet-600 mr-2" />
@@ -281,7 +281,7 @@ export default function AboutPage() {
                   {/* Team Member Info */}
                   <div className="text-center relative z-10">
                     <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-violet-700 transition-colors duration-300">
-                      Amir Mohammad Marwi
+                      {tr("ui.founder_amir")}
                     </h3>
                     <div className="inline-flex items-center px-4 py-2 bg-violet-100 rounded-full border border-violet-200 mb-6">
                       <Code className="w-4 h-4 text-violet-600 mr-2" />

@@ -617,6 +617,8 @@
     "cnt_stopped": "{count} stopped",
     "cnt_offline": "{count} offline",
     "no_signal": "No signal",
-    "online_lbl": "Online"
+    "online_lbl": "Online",
+    "founder_aziz": "Azizollah Payanda",
+    "founder_amir": "Amir Mohammad Marwi"
   }
 }
