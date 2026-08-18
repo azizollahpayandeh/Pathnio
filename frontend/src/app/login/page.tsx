@@ -8,13 +8,15 @@ import { register, login, isAuthenticated } from "@/lib/auth";
 import { useT } from "@/i18n";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
+// Labels/placeholders are translation KEYS; resolved at render so the array
+// can stay at module scope.
 const companyFields = [
-  { label: "Company Name", name: "companyName", required: true, placeholder: "Acme Logistics" },
-  { label: "Full Name", name: "fullName", required: true, placeholder: "Your full name" },
-  { label: "Phone Number", name: "phone", required: true, placeholder: "+49 151 000 000" },
-  { label: "Email", name: "email", required: true, placeholder: "you@company.com", type: "email" },
-  { label: "Password", name: "password", required: true, placeholder: "At least 6 characters", type: "password" },
-  { label: "Head Office Address", name: "address", required: false, placeholder: "City, Country" },
+  { labelKey: "ui.company_name", name: "companyName", required: true, phKey: "" , ph: "Acme Logistics" },
+  { labelKey: "ui.full_name", name: "fullName", required: true, phKey: "ui.your_full_name_ph" },
+  { labelKey: "ui.phone_number", name: "phone", required: true, ph: "+49 151 000 000" },
+  { labelKey: "ui.email", name: "email", required: true, ph: "you@company.com", type: "email" },
+  { labelKey: "ui.password", name: "password", required: true, phKey: "ui.at_least_6_chars", type: "password" },
+  { labelKey: "ui.head_office_address", name: "address", required: false, phKey: "ui.city_country" },
 ];
 
 export default function LoginPage() {
@@ -164,13 +166,13 @@ export default function LoginPage() {
               {companyFields.map((f) => (
                 <div key={f.name}>
                   <label htmlFor={f.name} className="block mb-1.5 text-sm font-semibold text-slate-700">
-                    {f.label}{f.required && <span className="text-rose-500 ml-0.5">*</span>}
+                    {tr(f.labelKey)}{f.required && <span className="text-rose-500 ml-0.5">*</span>}
                   </label>
-                  <input id={f.name} name={f.name} type={f.type || "text"} required={f.required} className="field" placeholder={f.placeholder} />
+                  <input id={f.name} name={f.name} type={f.type || "text"} required={f.required} className="field" placeholder={f.phKey ? tr(f.phKey) : f.ph} />
                 </div>
               ))}
               <button type="submit" className="btn btn-primary w-full text-lg" disabled={registerLoading}>
-                {registerLoading ? "Creating…" : (<>{tr("ui.create_account")} <ArrowRight className="w-5 h-5" /></>)}
+                {registerLoading ? tr("ui.creating") : (<>{tr("ui.create_account")} <ArrowRight className="w-5 h-5" /></>)}
               </button>
             </form>
           )}

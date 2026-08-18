@@ -25,11 +25,11 @@ ChartJS.register(
   Filler
 );
 
-const HEALTH_DATA = {
-  labels: ['Engine', 'Fuel System', 'Tires', 'Brakes', 'Battery', 'Transmission'],
+const healthData = (tr: (k: string) => string) => ({
+  labels: ['part_engine','part_fuel_system','part_tires','part_brakes','part_battery','part_transmission'].map((k) => tr(`ui.${k}`)),
   datasets: [
     {
-      label: 'Health Score (%)',
+      label: tr('ui.health_score_series'),
       data: [92, 76, 88, 95, 90, 87],
       backgroundColor: [
         'rgba(34, 197, 94, 0.8)',
@@ -52,13 +52,13 @@ const HEALTH_DATA = {
       borderSkipped: false,
     },
   ],
-};
+});
 
-const PERFORMANCE_DATA = {
-  labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+const performanceData = (tr: (k: string) => string) => ({
+  labels: ['mon','tue','wed','thu','fri','sat','sun'].map((d) => tr(`ui.wd_${d}`)),
   datasets: [
     {
-      label: 'Fuel Efficiency (km/L)',
+      label: tr('ui.fuel_efficiency_series'),
       data: [12.5, 13.2, 11.8, 14.1, 12.9, 13.5, 12.7],
       borderColor: 'rgba(139,  92,  246, 1)',
       backgroundColor: 'rgba(139,  92,  246, 0.1)',
@@ -72,7 +72,7 @@ const PERFORMANCE_DATA = {
       pointHoverRadius: 8,
     },
     {
-      label: 'Distance (km)',
+      label: tr('ui.distance_series'),
       data: [180, 220, 150, 280, 200, 240, 190],
       borderColor: 'rgba(168, 85, 247, 1)',
       backgroundColor: 'rgba(168, 85, 247, 0.1)',
@@ -86,10 +86,12 @@ const PERFORMANCE_DATA = {
       pointHoverRadius: 8,
     },
   ],
-};
+});
 
 export default function VehiclePerformanceChart() {
   const tr = useT();
+  const HEALTH_DATA = healthData(tr);
+  const PERFORMANCE_DATA = performanceData(tr);
   return (
     <div className="w-full space-y-8">
       {/* Health Overview Chart */}

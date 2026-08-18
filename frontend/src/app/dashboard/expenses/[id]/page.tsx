@@ -25,10 +25,10 @@ export default function ExpenseDetail() {
   }
 
   const specs = [
-    { icon: Tag, label: "Category", value: expense.category },
-    { icon: Calendar, label: "Date", value: new Date(expense.date).toLocaleDateString() },
-    { icon: Truck, label: "Vehicle", value: expense.plate_number || "—" },
-    { icon: User, label: "Driver", value: expense.driver || "—" },
+    { icon: Tag, label: tr("ui.category"), value: expense.category },
+    { icon: Calendar, label: tr("ui.date"), value: new Date(expense.date).toLocaleDateString() },
+    { icon: Truck, label: tr("ui.vehicle"), value: expense.plate_number || "—" },
+    { icon: User, label: tr("ui.driver"), value: expense.driver || "—" },
   ];
 
   return (

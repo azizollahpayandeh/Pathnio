@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useT } from "@/i18n";
 import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -33,7 +34,7 @@ interface DriverPerformanceChartProps {
   };
 }
 
-const options = {
+const options = (title: string) => ({
   responsive: true,
   plugins: {
     legend: {
@@ -44,7 +45,7 @@ const options = {
     },
     title: {
       display: true,
-      text: 'Driver Performance',
+      text: title,
       font: {
         size: 18,
       },
@@ -57,14 +58,15 @@ const options = {
       max: 100,
     },
   },
-};
+});
 
 export default function DriverPerformanceChart({
   performanceData,
 }: DriverPerformanceChartProps) {
+  const tr = useT();
   return (
     <div className="w-full h-64">
-      <Bar options={options} data={performanceData} />
+      <Bar options={options(tr("ui.driver_performance"))} data={performanceData} />
     </div>
   );
 }

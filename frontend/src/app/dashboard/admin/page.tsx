@@ -68,7 +68,7 @@ export default function AdminPage() {
 
   const toggleRole = async (id: number, isAdmin: boolean) => {
     try {
-      await api.post(`accounts/users/${id}/role/`, { role: isAdmin ? "Manager" : "Admin" });
+      await api.post(`accounts/users/${id}/role/`, { role: isAdmin ? tr("ui.manager") : tr("ui.admin") });
       await refresh();
     } catch (e: any) {
       setError(e?.response?.data?.detail || tr("ui.could_not_update_role"));
@@ -145,13 +145,13 @@ export default function AdminPage() {
                         <div className="text-slate-400 text-xs flex items-center gap-1"><Phone className="w-3 h-3" />{u.phone || "—"}</div>
                       </td>
                       <td className="py-3.5 px-4">
-                        <Badge tone={u.is_staff ? "rose" : "blue"} icon={u.is_staff ? Shield : UserIcon}>{u.is_staff ? "Admin" : "Manager"}</Badge>
+                        <Badge tone={u.is_staff ? "rose" : "blue"} icon={u.is_staff ? Shield : UserIcon}>{u.is_staff ? tr("ui.admin") : tr("ui.manager")}</Badge>
                       </td>
                       <td className="py-3.5 px-4 text-slate-500 hidden sm:table-cell whitespace-nowrap">{u.date_joined ? new Date(u.date_joined).toLocaleDateString() : "—"}</td>
                       <td className="py-3.5 px-6">
                         <div className="flex items-center justify-end gap-2">
                           <button onClick={() => toggleRole(u.id, u.is_staff)} disabled={String(u.id) === String(user?.id)} className="btn btn-ghost text-xs py-1.5 px-3 disabled:opacity-40">
-                            {u.is_staff ? "Make Manager" : "Make Admin"}
+                            {u.is_staff ? tr("ui.make_manager") : tr("ui.make_admin")}
                           </button>
                           <button
                             onClick={() => removeUser(u.id)}

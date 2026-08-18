@@ -34,12 +34,12 @@ export default function VehicleDetail() {
   }
 
   const specs = [
-    { icon: User, label: "Driver", value: vehicle.driver || tr("ui.unassigned") },
-    { icon: Weight, label: "Capacity", value: vehicle.capacity || "—" },
-    { icon: Palette, label: "Color", value: vehicle.color || "—" },
-    { icon: Truck, label: "Type", value: vehicle.vehicle_type },
-    { icon: RouteIcon, label: "Trips", value: vTrips.length },
-    { icon: Calendar, label: "Added", value: new Date(vehicle.createdAt).toLocaleDateString() },
+    { icon: User, label: tr("ui.driver"), value: vehicle.driver || tr("ui.unassigned") },
+    { icon: Weight, label: tr("ui.capacity"), value: vehicle.capacity || "—" },
+    { icon: Palette, label: tr("ui.color"), value: vehicle.color || "—" },
+    { icon: Truck, label: tr("ui.type"), value: vehicle.vehicle_type },
+    { icon: RouteIcon, label: tr("ui.trips"), value: vTrips.length },
+    { icon: Calendar, label: tr("ui.added"), value: new Date(vehicle.createdAt).toLocaleDateString() },
   ];
 
   return (

@@ -141,7 +141,7 @@ export default function LivePage() {
             disabled={loading}
             className="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold rounded-xl py-3 disabled:opacity-60"
           >
-            {loading ? "Signing in…" : tr("ui.sign_in")}
+            {loading ? tr("ui.signing_in") : tr("ui.sign_in")}
           </button>
           <p className="text-xs text-slate-400 mt-4 text-center">
             Backend: {API_BASE}

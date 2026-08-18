@@ -88,7 +88,7 @@ export default function FleetSettingsCard() {
 
       <div className="flex items-center gap-3 mt-5">
         <button onClick={save} disabled={saving} className="btn btn-primary">
-          <Save className="w-4 h-4" /> {saving ? "Saving…" : "Save settings"}
+          <Save className="w-4 h-4" /> {saving ? tr("ui.saving") : tr("ui.save_settings")}
         </button>
         {msg && <span className="text-sm text-emerald-600">{msg}</span>}
       </div>

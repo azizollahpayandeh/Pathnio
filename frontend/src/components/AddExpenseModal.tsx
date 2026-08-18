@@ -62,7 +62,7 @@ export default function AddExpenseModal({ isOpen, onClose, onAddExpense, initial
       const title =
         form.title || `${form.category}${form.plate_number ? " — " + form.plate_number : ""}`;
       await onAddExpense({ ...form, title, amount, date });
-      toast.success(initial ? "Expense updated." : `Expense “${title}” saved.`);
+      toast.success(initial ? tr("ui.expense_updated") : `Expense “${title}” saved.`);
       onClose(); // only close on real success
     } catch (err: unknown) {
       const detail =
@@ -80,7 +80,7 @@ export default function AddExpenseModal({ isOpen, onClose, onAddExpense, initial
   };
 
   return (
-    <Modal open={isOpen} onClose={onClose} title={initial ? "Edit Expense" : tr("ui.add_expense")} subtitle={tr("ui.record_a_fleet_cost")} icon={Wallet} gradient="from-emerald-500 to-teal-600" maxWidth="max-w-xl">
+    <Modal open={isOpen} onClose={onClose} title={initial ? tr("ui.edit_expense") : tr("ui.add_expense")} subtitle={tr("ui.record_a_fleet_cost")} icon={Wallet} gradient="from-emerald-500 to-teal-600" maxWidth="max-w-xl">
       <form onSubmit={submit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label={tr("ui.title")}>
@@ -119,7 +119,7 @@ export default function AddExpenseModal({ isOpen, onClose, onAddExpense, initial
         )}
         <div className="flex justify-end gap-3 pt-2">
           <button type="button" onClick={onClose} className="btn btn-ghost">{tr("ui.cancel")}</button>
-          <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? "Saving…" : initial ? tr("ui.save_changes") : tr("ui.add_expense")}</button>
+          <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? tr("ui.saving") : initial ? tr("ui.save_changes") : tr("ui.add_expense")}</button>
         </div>
       </form>
     </Modal>

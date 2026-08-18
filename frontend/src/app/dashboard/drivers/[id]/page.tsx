@@ -30,12 +30,12 @@ export default function DriverDetail() {
   }
 
   const specs = [
-    { icon: Phone, label: "Mobile", value: driver.mobile },
-    { icon: Mail, label: "Email", value: driver.email || "—" },
-    { icon: IdCard, label: "License", value: driver.license_no || "—" },
-    { icon: Truck, label: "Vehicle", value: driver.plate_number || tr("ui.unassigned") },
-    { icon: RouteIcon, label: "Total trips", value: driver.total_trips },
-    { icon: Calendar, label: "Joined", value: new Date(driver.joined_at).toLocaleDateString() },
+    { icon: Phone, label: tr("ui.mobile"), value: driver.mobile },
+    { icon: Mail, label: tr("ui.email"), value: driver.email || "—" },
+    { icon: IdCard, label: tr("ui.license"), value: driver.license_no || "—" },
+    { icon: Truck, label: tr("ui.vehicle"), value: driver.plate_number || tr("ui.unassigned") },
+    { icon: RouteIcon, label: tr("ui.total_trips"), value: driver.total_trips },
+    { icon: Calendar, label: tr("ui.joined"), value: new Date(driver.joined_at).toLocaleDateString() },
   ];
   const SIcon = driver.status === "Active" ? CheckCircle : driver.status === "On Trip" ? Navigation : driver.status === "Offline" ? WifiOff : XCircle;
 

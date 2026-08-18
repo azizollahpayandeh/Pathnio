@@ -43,7 +43,7 @@ export default function Footer() {
           <ul className="space-y-2.5 text-sm text-slate-400">
             <li className="flex items-center gap-2"><Mail className="w-4 h-4" /> support@pathnio.com</li>
             <li className="flex items-center gap-2"><Phone className="w-4 h-4" /> +49 30 1234 5678</li>
-            <li className="flex items-center gap-2"><MapPin className="w-4 h-4" /> Alexanderplatz 1, Berlin</li>
+            <li className="flex items-center gap-2"><MapPin className="w-4 h-4" /> {tr("ui.office_address")}</li>
           </ul>
         </div>
       </div>

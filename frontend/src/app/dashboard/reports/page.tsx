@@ -109,11 +109,11 @@ export default function ReportsPage() {
                 labels: timeSeries.labels,
                 datasets: [
                   {
-                    label: "Revenue", data: timeSeries.rev, borderColor: "#7c3aed",
+                    label: tr("ui.revenue"), data: timeSeries.rev, borderColor: "#7c3aed",
                     backgroundColor: "rgba(124, 58, 237,0.12)", fill: true, tension: 0.4, pointRadius: 3,
                   },
                   {
-                    label: "Expenses", data: timeSeries.exp, borderColor: "#f43f5e",
+                    label: tr("ui.expenses"), data: timeSeries.exp, borderColor: "#f43f5e",
                     backgroundColor: "rgba(244,63,94,0.10)", fill: true, tension: 0.4, pointRadius: 3,
                   },
                 ],
@@ -158,7 +158,7 @@ export default function ReportsPage() {
             data={{
               labels: topVehicles.labels,
               datasets: [{
-                label: "Revenue", data: topVehicles.values,
+                label: tr("ui.revenue"), data: topVehicles.values,
                 backgroundColor: "rgba(124, 58, 237,0.85)", borderRadius: 8, maxBarThickness: 42,
               }],
             }}

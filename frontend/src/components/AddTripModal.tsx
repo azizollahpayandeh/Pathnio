@@ -107,7 +107,7 @@ export default function AddTripModal({ isOpen, onClose, onAddTrip }: Props) {
         </div>
         <div className="flex justify-end gap-3 pt-2">
           <button type="button" onClick={onClose} className="btn btn-ghost">{tr("ui.cancel")}</button>
-          <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? "Saving…" : "Add Trip"}</button>
+          <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? tr("ui.saving") : tr("ui.add_trip")}</button>
         </div>
       </form>
     </Modal>

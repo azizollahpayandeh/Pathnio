@@ -29,12 +29,12 @@ export default function TripDetail() {
   }
   const SIcon = icon[trip.status];
   const specs = [
-    { icon: User, label: "Driver", value: trip.driver || tr("ui.unassigned") },
-    { icon: Truck, label: "Vehicle", value: trip.plate_number || "—" },
-    { icon: RouteIcon, label: "Distance", value: `${distance(trip.distance)}` },
-    { icon: Package, label: "Cargo", value: trip.cargo || "—" },
-    { icon: TrendingUp, label: "Revenue", value: currency(trip.revenue) },
-    { icon: Calendar, label: "Start", value: new Date(trip.start_time).toLocaleString() },
+    { icon: User, label: tr("ui.driver"), value: trip.driver || tr("ui.unassigned") },
+    { icon: Truck, label: tr("ui.vehicle"), value: trip.plate_number || "—" },
+    { icon: RouteIcon, label: tr("ui.distance"), value: `${distance(trip.distance)}` },
+    { icon: Package, label: tr("ui.cargo"), value: trip.cargo || "—" },
+    { icon: TrendingUp, label: tr("ui.revenue"), value: currency(trip.revenue) },
+    { icon: Calendar, label: tr("ui.start"), value: new Date(trip.start_time).toLocaleString() },
   ];
 
   return (

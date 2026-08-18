@@ -12,18 +12,18 @@ const CODE_TO_ID: Record<string, string> = { FREE: "starter", STARTER: "starter"
 
 const PLANS = [
   {
-    id: "starter", name: "Starter", price: 0, icon: Zap, tone: "from-slate-500 to-slate-700",
-    tagline: "For small teams getting started",
+    id: "starter", nameKey: "ui.starter", price: 0, icon: Zap, tone: "from-slate-500 to-slate-700",
+    taglineKey: "ui.val_for_small_teams_getting_started",
     features: ["Up to 5 vehicles", "Live map tracking", "Basic reports", "Email support"],
   },
   {
-    id: "pro", name: "Professional", price: 49, icon: Rocket, tone: "from-violet-500 to-purple-600",
-    tagline: "For growing fleets", popular: true,
+    id: "pro", nameKey: "ui.professional", price: 49, icon: Rocket, tone: "from-violet-500 to-purple-600",
+    taglineKey: "ui.val_for_growing_fleets", popular: true,
     features: ["Up to 50 vehicles", "Advanced analytics", "Driver performance", "Priority support", "Expense management", "Custom alerts"],
   },
   {
-    id: "enterprise", name: "Enterprise", price: 149, icon: Crown, tone: "from-purple-500 to-fuchsia-600",
-    tagline: "For large operations",
+    id: "enterprise", nameKey: "ui.enterprise", price: 149, icon: Crown, tone: "from-purple-500 to-fuchsia-600",
+    taglineKey: "ui.val_for_large_operations",
     features: ["Unlimited vehicles", "API access", "Dedicated manager", "SLA guarantee", "Custom integrations", "24/7 phone support"],
   },
 ];
@@ -86,8 +86,8 @@ export default function SubscriptionPage() {
               <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${p.tone} flex items-center justify-center shadow-md mb-4`}>
                 <Icon className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900">{tv(p.name)}</h3>
-              <p className="text-slate-500 text-sm mb-4">{tv(p.tagline)}</p>
+              <h3 className="text-xl font-bold text-slate-900">{tr(p.nameKey)}</h3>
+              <p className="text-slate-500 text-sm mb-4">{tr(p.taglineKey)}</p>
               <div className="mb-5">
                 <span className="text-4xl font-bold text-slate-900">€{p.price}</span>
                 <span className="text-slate-400">{tr("ui.per_month")}</span>
@@ -103,7 +103,7 @@ export default function SubscriptionPage() {
                 ))}
               </ul>
               <button
-                onClick={() => choose(p.id, p.name)}
+                onClick={() => choose(p.id, tr(p.nameKey))}
                 className={`btn w-full ${active ? "btn-ghost cursor-default" : "btn-primary"}`}
                 disabled={active}
               >
@@ -116,7 +116,7 @@ export default function SubscriptionPage() {
 
       <div className="card p-6">
         <h2 className="font-bold text-slate-800 mb-1">{tr("ui.billing")}</h2>
-        <p className="text-sm text-slate-500">{tr("ui.you_are_currently_on_the")} <span className="font-semibold text-violet-600">{PLANS.find((p) => p.id === current)?.name}</span> plan. Invoices and payment methods would appear here in production.</p>
+        <p className="text-sm text-slate-500">{tr("ui.you_are_currently_on_the")} <span className="font-semibold text-violet-600">{(() => { const pl = PLANS.find((p) => p.id === current); return pl ? tr(pl.nameKey) : ""; })()}</span> — {tr("ui.billing_note")}</p>
       </div>
 
       {alert && <FloatingAlert type={alert.type} msg={alert.msg} onClose={() => setAlert(null)} />}

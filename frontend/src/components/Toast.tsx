@@ -9,6 +9,7 @@
 // success/error. Technical details belong in console/dev logs, never here.
 
 import { useEffect, useState } from "react";
+import { useT } from "@/i18n";
 import { CheckCircle2, AlertCircle, Info, X } from "lucide-react";
 
 export type ToastKind = "success" | "error" | "info";
@@ -59,6 +60,7 @@ const STYLES: Record<ToastKind, { icon: typeof Info; ring: string; text: string;
 };
 
 export function ToastHost() {
+  const tr = useT();
   const [items, setItems] = useState<ToastItem[]>([]);
 
   useEffect(() => {
@@ -92,7 +94,7 @@ export function ToastHost() {
             <button
               onClick={() => setItems((prev) => prev.filter((x) => x.id !== t.id))}
               className="shrink-0 opacity-60 hover:opacity-100 transition"
-              aria-label="Dismiss"
+              aria-label={tr("ui.dismiss")}
             >
               <X className="w-4 h-4" />
             </button>

@@ -52,7 +52,7 @@ export default function AddVehicleModal({ isOpen, onClose, onAddVehicle, initial
     setSaving(true);
     try {
       await onAddVehicle(form);
-      toast.success(initial ? "Vehicle updated." : `Vehicle ${form.plate_number} added.`);
+      toast.success(initial ? tr("ui.vehicle_updated") : `Vehicle ${form.plate_number} added.`);
       onClose();
     } catch (err) {
       // Never fail silently and never expose a stack trace — a friendly message.
@@ -63,7 +63,7 @@ export default function AddVehicleModal({ isOpen, onClose, onAddVehicle, initial
   };
 
   return (
-    <Modal open={isOpen} onClose={onClose} title={initial ? "Edit Vehicle" : tr("ui.add_vehicle")} subtitle={tr("ui.register_a_vehicle_to_your_fleet")} icon={Truck} gradient="from-orange-500 to-amber-600" maxWidth="max-w-xl">
+    <Modal open={isOpen} onClose={onClose} title={initial ? tr("ui.edit_vehicle") : tr("ui.add_vehicle")} subtitle={tr("ui.register_a_vehicle_to_your_fleet")} icon={Truck} gradient="from-orange-500 to-amber-600" maxWidth="max-w-xl">
       <form onSubmit={submit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label={tr("ui.plate_number")} required>
@@ -99,7 +99,7 @@ export default function AddVehicleModal({ isOpen, onClose, onAddVehicle, initial
         </div>
         <div className="flex justify-end gap-3 pt-2">
           <button type="button" onClick={onClose} className="btn btn-ghost">{tr("ui.cancel")}</button>
-          <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? "Saving…" : initial ? tr("ui.save_changes") : tr("ui.add_vehicle")}</button>
+          <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? tr("ui.saving") : initial ? tr("ui.save_changes") : tr("ui.add_vehicle")}</button>
         </div>
       </form>
     </Modal>
