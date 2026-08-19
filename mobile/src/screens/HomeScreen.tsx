@@ -1,11 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   Linking,
+  Modal,
   RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -26,11 +29,53 @@ import {
   StatusInfo,
 } from "../location/status";
 import { STATIONARY_KMH } from "../config";
+import { tripAction } from "../api";
+import InspectionScreen from "./InspectionScreen";
+import ReportScreen from "./ReportScreen";
 
 const REFRESH_MS = 5000;
 
 export default function HomeScreen() {
+  // The driver can open a full-screen task on top of the dashboard.
+  const [task, setTask] = useState<
+    | null
+    | { kind: "inspection"; pre: boolean }
+    | { kind: "incident" }
+    | { kind: "expense" }
+  >(null);
+  const [tripBusy, setTripBusy] = useState(false);
+
+
   const { user, ctx, refreshContext, signOut } = useAuth();
+  // Alert.prompt is iOS-only, so the odometer is captured in a real modal
+  // that works the same on Android (the platform this app ships on).
+  const [odoPrompt, setOdoPrompt] = useState<
+    null | { tripId: number; action: "start" | "complete" }
+  >(null);
+  const [odoValue, setOdoValue] = useState("");
+
+  const confirmTripAction = useCallback(async () => {
+    if (!odoPrompt) return;
+    const { tripId, action } = odoPrompt;
+    setTripBusy(true);
+    try {
+      const raw = odoValue.trim();
+      const odo = raw ? parseInt(raw, 10) : null;
+      const r = await tripAction(tripId, action, {
+        odometer: odo !== null && Number.isFinite(odo) ? odo : null,
+      });
+      setOdoPrompt(null);
+      setOdoValue("");
+      await refreshContext();
+      if (action === "complete") {
+        Alert.alert("Trip complete", `Recorded ${r.distance} km.`);
+      }
+    } catch (e: any) {
+      Alert.alert("Could not update", e?.message ?? "Please try again.");
+    } finally {
+      setTripBusy(false);
+    }
+  }, [odoPrompt, odoValue, refreshContext]);
   const [trk, setTrk] = useState<StatusInfo | null>(null);
   const [speedKmh, setSpeedKmh] = useState<number | null>(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -136,6 +181,31 @@ export default function HomeScreen() {
   const vehicle = ctx?.vehicle;
   const trip = ctx?.trip;
   const moving = (speedKmh ?? 0) >= STATIONARY_KMH;
+
+  // A task owns the whole screen while it is open.
+  if (task?.kind === "inspection") {
+    return (
+      <InspectionScreen
+        kind={task.pre ? "PRE" : "POST"}
+        tripId={trip?.id ?? null}
+        onDone={() => {
+          setTask(null);
+          refreshContext();
+        }}
+        onCancel={() => setTask(null)}
+      />
+    );
+  }
+  if (task?.kind === "incident" || task?.kind === "expense") {
+    return (
+      <ReportScreen
+        mode={task.kind}
+        tripId={trip?.id ?? null}
+        onDone={() => setTask(null)}
+        onCancel={() => setTask(null)}
+      />
+    );
+  }
 
   return (
     <ScrollView
@@ -250,10 +320,69 @@ export default function HomeScreen() {
                 </Text>
               ) : null}
             </View>
+
+            {/* The driver drives the trip's lifecycle from here — until now
+                status could only be changed from the office dashboard. */}
+            {trip.status === "PLANNED" && (
+              <TouchableOpacity
+                style={[styles.tripBtn, tripBusy && styles.ctaOff]}
+                disabled={tripBusy}
+                onPress={() => {
+                  setOdoValue("");
+                  setOdoPrompt({ tripId: trip.id, action: "start" });
+                }}
+              >
+                <Text style={styles.tripBtnText}>Start this trip</Text>
+              </TouchableOpacity>
+            )}
+            {trip.status === "ACTIVE" && (
+              <TouchableOpacity
+                style={[styles.tripBtn, styles.tripBtnDone, tripBusy && styles.ctaOff]}
+                disabled={tripBusy}
+                onPress={() => {
+                  setOdoValue("");
+                  setOdoPrompt({ tripId: trip.id, action: "complete" });
+                }}
+              >
+                <Text style={styles.tripBtnText}>Finish trip</Text>
+              </TouchableOpacity>
+            )}
           </>
         ) : (
           <Text style={styles.cardEmpty}>No active trip</Text>
         )}
+      </View>
+
+      {/* Driver actions */}
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Actions</Text>
+        <View style={styles.actionGrid}>
+          <TouchableOpacity
+            style={styles.action}
+            onPress={() => setTask({ kind: "inspection", pre: true })}
+          >
+            <Text style={styles.actionIcon}>🛠</Text>
+            <Text style={styles.actionText}>Pre-trip check</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.action}
+            onPress={() => setTask({ kind: "inspection", pre: false })}
+          >
+            <Text style={styles.actionIcon}>📋</Text>
+            <Text style={styles.actionText}>Post-trip check</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.action} onPress={() => setTask({ kind: "expense" })}>
+            <Text style={styles.actionIcon}>⛽</Text>
+            <Text style={styles.actionText}>Log a cost</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.action, styles.actionDanger]}
+            onPress={() => setTask({ kind: "incident" })}
+          >
+            <Text style={styles.actionIcon}>⚠️</Text>
+            <Text style={styles.actionText}>Report problem</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Sync + connectivity */}
@@ -302,12 +431,94 @@ export default function HomeScreen() {
         Tracking runs automatically while you are on the road — even when the app
         is closed. Pull down to refresh.
       </Text>
+
+      <Modal
+        visible={!!odoPrompt}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setOdoPrompt(null)}
+      >
+        <View style={styles.modalBack}>
+          <View style={styles.modalCard}>
+            <Text style={styles.modalTitle}>
+              {odoPrompt?.action === "start" ? "Start trip" : "Finish trip"}
+            </Text>
+            <Text style={styles.modalHint}>
+              Odometer reading in km. Leave blank to skip.
+            </Text>
+            <TextInput
+              style={styles.modalInput}
+              value={odoValue}
+              onChangeText={setOdoValue}
+              keyboardType="number-pad"
+              placeholder="e.g. 128400"
+              placeholderTextColor="#94a3b8"
+              autoFocus
+            />
+            <View style={styles.modalRow}>
+              <TouchableOpacity
+                style={[styles.modalBtn, styles.modalGhost]}
+                onPress={() => setOdoPrompt(null)}
+              >
+                <Text style={styles.modalGhostText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalBtn, styles.modalPrimary, tripBusy && styles.ctaOff]}
+                onPress={confirmTripAction}
+                disabled={tripBusy}
+              >
+                <Text style={styles.modalPrimaryText}>
+                  {tripBusy
+                    ? "Saving…"
+                    : odoPrompt?.action === "start"
+                    ? "Start"
+                    : "Finish"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: "#0f0720" },
+  ctaOff: { opacity: 0.6 },
+  tripBtn: {
+    marginTop: 14, backgroundColor: "#7c3aed", borderRadius: 14,
+    paddingVertical: 14, alignItems: "center",
+  },
+  tripBtnDone: { backgroundColor: "#059669" },
+  tripBtnText: { color: "#fff", fontSize: 15, fontWeight: "800" },
+  actionGrid: { flexDirection: "row", flexWrap: "wrap", gap: 10, marginTop: 4 },
+  action: {
+    width: "47%", backgroundColor: "#241a45", borderRadius: 16,
+    paddingVertical: 18, alignItems: "center",
+  },
+  actionDanger: { backgroundColor: "#3b1220" },
+  actionIcon: { fontSize: 22, marginBottom: 6 },
+  actionText: { color: "#e9e3ff", fontSize: 13, fontWeight: "700" },
+  modalBack: {
+    flex: 1, backgroundColor: "rgba(6,3,16,0.75)",
+    alignItems: "center", justifyContent: "center", padding: 24,
+  },
+  modalCard: {
+    width: "100%", backgroundColor: "#1a1330", borderRadius: 22, padding: 22,
+  },
+  modalTitle: { color: "#fff", fontSize: 19, fontWeight: "800", marginBottom: 4 },
+  modalHint: { color: "#a78bfa", fontSize: 13, marginBottom: 14 },
+  modalInput: {
+    backgroundColor: "#0f0720", borderRadius: 14, paddingHorizontal: 16,
+    paddingVertical: 14, color: "#fff", fontSize: 17,
+  },
+  modalRow: { flexDirection: "row", gap: 10, marginTop: 18 },
+  modalBtn: { flex: 1, borderRadius: 14, paddingVertical: 14, alignItems: "center" },
+  modalGhost: { backgroundColor: "#2d2350" },
+  modalGhostText: { color: "#c4b5fd", fontWeight: "700", fontSize: 15 },
+  modalPrimary: { backgroundColor: "#7c3aed" },
+  modalPrimaryText: { color: "#fff", fontWeight: "800", fontSize: 15 },
   content: { padding: 18, paddingTop: 58, paddingBottom: 36 },
 
   header: {

@@ -381,3 +381,60 @@ export function useLiveVehicles(intervalMs = 4000) {
 
   return { data, ready };
 }
+
+// ---------------------------------------------------------------------------
+// Driver-submitted records (Phase 29). These are written from the phone and
+// only READ here — the dashboard reviews what actually happened on the road.
+// ---------------------------------------------------------------------------
+
+export type Inspection = {
+  id: string;
+  kind: "PRE" | "POST";
+  odometer: number | null;
+  items: Array<{ key: string; ok: boolean; note?: string }>;
+  has_defects: boolean;
+  defect_notes: string;
+  failed_items: string[];
+  created_at: string;
+  driver_name: string;
+  plate_number: string;
+};
+
+export type Incident = {
+  id: string;
+  kind: string;
+  severity: "LOW" | "MEDIUM" | "HIGH";
+  description: string;
+  resolved_at: string | null;
+  created_at: string;
+  driver_name: string;
+  plate_number: string;
+  lat: number | null;
+  lng: number | null;
+};
+
+export function useInspections(defectsOnly = false) {
+  return useResource<Inspection>(
+    `accounts/inspections/${defectsOnly ? "?defects=1" : ""}`,
+    (r: Record<string, unknown>) => r as unknown as Inspection
+  );
+}
+
+export function useIncidents(openOnly = false) {
+  return useResource<Incident>(
+    `accounts/incidents/${openOnly ? "?open=1" : ""}`,
+    (r: Record<string, unknown>) => r as unknown as Incident
+  );
+}
+
+export async function resolveIncident(id: string): Promise<void> {
+  await api.post(`accounts/incidents/${id}/resolve/`);
+}
+
+export async function approveExpense(id: string): Promise<void> {
+  await api.post(`accounts/expenses/${id}/approve/`);
+}
+
+export async function rejectExpense(id: string): Promise<void> {
+  await api.post(`accounts/expenses/${id}/reject/`);
+}

@@ -1,5 +1,6 @@
 "use client";
 import { useState, useMemo } from "react";
+import { approveExpense, rejectExpense } from "@/lib/api-data";
 import Link from "next/link";
 import {
   Wallet, Search, Plus, Eye, Trash2, Fuel, Wrench, Receipt,
@@ -11,6 +12,7 @@ import { useExpenses, createExpense, deleteExpense } from "@/lib/api-data";
 import type { ExpenseCategory } from "@/lib/types";
 import { useT, useTValue } from "@/i18n";
 import { useUnits } from "@/lib/format";
+import { toast } from "@/components/Toast";
 
 const catIcon: Record<ExpenseCategory, typeof Fuel> = {
   Fuel, Maintenance: Wrench, Tolls: Receipt, Insurance: Shield, Salary: Users, Other: MoreHorizontal,
@@ -32,6 +34,22 @@ export default function ExpensesPage() {
   const tv = useTValue();
   const { currency, distance } = useUnits();
   const { data: expenses, refetch } = useExpenses();
+
+  // Driver submissions awaiting a decision.
+  const pending = useMemo(
+    () => expenses.filter((e) => (e as unknown as { approval?: string }).approval === "PENDING"),
+    [expenses]
+  );
+
+  const review = async (id: string, ok: boolean) => {
+    try {
+      await (ok ? approveExpense(id) : rejectExpense(id));
+      await refetch();
+      toast.success(tr(ok ? "ui.exp_approved" : "ui.exp_rejected"));
+    } catch (err) {
+      toast.fromError(err, tr("ui.something_went_wrong"));
+    }
+  };
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [showAdd, setShowAdd] = useState(false);
@@ -96,6 +114,37 @@ export default function ExpensesPage() {
           {Object.keys(catIcon).map((c) => <option key={c} value={c}>{tv(c)}</option>)}
         </select>
       </div>
+
+      {/* Costs drivers logged on the road wait here for a decision — they are
+          not counted as real spend until the owner approves them. */}
+      {pending.length > 0 && (
+        <div className="card p-5 border-l-4 border-amber-400">
+          <h2 className="font-bold text-slate-800">{tr("ui.exp_pending_title")}</h2>
+          <p className="text-sm text-slate-500 mb-4">{tr("ui.exp_pending_hint")}</p>
+          <div className="space-y-2">
+            {pending.map((x) => (
+              <div key={x.id} className="flex items-center justify-between gap-3 flex-wrap rounded-xl bg-amber-50/60 px-4 py-3">
+                <div className="min-w-0">
+                  <p className="font-semibold text-slate-800 truncate">
+                    {tv(x.category)} · {currency(Number(x.amount))}
+                  </p>
+                  <p className="text-sm text-slate-500 truncate">
+                    {x.driver || "—"}{x.plate_number ? ` · ${x.plate_number}` : ""}
+                  </p>
+                </div>
+                <div className="flex gap-2 shrink-0">
+                  <button onClick={() => review(x.id, true)} className="btn btn-primary text-sm">
+                    {tr("ui.exp_approve")}
+                  </button>
+                  <button onClick={() => review(x.id, false)} className="btn btn-ghost text-sm">
+                    {tr("ui.exp_reject")}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {filtered.length === 0 ? (
         <div className="card">

@@ -268,6 +268,12 @@ class Trip(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="created_trips")
     start_time = models.DateTimeField(default=timezone.now)
     end_time = models.DateTimeField(null=True, blank=True)
+    # Filled by the DRIVER from the mobile app, so the record reflects the job
+    # as actually run rather than as planned on the dashboard.
+    start_odometer = models.PositiveIntegerField(null=True, blank=True)
+    end_odometer = models.PositiveIntegerField(null=True, blank=True)
+    started_at = models.DateTimeField(null=True, blank=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -305,6 +311,16 @@ class Expense(models.Model):
     status = models.CharField(max_length=16, choices=STATUS_CHOICES, default="Paid")
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    # Costs logged by a driver on the road arrive PENDING for owner review;
+    # anything entered on the dashboard is APPROVED on the spot.
+    SOURCE_CHOICES = [("WEB", "Dashboard"), ("DRIVER", "Driver app")]
+    APPROVAL_CHOICES = [("PENDING", "Pending"), ("APPROVED", "Approved"), ("REJECTED", "Rejected")]
+    source = models.CharField(max_length=8, choices=SOURCE_CHOICES, default="WEB")
+    approval = models.CharField(max_length=8, choices=APPROVAL_CHOICES, default="APPROVED")
+    submitted_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True,
+                                     related_name="submitted_expenses")
+    odometer = models.PositiveIntegerField(null=True, blank=True)
+    liters = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
 
     class Meta:
         ordering = ["-date"]
@@ -584,3 +600,84 @@ class Subscription(models.Model):
 
     def __str__(self):
         return f"sub<{self.company.company_name} / {self.plan.code} / {self.status}>"
+
+
+# ---------------------------------------------------------------------------
+# Driver-side operations (Phase 29)
+#
+# Until now the mobile app was a one-way GPS beacon: the driver could not
+# record anything. These models let the driver run the job from the road —
+# start/finish trips with real odometer readings, sign off a vehicle
+# inspection, log costs as they happen and raise incidents — so the dashboard
+# reflects what actually happened instead of what was planned.
+# ---------------------------------------------------------------------------
+
+class VehicleInspection(models.Model):
+    """A pre- or post-trip vehicle check (DVIR).
+
+    `items` is the checklist result: [{"key": "brakes", "ok": true, "note": ""}].
+    Any failed item marks the inspection as defective, which raises a fleet
+    alert and can take the vehicle out of service.
+    """
+    KIND_CHOICES = [("PRE", "Pre-trip"), ("POST", "Post-trip")]
+
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="inspections")
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, related_name="inspections")
+    driver = models.ForeignKey(Driver, on_delete=models.SET_NULL, null=True, blank=True,
+                               related_name="inspections")
+    trip = models.ForeignKey(Trip, on_delete=models.SET_NULL, null=True, blank=True,
+                             related_name="inspections")
+    kind = models.CharField(max_length=8, choices=KIND_CHOICES, default="PRE")
+    odometer = models.PositiveIntegerField(null=True, blank=True)
+    items = models.JSONField(default=list, blank=True)
+    has_defects = models.BooleanField(default=False)
+    defect_notes = models.TextField(blank=True)
+    # Where the driver stood when signing off — proves the check was on site.
+    lat = models.FloatField(null=True, blank=True)
+    lng = models.FloatField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["company", "-created_at"]),
+            models.Index(fields=["vehicle", "-created_at"]),
+            models.Index(fields=["company", "has_defects"]),
+        ]
+
+    def __str__(self):
+        return f"inspection<{self.vehicle_id}/{self.kind}/{'DEFECT' if self.has_defects else 'OK'}>"
+
+
+class Incident(models.Model):
+    """Something went wrong on the road — breakdown, accident, delay."""
+    KIND_CHOICES = [
+        ("BREAKDOWN", "Breakdown"), ("ACCIDENT", "Accident"),
+        ("DELAY", "Delay"), ("THEFT", "Theft"), ("OTHER", "Other"),
+    ]
+    SEVERITY_CHOICES = [("LOW", "Low"), ("MEDIUM", "Medium"), ("HIGH", "High")]
+
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="incidents")
+    driver = models.ForeignKey(Driver, on_delete=models.SET_NULL, null=True, blank=True,
+                               related_name="incidents")
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.SET_NULL, null=True, blank=True,
+                                related_name="incidents")
+    trip = models.ForeignKey(Trip, on_delete=models.SET_NULL, null=True, blank=True,
+                             related_name="incidents")
+    kind = models.CharField(max_length=16, choices=KIND_CHOICES, default="OTHER")
+    severity = models.CharField(max_length=8, choices=SEVERITY_CHOICES, default="MEDIUM")
+    description = models.TextField()
+    lat = models.FloatField(null=True, blank=True)
+    lng = models.FloatField(null=True, blank=True)
+    resolved_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["company", "-created_at"]),
+            models.Index(fields=["company", "resolved_at"]),
+        ]
+
+    def __str__(self):
+        return f"incident<{self.kind}/{self.severity}>"

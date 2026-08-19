@@ -183,3 +183,109 @@ export async function uploadPings(pings: Ping[]): Promise<boolean> {
   }
   return res.ok;
 }
+
+// ---------------------------------------------------------------------------
+// Driver operations — the phone can now RUN the job, not just report position.
+// Company / vehicle / driver are always derived server-side from the token, so
+// none of these calls carry (or trust) an identifier the app made up.
+// ---------------------------------------------------------------------------
+
+export type TripActionResult = {
+  id: number;
+  status: string;
+  start_odometer: number | null;
+  end_odometer: number | null;
+  distance: number;
+  started_at: string | null;
+  completed_at: string | null;
+};
+
+async function jsonOrThrow(res: Response, fallback: string) {
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const detail =
+      data?.detail ||
+      (typeof data === "object" && data
+        ? (Object.values(data).flat()[0] as string)
+        : null) ||
+      fallback;
+    throw new ApiError(res.status, String(detail));
+  }
+  return data;
+}
+
+/** Start or complete the driver's own trip, recording the odometer. */
+export async function tripAction(
+  tripId: number,
+  action: "start" | "complete",
+  body: { odometer?: number | null; notes?: string } = {}
+): Promise<TripActionResult> {
+  const res = await authedRequest(`/accounts/driver/trips/${tripId}/${action}/`, {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+  return jsonOrThrow(res, "Could not update the trip.");
+}
+
+export type InspectionItem = { key: string; ok: boolean; note?: string };
+
+export async function fetchInspectionChecklist(): Promise<{
+  checklist: string[];
+  recent: Array<{ id: number; kind: string; has_defects: boolean; created_at: string }>;
+}> {
+  const res = await authedRequest("/accounts/driver/inspections/", { method: "GET" });
+  return jsonOrThrow(res, "Could not load the checklist.");
+}
+
+export async function submitInspection(body: {
+  kind: "PRE" | "POST";
+  items: InspectionItem[];
+  odometer?: number | null;
+  defect_notes?: string;
+  lat?: number | null;
+  lng?: number | null;
+  trip_id?: number | null;
+}): Promise<{ id: number; has_defects: boolean; failed_items: string[] }> {
+  const res = await authedRequest("/accounts/driver/inspections/", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+  return jsonOrThrow(res, "Could not submit the inspection.");
+}
+
+export async function reportIncident(body: {
+  kind: "BREAKDOWN" | "ACCIDENT" | "DELAY" | "THEFT" | "OTHER";
+  severity?: "LOW" | "MEDIUM" | "HIGH";
+  description: string;
+  lat?: number | null;
+  lng?: number | null;
+  trip_id?: number | null;
+}): Promise<{ id: number }> {
+  const res = await authedRequest("/accounts/driver/incidents/", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+  return jsonOrThrow(res, "Could not report the incident.");
+}
+
+export async function submitExpense(body: {
+  category: string;
+  amount: string;
+  description?: string;
+  odometer?: number | null;
+  liters?: string | null;
+  date?: string;
+}): Promise<{ id: number; approval: string }> {
+  const res = await authedRequest("/accounts/driver/expenses/", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+  return jsonOrThrow(res, "Could not save the expense.");
+}
+
+export async function fetchMyExpenses(): Promise<
+  Array<{ id: number; title: string; category: string; amount: string; date: string; approval: string }>
+> {
+  const res = await authedRequest("/accounts/driver/expenses/", { method: "GET" });
+  return jsonOrThrow(res, "Could not load your expenses.");
+}

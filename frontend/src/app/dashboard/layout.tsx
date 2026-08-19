@@ -7,6 +7,7 @@ import { useRouter, usePathname } from "next/navigation";
 import {
   LayoutDashboard, Map, Users, Truck, Route, Wallet, BarChart3,
   Bell, CreditCard, LifeBuoy, Settings, ShieldCheck, Menu, LogOut, X,
+  ClipboardCheck, ShieldAlert,
 } from "lucide-react";
 import { useAuth, logout } from "@/lib/auth";
 import { useT } from "@/i18n";
@@ -31,6 +32,8 @@ const NAV: NavItem[] = [
   { href: "/dashboard/trips", labelKey: "nav.trips", icon: Route, color: "text-purple-500" },
   { href: "/dashboard/expenses", labelKey: "nav.expenses", icon: Wallet, color: "text-emerald-600" },
   { href: "/dashboard/reports", labelKey: "nav.reports", icon: BarChart3, color: "text-violet-600" },
+  { href: "/dashboard/inspections", labelKey: "nav.inspections", icon: ClipboardCheck, color: "text-sky-500" },
+  { href: "/dashboard/incidents", labelKey: "nav.incidents", icon: ShieldAlert, color: "text-rose-500" },
   { href: "/dashboard/alerts", labelKey: "nav.alerts", icon: Bell, color: "text-amber-500" },
   { href: "/dashboard/subscription", labelKey: "nav.subscription", icon: CreditCard, color: "text-teal-500" },
   { href: "/dashboard/support", labelKey: "nav.support", icon: LifeBuoy, color: "text-teal-500" },

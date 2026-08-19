@@ -1412,6 +1412,29 @@ class ExpenseViewSet(CompanyScopedViewSet):
     queryset = Expense.objects.all()
     serializer_class = ExpenseSerializer
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        # ?pending=1 -> only what drivers submitted and nobody has reviewed yet.
+        if self.request.query_params.get('pending') == '1':
+            qs = qs.filter(approval='PENDING')
+        return qs
+
+    @action(detail=True, methods=['post'], permission_classes=[IsCompanyOwner])
+    def approve(self, request, pk=None):
+        """Accept a cost a driver logged on the road."""
+        expense = self.get_object()
+        expense.approval = 'APPROVED'
+        expense.status = 'Paid'
+        expense.save(update_fields=['approval', 'status'])
+        return Response(self.get_serializer(expense).data)
+
+    @action(detail=True, methods=['post'], permission_classes=[IsCompanyOwner])
+    def reject(self, request, pk=None):
+        expense = self.get_object()
+        expense.approval = 'REJECTED'
+        expense.save(update_fields=['approval'])
+        return Response(self.get_serializer(expense).data)
+
 
 class DriverViewSet(CompanyScopedViewSet):
     """Company-scoped driver CRUD for the owner dashboard.

@@ -392,7 +392,10 @@ class ExpenseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Expense
         fields = '__all__'
-        read_only_fields = ('id', 'company', 'created_at')
+        # source/approval/submitted_by are decided by the server: a client must
+        # never be able to mark its own submission approved.
+        read_only_fields = ('id', 'company', 'created_at', 'source', 'approval',
+                            'submitted_by')
 
     def to_internal_value(self, data):
         """Accept an ISO datetime for `date` and narrow it to a calendar date.

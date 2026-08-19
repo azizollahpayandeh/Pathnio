@@ -1,6 +1,10 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
+from .driver_ops import (
+    DriverTripActionView, DriverInspectionView, DriverIncidentView, DriverExpenseView,
+)
+from .fleet_ops import InspectionViewSet, IncidentViewSet
 from .views import (
     CompanyRegisterView, DriverRegisterView, DriverListView, SiteSettingsView,
     CompanyMeView, ContactMessageCreateView, SupportTicketListCreateView,
@@ -23,6 +27,8 @@ router.register(r'expenses', ExpenseViewSet, basename='expense')
 router.register(r'drivers', DriverViewSet, basename='driver')
 router.register(r'cargo', CargoViewSet, basename='cargo')
 router.register(r'fleet-alerts', FleetAlertViewSet, basename='fleet-alert')
+router.register(r'inspections', InspectionViewSet, basename='inspection')
+router.register(r'incidents', IncidentViewSet, basename='incident')
 
 urlpatterns = [
     # Authentication
@@ -75,6 +81,13 @@ urlpatterns = [
     # Phase 3 — secure driver invitation + mobile activation
     path('driver/register/', DriverRegisterMobileView.as_view(), name='driver-register-mobile'),
     path('driver/me/', DriverMeView.as_view(), name='driver-me'),
+
+    # Phase 29 — the driver runs the job from the phone
+    path('driver/trips/<int:trip_id>/<str:action>/', DriverTripActionView.as_view(),
+         name='driver-trip-action'),
+    path('driver/inspections/', DriverInspectionView.as_view(), name='driver-inspections'),
+    path('driver/incidents/', DriverIncidentView.as_view(), name='driver-incidents'),
+    path('driver/expenses/', DriverExpenseView.as_view(), name='driver-expenses'),
     path('driver-invitations/activate/', DriverActivateView.as_view(), name='driver-activate'),
     path('drivers/<int:driver_id>/invitation/', DriverInvitationView.as_view(), name='driver-invitation'),
     path('drivers/<int:driver_id>/invitation/revoke/', DriverInvitationRevokeView.as_view(), name='driver-invitation-revoke'),
