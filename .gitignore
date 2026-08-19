@@ -28,6 +28,7 @@ media/
 
 # Virtual Environment
 venv/
+.venv/
 env/
 ENV/
 

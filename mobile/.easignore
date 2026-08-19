@@ -1,0 +1,10 @@
+# EAS archives the whole monorepo from the git root. Keep the upload to the
+# mobile app: the web app alone carries an 80 MB tracked video.
+../backend/
+../frontend/
+backend/
+frontend/
+**/__pycache__/
+**/.venv/
+**/node_modules/
+**/.next/

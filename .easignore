@@ -1,0 +1,11 @@
+# EAS builds the mobile app, but archives from the git root because this is a
+# monorepo. Without this, backend/.venv (238 MB) and the web build were swept
+# into the upload, producing a 119 MB tarball that the API rejected with 403.
+backend/
+frontend/
+*.log
+**/__pycache__/
+**/.venv/
+**/node_modules/
+**/.next/
+**/.expo/
