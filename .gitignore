@@ -199,3 +199,4 @@ coverage.xml
 dmypy.json
 .vercel
 .env*
+!.env.example

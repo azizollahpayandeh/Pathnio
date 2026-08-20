@@ -1,10 +1,10 @@
 import logging
+import sys
 from django.utils import timezone
 from django.http import JsonResponse
 from django.core.cache import cache
 from .models import UserSession, ActivityLog, LoginAttempt
 from datetime import timedelta
-import time
 from django.utils.deprecation import MiddlewareMixin
 from django.contrib.auth.models import User
 
@@ -45,24 +45,22 @@ class RateLimitMiddleware(MiddlewareMixin):
         # Skip for login endpoints
         if request.path in ['/api/auth/token/login/', '/api/test/login/']:
             return None
-            
+        # The test client reuses one IP across the whole suite's requests,
+        # which would false-trip this cache-backed counter (same rationale
+        # as DEFAULT_THROTTLE_RATES being disabled under 'test' in settings.py).
+        if 'test' in sys.argv:
+            return None
+
         client_ip = self.get_client_ip(request)
-        current_time = time.time()
-        
-        # Simple rate limiting: 100 requests per minute per IP
-        if not hasattr(request, 'rate_limit_data'):
-            request.rate_limit_data = {}
-        
-        if client_ip not in request.rate_limit_data:
-            request.rate_limit_data[client_ip] = {'count': 0, 'reset_time': current_time + 60}
-        
-        if current_time > request.rate_limit_data[client_ip]['reset_time']:
-            request.rate_limit_data[client_ip] = {'count': 0, 'reset_time': current_time + 60}
-        
-        request.rate_limit_data[client_ip]['count'] += 1
-        
-        if request.rate_limit_data[client_ip]['count'] > 100:
+
+        # Simple rate limiting: 100 requests per minute per IP. Must live in
+        # the shared cache, not on `request` - a fresh HttpRequest is built
+        # per request, so per-request state can never accumulate a count.
+        cache_key = f'ratelimit:{client_ip}'
+        count = cache.get(cache_key, 0)
+        if count >= 100:
             return JsonResponse({'detail': 'Rate limit exceeded'}, status=429)
+        cache.set(cache_key, count + 1, timeout=60)
     
     def get_client_ip(self, request):
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')

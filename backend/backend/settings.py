@@ -26,13 +26,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-255do%edf3=ek&q^y*mviqh_84yed+g(d*$83*xfkqe4f1sedr')
-
 # SECURITY WARNING: don't run with debug turned on in production!
 # Safer default: production is secure even if the DEBUG env var is missing.
 # Local dev sets DEBUG=True explicitly.
 DEBUG = os.environ.get('DEBUG', 'False').lower() in ['1', 'true', 'yes']
+
+# SECURITY WARNING: keep the secret key used in production secret!
+_INSECURE_FALLBACK_KEY = 'django-insecure-255do%edf3=ek&q^y*mviqh_84yed+g(d*$83*xfkqe4f1sedr'
+SECRET_KEY = os.environ.get('SECRET_KEY', _INSECURE_FALLBACK_KEY)
+if not DEBUG and SECRET_KEY == _INSECURE_FALLBACK_KEY and 'test' not in sys.argv:
+    # This key also signs JWTs (SIMPLE_JWT.SIGNING_KEY below) - a hardcoded
+    # fallback in a public repo would let anyone forge auth tokens.
+    raise RuntimeError(
+        'SECRET_KEY environment variable is not set. Refusing to start in '
+        'production with the insecure fallback key.'
+    )
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,0.0.0.0,.vercel.app').split(',')
 
@@ -398,3 +406,7 @@ if 'test' in sys.argv:
     SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
+    # PBKDF2 (the default hasher) is deliberately slow; that's correct in
+    # production but makes the suite hash real passwords on every test user
+    # it creates. MD5Hasher is insecure but fine for throwaway test data.
+    PASSWORD_HASHERS = ['django.contrib.auth.hashers.MD5PasswordHasher']
