@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Vazirmatn } from "next/font/google";
 import "./globals.css";
 import { I18nProvider } from "@/i18n";
 import { LOCALE_COOKIE, DEFAULT_LOCALE, isSupported, dirOf, type LocaleCode } from "@/i18n/config";
@@ -13,6 +13,14 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+// Vazirmatn is a variable Persian typeface purpose-built for UI text — it
+// gives the "fa" locale proper Farsi glyph shaping instead of falling back
+// to the OS default (Segoe UI/Tahoma), which reads noticeably worse.
+const vazirmatn = Vazirmatn({
+  variable: "--font-vazirmatn",
+  subsets: ["arabic", "latin"],
 });
 
 export const metadata: Metadata = {
@@ -36,7 +44,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} dir={dir} suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#f4f8fb] text-[#171717]`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${vazirmatn.variable} antialiased bg-[#f4f8fb] text-[#171717]`}>
         <I18nProvider initialLocale={locale}>{children}</I18nProvider>
       </body>
     </html>

@@ -217,8 +217,12 @@ body {
    automatically.
 --------------------------------------------------------------------------- */
 [dir="rtl"] body {
-  /* Persian reads better with a slightly larger line-height */
+  /* Vazirmatn is a variable Persian typeface built for UI — proper Farsi
+     glyph shaping instead of the OS fallback (Segoe UI/Tahoma). It also
+     reads better with a slightly larger line-height than the Latin font. */
+  font-family: var(--font-vazirmatn), var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   line-height: 1.75;
+  letter-spacing: 0;
 }
 
 /* Fixed sidebar sits on the right in RTL */
@@ -244,9 +248,11 @@ body {
 }
 
 /* Keep genuinely direction-neutral data readable left-to-right
-   (plates, coordinates, codes, numbers) */
+   (plates, coordinates, codes, numbers). Also keeps the Latin mono stack
+   instead of falling back to Vazirmatn's Persian glyph shaping. */
 [dir="rtl"] .font-mono,
 [dir="rtl"] code {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
   direction: ltr;
   unicode-bidi: embed;
   display: inline-block;
