@@ -35,7 +35,7 @@ backend/accounts/       models, serializers, views, urls (all API logic)
   fleet_status.py       vehicle/driver status engine (configurable thresholds)
   alerts_engine.py      derive fleet alerts from real data
   subscriptions.py      plan limit enforcement
-  tests_*.py            55 automated tests
+  tests_*.py            113 automated tests
 frontend/src/
   lib/api-data.ts       API hooks + CRUD (company-scoped) — the data layer
   lib/auth.ts           real JWT auth (login/refresh/session)
@@ -53,7 +53,7 @@ mobile/src/
 cd backend && python -m venv .venv && ./.venv/bin/pip install -r requirements.txt
 DEBUG=True ALLOWED_HOSTS='*' ./.venv/bin/python manage.py migrate
 DEBUG=True ALLOWED_HOSTS='*' ./.venv/bin/python manage.py runserver 0.0.0.0:8000
-./.venv/bin/python manage.py test accounts        # 55 tests
+./.venv/bin/python manage.py test accounts        # 113 tests
 
 # Frontend (talks to localhost:8000 when on localhost)
 cd frontend && npm install && npm run dev
@@ -141,7 +141,7 @@ Mobile: `EAS_NO_VCS=1 eas build -p android --profile preview` → APK link.
 
 ## 12. Production verification
 
-- `python manage.py test accounts` — 55 tests (auth, tenant isolation, IDOR,
+- `python manage.py test accounts` — 113 tests (auth, tenant isolation, IDOR,
   invitations, activation, assignment, trips, cargo, telemetry + dedup, expenses,
   alerts, settings, live-map, subscription limits, cross-tenant attacks).
 - End-to-end (see `docs` / the E2E script): register → activate → assign → trip →

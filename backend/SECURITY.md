@@ -7,9 +7,13 @@ This Django application implements comprehensive security features to protect us
 
 ### JWT Token Authentication
 - **Token Expiration**: 5 days for access tokens, 10 days for refresh tokens
-- **Token Rotation**: Enabled for refresh tokens
-- **Blacklist**: Tokens are blacklisted after rotation
-- **Algorithm**: HS256 with secure signing key
+- **Token Rotation**: Disabled (`ROTATE_REFRESH_TOKENS = False`) - the
+  `token_blacklist` app isn't installed, so a refresh token stays valid
+  until it expires. Enabling rotation requires adding
+  `rest_framework_simplejwt.token_blacklist` to `INSTALLED_APPS` and running
+  its migration first.
+- **Algorithm**: HS256, signing key = `SECRET_KEY` (required env var in
+  production - the app refuses to start without it, see below)
 
 ### Session Management
 - **Session Duration**: 5 days (432,000 seconds)
@@ -24,9 +28,15 @@ This Django application implements comprehensive security features to protect us
 - **Strict-Transport-Security**: max-age=31536000; includeSubDomains
 
 ## Rate Limiting
-- **Login Attempts**: Maximum 5 attempts per 15 minutes per IP
-- **Account Lockout**: Temporary lockout after failed attempts
+- **Login lockout**: 20 failed attempts per (username, IP) pair within a
+  rolling hour blocks further attempts (`accounts/views.py::check_login_attempts`)
+- **DRF throttle scopes**: `login` 10/min, `activate` 10/min, `register` 5/min,
+  plus a global `anon` cap of 120/min (`REST_FRAMEWORK.DEFAULT_THROTTLE_RATES`
+  in `settings.py`)
+- **Per-IP request cap**: 100 requests/min across all endpoints
+  (`accounts.middleware.RateLimitMiddleware`, cache-backed)
 - **IP-based Tracking**: All login attempts are logged with IP addresses
+  (`LoginAttempt` model)
 
 ## Activity Logging
 All user activities are logged for security monitoring:
@@ -48,21 +58,31 @@ All user activities are logged for security monitoring:
 
 ## Password Security
 - **Minimum Length**: 8 characters
-- **Validation**: Django's built-in password validators
-- **Password History**: Tracked in security settings
-- **Password Expiry**: 90 days (configurable)
+- **Validation**: Django's built-in password validators (similarity, common
+  password, numeric-only checks)
+- **Password Expiry**: `SecuritySettings.password_expiry_days` defaults to 90
+  and is stored per user, but is **not currently enforced** anywhere - no
+  view checks it against the last password change. Treat it as a future
+  hook, not an active control.
 
 ## CORS Configuration
-- **Allowed Origins**: Specific domains only
-- **Credentials**: Enabled for authenticated requests
+- **Allowed Origins**: `localhost:3000`/`:8000` for dev, plus any `CORS_ALLOWED_ORIGINS`
+  env override for production. **Also trusts every `https://*.vercel.app`
+  subdomain by regex** (`CORS_ALLOWED_ORIGIN_REGEXES`) so Vercel preview
+  deployments work - this is intentionally broad, not a bug, but it does mean
+  any Vercel-hosted site can make a credentialed request. Tighten it if
+  preview-URL testing is ever dropped.
+- **Credentials**: Enabled (`CORS_ALLOW_CREDENTIALS = True`)
 - **Methods**: GET, POST, PUT, PATCH, DELETE, OPTIONS
 - **Headers**: Authorization, Content-Type, etc.
 
 ## Database Security
-- **SQL Injection Protection**: Django ORM
-- **Data Encryption**: Sensitive data encrypted at rest
-- **Audit Trail**: All changes logged
-- **Backup Security**: Regular encrypted backups
+- **SQL Injection Protection**: Django ORM (no raw SQL in `accounts/`)
+- **Encryption at rest / backups**: Delegated to the managed Postgres
+  provider (Neon) - not something this codebase configures or verifies.
+  Confirm your provider's settings directly rather than relying on this doc.
+- **Audit Trail**: Mutations relevant to auth/security are logged via
+  `ActivityLog`; this is not a full audit trail of every model change.
 
 ## API Security
 - **Authentication Required**: All endpoints require authentication (except public ones)
@@ -93,17 +113,17 @@ All user activities are logged for security monitoring:
 ## Security Endpoints
 
 ### Authentication
-- `POST /api/auth/login/` - User login with JWT tokens
-- `POST /api/auth/logout/` - User logout
-- `POST /api/auth/refresh/` - Refresh JWT token
-- `GET /api/auth/check/` - Check authentication status
+- `POST /api/token/` (or `/api/auth/token/login/`) - JWT login (username or email)
+- `POST /api/auth/token/refresh/` - Refresh JWT token
+- `POST /api/auth/token/verify/` - Verify a token
+- `POST /api/accounts/auth/login/` - Session-based login (`LoginView`)
+- `POST /api/accounts/auth/logout/` - Session-based logout
 
 ### User Management
-- `POST /api/auth/password/change/` - Change password
-- `GET /api/auth/profile/` - Get user profile
-- `PATCH /api/auth/profile/` - Update user profile
-- `GET /api/auth/activity/` - Get activity log
-- `GET /api/auth/security/` - Get security status
+- `POST /api/accounts/auth/password/change/` - Change password
+- `GET/PATCH /api/accounts/auth/profile/` - Get/update user profile
+- `GET /api/accounts/auth/activity/` - Get activity log
+- `GET /api/accounts/auth/security/` - Get security status
 
 ## Security Best Practices Implemented
 
@@ -153,7 +173,7 @@ Store sensitive data in environment variables:
 ## Incident Response
 
 ### Security Events
-1. **Failed Login Attempts**: Automatic lockout after 5 attempts
+1. **Failed Login Attempts**: Automatic lockout after 20 attempts/hour
 2. **Suspicious Activity**: Logged and monitored
 3. **Session Anomalies**: Automatic session invalidation
 4. **Rate Limit Violations**: Temporary IP blocking

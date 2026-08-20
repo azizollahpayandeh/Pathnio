@@ -19,15 +19,13 @@ npm run start
 
 ## How data works
 
-The app is self-contained: all fleet data is kept in a reactive
-`localStorage`-backed store (`src/lib/store.ts`) with seed data
-(`src/lib/seed.ts`), and auth is handled client-side (`src/lib/auth.ts`). Every
-create / edit / delete persists across reloads.
+All fleet data (vehicles, drivers, trips, expenses, alerts) comes from the
+Django REST API in `../backend` — there is no local-storage store or seed
+data. `src/lib/api-data.ts` holds the API hooks + CRUD calls, and
+`src/lib/auth.ts` handles real JWT login/refresh/session.
 
-Demo login: **demo@pathnio.com** / **demo1234** (or click _“Use demo account”_).
-
-To connect a real backend instead, set `NEXT_PUBLIC_API_BASE_URL` and use the
-Django REST API in `../backend`.
+On `localhost` the app talks to `http://localhost:8000`; in production it
+targets the deployed backend. See `src/app/api.ts` for the base URL.
 
 ## Structure
 
@@ -35,5 +33,6 @@ Django REST API in `../backend`.
 src/
 ├── app/          # App Router routes (landing, auth, dashboard/*)
 ├── components/   # UI primitives, modals, widgets
-└── lib/          # store, auth, types, seed data
+├── i18n/         # English + Persian locales
+└── lib/          # api-data (data layer), auth, types
 ```

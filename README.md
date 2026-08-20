@@ -6,21 +6,24 @@ expenses and get beautiful analytics — all from one polished dashboard.
 
 **Live demo:** https://pathnio-atzv.vercel.app
 
-> Demo login → **demo@pathnio.com** / **demo1234** (or just click _“Use demo account”_ on the login page).
+> Fleet data is real and multi-tenant now — sign up for a free company
+> account from the login page to try it (there's no shared demo login).
 
 ---
 
 ## ✨ Features
 
-- **Live map** — real-time vehicle positions with moving / stopped / offline states (Leaflet + OpenStreetMap)
+- **Live map** — real-time vehicle positions with moving / stopped / offline states (Leaflet + OpenStreetMap), polled from the API
 - **Vehicles** — full CRUD, fuel levels, odometer, status, per-vehicle detail pages
-- **Drivers** — team management with ratings, trip history and profiles
+- **Drivers** — team management with ratings, trip history, profiles, and invite-based mobile activation
 - **Trips** — schedule, track and complete journeys with cargo & revenue
 - **Expenses** — fuel, maintenance, tolls, insurance and salary tracking
 - **Reports** — revenue vs. expenses, expense breakdown and top-vehicle charts (Chart.js)
-- **Alerts** — prioritized notifications with unread counts and mark-as-read
-- **Support, Subscription, Admin & Settings** — tickets, plans, user management and preferences
-- **Auth** — company registration and sign-in
+- **Alerts** — derived from real fleet conditions (offline vehicles, low fuel, maintenance), with unread counts and mark-as-read
+- **Support, Subscription, Admin & Settings** — tickets, plan limits, user management and per-company preferences
+- **Auth** — company registration and sign-in over JWT, multi-tenant with role-based access (owner / driver / platform admin)
+- **i18n** — full English + Persian (RTL) localization
+- **Driver mobile app** — Android/iOS app (Expo) drivers use to activate their account and stream background GPS telemetry
 - **Design** — a cohesive design system with soft shadows, gradients, glassmorphism and smooth motion; fully responsive
 
 ## 🧱 Tech stack
@@ -28,24 +31,17 @@ expenses and get beautiful analytics — all from one polished dashboard.
 | Layer | Stack |
 |------|-------|
 | Frontend | Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS v4, Framer Motion, Chart.js, Leaflet |
-| Backend  | Django 5, Django REST Framework, SimpleJWT, Djoser |
+| Backend  | Django 5, Django REST Framework, SimpleJWT, Djoser, Neon PostgreSQL |
+| Mobile   | Expo SDK 57 (React Native), expo-location + expo-task-manager for background GPS |
 
 ## 🏗️ Architecture
 
-The frontend is a **self-contained application**. All fleet data (vehicles,
-drivers, trips, expenses, alerts) lives in a small reactive store
-(`frontend/src/lib/store.ts`) backed by `localStorage`, and authentication is
-handled client-side (`frontend/src/lib/auth.ts`). This makes the deployed demo
-fully functional and persistent in the browser — every create / edit / delete
-survives reloads — with no server dependency, which is ideal for a serverless
-host like Vercel.
-
-The repository also ships a complete **Django REST API** (`backend/`) with
-models, serializers and company-scoped viewsets for `Company`, `Driver`,
-`Vehicle`, `Trip`, `Expense`, `Alert`, support tickets and user management. It's
-ready for self-hosting when you want a persistent multi-user backend — point the
-frontend at it via `NEXT_PUBLIC_API_BASE_URL` and swap the local store for the
-API layer.
+Three real, connected apps — a Next.js dashboard, a Django/DRF API, and an
+Expo driver app — all backed by one multi-tenant Postgres database. There is
+no local-storage demo mode or seed data; every environment talks to the live
+API. See **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** for the full
+breakdown (auth & multi-tenancy, driver invitation/activation, telemetry,
+status engine, deployment).
 
 ## 🚀 Getting started
 
@@ -54,37 +50,49 @@ API layer.
 ```bash
 cd frontend
 npm install
-npm run dev        # http://localhost:3000
+npm run dev        # http://localhost:3000, talks to localhost:8000
 ```
 
-### Backend (optional, for self-hosting)
+### Backend
 
 ```bash
 cd backend
-python -m venv env && source env/bin/activate   # Windows: env\Scripts\activate
+python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-python manage.py migrate
-python manage.py runserver   # http://localhost:8000
+DEBUG=True ALLOWED_HOSTS='*' python manage.py migrate
+DEBUG=True ALLOWED_HOSTS='*' python manage.py runserver   # http://localhost:8000
+python manage.py test accounts   # run the test suite
+```
+
+### Mobile (driver app)
+
+```bash
+cd mobile
+npm install
+npx expo run:android   # background location needs a dev/EAS build, not Expo Go
 ```
 
 ## ☁️ Deployment
 
-The frontend deploys to **Vercel** (root directory `frontend/`). Pushing to the
-default branch triggers an automatic production deployment.
+The frontend and backend each deploy to **Vercel** as separate projects (root
+directories `frontend/` and `backend/`). Pushing to `main` triggers an
+automatic production deployment for both — migrations do **not** auto-run on
+Vercel, so run them against the database manually after a schema change (see
+ARCHITECTURE.md §11).
 
-The backend can be deployed to any host that supports Django + a persistent
-database (set `DATABASE_URL`, `SECRET_KEY`, `DEBUG=False`, `ALLOWED_HOSTS` and
-`CORS_ALLOWED_ORIGINS`).
+The mobile app builds via EAS: `eas build -p android --profile preview`.
 
 ## 📁 Structure
 
 ```
-Pathnio1/
-├── frontend/            # Next.js app (the deployed product)
+Pathnio/
+├── frontend/            # Next.js dashboard
 │   └── src/
 │       ├── app/         # routes: landing, auth, dashboard/*
 │       ├── components/  # UI primitives, modals, widgets
-│       └── lib/         # store, auth, types, seed data
-└── backend/             # Django REST API (optional self-host)
-    └── accounts/        # models, serializers, views, urls
+│       └── lib/         # api-data (data layer), auth, types, i18n
+├── backend/              # Django REST API
+│   └── accounts/         # models, serializers, views, urls, tests
+└── mobile/               # Expo driver app
+    └── src/               # auth, api, location tracking, screens
 ```
