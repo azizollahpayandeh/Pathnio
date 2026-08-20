@@ -70,10 +70,10 @@ export default function AddTripModal({ isOpen, onClose, onAddTrip }: Props) {
       <form onSubmit={submit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label={tr("ui.origin")} required>
-            <input className="field" required value={form.origin} onChange={(e) => set("origin", e.target.value)} placeholder="Berlin" />
+            <input className="field" required value={form.origin} onChange={(e) => set("origin", e.target.value)} placeholder={tr("ui.e_g_berlin")} />
           </Field>
           <Field label={tr("ui.destination")} required>
-            <input className="field" required value={form.destination} onChange={(e) => set("destination", e.target.value)} placeholder="Hamburg" />
+            <input className="field" required value={form.destination} onChange={(e) => set("destination", e.target.value)} placeholder={tr("ui.e_g_hamburg")} />
           </Field>
           <Field label={tr("ui.driver")}>
             <select className="field" value={form.driver_ref ?? ""} onChange={(e) => set("driver_ref", e.target.value || null)}>
@@ -94,7 +94,7 @@ export default function AddTripModal({ isOpen, onClose, onAddTrip }: Props) {
             <input className="field" type="number" min={0} value={form.revenue} onChange={(e) => set("revenue", Number(e.target.value))} />
           </Field>
           <Field label={tr("ui.cargo")}>
-            <input className="field" value={form.cargo} onChange={(e) => set("cargo", e.target.value)} placeholder="Electronics" />
+            <input className="field" value={form.cargo} onChange={(e) => set("cargo", e.target.value)} placeholder={tr("ui.e_g_electronics")} />
           </Field>
           <Field label={tr("ui.status")}>
             <select className="field" value={form.status} onChange={(e) => set("status", e.target.value)}>
