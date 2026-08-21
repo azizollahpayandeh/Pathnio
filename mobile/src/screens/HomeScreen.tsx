@@ -114,6 +114,13 @@ export default function HomeScreen() {
     (async () => {
       if (!trk || trk.status === "PERMISSION_MISSING" || trk.status === "GPS_DISABLED") {
         setSpeedKmh(null);
+        // Permission/GPS just went away — this subscription would otherwise
+        // keep running (and draining battery) for as long as Home stays
+        // mounted, since only unmount used to tear it down.
+        if (watcher.current) {
+          watcher.current.remove();
+          watcher.current = null;
+        }
         return;
       }
       if (watcher.current) return; // already watching
@@ -128,6 +135,12 @@ export default function HomeScreen() {
             );
           }
         );
+        if (cancelled) {
+          // Status changed again while we were awaiting the subscription —
+          // don't leak it, and don't let it clobber a newer watcher.
+          sub.remove();
+          return;
+        }
         watcher.current = sub;
       } catch {
         /* speed readout is optional — never break the screen */

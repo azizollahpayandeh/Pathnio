@@ -84,6 +84,9 @@ TaskManager.defineTask(LOCATION_TASK, async ({ data, error }) => {
       heading: loc.coords.heading ?? null,
       accuracy: loc.coords.accuracy ?? null,
       altitude: loc.coords.altitude ?? null,
+      // Known gap: no battery integration yet (would need the expo-battery
+      // dependency, not currently installed), so server-side low-battery
+      // alerting can't work off this field. Left null rather than faked.
       battery: null,
       is_moving: speed > 0.5,
       recorded_at: new Date(loc.timestamp).toISOString(),

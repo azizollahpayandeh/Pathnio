@@ -5,6 +5,7 @@
  */
 import React, {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -15,11 +16,11 @@ import {
   register as apiRegister,
   activate as apiActivate,
   fetchDriverContext,
+  setSessionExpiredListener,
   DriverContext,
 } from "./api";
 import { clearTokens, getAccessToken, getUser, StoredUser } from "./storage";
 import { reconcileTracking, stopTracking } from "./location/tracker";
-import { setOnDuty } from "./storage";
 
 type AuthState = {
   user: StoredUser | null;
@@ -40,6 +41,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<StoredUser | null>(null);
   const [ctx, setCtx] = useState<DriverContext | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Shared logout path: used for a manual sign-out AND for a session that
+  // api.ts has determined is definitively over (refresh token rejected), so
+  // an expired session always lands the driver back on the login screen
+  // instead of failing silently mid-shift.
+  const doLogout = useCallback(async () => {
+    await stopTracking();
+    await clearTokens();
+    setUser(null);
+    setCtx(null);
+  }, []);
+
+  // Let api.ts force this same logout path when a refresh is definitively
+  // rejected by the backend (as opposed to a transient network failure).
+  useEffect(() => {
+    setSessionExpiredListener(doLogout);
+    return () => setSessionExpiredListener(null);
+  }, [doLogout]);
 
   // Restore session on launch, then re-verify activation with the backend.
   useEffect(() => {
@@ -90,15 +109,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       refreshContext: async () => {
         setCtx(await fetchDriverContext());
       },
-      signOut: async () => {
-        await stopTracking();
-        await setOnDuty(false);
-        await clearTokens();
-        setUser(null);
-        setCtx(null);
-      },
+      signOut: doLogout,
     }),
-    [user, ctx, loading]
+    [user, ctx, loading, doLogout]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

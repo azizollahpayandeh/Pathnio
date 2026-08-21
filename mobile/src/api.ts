@@ -100,16 +100,59 @@ export async function register(
   return { user, activated: !!data.activated, driver: data.driver, company: data.company };
 }
 
+/**
+ * Fired when a refresh attempt is DEFINITIVELY rejected by the server (as
+ * opposed to a transient network failure) — i.e. the session is genuinely
+ * over, not just temporarily unreachable. AuthProvider registers a listener
+ * that runs the same logout path as the app's bootstrap check, so an
+ * expired session gets a clear "please log in again" instead of the driver
+ * seeing silent, repeated "could not update" alerts for the rest of the
+ * shift. Left null (a harmless no-op) when nothing is listening, e.g. from
+ * the headless background task, which has no UI to redirect.
+ */
+type SessionExpiredListener = () => void;
+let sessionExpiredListener: SessionExpiredListener | null = null;
+export function setSessionExpiredListener(listener: SessionExpiredListener | null) {
+  sessionExpiredListener = listener;
+}
+
+// Shared by every concurrent caller so a refresh token that the backend
+// single-uses/rotates is only ever redeemed once per expiry — without this,
+// authedRequest() and uploadPings() hitting a 401 at the same moment would
+// each fire their own refresh call with the same (soon-to-be-invalid) token,
+// and the losing call would fail needlessly.
+let refreshPromise: Promise<string | null> | null = null;
+
 /** Exchange the stored refresh token for a fresh access token. */
-async function refreshAccess(): Promise<string | null> {
+function refreshAccess(): Promise<string | null> {
+  if (refreshPromise) return refreshPromise;
+  refreshPromise = doRefresh().finally(() => {
+    refreshPromise = null;
+  });
+  return refreshPromise;
+}
+
+async function doRefresh(): Promise<string | null> {
   const refresh = await getRefreshToken();
   if (!refresh) return null;
-  const res = await fetch(`${API_PREFIX}/auth/token/refresh/`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ refresh }),
-  });
-  if (!res.ok) return null;
+
+  let res: Response;
+  try {
+    res = await fetch(`${API_PREFIX}/auth/token/refresh/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refresh }),
+    });
+  } catch {
+    return null; // transient network failure — session may still be valid
+  }
+
+  if (!res.ok) {
+    // The refresh token itself was rejected (expired/rotated/revoked): the
+    // session is over, not just offline.
+    sessionExpiredListener?.();
+    return null;
+  }
   const data = await res.json().catch(() => ({}));
   if (!data?.access) return null;
   await saveAccessToken(data.access);
@@ -203,12 +246,15 @@ export type TripActionResult = {
 async function jsonOrThrow(res: Response, fallback: string) {
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    const detail =
+    // Raw serializer text (e.g. "This field is required.") reads like a bug
+    // report to a driver with no surrounding context — frame it as ours
+    // rather than surfacing it bare, while keeping the useful detail.
+    const raw =
       data?.detail ||
       (typeof data === "object" && data
         ? (Object.values(data).flat()[0] as string)
-        : null) ||
-      fallback;
+        : null);
+    const detail = raw ? `Couldn't submit: ${raw}` : fallback;
     throw new ApiError(res.status, String(detail));
   }
   return data;

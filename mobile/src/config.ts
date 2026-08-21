@@ -48,7 +48,6 @@ export const KEYS = {
   access: "pathnio_access",
   refresh: "pathnio_refresh",
   user: "pathnio_user",
-  duty: "pathnio_on_duty",
   queue: "pathnio_ping_queue",
   lastSync: "pathnio_last_sync", // ISO time of the last successful upload
   lastFix: "pathnio_last_fix",   // previous fix, for speed fallback
