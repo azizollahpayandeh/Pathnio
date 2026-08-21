@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import type { LatLngExpression } from "leaflet";
 import type { LiveVehicle } from "@/lib/api-data";
 import { useT, useTValue } from "@/i18n";
+import { useUnits } from "@/lib/format";
 
 export type { LiveVehicle } from "@/lib/api-data";
 
@@ -103,6 +104,7 @@ function Inner({ useMap, vehicles, focusId }: any) {
 export default function LiveTrackMap({ vehicles, focusId }: { vehicles: LiveVehicle[]; focusId?: number | null }) {
   const tr = useT();
   const tv = useTValue();
+  const { speed } = useUnits();
   const [isClient, setIsClient] = useState(false);
   const [icons, setIcons] = useState<Record<string, unknown>>({});
 
@@ -186,7 +188,7 @@ export default function LiveTrackMap({ vehicles, focusId }: { vehicles: LiveVehi
               <div className="text-slate-600 mb-0.5">{tr("ui.driver")} <span className="font-semibold">{v.driver?.full_name || tr("ui.unassigned")}</span></div>
               <div className="mb-0.5">{tr("ui.status")} <span className="font-semibold">{tv(v.live_status)}</span></div>
               {v.live_status === "MOVING" || v.live_status === "STOPPED" ? (
-                <div className="mb-0.5">{tr("ui.speed")} <span className="font-mono text-violet-700">{v.speed} km/h</span></div>
+                <div className="mb-0.5">{tr("ui.speed")} <span className="font-mono text-violet-700">{speed(v.speed)}</span></div>
               ) : (
                 // Not currently reporting: the pin is a historical fix, so say so.
                 <div className="mb-0.5 text-amber-700 font-semibold">
@@ -201,7 +203,7 @@ export default function LiveTrackMap({ vehicles, focusId }: { vehicles: LiveVehi
             <Tooltip direction="top" offset={[0, -22]} opacity={0.95}>
               {v.plate_number}
               {v.live_status === "MOVING" || v.live_status === "STOPPED"
-                ? ` · ${v.speed} km/h`
+                ? ` · ${speed(v.speed)}`
                 : ` · ${tr("liveMap.lastKnownPosition")}`}
             </Tooltip>
           </Marker>

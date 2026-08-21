@@ -287,6 +287,10 @@ body {
 /* The language dropdown anchors to the correct edge in both directions */
 [dir="rtl"] .end-0 { right: auto; left: 0; }
 
+/* The live-map vehicle-counters overlay anchors to the correct edge in RTL too,
+   so it doesn't collide with the map's zoom control or drift off-screen. */
+[dir="rtl"] .live-map-counters { right: auto; left: 0.75rem; }
+
 /* The .field base class sets its own horizontal padding, which out-specifies
    the ps-10 utility and made the placeholder sit underneath the search icon.
    Re-assert the inline-start padding for icon inputs (works in LTR and RTL). */
