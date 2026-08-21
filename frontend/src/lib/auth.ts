@@ -138,34 +138,36 @@ export function getCurrentUser(): User | null {
   }
 }
 
-// Best-effort profile update: patch the backend company profile and refresh
-// the locally cached user.
+// Patch the backend company profile and only refresh the locally cached user
+// once the server confirms the change. On failure, throw so the caller can
+// show a real error instead of a false "saved" state.
 export async function updateProfile(patch: Partial<User>) {
   if (!isBrowser()) return;
   const access = window.localStorage.getItem(ACCESS_KEY);
   const current = getCurrentUser();
   const merged = { ...(current || {}), ...patch } as User;
-  window.localStorage.setItem(USER_KEY, JSON.stringify(merged));
-  emit();
+
   if (access) {
-    try {
-      await fetch(`${API_BASE_URL}/api/accounts/company/me/`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${access}`,
-        },
-        body: JSON.stringify({
-          company_name: patch.company_name,
-          manager_full_name: patch.manager_full_name,
-          phone: patch.phone,
-          address: patch.address,
-        }),
-      });
-    } catch {
-      /* keep local update even if the network call fails */
+    const res = await fetch(`${API_BASE_URL}/api/accounts/company/me/`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${access}`,
+      },
+      body: JSON.stringify({
+        company_name: patch.company_name,
+        manager_full_name: patch.manager_full_name,
+        phone: patch.phone,
+        address: patch.address,
+      }),
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data?.detail || "Could not update profile.");
     }
   }
+  window.localStorage.setItem(USER_KEY, JSON.stringify(merged));
+  emit();
 }
 
 export function useAuth(): { user: User | null; ready: boolean } {

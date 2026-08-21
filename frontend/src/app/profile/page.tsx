@@ -47,19 +47,27 @@ export default function ProfilePage() {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = () => {
+    reader.onload = async () => {
       const url = reader.result as string;
-      setPhoto(url);
-      updateProfile({ profile_photo: url });
-      setAlert({ type: "success", msg: "Photo updated." });
+      try {
+        await updateProfile({ profile_photo: url });
+        setPhoto(url);
+        setAlert({ type: "success", msg: "Photo updated." });
+      } catch (err) {
+        setAlert({ type: "error", msg: err instanceof Error ? err.message : "Could not update photo." });
+      }
     };
     reader.readAsDataURL(file);
   };
 
-  const save = (e: React.FormEvent) => {
+  const save = async (e: React.FormEvent) => {
     e.preventDefault();
-    updateProfile(form);
-    setAlert({ type: "success", msg: "Profile saved successfully." });
+    try {
+      await updateProfile(form);
+      setAlert({ type: "success", msg: "Profile saved successfully." });
+    } catch (err) {
+      setAlert({ type: "error", msg: err instanceof Error ? err.message : "Could not save profile." });
+    }
   };
 
   const initial = (form.company_name || form.manager_full_name || "P").charAt(0).toUpperCase();
