@@ -657,10 +657,12 @@ class CompanyMeView(APIView):
                 return Response(response_serializer.data)
                 
             except Exception as e:
+                # Log the real exception server-side only — never echo str(e)
+                # to the client, which can leak internal details (DB schema,
+                # file paths, etc).
                 logger.error(f"Error saving company profile: {e}")
                 return Response({
                     'detail': 'Failed to update profile. Please try again.',
-                    'error': str(e)
                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             logger.error(f"Company profile update validation errors: {serializer.errors}")
