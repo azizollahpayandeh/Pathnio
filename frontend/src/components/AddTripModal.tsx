@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Route } from "lucide-react";
 import { Modal, Field } from "./ui";
 import { useDrivers, useVehicles } from "@/lib/api-data";
+import { toast } from "./Toast";
 import { useT, useTValue } from "@/i18n";
 
 export type NewTrip = {
@@ -33,6 +34,7 @@ export default function AddTripModal({ isOpen, onClose, onAddTrip }: Props) {
   const { data: drivers } = useDrivers();
   const { data: vehicles } = useVehicles();
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState<NewTrip>({
     origin: "",
     destination: "",
@@ -51,6 +53,7 @@ export default function AddTripModal({ isOpen, onClose, onAddTrip }: Props) {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
     setSaving(true);
     try {
       await onAddTrip({
@@ -59,7 +62,17 @@ export default function AddTripModal({ isOpen, onClose, onAddTrip }: Props) {
         vehicle_ref: form.vehicle_ref || null,
         start_time: new Date(form.start_time).toISOString(),
       });
-      onClose();
+      onClose(); // only close on real success
+    } catch (err: unknown) {
+      const detail =
+        (err as { response?: { data?: Record<string, unknown> } })?.response?.data;
+      const first =
+        detail && typeof detail === "object"
+          ? Object.values(detail).flat()[0]
+          : undefined;
+      const msg = (first as string) || tr("ui.could_not_save_the_trip");
+      setError(msg);
+      toast.error(msg);
     } finally {
       setSaving(false);
     }
@@ -105,6 +118,11 @@ export default function AddTripModal({ isOpen, onClose, onAddTrip }: Props) {
             <input className="field" type="datetime-local" value={form.start_time.slice(0, 16)} onChange={(e) => set("start_time", e.target.value)} />
           </Field>
         </div>
+        {error && (
+          <p className="text-sm text-rose-600 bg-rose-50 border border-rose-100 rounded-xl px-3 py-2">
+            {error}
+          </p>
+        )}
         <div className="flex justify-end gap-3 pt-2">
           <button type="button" onClick={onClose} className="btn btn-ghost">{tr("ui.cancel")}</button>
           <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? tr("ui.saving") : tr("ui.add_trip")}</button>
