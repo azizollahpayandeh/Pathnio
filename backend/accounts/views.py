@@ -220,24 +220,26 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                     priority='high',
                     request=request
                 )
-            # Improved error message
+            # Generic message for both cases — never reveal whether the
+            # username exists (that alone lets an attacker enumerate valid
+            # accounts before attempting to brute-force a password).
             if not user_obj:
                 logger.warning(f"Login attempt with non-existent username: {username}")
-                return Response({
-                    'detail': 'The entered username does not exist.',
-                    'code': 'user_not_found',
-                }, status=status.HTTP_401_UNAUTHORIZED)
             else:
                 logger.warning(f"Failed login attempt for user: {username}")
-                return Response({
-                    'detail': 'The password is incorrect. Please try again.',
-                    'code': 'invalid_password',
-                }, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({
+                'detail': 'Invalid username or password.',
+                'code': 'invalid_credentials',
+            }, status=status.HTTP_401_UNAUTHORIZED)
 
 # Authentication Views
 class LoginView(APIView):
     permission_classes = [AllowAny]
-    
+    # Same scope as CustomTokenObtainPairView: DRF's ScopedRateThrottle keys
+    # anonymous requests by IP, so this also caps password-spraying from a
+    # single IP across many usernames (10/min, see settings.REST_FRAMEWORK).
+    throttle_scope = 'login'
+
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
@@ -323,18 +325,14 @@ class LoginView(APIView):
                 # Record failed login attempt (even if user does not exist)
                 record_login_attempt(username, ip_address, user_agent, False, user_obj)
                 
-                # Improved error message
-                if not user_obj:
-                    return Response({
-                        'detail': 'The entered username does not exist.',
-                        'code': 'user_not_found',
-                    }, status=status.HTTP_401_UNAUTHORIZED)
-                else:
-                    return Response({
-                        'detail': 'The password is incorrect. Please try again.',
-                        'code': 'invalid_password',
-                    }, status=status.HTTP_401_UNAUTHORIZED)
-        
+                # Generic message for both cases — never reveal whether the
+                # username exists (see CustomTokenObtainPairView for the same
+                # fix on the JWT login endpoint).
+                return Response({
+                    'detail': 'Invalid username or password.',
+                    'code': 'invalid_credentials',
+                }, status=status.HTTP_401_UNAUTHORIZED)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LogoutView(APIView):

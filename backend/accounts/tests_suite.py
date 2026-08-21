@@ -1,7 +1,11 @@
 """Phase 25 — regression coverage for areas not covered by the focused suites:
 JWT refresh, expenses, alerts, settings, live-map API, cross-tenant telemetry."""
+from unittest.mock import patch
+
 from django.contrib.auth.models import User
+from django.core.cache import cache as django_cache
 from rest_framework.test import APITestCase
+from rest_framework.throttling import ScopedRateThrottle
 
 from accounts.models import (
     Company, Driver, Vehicle, Membership, DriverVehicleAssignment,
@@ -108,3 +112,41 @@ class CrossTenantTelemetryTests(TwoCompanies):
         self.assertIsNone(vb.lat)
         self.assertIsNone(vb.lng)
         self.assertIsNone(vb.last_seen_at)
+
+
+class LoginSecurityTests(TwoCompanies):
+    """Both login endpoints must (a) give a generic, non-enumerating error for
+    both 'unknown username' and 'wrong password', and (b) share the same
+    IP-keyed 'login' throttle scope, so a single IP is capped regardless of
+    how many different usernames it tries."""
+
+    def tearDown(self):
+        django_cache.clear()
+
+    def test_unified_error_code_for_bad_username_and_bad_password(self):
+        for url in ("/api/accounts/auth/login/", "/api/auth/token/login/"):
+            r_unknown = self.client.post(url, {"username": "no-such-user", "password": "x"},
+                                         format="json")
+            r_wrongpw = self.client.post(url, {"username": "oa", "password": "wrong"},
+                                        format="json")
+            self.assertEqual(r_unknown.status_code, 401)
+            self.assertEqual(r_wrongpw.status_code, 401)
+            self.assertEqual(r_unknown.json()["code"], "invalid_credentials")
+            self.assertEqual(r_wrongpw.json()["code"], "invalid_credentials")
+            self.assertEqual(r_unknown.json()["detail"], r_wrongpw.json()["detail"])
+
+    def test_ip_wide_throttle_caps_password_spray_across_usernames_and_endpoints(self):
+        # Test settings null out DEFAULT_THROTTLE_RATES so the suite doesn't
+        # false-trip; temporarily restore a tiny rate to prove the mechanism.
+        with patch.object(ScopedRateThrottle, 'THROTTLE_RATES', {'login': '2/min'}):
+            r1 = self.client.post("/api/accounts/auth/login/",
+                                  {"username": "attacker1", "password": "x"}, format="json")
+            r2 = self.client.post("/api/auth/token/login/",
+                                  {"username": "attacker2", "password": "x"}, format="json")
+            # Same IP, third DIFFERENT username, third distinct endpoint call
+            # -> must be capped even though no username repeats.
+            r3 = self.client.post("/api/accounts/auth/login/",
+                                  {"username": "attacker3", "password": "x"}, format="json")
+        self.assertEqual(r1.status_code, 401)
+        self.assertEqual(r2.status_code, 401)
+        self.assertEqual(r3.status_code, 429)
