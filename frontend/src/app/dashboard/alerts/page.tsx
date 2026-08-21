@@ -2,7 +2,7 @@
 import { useState, useMemo } from "react";
 import {
   Bell, AlertTriangle, CheckCircle, Info, Search, Clock,
-  Check, Trash2, CheckCheck, ShieldAlert,
+  Check, CheckCheck, ShieldAlert,
 } from "lucide-react";
 import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
 import { useFleetAlerts, acknowledgeAlert } from "@/lib/api-data";
@@ -12,14 +12,14 @@ import { useT, useTValue } from "@/i18n";
 const tone: Record<AlertPriority, string> = { low: "gray", medium: "blue", high: "amber", critical: "red" };
 const icon: Record<AlertPriority, typeof Info> = { low: Info, medium: Bell, high: AlertTriangle, critical: ShieldAlert };
 
-function timeAgo(iso: string) {
+function timeAgo(iso: string, tr: (key: string, vars?: Record<string, string | number>) => string) {
   const diff = Date.now() - new Date(iso).getTime();
   const m = Math.floor(diff / 60000);
-  if (m < 1) return "just now";
-  if (m < 60) return `${m}m ago`;
+  if (m < 1) return tr("ui.time_just_now");
+  if (m < 60) return tr("ui.time_minutes_ago", { m });
   const h = Math.floor(m / 60);
-  if (h < 24) return `${h}h ago`;
-  return `${Math.floor(h / 24)}d ago`;
+  if (h < 24) return tr("ui.time_hours_ago", { h });
+  return tr("ui.time_days_ago", { d: Math.floor(h / 24) });
 }
 
 export default function AlertsPage() {
@@ -101,17 +101,14 @@ export default function AlertsPage() {
                     {!a.read && <span className="w-2 h-2 rounded-full bg-violet-500" />}
                   </div>
                   <p className="text-slate-600 text-sm mt-0.5">{a.message}</p>
-                  <span className="text-xs text-slate-400 mt-1 inline-block">{timeAgo(a.timestamp)}</span>
+                  <span className="text-xs text-slate-400 mt-1 inline-block">{timeAgo(a.timestamp, tr)}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   {!a.read && (
-                    <button onClick={() => ack(a.id)} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-emerald-50 hover:text-emerald-600 transition" title={tr("ui.mark_read")}>
+                    <button onClick={() => ack(a.id)} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-emerald-50 hover:text-emerald-600 transition" title={tr("ui.mark_read")} aria-label={tr("ui.mark_read")}>
                       <Check className="w-4 h-4" />
                     </button>
                   )}
-                  <button onClick={() => ack(a.id)} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition" title={tr("ui.delete")}>
-                    <Trash2 className="w-4 h-4" />
-                  </button>
                 </div>
               </div>
             );
