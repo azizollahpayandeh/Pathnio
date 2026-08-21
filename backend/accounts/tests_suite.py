@@ -115,6 +115,44 @@ class CrossTenantTelemetryTests(TwoCompanies):
         self.assertIsNone(vb.last_seen_at)
 
 
+class VehicleMassAssignmentTests(TwoCompanies):
+    """Server-owned telemetry must never be settable through the normal
+    vehicle CRUD endpoint — only via the dedicated /locations/ ingest path."""
+
+    def test_patch_cannot_change_telemetry_fields(self):
+        v = Vehicle.objects.create(company=self.ca, plate_number="A-1", vehicle_type="Van",
+                                   lat=10.0, lng=20.0, speed=5, fuel_level=80, odometer=1000)
+        self.client.force_authenticate(self.oa)
+        r = self.client.patch(f"/api/accounts/vehicles/{v.id}/", {
+            "lat": 99.9, "lng": 99.9, "speed": 999,
+            "fuel_level": 1, "odometer": 999999,
+            "plate_number": "A-1-RENAMED",
+        }, format="json")
+        self.assertEqual(r.status_code, 200, r.content)
+        v.refresh_from_db()
+        # Telemetry is untouched...
+        self.assertEqual(v.lat, 10.0)
+        self.assertEqual(v.lng, 20.0)
+        self.assertEqual(v.speed, 5)
+        self.assertEqual(v.fuel_level, 80)
+        self.assertEqual(v.odometer, 1000)
+        # ...but a legitimate, non-telemetry field still updates normally.
+        self.assertEqual(v.plate_number, "A-1-RENAMED")
+
+    def test_create_ignores_client_supplied_telemetry(self):
+        self.client.force_authenticate(self.oa)
+        r = self.client.post("/api/accounts/vehicles/", {
+            "plate_number": "NEW-9", "vehicle_type": "Van",
+            "lat": 5.0, "lng": 6.0, "speed": 42, "fuel_level": 3,
+        }, format="json")
+        self.assertEqual(r.status_code, 201, r.content)
+        v = Vehicle.objects.get(plate_number="NEW-9")
+        self.assertIsNone(v.lat)
+        self.assertIsNone(v.lng)
+        self.assertEqual(v.speed, 0)
+        self.assertEqual(v.fuel_level, 100)  # model default, not the client's "3"
+
+
 class LoginSecurityTests(TwoCompanies):
     """Both login endpoints must (a) give a generic, non-enumerating error for
     both 'unknown username' and 'wrong password', and (b) share the same
@@ -151,6 +189,23 @@ class LoginSecurityTests(TwoCompanies):
         self.assertEqual(r1.status_code, 401)
         self.assertEqual(r2.status_code, 401)
         self.assertEqual(r3.status_code, 429)
+
+
+class CompanyRegistrationErrorRecoveryTests(APITestCase):
+    """If Company creation fails after the User was already created, the view
+    must return a clean 400 (with the user cleaned up), not a 500 from
+    TransactionManagementError."""
+
+    def test_company_create_failure_yields_400_and_cleans_up_user(self):
+        with patch("accounts.serializers.Company.objects.create",
+                  side_effect=Exception("boom")):
+            r = self.client.post("/api/accounts/register/company/", {
+                "user": {"username": "willfail", "email": "willfail@example.com",
+                         "password": "pw123456"},
+                "company_name": "WillFail Co", "manager_full_name": "M", "phone": "1",
+            }, format="json")
+        self.assertEqual(r.status_code, 400, r.content)
+        self.assertFalse(User.objects.filter(username="willfail").exists())
 
 
 class TelemetryDedupRaceTests(TwoCompanies):
