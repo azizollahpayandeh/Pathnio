@@ -1,8 +1,13 @@
+import logging
+
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
+from django.db import transaction
 from .models import Company, Driver, ContactMessage, SiteSettings, Profile, Alert, Vehicle, Trip, Expense, LocationPing, DriverInvitation, Cargo, FleetAlert, CompanySettings
 from djoser.serializers import UserSerializer as DjoserUserSerializer, UserCreateSerializer as DjoserUserCreateSerializer
+
+logger = logging.getLogger(__name__)
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -138,23 +143,33 @@ class CompanySerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # Extract user data
         user_data = validated_data.pop('user')
-        
+
         # Remove password_retype if present
         user_data.pop('password_retype', None)
-        
+
+        # Create the user first
+        user = User.objects.create_user(**user_data)
+
         try:
-            # Create the user first
-            user = User.objects.create_user(**user_data)
-            
-            # Create the company profile
-            company = Company.objects.create(user=user, **validated_data)
-            
+            # Company creation runs in its own savepoint (nested atomic). The
+            # caller (CompanyRegisterView) already wraps this whole call in an
+            # outer transaction.atomic(); without this nested block, a failure
+            # here would mark that outer transaction "needs rollback", and the
+            # user.delete() below would then raise TransactionManagementError
+            # instead of cleaning up — turning a clean 400 into a 500.
+            with transaction.atomic():
+                company = Company.objects.create(user=user, **validated_data)
             return company
         except Exception as e:
-            # If user was created but company creation failed, delete the user
-            if 'user' in locals():
-                user.delete()
-            raise serializers.ValidationError(f'Failed to create company: {str(e)}')
+            # If user was created but company creation failed, delete the
+            # user. The nested atomic() above rolled back to its own
+            # savepoint on failure, so the outer transaction is still healthy
+            # and this delete can run cleanly.
+            logger.error("Company creation failed after user %s was created: %s",
+                        user.username, e)
+            user.delete()
+            raise serializers.ValidationError(
+                'Failed to create company. Please try again.')
 
     def to_representation(self, instance):
         """Custom representation for the response"""
@@ -248,12 +263,24 @@ class DriverSerializer(serializers.ModelSerializer):
             AVAILABLE, ON_TRIP, DRIVER_OFFLINE, DRIVER_INACTIVE,
         )
         from .models import Trip, DriverVehicleAssignment
-        has_active_trip = Trip.objects.filter(driver_ref=obj, status="ACTIVE").exists()
-        assignment = (
-            DriverVehicleAssignment.objects
-            .filter(driver=obj, is_active=True)
-            .select_related("vehicle").first()
-        )
+        # The driver list/viewset prefetch these onto the queryset (see
+        # DriverListView / DriverViewSet) as '_prefetched_active_trips' /
+        # '_prefetched_active_assignments' so this doesn't re-query per row
+        # (N+1 on the driver list). Fall back to a direct query for any
+        # caller that hands in a plain, unprefetched Driver instance.
+        if hasattr(obj, '_prefetched_active_trips'):
+            has_active_trip = bool(obj._prefetched_active_trips)
+        else:
+            has_active_trip = Trip.objects.filter(driver_ref=obj, status="ACTIVE").exists()
+        if hasattr(obj, '_prefetched_active_assignments'):
+            assignment = (obj._prefetched_active_assignments[0]
+                          if obj._prefetched_active_assignments else None)
+        else:
+            assignment = (
+                DriverVehicleAssignment.objects
+                .filter(driver=obj, is_active=True)
+                .select_related("vehicle").first()
+            )
         vehicle = assignment.vehicle if assignment else None
         _, offline_timeout = company_thresholds(obj.company)
         raw = driver_status(obj, has_active_trip, vehicle, offline_timeout)
@@ -324,10 +351,22 @@ class VehicleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vehicle
         fields = '__all__'
-        read_only_fields = ('id', 'company', 'created_at')
+        # lat/lng/speed/last_seen_at/fuel_level/odometer are server-owned
+        # telemetry — set ONLY by LocationIngestView / driver_ops from real GPS
+        # fixes and DVIR odometer readings. A company member must never be
+        # able to fake a vehicle's position/speed/fuel via a normal PATCH —
+        # that would defeat the whole "server owns telemetry" design
+        # (docs/ARCHITECTURE.md §8).
+        read_only_fields = ('id', 'company', 'created_at',
+                            'lat', 'lng', 'speed', 'last_seen_at',
+                            'fuel_level', 'odometer')
 
     def get_assigned_driver(self, obj):
-        a = obj.assignments.filter(is_active=True).select_related('driver').first()
+        # obj.assignments is prefetched by the viewset (prefetch_related
+        # 'assignments__driver'); filtering in Python here (rather than
+        # obj.assignments.filter(...)) reuses that cache instead of firing a
+        # fresh query per vehicle on the list endpoint.
+        a = next((a for a in obj.assignments.all() if a.is_active), None)
         return {'id': a.driver_id, 'full_name': a.driver.full_name} if a else None
 
     def validate_plate_number(self, value):

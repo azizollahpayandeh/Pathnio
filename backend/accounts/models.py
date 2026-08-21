@@ -518,6 +518,8 @@ class FleetAlert(models.Model):
         LOW_FUEL = "LOW_FUEL", "Low fuel"
         SPEEDING = "SPEEDING", "Excessive speed"
         GPS_UNAVAILABLE = "GPS_UNAVAILABLE", "GPS unavailable"
+        INSPECTION_DEFECT = "INSPECTION_DEFECT", "Inspection defect"
+        INCIDENT = "INCIDENT", "Incident"
         OTHER = "OTHER", "Other"
 
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name="fleet_alerts")

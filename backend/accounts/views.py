@@ -9,7 +9,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.utils import timezone
-from django.db import transaction
+from django.db import transaction, IntegrityError
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -40,7 +40,10 @@ from .fleet_status import (
     vehicle_live_status, driver_status, company_thresholds, has_valid_position,
 )
 from .alerts_engine import refresh_fleet_alerts
-from .subscriptions import check_can_add, usage as subscription_usage, get_or_create_subscription
+from .subscriptions import (
+    check_can_add, usage as subscription_usage, get_or_create_subscription,
+    lock_subscription_for_plan_check,
+)
 from .models import Plan, Subscription
 from .tenancy import (
     company_for, role_for, is_owner,
@@ -220,24 +223,26 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                     priority='high',
                     request=request
                 )
-            # Improved error message
+            # Generic message for both cases — never reveal whether the
+            # username exists (that alone lets an attacker enumerate valid
+            # accounts before attempting to brute-force a password).
             if not user_obj:
                 logger.warning(f"Login attempt with non-existent username: {username}")
-                return Response({
-                    'detail': 'The entered username does not exist.',
-                    'code': 'user_not_found',
-                }, status=status.HTTP_401_UNAUTHORIZED)
             else:
                 logger.warning(f"Failed login attempt for user: {username}")
-                return Response({
-                    'detail': 'The password is incorrect. Please try again.',
-                    'code': 'invalid_password',
-                }, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({
+                'detail': 'Invalid username or password.',
+                'code': 'invalid_credentials',
+            }, status=status.HTTP_401_UNAUTHORIZED)
 
 # Authentication Views
 class LoginView(APIView):
     permission_classes = [AllowAny]
-    
+    # Same scope as CustomTokenObtainPairView: DRF's ScopedRateThrottle keys
+    # anonymous requests by IP, so this also caps password-spraying from a
+    # single IP across many usernames (10/min, see settings.REST_FRAMEWORK).
+    throttle_scope = 'login'
+
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
@@ -323,18 +328,14 @@ class LoginView(APIView):
                 # Record failed login attempt (even if user does not exist)
                 record_login_attempt(username, ip_address, user_agent, False, user_obj)
                 
-                # Improved error message
-                if not user_obj:
-                    return Response({
-                        'detail': 'The entered username does not exist.',
-                        'code': 'user_not_found',
-                    }, status=status.HTTP_401_UNAUTHORIZED)
-                else:
-                    return Response({
-                        'detail': 'The password is incorrect. Please try again.',
-                        'code': 'invalid_password',
-                    }, status=status.HTTP_401_UNAUTHORIZED)
-        
+                # Generic message for both cases — never reveal whether the
+                # username exists (see CustomTokenObtainPairView for the same
+                # fix on the JWT login endpoint).
+                return Response({
+                    'detail': 'Invalid username or password.',
+                    'code': 'invalid_credentials',
+                }, status=status.HTTP_401_UNAUTHORIZED)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LogoutView(APIView):
@@ -585,8 +586,12 @@ class DriverRegisterView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         company = company_for(self.request.user)
-        check_can_add(company, 'driver')  # enforce plan limit
+        # Lock the company's Subscription row for the whole check+create so
+        # two concurrent requests can't both pass check_can_add() before
+        # either has created a row (count-then-create race).
         with transaction.atomic():
+            lock_subscription_for_plan_check(company)
+            check_can_add(company, 'driver')  # enforce plan limit
             driver = serializer.save(company=company)
             # Only profile-with-account drivers get a Membership now; a
             # profile-only driver (user is None) gets one at activation.
@@ -652,10 +657,12 @@ class CompanyMeView(APIView):
                 return Response(response_serializer.data)
                 
             except Exception as e:
+                # Log the real exception server-side only — never echo str(e)
+                # to the client, which can leak internal details (DB schema,
+                # file paths, etc).
                 logger.error(f"Error saving company profile: {e}")
                 return Response({
                     'detail': 'Failed to update profile. Please try again.',
-                    'error': str(e)
                 }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             logger.error(f"Company profile update validation errors: {serializer.errors}")
@@ -664,10 +671,25 @@ class CompanyMeView(APIView):
                 'errors': serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 
+def _driver_status_queryset(qs):
+    """Attach the prefetches DriverSerializer.get_status() looks for, so
+    listing N drivers doesn't run 2 extra queries per row (active trip +
+    active assignment) on top of the N+1 that was already there."""
+    from django.db.models import Prefetch
+    return qs.select_related('company').prefetch_related(
+        Prefetch('trips', queryset=Trip.objects.filter(status='ACTIVE'),
+                 to_attr='_prefetched_active_trips'),
+        Prefetch('assignments',
+                 queryset=DriverVehicleAssignment.objects.filter(is_active=True)
+                 .select_related('vehicle'),
+                 to_attr='_prefetched_active_assignments'),
+    )
+
+
 class DriverListView(CompanyScopedQuerysetMixin, generics.ListAPIView):
     # Scoped to the caller's company by the mixin — an owner sees ONLY their
     # own drivers, never another company's. Ordered for stable pagination.
-    queryset = Driver.objects.all().order_by('id')
+    queryset = _driver_status_queryset(Driver.objects.all().order_by('id'))
     serializer_class = DriverSerializer
     permission_classes = [IsCompanyMember]
 
@@ -1251,11 +1273,16 @@ class VehicleViewSet(CompanyScopedViewSet):
 
     def perform_create(self, serializer):
         company = company_for(self.request.user)
-        check_can_add(company, 'vehicle')  # enforce plan limit
-        driver_id = serializer.validated_data.pop('driver_id', None)
-        vehicle = serializer.save(company=company)
-        if driver_id is not None:
-            self._apply_driver(vehicle, driver_id)
+        # See DriverRegisterView.perform_create: lock the Subscription row so
+        # the count check and the create can't race across concurrent
+        # requests.
+        with transaction.atomic():
+            lock_subscription_for_plan_check(company)
+            check_can_add(company, 'vehicle')  # enforce plan limit
+            driver_id = serializer.validated_data.pop('driver_id', None)
+            vehicle = serializer.save(company=company)
+            if driver_id is not None:
+                self._apply_driver(vehicle, driver_id)
 
     def perform_update(self, serializer):
         driver_id = serializer.validated_data.pop('driver_id', "__absent__")
@@ -1358,7 +1385,11 @@ class CargoViewSet(CompanyScopedViewSet):
     def get_queryset(self):
         qs = super().get_queryset()
         trip_id = self.request.query_params.get('trip')
-        return qs.filter(trip_id=trip_id) if trip_id else qs
+        if not trip_id:
+            return qs
+        if not trip_id.isdigit():
+            raise serializers.ValidationError({'trip': 'Must be a valid integer id.'})
+        return qs.filter(trip_id=trip_id)
 
     def perform_create(self, serializer):
         company = company_for(self.request.user)
@@ -1443,7 +1474,7 @@ class DriverViewSet(CompanyScopedViewSet):
     Drivers are created profile-only (no login account) — Phase 3's invitation
     flow links a real user at activation.
     """
-    queryset = Driver.objects.all().order_by('id')
+    queryset = _driver_status_queryset(Driver.objects.all().order_by('id'))
     serializer_class = DriverSerializer
 
     def get_permissions(self):
@@ -1453,8 +1484,13 @@ class DriverViewSet(CompanyScopedViewSet):
 
     def perform_create(self, serializer):
         company = company_for(self.request.user)
-        check_can_add(company, 'driver')  # enforce plan limit
-        serializer.save(company=company)
+        # See DriverRegisterView.perform_create: lock the Subscription row so
+        # the count check and the create can't race across concurrent
+        # requests.
+        with transaction.atomic():
+            lock_subscription_for_plan_check(company)
+            check_can_add(company, 'driver')  # enforce plan limit
+            serializer.save(company=company)
 
 
 class LocationIngestView(APIView):
@@ -1532,7 +1568,23 @@ class LocationIngestView(APIView):
             if eid and LocationPing.objects.filter(event_id=eid).exists():
                 duplicates += 1  # retransmitted offline fix — skip silently
                 continue
-            ping = ser.save(company=company, driver=driver, vehicle=vehicle, trip=trip)
+            try:
+                # A nested atomic() gives this its own savepoint: if the
+                # insert hits uniq_location_event_id, only this savepoint
+                # rolls back — a plain try/except here would otherwise leave
+                # the surrounding transaction (e.g. ATOMIC_REQUESTS, or a
+                # caller's own atomic block) marked "needs rollback", turning
+                # every later query in the request into a
+                # TransactionManagementError.
+                with transaction.atomic():
+                    ping = ser.save(company=company, driver=driver, vehicle=vehicle, trip=trip)
+            except IntegrityError:
+                # Concurrent retransmission of the same offline fix can pass
+                # the exists() check above twice (classic check-then-act
+                # race) and collide on uniq_location_event_id. Treat that as
+                # the same graceful duplicate, not an unhandled 500.
+                duplicates += 1
+                continue
             saved.append(ping)
 
         if not saved and not duplicates:

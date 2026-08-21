@@ -11,13 +11,14 @@ from django.contrib.auth.models import User
 logger = logging.getLogger(__name__)
 
 class SecurityMiddleware(MiddlewareMixin):
-    def process_request(self, request):
-        # Skip authentication for login endpoints
-        if request.path in ['/api/auth/token/login/', '/api/test/login/']:
-            return None
-            
-        # Add security headers
-        response = self.get_response(request)
+    # Security headers must be set on EVERY response, including the login
+    # endpoints — there is nothing here that legitimately needs to be
+    # skipped for them. Doing the header-setting in process_response (the
+    # idiomatic MiddlewareMixin hook) instead of manually calling
+    # self.get_response(request) from inside process_request means it always
+    # runs, regardless of path, and there is no path-based "skip" left to
+    # accidentally bypass it.
+    def process_response(self, request, response):
         response['X-Content-Type-Options'] = 'nosniff'
         response['X-Frame-Options'] = 'DENY'
         response['X-XSS-Protection'] = '1; mode=block'
