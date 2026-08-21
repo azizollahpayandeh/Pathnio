@@ -669,10 +669,25 @@ class CompanyMeView(APIView):
                 'errors': serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 
+def _driver_status_queryset(qs):
+    """Attach the prefetches DriverSerializer.get_status() looks for, so
+    listing N drivers doesn't run 2 extra queries per row (active trip +
+    active assignment) on top of the N+1 that was already there."""
+    from django.db.models import Prefetch
+    return qs.select_related('company').prefetch_related(
+        Prefetch('trips', queryset=Trip.objects.filter(status='ACTIVE'),
+                 to_attr='_prefetched_active_trips'),
+        Prefetch('assignments',
+                 queryset=DriverVehicleAssignment.objects.filter(is_active=True)
+                 .select_related('vehicle'),
+                 to_attr='_prefetched_active_assignments'),
+    )
+
+
 class DriverListView(CompanyScopedQuerysetMixin, generics.ListAPIView):
     # Scoped to the caller's company by the mixin — an owner sees ONLY their
     # own drivers, never another company's. Ordered for stable pagination.
-    queryset = Driver.objects.all().order_by('id')
+    queryset = _driver_status_queryset(Driver.objects.all().order_by('id'))
     serializer_class = DriverSerializer
     permission_classes = [IsCompanyMember]
 
@@ -1453,7 +1468,7 @@ class DriverViewSet(CompanyScopedViewSet):
     Drivers are created profile-only (no login account) — Phase 3's invitation
     flow links a real user at activation.
     """
-    queryset = Driver.objects.all().order_by('id')
+    queryset = _driver_status_queryset(Driver.objects.all().order_by('id'))
     serializer_class = DriverSerializer
 
     def get_permissions(self):
