@@ -19,8 +19,28 @@ def get_or_create_subscription(company):
     return Subscription.objects.create(company=company, plan=plan)
 
 
+def lock_subscription_for_plan_check(company):
+    """Row-lock the company's Subscription for the rest of the current
+    transaction.
+
+    check_can_add() is a count-then-create check: without a lock, two
+    concurrent requests can both count N (under the limit), both pass, and
+    both create — overshooting the plan limit. Call this INSIDE a
+    transaction.atomic() block, before check_can_add() and the actual
+    Driver/Vehicle create, so the two concurrent requests serialize on this
+    row instead of racing.
+    """
+    get_or_create_subscription(company)  # ensure a row exists to lock
+    return Subscription.objects.select_for_update().get(company=company)
+
+
 def check_can_add(company, kind):
-    """Raise if the company is at its plan limit for `kind` ('driver'|'vehicle')."""
+    """Raise if the company is at its plan limit for `kind` ('driver'|'vehicle').
+
+    Callers that need this to be race-free under concurrent requests must
+    call lock_subscription_for_plan_check(company) first, inside the same
+    transaction.atomic() block that performs the create.
+    """
     sub = get_or_create_subscription(company)
     plan = sub.plan
     if kind == "driver" and Driver.objects.filter(company=company).count() >= plan.max_drivers:

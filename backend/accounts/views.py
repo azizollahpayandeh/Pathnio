@@ -40,7 +40,10 @@ from .fleet_status import (
     vehicle_live_status, driver_status, company_thresholds, has_valid_position,
 )
 from .alerts_engine import refresh_fleet_alerts
-from .subscriptions import check_can_add, usage as subscription_usage, get_or_create_subscription
+from .subscriptions import (
+    check_can_add, usage as subscription_usage, get_or_create_subscription,
+    lock_subscription_for_plan_check,
+)
 from .models import Plan, Subscription
 from .tenancy import (
     company_for, role_for, is_owner,
@@ -583,8 +586,12 @@ class DriverRegisterView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         company = company_for(self.request.user)
-        check_can_add(company, 'driver')  # enforce plan limit
+        # Lock the company's Subscription row for the whole check+create so
+        # two concurrent requests can't both pass check_can_add() before
+        # either has created a row (count-then-create race).
         with transaction.atomic():
+            lock_subscription_for_plan_check(company)
+            check_can_add(company, 'driver')  # enforce plan limit
             driver = serializer.save(company=company)
             # Only profile-with-account drivers get a Membership now; a
             # profile-only driver (user is None) gets one at activation.
@@ -1249,11 +1256,16 @@ class VehicleViewSet(CompanyScopedViewSet):
 
     def perform_create(self, serializer):
         company = company_for(self.request.user)
-        check_can_add(company, 'vehicle')  # enforce plan limit
-        driver_id = serializer.validated_data.pop('driver_id', None)
-        vehicle = serializer.save(company=company)
-        if driver_id is not None:
-            self._apply_driver(vehicle, driver_id)
+        # See DriverRegisterView.perform_create: lock the Subscription row so
+        # the count check and the create can't race across concurrent
+        # requests.
+        with transaction.atomic():
+            lock_subscription_for_plan_check(company)
+            check_can_add(company, 'vehicle')  # enforce plan limit
+            driver_id = serializer.validated_data.pop('driver_id', None)
+            vehicle = serializer.save(company=company)
+            if driver_id is not None:
+                self._apply_driver(vehicle, driver_id)
 
     def perform_update(self, serializer):
         driver_id = serializer.validated_data.pop('driver_id', "__absent__")
@@ -1451,8 +1463,13 @@ class DriverViewSet(CompanyScopedViewSet):
 
     def perform_create(self, serializer):
         company = company_for(self.request.user)
-        check_can_add(company, 'driver')  # enforce plan limit
-        serializer.save(company=company)
+        # See DriverRegisterView.perform_create: lock the Subscription row so
+        # the count check and the create can't race across concurrent
+        # requests.
+        with transaction.atomic():
+            lock_subscription_for_plan_check(company)
+            check_can_add(company, 'driver')  # enforce plan limit
+            serializer.save(company=company)
 
 
 class LocationIngestView(APIView):
