@@ -31,7 +31,7 @@ const PLANS = [
 export default function SubscriptionPage() {
   const tr = useT();
   const tv = useTValue();
-  const { data: sub, refetch } = useSubscription();
+  const { data: sub, error: subError, refetch } = useSubscription();
   const [alert, setAlert] = useState<{ type: "success" | "error"; msg: string } | null>(null);
   const current = sub ? (CODE_TO_ID[sub.plan.code] || "pro") : "pro";
 
@@ -49,6 +49,10 @@ export default function SubscriptionPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <PageHeader icon={CreditCard} title={tr("ui.subscription")} subtitle={tr("ui.choose_the_plan_that_fits_your_fleet")} gradient="from-teal-500 to-emerald-600" />
+
+      {subError && !sub && (
+        <div className="card p-4 border-rose-200 bg-rose-50 text-rose-700 text-sm">{tr("ui.could_not_load_subscription")}</div>
+      )}
 
       {sub && (
         <div className="card p-5 flex flex-wrap items-center justify-between gap-3">

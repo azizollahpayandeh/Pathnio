@@ -103,7 +103,7 @@ export default function InviteDriverModal({
               <p className="text-sm text-slate-500">{driverName}</p>
             </div>
           </div>
-          <button onClick={onClose} className="w-9 h-9 rounded-xl hover:bg-slate-100 flex items-center justify-center text-slate-500">
+          <button onClick={onClose} className="w-9 h-9 rounded-xl hover:bg-slate-100 flex items-center justify-center text-slate-500" aria-label={tr("ui.close")}>
             <X className="w-5 h-5" />
           </button>
         </div>

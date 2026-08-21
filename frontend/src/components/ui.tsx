@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useT } from "@/i18n";
 import type { LucideIcon } from "lucide-react";
 
@@ -147,6 +147,26 @@ export function Modal({
   maxWidth?: string;
 }) {
   const tr = useT();
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const previouslyFocused = useRef<HTMLElement | null>(null);
+
+  // Close on Escape, focus the dialog on open, and return focus to whatever
+  // triggered it on close — basic modal accessibility without a full
+  // focus-trap library.
+  useEffect(() => {
+    if (!open) return;
+    previouslyFocused.current = document.activeElement as HTMLElement | null;
+    dialogRef.current?.focus();
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      previouslyFocused.current?.focus?.();
+    };
+  }, [open, onClose]);
+
   if (!open) return null;
   return (
     <div
@@ -154,7 +174,12 @@ export function Modal({
       onMouseDown={onClose}
     >
       <div
-        className={`card-glass w-full ${maxWidth} max-h-[92vh] overflow-y-auto scroll-slim animate-fade-in-up`}
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
+        tabIndex={-1}
+        className={`card-glass w-full ${maxWidth} max-h-[92vh] overflow-y-auto scroll-slim animate-fade-in-up outline-none`}
         onMouseDown={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-4 p-6 border-b border-slate-100">
@@ -200,7 +225,7 @@ export function Field({
     <label className="block">
       <span className="block mb-1.5 text-sm font-semibold text-slate-700">
         {label}
-        {required && <span className="text-rose-500 ml-0.5">*</span>}
+        {required && <span className="text-rose-500 ms-0.5">*</span>}
       </span>
       {children}
       {hint && <span className="block mt-1 text-xs text-slate-400">{hint}</span>}

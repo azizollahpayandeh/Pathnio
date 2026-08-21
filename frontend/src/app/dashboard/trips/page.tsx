@@ -11,6 +11,7 @@ import { useTrips, createTrip, deleteTrip, createCargo } from "@/lib/api-data";
 import type { TripStatus } from "@/lib/types";
 import { useT, useTValue } from "@/i18n";
 import { useUnits } from "@/lib/format";
+import { toast } from "@/components/Toast";
 
 const tone: Record<TripStatus, string> = { COMPLETED: "green", ACTIVE: "blue", PLANNED: "amber", CANCELLED: "red" };
 const icon: Record<TripStatus, typeof Clock> = { COMPLETED: CheckCircle2, ACTIVE: Navigation, PLANNED: CalendarClock, CANCELLED: XCircle };
@@ -58,8 +59,14 @@ export default function TripsPage() {
   };
 
   const handleDelete = async (id: string) => {
-    await deleteTrip(id);
-    await refetch();
+    if (typeof window !== "undefined" && !window.confirm(tr("ui.confirm_delete_trip"))) return;
+    try {
+      await deleteTrip(id);
+      await refetch();
+      toast.success(tr("ui.trip_deleted"));
+    } catch (err) {
+      toast.fromError(err, tr("ui.could_not_delete_the_trip"));
+    }
   };
 
   return (

@@ -5,6 +5,7 @@ import { Map as MapIcon, Navigation, Signal, Search } from "lucide-react";
 import { PageHeader, Badge } from "@/components/ui";
 import { useLiveVehicles, type LiveVehicle } from "@/lib/api-data";
 import { useT, useTValue } from "@/i18n";
+import { useUnits } from "@/lib/format";
 
 const LiveMap = dynamic(() => import("@/components/LiveMapWidget"), { ssr: false });
 
@@ -18,6 +19,7 @@ const tone: Record<string, string> = { moving: "green", stopped: "amber", offlin
 export default function LiveMapPage() {
   const tr = useT();
   const tv = useTValue();
+  const { speed } = useUnits();
   const { data: vehicles } = useLiveVehicles();
   const [search, setSearch] = useState("");
 
@@ -58,7 +60,7 @@ export default function LiveMapPage() {
                   </div>
                   <div className="text-sm text-slate-500 mt-1 truncate">{v.driver?.full_name || tr("ui.unassigned")}{v.model ? ` · ${v.model}` : ""}</div>
                   <div className="flex items-center gap-4 mt-2 text-xs text-slate-500">
-                    <span className="flex items-center gap-1"><Navigation className="w-3.5 h-3.5" /><span className="ltr-inline">{v.speed} km/h</span></span>
+                    <span className="flex items-center gap-1"><Navigation className="w-3.5 h-3.5" /><span className="ltr-inline">{speed(v.speed)}</span></span>
                     <span className="flex items-center gap-1"><Signal className="w-3.5 h-3.5" />{st === "offline" ? tr("ui.no_signal") : tr("ui.online_lbl")}</span>
                   </div>
                 </div>

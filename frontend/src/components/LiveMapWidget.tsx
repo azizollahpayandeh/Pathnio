@@ -26,7 +26,7 @@ export default function LiveMapWidget({ fullscreen = false }: LiveMapWidgetProps
   return (
     <div className="w-full h-full min-h-[320px] relative rounded-2xl overflow-hidden">
       {/* Counters overlay */}
-      <div className="absolute top-3 right-3 z-[1000] card px-4 py-2.5 flex flex-wrap gap-x-5 gap-y-1 items-center text-sm shadow-soft">
+      <div className="live-map-counters absolute top-3 right-3 z-[1000] card px-4 py-2.5 flex flex-wrap gap-x-5 gap-y-1 items-center text-sm shadow-soft">
         <span className="font-bold text-violet-700 flex items-center gap-1.5"><FaCarSide className="text-violet-400" />{tr("ui.cnt_total", { count: vehicles.length })}</span>
         <span className="font-semibold text-emerald-600 flex items-center gap-1"><FaCheckCircle />{tr("ui.cnt_moving", { count: counts.moving })}</span>
         <span className="font-semibold text-amber-600 flex items-center gap-1"><FaRegClock />{tr("ui.cnt_stopped", { count: counts.stopped })}</span>

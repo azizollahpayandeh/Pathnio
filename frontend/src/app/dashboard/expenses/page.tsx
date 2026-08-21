@@ -18,7 +18,7 @@ const catIcon: Record<ExpenseCategory, typeof Fuel> = {
   Fuel, Maintenance: Wrench, Tolls: Receipt, Insurance: Shield, Salary: Users, Other: MoreHorizontal,
 };
 const catTone: Record<ExpenseCategory, string> = {
-  Fuel: "blue", Maintenance: "orange", Tolls: "purple", Insurance: "teal", Salary: "indigo", Other: "gray",
+  Fuel: "blue", Maintenance: "orange", Tolls: "purple", Insurance: "teal", Salary: "purple", Other: "gray",
 };
 const catIconBg: Record<ExpenseCategory, string> = {
   Fuel: "bg-violet-100 text-violet-600",
@@ -79,8 +79,14 @@ export default function ExpensesPage() {
     await refetch();
   };
   const handleDelete = async (id: string) => {
-    await deleteExpense(id);
-    await refetch();
+    if (typeof window !== "undefined" && !window.confirm(tr("ui.confirm_delete_expense"))) return;
+    try {
+      await deleteExpense(id);
+      await refetch();
+      toast.success(tr("ui.expense_deleted"));
+    } catch (err) {
+      toast.fromError(err, tr("ui.could_not_delete_the_expense"));
+    }
   };
 
   return (

@@ -8,13 +8,14 @@ import {
 } from "lucide-react";
 import { useDrivers, useTrips } from "@/lib/api-data";
 import { Badge, EmptyState } from "@/components/ui";
-import { useT } from "@/i18n";
+import { useT, useTValue } from "@/i18n";
 import { useUnits } from "@/lib/format";
 
 const statusTone: Record<string, string> = { Active: "green", "On Trip": "blue", Offline: "amber", Inactive: "gray" };
 
 export default function DriverDetail() {
   const tr = useT();
+  const tv = useTValue();
   const { currency, distance } = useUnits();
   const params = useParams();
   const router = useRouter();
@@ -23,7 +24,7 @@ export default function DriverDetail() {
   const { data: trips } = useTrips();
 
   const driver = useMemo(() => drivers.find((d) => d.id === id), [drivers, id]);
-  const dTrips = useMemo(() => (driver ? trips.filter((t) => t.driver === driver.full_name) : []), [trips, driver]);
+  const dTrips = useMemo(() => (driver ? trips.filter((t) => t.driver_ref === driver.id) : []), [trips, driver]);
 
   if (!driver) {
     return <div className="card"><EmptyState icon={Users} title={tr("ui.driver_not_found")} action={<Link href="/dashboard/drivers" className="btn btn-primary mx-auto">{tr("ui.back_to_drivers")}</Link>} /></div>;
@@ -51,7 +52,7 @@ export default function DriverDetail() {
           <div className="flex-1">
             <div className="flex items-center gap-2 flex-wrap">
               <h1 className="text-3xl font-bold text-slate-900">{driver.full_name}</h1>
-              <Badge tone={statusTone[driver.status] || "gray"} icon={SIcon}>{driver.status}</Badge>
+              <Badge tone={statusTone[driver.status] || "gray"} icon={SIcon}>{tv(driver.status)}</Badge>
               {driver.activated ? (
                 <Badge tone="green" icon={CheckCircle}>{tr("ui.activated")}</Badge>
               ) : (
@@ -73,7 +74,7 @@ export default function DriverDetail() {
       </div>
 
       <div className="card p-6">
-        <h2 className="font-bold text-slate-800 mb-3">Trip history ({dTrips.length})</h2>
+        <h2 className="font-bold text-slate-800 mb-3">{tr("ui.trip_history")} ({dTrips.length})</h2>
         {dTrips.length === 0 ? <p className="text-slate-400 text-sm py-6 text-center">{tr("ui.no_trips_recorded_for_this_driver")}</p> : (
           <div className="space-y-2">
             {dTrips.map((t) => (
