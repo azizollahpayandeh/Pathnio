@@ -75,7 +75,8 @@ export default function AdminPage() {
     }
   };
 
-  const removeUser = async (id: number) => {
+  const removeUser = async (id: number, label: string) => {
+    if (typeof window !== "undefined" && !window.confirm(tr("ui.confirm_delete_account", { name: label }))) return;
     try {
       await api.delete(`accounts/users/${id}/delete/`);
       await refresh();
@@ -154,10 +155,10 @@ export default function AdminPage() {
                             {u.is_staff ? tr("ui.make_manager") : tr("ui.make_admin")}
                           </button>
                           <button
-                            onClick={() => removeUser(u.id)}
+                            onClick={() => removeUser(u.id, label)}
                             disabled={String(u.id) === String(user?.id)}
                             className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition disabled:opacity-40 disabled:cursor-not-allowed"
-                            title={String(u.id) === String(user?.id) ? "You can't delete yourself" : tr("ui.delete")}
+                            title={String(u.id) === String(user?.id) ? tr("ui.cannot_delete_self") : tr("ui.delete")}
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
