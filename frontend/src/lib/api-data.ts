@@ -152,6 +152,7 @@ function mapExpense(e: any): Expense {
     amount: Number(e.amount) || 0,
     date: e.date || new Date().toISOString(),
     plate_number: e.plate_number || "",
+    vehicleId: e.vehicle_ref != null ? String(e.vehicle_ref) : undefined,
     driver: e.driver || "",
     status: (e.status || "Paid") as Expense["status"],
     description: e.description || "",
@@ -299,14 +300,18 @@ export type SubscriptionInfo = {
 export function useSubscription() {
   const [data, setData] = useState<SubscriptionInfo | null>(null);
   const [ready, setReady] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const refetch = useCallback(async () => {
     try {
       const r = await api.get("accounts/subscription/");
       setData(r.data);
-    } catch { /* ignore */ } finally { setReady(true); }
+      setError(null);
+    } catch (e: any) {
+      setError(e?.message || "Failed to load.");
+    } finally { setReady(true); }
   }, []);
   useEffect(() => { refetch(); }, [refetch]);
-  return { data, ready, refetch };
+  return { data, ready, error, refetch };
 }
 
 export async function changePlan(code: string): Promise<void> {

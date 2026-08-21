@@ -8,13 +8,14 @@ import {
 } from "lucide-react";
 import { useExpenses, useTrips, useVehicles } from "@/lib/api-data";
 import { Badge, EmptyState } from "@/components/ui";
-import { useT } from "@/i18n";
+import { useT, useTValue } from "@/i18n";
 import { useUnits } from "@/lib/format";
 
 const statusTone: Record<string, string> = { Active: "green", Inactive: "gray", Maintenance: "blue" };
 
 export default function VehicleDetail() {
   const tr = useT();
+  const tv = useTValue();
   const { currency, distance } = useUnits();
   const params = useParams();
   const router = useRouter();
@@ -24,8 +25,8 @@ export default function VehicleDetail() {
   const { data: expenses } = useExpenses();
 
   const vehicle = useMemo(() => vehicles.find((v) => v.plate_number === plate), [vehicles, plate]);
-  const vTrips = useMemo(() => trips.filter((t) => t.plate_number === plate), [trips, plate]);
-  const vExpenses = useMemo(() => expenses.filter((e) => e.plate_number === plate), [expenses, plate]);
+  const vTrips = useMemo(() => (vehicle ? trips.filter((t) => t.vehicle_ref === vehicle.id) : []), [trips, vehicle]);
+  const vExpenses = useMemo(() => (vehicle ? expenses.filter((e) => e.vehicleId === vehicle.id) : []), [expenses, vehicle]);
 
   if (!vehicle) {
     return (
@@ -37,7 +38,7 @@ export default function VehicleDetail() {
     { icon: User, label: tr("ui.driver"), value: vehicle.driver || tr("ui.unassigned") },
     { icon: Weight, label: tr("ui.capacity"), value: vehicle.capacity || "—" },
     { icon: Palette, label: tr("ui.color"), value: vehicle.color || "—" },
-    { icon: Truck, label: tr("ui.type"), value: vehicle.vehicle_type },
+    { icon: Truck, label: tr("ui.type"), value: tv(vehicle.vehicle_type) },
     { icon: RouteIcon, label: tr("ui.trips"), value: vTrips.length },
     { icon: Calendar, label: tr("ui.added"), value: new Date(vehicle.createdAt).toLocaleDateString() },
   ];
@@ -54,8 +55,8 @@ export default function VehicleDetail() {
           <div className="flex-1">
             <div className="flex items-center gap-2 flex-wrap">
               <h1 className="text-3xl font-bold text-slate-900">{vehicle.plate_number}</h1>
-              <Badge tone={statusTone[vehicle.status]} icon={vehicle.status === "Active" ? CheckCircle : vehicle.status === "Maintenance" ? Wrench : XCircle}>{vehicle.status}</Badge>
-              <Badge tone="orange">{vehicle.vehicle_type}</Badge>
+              <Badge tone={statusTone[vehicle.status]} icon={vehicle.status === "Active" ? CheckCircle : vehicle.status === "Maintenance" ? Wrench : XCircle}>{tv(vehicle.status)}</Badge>
+              <Badge tone="orange">{tv(vehicle.vehicle_type)}</Badge>
             </div>
             <p className="text-slate-500 mt-1">{vehicle.model}</p>
           </div>
@@ -74,7 +75,7 @@ export default function VehicleDetail() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="card p-6">
-          <h2 className="font-bold text-slate-800 mb-3">Recent trips ({vTrips.length})</h2>
+          <h2 className="font-bold text-slate-800 mb-3">{tr("ui.recent_trips")} ({vTrips.length})</h2>
           {vTrips.length === 0 ? <p className="text-slate-400 text-sm py-6 text-center">{tr("ui.no_trips_recorded")}</p> : (
             <div className="space-y-2">
               {vTrips.slice(0, 6).map((t) => (
@@ -87,12 +88,12 @@ export default function VehicleDetail() {
           )}
         </div>
         <div className="card p-6">
-          <h2 className="font-bold text-slate-800 mb-3">Expenses ({vExpenses.length})</h2>
+          <h2 className="font-bold text-slate-800 mb-3">{tr("ui.expenses")} ({vExpenses.length})</h2>
           {vExpenses.length === 0 ? <p className="text-slate-400 text-sm py-6 text-center">{tr("ui.no_expenses_recorded")}</p> : (
             <div className="space-y-2">
               {vExpenses.slice(0, 6).map((x) => (
                 <div key={x.id} className="flex items-center justify-between p-3 rounded-xl bg-slate-50">
-                  <span className="text-sm font-medium text-slate-700">{x.category} · {new Date(x.date).toLocaleDateString()}</span>
+                  <span className="text-sm font-medium text-slate-700">{tv(x.category)} · {new Date(x.date).toLocaleDateString()}</span>
                   <span className="text-sm font-semibold text-slate-800">{currency(x.amount)}</span>
                 </div>
               ))}

@@ -9,7 +9,7 @@ import {
 import { useTrips } from "@/lib/api-data";
 import { Badge, EmptyState } from "@/components/ui";
 import type { TripStatus } from "@/lib/types";
-import { useT } from "@/i18n";
+import { useT, useTValue } from "@/i18n";
 import { useUnits } from "@/lib/format";
 
 const tone: Record<TripStatus, string> = { COMPLETED: "green", ACTIVE: "blue", PLANNED: "amber", CANCELLED: "red" };
@@ -17,6 +17,7 @@ const icon: Record<TripStatus, typeof Clock> = { COMPLETED: CheckCircle2, ACTIVE
 
 export default function TripDetail() {
   const tr = useT();
+  const tv = useTValue();
   const { currency, distance } = useUnits();
   const params = useParams();
   const router = useRouter();
@@ -47,7 +48,7 @@ export default function TripDetail() {
             <MapPin className="w-7 h-7 text-purple-500" />
             {trip.origin} <span className="text-slate-300">→</span> {trip.destination}
           </div>
-          <Badge tone={tone[trip.status]} icon={SIcon}>{trip.status}</Badge>
+          <Badge tone={tone[trip.status]} icon={SIcon}>{tv(trip.status)}</Badge>
         </div>
 
         {/* Route progress */}
