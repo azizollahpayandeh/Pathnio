@@ -1,5 +1,6 @@
 """Phase 25 — regression coverage for areas not covered by the focused suites:
 JWT refresh, expenses, alerts, settings, live-map API, cross-tenant telemetry."""
+import uuid
 from unittest.mock import patch
 
 from django.contrib.auth.models import User
@@ -9,7 +10,7 @@ from rest_framework.throttling import ScopedRateThrottle
 
 from accounts.models import (
     Company, Driver, Vehicle, Membership, DriverVehicleAssignment,
-    Expense, CompanySettings,
+    Expense, CompanySettings, LocationPing,
 )
 
 
@@ -150,3 +151,42 @@ class LoginSecurityTests(TwoCompanies):
         self.assertEqual(r1.status_code, 401)
         self.assertEqual(r2.status_code, 401)
         self.assertEqual(r3.status_code, 429)
+
+
+class TelemetryDedupRaceTests(TwoCompanies):
+    """A concurrent retransmit of the same offline fix can pass the
+    exists()-check twice; the DB's uniqueness constraint must be handled as a
+    graceful duplicate, not surfaced as an unhandled 500."""
+
+    def setUp(self):
+        super().setUp()
+        self.mob = User.objects.create_user("mobrace", password="pw123456")
+        self.driver = Driver.objects.create(user=self.mob, full_name="D", mobile="1",
+                                            company=self.ca)
+        Membership.objects.create(user=self.mob, company=self.ca, role=Membership.Role.DRIVER)
+        self.vehicle = Vehicle.objects.create(company=self.ca, plate_number="RACE-1",
+                                              vehicle_type="Van")
+        DriverVehicleAssignment.objects.create(company=self.ca, driver=self.driver,
+                                               vehicle=self.vehicle, is_active=True)
+
+    def test_concurrent_duplicate_event_id_is_graceful_not_500(self):
+        eid = str(uuid.uuid4())
+        # Simulate another request having already won the race and inserted
+        # this event_id a moment before this request's exists() check ran.
+        LocationPing.objects.create(company=self.ca, driver=self.driver,
+                                    vehicle=self.vehicle, event_id=eid,
+                                    lat=1, lng=2, speed=0,
+                                    recorded_at="2026-08-11T10:00:00Z")
+        self.client.force_authenticate(self.mob)
+        # Force the exists()-check to report "not a duplicate" (as it would
+        # under a real race, on a stale read), so the code proceeds to
+        # ser.save() and collides with the real DB constraint.
+        with patch("accounts.views.LocationPing.objects.filter") as mock_filter:
+            mock_filter.return_value.exists.return_value = False
+            r = self.client.post("/api/accounts/locations/", {"locations": [
+                {"event_id": eid, "lat": 3, "lng": 4, "speed": 1,
+                 "recorded_at": "2026-08-11T10:01:00Z"}]}, format="json")
+        self.assertEqual(r.status_code, 201, r.content)
+        self.assertEqual(r.json()["saved"], 0)
+        self.assertEqual(r.json()["duplicates"], 1)
+        self.assertEqual(LocationPing.objects.filter(event_id=eid).count(), 1)

@@ -9,7 +9,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.utils import timezone
-from django.db import transaction
+from django.db import transaction, IntegrityError
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -1568,7 +1568,23 @@ class LocationIngestView(APIView):
             if eid and LocationPing.objects.filter(event_id=eid).exists():
                 duplicates += 1  # retransmitted offline fix — skip silently
                 continue
-            ping = ser.save(company=company, driver=driver, vehicle=vehicle, trip=trip)
+            try:
+                # A nested atomic() gives this its own savepoint: if the
+                # insert hits uniq_location_event_id, only this savepoint
+                # rolls back — a plain try/except here would otherwise leave
+                # the surrounding transaction (e.g. ATOMIC_REQUESTS, or a
+                # caller's own atomic block) marked "needs rollback", turning
+                # every later query in the request into a
+                # TransactionManagementError.
+                with transaction.atomic():
+                    ping = ser.save(company=company, driver=driver, vehicle=vehicle, trip=trip)
+            except IntegrityError:
+                # Concurrent retransmission of the same offline fix can pass
+                # the exists() check above twice (classic check-then-act
+                # race) and collide on uniq_location_event_id. Treat that as
+                # the same graceful duplicate, not an unhandled 500.
+                duplicates += 1
+                continue
             saved.append(ping)
 
         if not saved and not duplicates:
