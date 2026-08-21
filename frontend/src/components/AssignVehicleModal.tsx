@@ -52,14 +52,14 @@ export default function AssignVehicleModal({
               <p className="text-sm text-slate-500 font-mono">{vehiclePlate}</p>
             </div>
           </div>
-          <button onClick={onClose} className="w-9 h-9 rounded-xl hover:bg-slate-100 flex items-center justify-center text-slate-500">
+          <button onClick={onClose} className="w-9 h-9 rounded-xl hover:bg-slate-100 flex items-center justify-center text-slate-500" aria-label={tr("ui.close")}>
             <X className="w-5 h-5" />
           </button>
         </div>
 
         <label className="block text-sm text-slate-600 mt-4 mb-1.5">{tr("ui.driver")}</label>
         <select className="field w-full" value={driverId} onChange={(e) => setDriverId(e.target.value)}>
-          <option value="">— Select a driver —</option>
+          <option value="">{tr("ui.select_a_driver")}</option>
           {drivers.map((d) => (
             <option key={d.id} value={d.id}>{d.full_name}</option>
           ))}
