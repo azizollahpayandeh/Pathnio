@@ -52,3 +52,17 @@ class CargoTests(APITestCase):
         r = self.client.get(f"/api/accounts/trips/{self.trip_a.id}/")
         self.assertEqual(len(r.json()["cargos"]), 1)
         self.assertEqual(r.json()["cargos"][0]["description"], "pallet")
+
+    def test_cargo_list_rejects_non_numeric_trip_param(self):
+        # A non-numeric ?trip= used to raise an unhandled ValueError -> 500;
+        # it must now be a clean 400.
+        self.client.force_authenticate(self.owner_a)
+        r = self.client.get("/api/accounts/cargo/?trip=not-a-number")
+        self.assertEqual(r.status_code, 400)
+
+    def test_cargo_list_filters_by_valid_trip_param(self):
+        Cargo.objects.create(company=self.company_a, trip=self.trip_a, description="mine")
+        self.client.force_authenticate(self.owner_a)
+        r = self.client.get(f"/api/accounts/cargo/?trip={self.trip_a.id}")
+        rows = r.json().get("results", r.json())
+        self.assertEqual([c["description"] for c in rows], ["mine"])

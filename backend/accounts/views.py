@@ -1385,7 +1385,11 @@ class CargoViewSet(CompanyScopedViewSet):
     def get_queryset(self):
         qs = super().get_queryset()
         trip_id = self.request.query_params.get('trip')
-        return qs.filter(trip_id=trip_id) if trip_id else qs
+        if not trip_id:
+            return qs
+        if not trip_id.isdigit():
+            raise serializers.ValidationError({'trip': 'Must be a valid integer id.'})
+        return qs.filter(trip_id=trip_id)
 
     def perform_create(self, serializer):
         company = company_for(self.request.user)
