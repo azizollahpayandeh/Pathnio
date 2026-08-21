@@ -53,16 +53,6 @@ export async function getUser(): Promise<StoredUser | null> {
   return raw ? (JSON.parse(raw) as StoredUser) : null;
 }
 
-// ---- Duty flag ------------------------------------------------------------
-
-export async function setOnDuty(on: boolean) {
-  await AsyncStorage.setItem(KEYS.duty, on ? "1" : "0");
-}
-
-export async function isOnDuty(): Promise<boolean> {
-  return (await AsyncStorage.getItem(KEYS.duty)) === "1";
-}
-
 // ---- Last successful sync --------------------------------------------------
 
 export async function setLastSync(when: Date = new Date()) {
