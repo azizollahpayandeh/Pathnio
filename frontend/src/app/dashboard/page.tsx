@@ -7,7 +7,7 @@ import {
   CheckCircle2, Clock, Maximize2,
 } from "lucide-react";
 import { useVehicles, useDrivers, useTrips, useExpenses, useFleetAlerts } from "@/lib/api-data";
-import { StatCard, Badge } from "@/components/ui";
+import { StatCard, Badge, StatCardsSkeleton } from "@/components/ui";
 import type { TripStatus } from "@/lib/types";
 import { useT } from "@/i18n";
 import { useUnits } from "@/lib/format";
@@ -25,12 +25,14 @@ const tripTone: Record<TripStatus, string> = {
 export default function Dashboard() {
   const tr = useT();
   const { currency, distance } = useUnits();
-  const { data: vehicles } = useVehicles();
-  const { data: drivers } = useDrivers();
-  const { data: trips } = useTrips();
+  const { data: vehicles, ready: rv } = useVehicles();
+  const { data: drivers, ready: rd } = useDrivers();
+  const { data: trips, ready: rt } = useTrips();
   const { data: expenses } = useExpenses();
   const { data: alerts } = useFleetAlerts();
   const openAlerts = alerts.filter((a) => !a.read).slice(0, 4);
+
+  const ready = rv && rd && rt;
 
   const stats = useMemo(() => {
     const now = Date.now();
@@ -78,6 +80,7 @@ export default function Dashboard() {
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Stat cards */}
+      {!ready ? <StatCardsSkeleton count={4} /> : (
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 stagger">
         <StatCard
           icon={Users}
@@ -107,6 +110,7 @@ export default function Dashboard() {
           gradient="from-emerald-500 to-teal-600"
         />
       </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Live map */}

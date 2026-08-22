@@ -5,6 +5,10 @@ from .driver_ops import (
     DriverTripActionView, DriverInspectionView, DriverIncidentView, DriverExpenseView,
 )
 from .fleet_ops import InspectionViewSet, IncidentViewSet
+from .platform_admin import (
+    AdminOverviewView, AdminCompanyListView, AdminCompanyActionView,
+    AdminMessageListView,
+)
 from .views import (
     CompanyRegisterView, DriverRegisterView, DriverListView, SiteSettingsView,
     CompanyMeView, ContactMessageCreateView, SupportTicketListCreateView,
@@ -59,6 +63,13 @@ urlpatterns = [
     path('alerts/', UserAlertsView.as_view(), name='user-alerts'),
     path('alerts/<int:alert_id>/', UserAlertsView.as_view(), name='alert-mark-read'),
     path('admin/alerts/', AdminAlertsView.as_view(), name='admin-alerts'),
+
+    # Platform administration (is_staff only) — cross-company oversight
+    path('admin/overview/', AdminOverviewView.as_view(), name='admin-overview'),
+    path('admin/companies/', AdminCompanyListView.as_view(), name='admin-companies'),
+    path('admin/companies/<int:company_id>/<str:action>/', AdminCompanyActionView.as_view(),
+         name='admin-company-action'),
+    path('admin/contact-messages/', AdminMessageListView.as_view(), name='admin-contact-messages'),
     path('site-settings/', SiteSettingsView.as_view(), name='site-settings'),
 
     # Support

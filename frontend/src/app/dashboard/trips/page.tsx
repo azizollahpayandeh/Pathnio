@@ -6,7 +6,7 @@ import {
   CheckCircle2, Clock, CalendarClock, XCircle, TrendingUp,
 } from "lucide-react";
 import AddTripModal, { NewTrip } from "@/components/AddTripModal";
-import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
+import { PageHeader, StatCard, Badge, EmptyState , RowListSkeleton} from "@/components/ui";
 import { useTrips, createTrip, deleteTrip, createCargo } from "@/lib/api-data";
 import type { TripStatus } from "@/lib/types";
 import { useT, useTValue } from "@/i18n";
@@ -21,7 +21,7 @@ export default function TripsPage() {
   const tr = useT();
   const tv = useTValue();
   const { currency, distance } = useUnits();
-  const { data: trips, refetch } = useTrips();
+  const { data: trips, ready, refetch } = useTrips();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
   const [showAdd, setShowAdd] = useState(false);
@@ -104,7 +104,9 @@ export default function TripsPage() {
         </select>
       </div>
 
-      {filtered.length === 0 ? (
+      {!ready ? (
+        <RowListSkeleton count={6} />
+      ) : filtered.length === 0 ? (
         <div className="card">
           <EmptyState icon={Route} title={tr("ui.no_trips_found")} description={tr("ui.schedule_a_new_trip_to_get_started")}
             action={<button onClick={() => setShowAdd(true)} className="btn btn-primary mx-auto"><Plus className="w-4 h-4" /> {tr("ui.new_trip")}</button>} />
