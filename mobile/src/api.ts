@@ -287,6 +287,7 @@ export async function submitInspection(body: {
   kind: "PRE" | "POST";
   items: InspectionItem[];
   odometer?: number | null;
+  fuel_percent?: number | null;
   defect_notes?: string;
   lat?: number | null;
   lng?: number | null;

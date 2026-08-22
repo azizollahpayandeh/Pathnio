@@ -17,7 +17,8 @@ export interface Vehicle {
   status: VehicleStatus;
   capacity: string;
   color: string;
-  fuel_level: number; // 0..100
+  fuel_level: number; // 0..100 — only trustworthy when fuel_reported_at is set
+  fuel_reported_at?: string | null;
   odometer: number; // km
   efficiency: string; // e.g. "8.2 L/100km"
   last_maintenance: string; // ISO date

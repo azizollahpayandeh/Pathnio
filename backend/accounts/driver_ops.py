@@ -125,6 +125,8 @@ class DriverInspectionView(APIView):
     class InSerializer(serializers.Serializer):
         kind = serializers.ChoiceField(choices=["PRE", "POST"])
         odometer = serializers.IntegerField(min_value=0, required=False, allow_null=True)
+        fuel_percent = serializers.IntegerField(min_value=0, max_value=100,
+                                                required=False, allow_null=True)
         items = serializers.ListField(child=serializers.DictField(), allow_empty=True)
         defect_notes = serializers.CharField(required=False, allow_blank=True, max_length=2000)
         lat = serializers.FloatField(required=False, allow_null=True)
@@ -181,13 +183,19 @@ class DriverInspectionView(APIView):
         with transaction.atomic():
             inspection = VehicleInspection.objects.create(
                 company=driver.company, vehicle=vehicle, driver=driver, trip=trip,
-                kind=d["kind"], odometer=d.get("odometer"), items=clean,
+                kind=d["kind"], odometer=d.get("odometer"),
+                fuel_percent=d.get("fuel_percent"), items=clean,
                 has_defects=bool(failed), defect_notes=d.get("defect_notes", ""),
                 lat=d.get("lat"), lng=d.get("lng"),
             )
             if d.get("odometer") is not None:
                 Vehicle.objects.filter(id=vehicle.id, odometer__lt=d["odometer"]).update(
                     odometer=d["odometer"])
+            # A real gauge reading turns fuel_level from a fake default into
+            # trustworthy data (fuel_reported_at is the honesty gate).
+            if d.get("fuel_percent") is not None:
+                Vehicle.objects.filter(id=vehicle.id).update(
+                    fuel_level=d["fuel_percent"], fuel_reported_at=timezone.now())
 
             if failed:
                 # One open alert per vehicle for defects; the alerts engine

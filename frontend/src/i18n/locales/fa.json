@@ -724,6 +724,9 @@
     "exp_approved": "هزینه تأیید شد.",
     "exp_rejected": "هزینه رد شد.",
     "val_approved": "تأییدشده",
-    "val_rejected": "ردشده"
+    "val_rejected": "ردشده",
+    "fuel_level": "سطح سوخت",
+    "fuel_reported": "گزارش‌شده در {when}",
+    "fuel_not_reported": "هنوز گزارش نشده — راننده هنگام بازرسی خودرو آن را ثبت می‌کند."
   }
 }

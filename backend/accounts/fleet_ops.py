@@ -18,9 +18,9 @@ class InspectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = VehicleInspection
-        fields = ["id", "kind", "odometer", "items", "has_defects", "defect_notes",
-                  "lat", "lng", "created_at", "driver_name", "plate_number",
-                  "failed_items", "trip"]
+        fields = ["id", "kind", "odometer", "fuel_percent", "items", "has_defects",
+                  "defect_notes", "lat", "lng", "created_at", "driver_name",
+                  "plate_number", "failed_items", "trip"]
         read_only_fields = fields
 
     def get_failed_items(self, obj):

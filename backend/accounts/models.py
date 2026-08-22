@@ -226,6 +226,9 @@ class Vehicle(models.Model):
     capacity = models.CharField(max_length=32, blank=True)
     color = models.CharField(max_length=32, blank=True)
     fuel_level = models.PositiveIntegerField(default=100)
+    # When a driver last reported the fuel gauge. Null = never reported, so the
+    # dashboard shows "—" instead of a fake 100%.
+    fuel_reported_at = models.DateTimeField(null=True, blank=True)
     odometer = models.PositiveIntegerField(default=0)
     efficiency = models.CharField(max_length=32, blank=True)
     last_maintenance = models.DateField(null=True, blank=True)
@@ -631,6 +634,9 @@ class VehicleInspection(models.Model):
                              related_name="inspections")
     kind = models.CharField(max_length=8, choices=KIND_CHOICES, default="PRE")
     odometer = models.PositiveIntegerField(null=True, blank=True)
+    # Fuel-gauge reading (0-100%) the driver notes during the check. Nullable
+    # so "not reported" is distinct from "reported 0%".
+    fuel_percent = models.PositiveSmallIntegerField(null=True, blank=True)
     items = models.JSONField(default=list, blank=True)
     has_defects = models.BooleanField(default=False)
     defect_notes = models.TextField(blank=True)

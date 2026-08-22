@@ -1,5 +1,6 @@
 "use client";
 import { useParams, useRouter } from "next/navigation";
+import FuelGauge from "@/components/FuelGauge";
 import { useMemo } from "react";
 import Link from "next/link";
 import {
@@ -70,6 +71,10 @@ export default function VehicleDetail() {
               <div className="font-semibold text-slate-800 truncate">{s.value}</div>
             </div>
           ))}
+        </div>
+
+        <div className="mt-6 max-w-sm">
+          <FuelGauge level={vehicle.fuel_level} reportedAt={vehicle.fuel_reported_at} />
         </div>
       </div>
 

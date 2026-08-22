@@ -724,6 +724,9 @@
     "exp_approved": "Expense approved.",
     "exp_rejected": "Expense rejected.",
     "val_approved": "Approved",
-    "val_rejected": "Rejected"
+    "val_rejected": "Rejected",
+    "fuel_level": "Fuel level",
+    "fuel_reported": "Reported {when}",
+    "fuel_not_reported": "Not reported yet — a driver reports it during a vehicle check."
   }
 }

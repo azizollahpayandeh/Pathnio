@@ -69,6 +69,7 @@ function mapVehicle(v: any): Vehicle {
     capacity: v.capacity || "",
     color: v.color || "",
     fuel_level: v.fuel_level ?? 0,
+    fuel_reported_at: (v.fuel_reported_at as string) ?? null,
     odometer: v.odometer ?? 0,
     efficiency: v.efficiency || "",
     last_maintenance: v.last_maintenance || "",

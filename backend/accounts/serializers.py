@@ -359,7 +359,7 @@ class VehicleSerializer(serializers.ModelSerializer):
         # (docs/ARCHITECTURE.md §8).
         read_only_fields = ('id', 'company', 'created_at',
                             'lat', 'lng', 'speed', 'last_seen_at',
-                            'fuel_level', 'odometer')
+                            'fuel_level', 'fuel_reported_at', 'odometer')
 
     def get_assigned_driver(self, obj):
         # obj.assignments is prefetched by the viewset (prefetch_related
