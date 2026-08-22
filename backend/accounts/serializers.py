@@ -293,12 +293,29 @@ class DriverSerializer(serializers.ModelSerializer):
         }.get(raw, "Inactive")
 
 class ContactMessageSerializer(serializers.ModelSerializer):
+    # For the AUTHENTICATED support-ticket flow: name/email are server-set from
+    # the logged-in user, so they are read-only here (the client cannot spoof
+    # another identity).
     user = serializers.StringRelatedField(read_only=True)
     name = serializers.CharField(read_only=True)
     email = serializers.EmailField(read_only=True)
     class Meta:
         model = ContactMessage
         fields = ('id', 'user', 'name', 'email', 'subject', 'message', 'reply', 'status', 'created_at', 'answered_at')
+
+
+class PublicContactSerializer(serializers.ModelSerializer):
+    """The PUBLIC contact form: an anonymous visitor supplies their own name
+    and email, so those must be writable (and required) — unlike the
+    authenticated ticket serializer, where the server fills them from the user.
+    """
+    class Meta:
+        model = ContactMessage
+        fields = ('id', 'name', 'email', 'subject', 'message', 'created_at')
+        read_only_fields = ('id', 'created_at')
+
+    def validate_subject(self, value):
+        return value or "Contact Form Submission"
 
 class SiteSettingsSerializer(serializers.ModelSerializer):
     class Meta:

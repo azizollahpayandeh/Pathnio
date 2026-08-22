@@ -27,6 +27,7 @@ from .models import (
     DriverVehicleAssignment, Cargo, FleetAlert, CompanySettings,
 )
 from .serializers import (
+    PublicContactSerializer,
     CompanySerializer, CompanyUpdateSerializer, CompanyUserSerializer, DriverSerializer, ContactMessageSerializer,
     SiteSettingsSerializer, LoginSerializer, PasswordChangeSerializer,
     UserProfileUpdateSerializer, ActivityLogSerializer, AlertSerializer,
@@ -607,7 +608,7 @@ class DriverRegisterView(generics.CreateAPIView):
 
 class ContactMessageCreateView(generics.CreateAPIView):
     queryset = ContactMessage.objects.all()
-    serializer_class = ContactMessageSerializer
+    serializer_class = PublicContactSerializer   # writable name/email
     permission_classes = [AllowAny]
     
     def perform_create(self, serializer):

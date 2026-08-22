@@ -16,6 +16,7 @@ import {
   Heart,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { API_BASE_URL } from "@/app/api";
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { useT } from "@/i18n";
@@ -74,7 +75,7 @@ export default function ContactUs() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('/api/contact', {
+      const response = await fetch(`${API_BASE_URL}/api/accounts/contact/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -90,21 +91,21 @@ export default function ContactUs() {
       if (response.ok) {
         setAlert({
           type: 'success',
-          msg: '🎉 پیام شما با موفقیت ارسال شد!',
+          msg: tr("ui.contact_sent_ok"),
         });
         setForm({ name: '', email: '', message: '' });
       } else {
         const errorData = await response.json();
         setAlert({
           type: 'error',
-          msg: errorData.detail || 'خطا در ارسال پیام. لطفاً دوباره تلاش کنید.',
+          msg: errorData.detail || tr("ui.contact_send_error"),
         });
       }
     } catch (error) {
       console.error('Error submitting form:', error);
       setAlert({
         type: 'error',
-        msg: 'خطا در اتصال به سرور. لطفاً دوباره تلاش کنید.',
+        msg: tr("ui.contact_network_error"),
       });
     } finally {
       setIsSubmitting(false);

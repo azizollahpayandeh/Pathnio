@@ -760,6 +760,9 @@
     "adm_edit_reply": "ویرایش پاسخ",
     "adm_send_reply": "ارسال پاسخ",
     "adm_reply_sent": "پاسخ ارسال شد.",
-    "adm_reply_placeholder": "پاسخ خود را به فرستنده بنویسید…"
+    "adm_reply_placeholder": "پاسخ خود را به فرستنده بنویسید…",
+    "contact_sent_ok": "🎉 پیام شما با موفقیت ارسال شد!",
+    "contact_send_error": "خطا در ارسال پیام. لطفاً دوباره تلاش کنید.",
+    "contact_network_error": "خطا در اتصال به سرور. لطفاً دوباره تلاش کنید."
   }
 }

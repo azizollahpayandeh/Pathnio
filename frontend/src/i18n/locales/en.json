@@ -760,6 +760,9 @@
     "adm_edit_reply": "Edit reply",
     "adm_send_reply": "Send reply",
     "adm_reply_sent": "Reply sent.",
-    "adm_reply_placeholder": "Write your reply to the sender…"
+    "adm_reply_placeholder": "Write your reply to the sender…",
+    "contact_sent_ok": "🎉 Your message has been sent!",
+    "contact_send_error": "Could not send your message. Please try again.",
+    "contact_network_error": "Could not reach the server. Please try again."
   }
 }

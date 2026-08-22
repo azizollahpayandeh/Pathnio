@@ -111,3 +111,45 @@ class MessagesTests(PlatformAdminBase):
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0]["subject"], "Hi")
         self.assertEqual(rows[0]["status"], "open")
+
+
+class PublicContactTests(PlatformAdminBase):
+    def test_public_contact_saves_name_and_email_and_reaches_admin(self):
+        # anonymous visitor submits the public contact form
+        r = self.client.post("/api/accounts/contact/", {
+            "name": "Jane Visitor",
+            "email": "jane@outside.test",
+            "subject": "Pricing question",
+            "message": "How much for 20 vehicles?",
+        }, format="json")
+        self.assertEqual(r.status_code, 201)
+
+        # it is saved WITH the visitor's name/email (the old read-only
+        # serializer dropped these, so admins saw blank senders)
+        from accounts.models import ContactMessage
+        msg = ContactMessage.objects.get(email="jane@outside.test")
+        self.assertEqual(msg.name, "Jane Visitor")
+        self.assertEqual(msg.subject, "Pricing question")
+        self.assertEqual(msg.status, "open")
+
+        # and it shows up in the admin messages inbox
+        self.client.force_authenticate(self.admin)
+        rows = self.client.get("/api/accounts/admin/contact-messages/").json()
+        hit = [m for m in rows if m["email"] == "jane@outside.test"]
+        self.assertEqual(len(hit), 1)
+        self.assertEqual(hit[0]["name"], "Jane Visitor")
+
+    def test_public_contact_requires_the_core_fields(self):
+        r = self.client.post("/api/accounts/contact/", {"message": "hi"}, format="json")
+        self.assertEqual(r.status_code, 400)
+
+    def test_public_contact_cannot_spoof_status_or_reply(self):
+        r = self.client.post("/api/accounts/contact/", {
+            "name": "X", "email": "x@y.test", "subject": "s", "message": "m",
+            "status": "closed", "reply": "faked",
+        }, format="json")
+        self.assertEqual(r.status_code, 201)
+        from accounts.models import ContactMessage
+        msg = ContactMessage.objects.get(email="x@y.test")
+        self.assertEqual(msg.status, "open")   # status not client-writable
+        self.assertFalse(msg.reply)            # reply not client-writable
