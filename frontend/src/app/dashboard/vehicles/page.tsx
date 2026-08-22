@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import AddVehicleModal, { VehicleInput } from "@/components/AddVehicleModal";
 import AssignVehicleModal from "@/components/AssignVehicleModal";
-import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
+import { PageHeader, StatCard, Badge, EmptyState, PageLoading } from "@/components/ui";
 import { useVehicles, useDrivers, createVehicle, deleteVehicle } from "@/lib/api-data";
 import { toast } from "@/components/Toast";
 import { useT, useTValue } from "@/i18n";
@@ -18,7 +18,7 @@ const statusIcon: Record<string, typeof CheckCircle> = { Active: CheckCircle, In
 export default function VehiclesPage() {
   const tr = useT();
   const tv = useTValue();
-  const { data: vehicles, refetch } = useVehicles();
+  const { data: vehicles, ready, refetch } = useVehicles();
   const { data: allDrivers } = useDrivers();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
@@ -101,7 +101,9 @@ export default function VehiclesPage() {
         </select>
       </div>
 
-      {filtered.length === 0 ? (
+      {!ready ? (
+        <PageLoading />
+      ) : filtered.length === 0 ? (
         <div className="card">
           <EmptyState
             icon={Car}

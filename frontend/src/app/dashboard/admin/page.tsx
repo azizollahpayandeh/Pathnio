@@ -5,7 +5,7 @@ import {
   ShieldCheck, Users, Search, Trash2, Shield, User as UserIcon,
   Mail, Phone, Activity,
 } from "lucide-react";
-import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
+import { PageHeader, StatCard, Badge, EmptyState, PageLoading } from "@/components/ui";
 import api from "@/app/api";
 import { useAuth } from "@/lib/auth";
 import { useT } from "@/i18n";
@@ -110,7 +110,7 @@ export default function AdminPage() {
         </div>
 
         {loading ? (
-          <div className="p-10 text-center text-slate-400 text-sm">{tr("ui.loading_accounts")}</div>
+          <PageLoading />
         ) : filtered.length === 0 ? (
           <EmptyState icon={Users} title={tr("ui.no_users_found")} />
         ) : (

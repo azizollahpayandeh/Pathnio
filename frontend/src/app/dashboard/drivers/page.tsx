@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import AddDriverModal, { DriverInput } from "@/components/AddDriverModal";
 import InviteDriverModal from "@/components/InviteDriverModal";
-import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
+import { PageHeader, StatCard, Badge, EmptyState, PageLoading } from "@/components/ui";
 import { useDrivers, createDriver, deleteDriver, createInvitation } from "@/lib/api-data";
 import { toast } from "@/components/Toast";
 import { useT, useTValue } from "@/i18n";
@@ -17,7 +17,7 @@ const statusTone: Record<string, string> = { Active: "green", "On Trip": "blue",
 export default function DriversPage() {
   const tr = useT();
   const tv = useTValue();
-  const { data: drivers, refetch } = useDrivers();
+  const { data: drivers, ready, refetch } = useDrivers();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
   const [showAdd, setShowAdd] = useState(false);
@@ -104,7 +104,9 @@ export default function DriversPage() {
         </select>
       </div>
 
-      {filtered.length === 0 ? (
+      {!ready ? (
+        <PageLoading />
+      ) : filtered.length === 0 ? (
         <div className="card">
           <EmptyState
             icon={Users}

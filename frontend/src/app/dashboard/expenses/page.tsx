@@ -7,7 +7,7 @@ import {
   Shield, Users, MoreHorizontal, TrendingDown,
 } from "lucide-react";
 import AddExpenseModal, { NewExpense } from "@/components/AddExpenseModal";
-import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
+import { PageHeader, StatCard, Badge, EmptyState, PageLoading } from "@/components/ui";
 import { useExpenses, createExpense, deleteExpense } from "@/lib/api-data";
 import type { ExpenseCategory } from "@/lib/types";
 import { useT, useTValue } from "@/i18n";
@@ -33,7 +33,7 @@ export default function ExpensesPage() {
   const tr = useT();
   const tv = useTValue();
   const { currency, distance } = useUnits();
-  const { data: expenses, refetch } = useExpenses();
+  const { data: expenses, ready, refetch } = useExpenses();
 
   // Driver submissions awaiting a decision.
   const pending = useMemo(
@@ -152,7 +152,9 @@ export default function ExpensesPage() {
         </div>
       )}
 
-      {filtered.length === 0 ? (
+      {!ready ? (
+        <PageLoading />
+      ) : filtered.length === 0 ? (
         <div className="card">
           <EmptyState icon={Wallet} title={tr("ui.no_expenses_found")} description={tr("ui.record_your_first_fleet_expense")}
             action={<button onClick={() => setShowAdd(true)} className="btn btn-primary mx-auto"><Plus className="w-4 h-4" /> {tr("ui.add_expense")}</button>} />

@@ -104,6 +104,24 @@ export function Badge({
   );
 }
 
+export function Spinner({ className = "w-6 h-6" }: { className?: string }) {
+  return (
+    <div
+      className={`${className} rounded-full border-4 border-violet-200 border-t-violet-600 animate-spin`}
+      role="status"
+      aria-label="Loading"
+    />
+  );
+}
+
+export function PageLoading() {
+  return (
+    <div className="flex items-center justify-center py-20">
+      <Spinner className="w-10 h-10" />
+    </div>
+  );
+}
+
 export function EmptyState({
   icon: Icon,
   title,

@@ -6,7 +6,7 @@ import {
 } from "chart.js";
 import { Line, Doughnut, Bar } from "react-chartjs-2";
 import { BarChart3, TrendingUp, TrendingDown, Percent, Download } from "lucide-react";
-import { PageHeader, StatCard } from "@/components/ui";
+import { PageHeader, StatCard, PageLoading } from "@/components/ui";
 import { useTrips, useExpenses, useVehicles } from "@/lib/api-data";
 import { useT } from "@/i18n";
 import { useUnits } from "@/lib/format";
@@ -22,9 +22,9 @@ const monthLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Se
 export default function ReportsPage() {
   const tr = useT();
   const { currency, distance } = useUnits();
-  const { data: trips } = useTrips();
-  const { data: expenses } = useExpenses();
-  const { data: vehicles } = useVehicles();
+  const { data: trips, ready: tripsReady } = useTrips();
+  const { data: expenses, ready: expensesReady } = useExpenses();
+  const { data: vehicles, ready: vehiclesReady } = useVehicles();
 
   const totals = useMemo(() => {
     const revenue = trips.filter((t) => t.status !== "CANCELLED").reduce((s, t) => s + t.revenue, 0);
@@ -78,6 +78,8 @@ export default function ReportsPage() {
 
   const chartFont = { family: "inherit" };
   const gridColor = "rgba(148,163,184,0.15)";
+
+  if (!tripsReady || !expensesReady || !vehiclesReady) return <PageLoading />;
 
   return (
     <div className="space-y-6 animate-fade-in">

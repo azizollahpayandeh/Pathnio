@@ -14,6 +14,7 @@ import { useT } from "@/i18n";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useFleetAlerts } from "@/lib/api-data";
 import { ToastHost } from "@/components/Toast";
+import { Spinner } from "@/components/ui";
 import type { LucideIcon } from "lucide-react";
 
 interface NavItem {
@@ -142,7 +143,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   if (!ready || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
-        <div className="w-12 h-12 rounded-full border-4 border-violet-200 border-t-violet-600 animate-spin" />
+        <Spinner className="w-12 h-12" />
       </div>
     );
   }

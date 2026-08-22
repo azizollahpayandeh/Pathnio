@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { CreditCard, Check, Crown, Zap, Rocket, Sparkles } from "lucide-react";
-import { PageHeader } from "@/components/ui";
+import { PageHeader, PageLoading } from "@/components/ui";
 import FloatingAlert from "@/components/FloatingAlert";
 import { useSubscription, changePlan } from "@/lib/api-data";
 import { useT, useTValue } from "@/i18n";
@@ -31,7 +31,7 @@ const PLANS = [
 export default function SubscriptionPage() {
   const tr = useT();
   const tv = useTValue();
-  const { data: sub, error: subError, refetch } = useSubscription();
+  const { data: sub, ready, error: subError, refetch } = useSubscription();
   const [alert, setAlert] = useState<{ type: "success" | "error"; msg: string } | null>(null);
   const current = sub ? (CODE_TO_ID[sub.plan.code] || "pro") : "pro";
 
@@ -45,6 +45,8 @@ export default function SubscriptionPage() {
     }
     setTimeout(() => setAlert(null), 2600);
   };
+
+  if (!ready) return <PageLoading />;
 
   return (
     <div className="space-y-6 animate-fade-in">

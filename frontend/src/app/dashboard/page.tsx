@@ -7,7 +7,7 @@ import {
   CheckCircle2, Clock, Maximize2,
 } from "lucide-react";
 import { useVehicles, useDrivers, useTrips, useExpenses, useFleetAlerts } from "@/lib/api-data";
-import { StatCard, Badge } from "@/components/ui";
+import { StatCard, Badge, PageLoading } from "@/components/ui";
 import type { TripStatus } from "@/lib/types";
 import { useT } from "@/i18n";
 import { useUnits } from "@/lib/format";
@@ -25,12 +25,13 @@ const tripTone: Record<TripStatus, string> = {
 export default function Dashboard() {
   const tr = useT();
   const { currency, distance } = useUnits();
-  const { data: vehicles } = useVehicles();
-  const { data: drivers } = useDrivers();
-  const { data: trips } = useTrips();
-  const { data: expenses } = useExpenses();
-  const { data: alerts } = useFleetAlerts();
+  const { data: vehicles, ready: vehiclesReady } = useVehicles();
+  const { data: drivers, ready: driversReady } = useDrivers();
+  const { data: trips, ready: tripsReady } = useTrips();
+  const { data: expenses, ready: expensesReady } = useExpenses();
+  const { data: alerts, ready: alertsReady } = useFleetAlerts();
   const openAlerts = alerts.filter((a) => !a.read).slice(0, 4);
+  const allReady = vehiclesReady && driversReady && tripsReady && expensesReady && alertsReady;
 
   const stats = useMemo(() => {
     const now = Date.now();
@@ -74,6 +75,8 @@ export default function Dashboard() {
   const recentTrips = [...trips]
     .sort((a, b) => new Date(b.start_time).getTime() - new Date(a.start_time).getTime())
     .slice(0, 5);
+
+  if (!allReady) return <PageLoading />;
 
   return (
     <div className="space-y-6 animate-fade-in">

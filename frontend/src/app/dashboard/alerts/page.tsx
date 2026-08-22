@@ -4,7 +4,7 @@ import {
   Bell, AlertTriangle, CheckCircle, Info, Search, Clock,
   Check, CheckCheck, ShieldAlert,
 } from "lucide-react";
-import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
+import { PageHeader, StatCard, Badge, EmptyState, PageLoading } from "@/components/ui";
 import { useFleetAlerts, acknowledgeAlert } from "@/lib/api-data";
 import type { AlertPriority } from "@/lib/types";
 import { useT, useTValue } from "@/i18n";
@@ -25,7 +25,7 @@ function timeAgo(iso: string, tr: (key: string, vars?: Record<string, string | n
 export default function AlertsPage() {
   const tr = useT();
   const tv = useTValue();
-  const { data: alerts, refetch } = useFleetAlerts();
+  const { data: alerts, ready, refetch } = useFleetAlerts();
   const [filter, setFilter] = useState<"all" | "unread">("all");
   const [search, setSearch] = useState("");
 
@@ -83,7 +83,9 @@ export default function AlertsPage() {
         </div>
       </div>
 
-      {filtered.length === 0 ? (
+      {!ready ? (
+        <PageLoading />
+      ) : filtered.length === 0 ? (
         <div className="card"><EmptyState icon={CheckCircle} title={tr("ui.you_re_all_caught_up")} description={tr("ui.no_alerts_match")} /></div>
       ) : (
         <div className="space-y-3 stagger">

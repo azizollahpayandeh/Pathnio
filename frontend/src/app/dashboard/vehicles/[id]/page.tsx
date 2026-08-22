@@ -7,7 +7,7 @@ import {
   Wrench, CheckCircle, XCircle, Calendar,
 } from "lucide-react";
 import { useExpenses, useTrips, useVehicles } from "@/lib/api-data";
-import { Badge, EmptyState } from "@/components/ui";
+import { Badge, EmptyState, PageLoading } from "@/components/ui";
 import { useT, useTValue } from "@/i18n";
 import { useUnits } from "@/lib/format";
 
@@ -20,13 +20,17 @@ export default function VehicleDetail() {
   const params = useParams();
   const router = useRouter();
   const plate = decodeURIComponent(String(params.id));
-  const { data: vehicles } = useVehicles();
+  const { data: vehicles, ready } = useVehicles();
   const { data: trips } = useTrips();
   const { data: expenses } = useExpenses();
 
   const vehicle = useMemo(() => vehicles.find((v) => v.plate_number === plate), [vehicles, plate]);
   const vTrips = useMemo(() => (vehicle ? trips.filter((t) => t.vehicle_ref === vehicle.id) : []), [trips, vehicle]);
   const vExpenses = useMemo(() => (vehicle ? expenses.filter((e) => e.vehicleId === vehicle.id) : []), [expenses, vehicle]);
+
+  if (!ready) {
+    return <PageLoading />;
+  }
 
   if (!vehicle) {
     return (

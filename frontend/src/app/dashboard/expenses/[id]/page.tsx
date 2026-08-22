@@ -6,7 +6,7 @@ import {
   ArrowLeft, Calendar, User, Truck, Tag, Receipt, FileText,
 } from "lucide-react";
 import { useExpenses } from "@/lib/api-data";
-import { Badge, EmptyState } from "@/components/ui";
+import { Badge, EmptyState, PageLoading } from "@/components/ui";
 import { useT } from "@/i18n";
 import { useUnits } from "@/lib/format";
 
@@ -17,8 +17,12 @@ export default function ExpenseDetail() {
   const params = useParams();
   const router = useRouter();
   const id = String(params.id);
-  const { data: expenses } = useExpenses();
+  const { data: expenses, ready } = useExpenses();
   const expense = useMemo(() => expenses.find((e) => e.id === id), [expenses, id]);
+
+  if (!ready) {
+    return <PageLoading />;
+  }
 
   if (!expense) {
     return <div className="card"><EmptyState icon={Receipt} title={tr("ui.expense_not_found")} action={<Link href="/dashboard/expenses" className="btn btn-primary mx-auto">{tr("ui.back_to_expenses")}</Link>} /></div>;

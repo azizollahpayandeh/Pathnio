@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import FloatingAlert from "@/components/FloatingAlert";
 import { useAuth, updateProfile, logout } from "@/lib/auth";
-import { Field } from "@/components/ui";
+import { Field, PageLoading } from "@/components/ui";
 import { useT } from "@/i18n";
 
 export default function ProfilePage() {
@@ -39,7 +39,13 @@ export default function ProfilePage() {
     }
   }, [alert]);
 
-  if (!ready || !user) return null;
+  if (!ready || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
+        <PageLoading />
+      </div>
+    );
+  }
 
   const set = (k: keyof typeof form, v: string) => setForm((p) => ({ ...p, [k]: v }));
 

@@ -7,7 +7,7 @@ import {
   Truck, Calendar, CheckCircle, Navigation, XCircle, KeyRound, WifiOff,
 } from "lucide-react";
 import { useDrivers, useTrips } from "@/lib/api-data";
-import { Badge, EmptyState } from "@/components/ui";
+import { Badge, EmptyState, PageLoading } from "@/components/ui";
 import { useT, useTValue } from "@/i18n";
 import { useUnits } from "@/lib/format";
 
@@ -20,11 +20,15 @@ export default function DriverDetail() {
   const params = useParams();
   const router = useRouter();
   const id = String(params.id);
-  const { data: drivers } = useDrivers();
+  const { data: drivers, ready } = useDrivers();
   const { data: trips } = useTrips();
 
   const driver = useMemo(() => drivers.find((d) => d.id === id), [drivers, id]);
   const dTrips = useMemo(() => (driver ? trips.filter((t) => t.driver_ref === driver.id) : []), [trips, driver]);
+
+  if (!ready) {
+    return <PageLoading />;
+  }
 
   if (!driver) {
     return <div className="card"><EmptyState icon={Users} title={tr("ui.driver_not_found")} action={<Link href="/dashboard/drivers" className="btn btn-primary mx-auto">{tr("ui.back_to_drivers")}</Link>} /></div>;

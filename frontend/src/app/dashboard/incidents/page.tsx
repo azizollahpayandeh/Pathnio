@@ -1,7 +1,7 @@
 "use client";
 import { useState, useMemo } from "react";
 import { ShieldAlert, Search, CheckCircle2, MapPin } from "lucide-react";
-import { PageHeader, StatCard, Badge, EmptyState } from "@/components/ui";
+import { PageHeader, StatCard, Badge, EmptyState, PageLoading } from "@/components/ui";
 import { useIncidents, resolveIncident } from "@/lib/api-data";
 import { toast } from "@/components/Toast";
 import { useT, useTValue } from "@/i18n";
@@ -79,7 +79,7 @@ export default function IncidentsPage() {
       </div>
 
       {!ready ? (
-        <div className="card p-10 text-center text-slate-400">{tr("common.loading")}</div>
+        <PageLoading />
       ) : filtered.length === 0 ? (
         <div className="card">
           <EmptyState

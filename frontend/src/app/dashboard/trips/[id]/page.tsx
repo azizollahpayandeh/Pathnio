@@ -7,7 +7,7 @@ import {
   TrendingUp, Route as RouteIcon, CheckCircle2, Clock, CalendarClock, XCircle,
 } from "lucide-react";
 import { useTrips } from "@/lib/api-data";
-import { Badge, EmptyState } from "@/components/ui";
+import { Badge, EmptyState, PageLoading } from "@/components/ui";
 import type { TripStatus } from "@/lib/types";
 import { useT, useTValue } from "@/i18n";
 import { useUnits } from "@/lib/format";
@@ -22,8 +22,12 @@ export default function TripDetail() {
   const params = useParams();
   const router = useRouter();
   const id = String(params.id);
-  const { data: trips } = useTrips();
+  const { data: trips, ready } = useTrips();
   const trip = useMemo(() => trips.find((t) => t.id === id), [trips, id]);
+
+  if (!ready) {
+    return <PageLoading />;
+  }
 
   if (!trip) {
     return <div className="card"><EmptyState icon={RouteIcon} title={tr("ui.trip_not_found")} action={<Link href="/dashboard/trips" className="btn btn-primary mx-auto">{tr("ui.back_to_trips")}</Link>} /></div>;

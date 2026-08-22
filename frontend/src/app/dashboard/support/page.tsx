@@ -4,7 +4,7 @@ import {
   LifeBuoy, Send, CheckCircle, Clock, Plus, Mail, Phone,
   MessageCircle, BookOpen, Headphones,
 } from "lucide-react";
-import { PageHeader, Badge, EmptyState, Field } from "@/components/ui";
+import { PageHeader, Badge, EmptyState, Field, PageLoading } from "@/components/ui";
 import FloatingAlert from "@/components/FloatingAlert";
 import { useSupportTickets, createSupportTicket } from "@/lib/api-data";
 import type { Ticket } from "@/lib/types";
@@ -14,7 +14,7 @@ const tone: Record<string, string> = { open: "amber", answered: "green", closed:
 
 export default function SupportPage() {
   const tr = useT();
-  const { data: tickets, refetch } = useSupportTickets();
+  const { data: tickets, ready, refetch } = useSupportTickets();
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [alert, setAlert] = useState<{ type: "success" | "error"; msg: string } | null>(null);
@@ -74,7 +74,9 @@ export default function SupportPage() {
         {/* Ticket list */}
         <div className="card p-6">
           <h2 className="font-bold text-slate-800 flex items-center gap-2 mb-4"><MessageCircle className="w-5 h-5 text-violet-600" /> Your tickets ({tickets.length})</h2>
-          {tickets.length === 0 ? (
+          {!ready ? (
+            <PageLoading />
+          ) : tickets.length === 0 ? (
             <EmptyState icon={BookOpen} title={tr("ui.no_tickets_yet")} description={tr("ui.submit_ticket_hint")} />
           ) : (
             <div className="space-y-3 max-h-[420px] overflow-y-auto scroll-slim pr-1">

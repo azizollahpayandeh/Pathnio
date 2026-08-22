@@ -2,7 +2,7 @@
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { Map as MapIcon, Navigation, Signal, Search } from "lucide-react";
-import { PageHeader, Badge } from "@/components/ui";
+import { PageHeader, Badge, Spinner } from "@/components/ui";
 import { useLiveVehicles, type LiveVehicle } from "@/lib/api-data";
 import { useT, useTValue } from "@/i18n";
 import { useUnits } from "@/lib/format";
@@ -20,7 +20,7 @@ export default function LiveMapPage() {
   const tr = useT();
   const tv = useTValue();
   const { speed } = useUnits();
-  const { data: vehicles } = useLiveVehicles();
+  const { data: vehicles, ready } = useLiveVehicles();
   const [search, setSearch] = useState("");
 
   const list = vehicles.filter(
@@ -47,9 +47,11 @@ export default function LiveMapPage() {
             <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={tr("ui.search_vehicle")} className="field ps-10" />
           </div>
           <div className="space-y-2 overflow-y-auto scroll-slim max-h-[420px] pr-1">
-            {list.length === 0 && (
+            {!ready ? (
+              <div className="flex justify-center py-8"><Spinner /></div>
+            ) : list.length === 0 ? (
               <p className="text-sm text-slate-400">{tr("ui.no_vehicles_yet_hint")}</p>
-            )}
+            ) : null}
             {list.map((v) => {
               const st = bucket(v);
               return (
