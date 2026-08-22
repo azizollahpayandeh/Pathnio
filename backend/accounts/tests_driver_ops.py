@@ -260,3 +260,41 @@ class ExpenseApprovalTests(DriverOpsBase):
         self.client.patch(f"/api/accounts/expenses/{eid}/",
                           {"approval": "APPROVED"}, format="json")
         self.assertEqual(Expense.objects.get(id=eid).approval, "PENDING")
+
+
+class FuelReportingTests(DriverOpsBase):
+    def test_driver_reports_fuel_gauge_on_inspection(self):
+        self.client.force_authenticate(self.duser)
+        r = self.client.post("/api/accounts/driver/inspections/", {
+            "kind": "PRE", "odometer": 1100, "fuel_percent": 65,
+            "items": [{"key": "tyres", "ok": True}],
+        }, format="json")
+        self.assertEqual(r.status_code, 201)
+        self.vehicle.refresh_from_db()
+        self.assertEqual(self.vehicle.fuel_level, 65)
+        self.assertIsNotNone(self.vehicle.fuel_reported_at)
+
+    def test_fuel_percent_out_of_range_is_rejected(self):
+        self.client.force_authenticate(self.duser)
+        r = self.client.post("/api/accounts/driver/inspections/", {
+            "kind": "PRE", "fuel_percent": 140, "items": [],
+        }, format="json")
+        self.assertEqual(r.status_code, 400)
+
+    def test_no_fuel_reading_leaves_the_gate_closed(self):
+        self.client.force_authenticate(self.duser)
+        self.client.post("/api/accounts/driver/inspections/", {
+            "kind": "PRE", "items": [{"key": "tyres", "ok": True}],
+        }, format="json")
+        self.vehicle.refresh_from_db()
+        # No reading => fuel_reported_at stays null, so the dashboard shows "—".
+        self.assertIsNone(self.vehicle.fuel_reported_at)
+
+    def test_owner_cannot_fake_fuel_via_vehicle_patch(self):
+        self.client.force_authenticate(self.owner)
+        self.client.patch(f"/api/accounts/vehicles/{self.vehicle.id}/",
+                          {"fuel_level": 99, "fuel_reported_at": "2026-01-01T00:00:00Z"},
+                          format="json")
+        self.vehicle.refresh_from_db()
+        self.assertNotEqual(self.vehicle.fuel_level, 99)   # read-only held
+        self.assertIsNone(self.vehicle.fuel_reported_at)

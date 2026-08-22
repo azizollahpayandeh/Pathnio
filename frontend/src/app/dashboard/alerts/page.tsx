@@ -4,7 +4,7 @@ import {
   Bell, AlertTriangle, CheckCircle, Info, Search, Clock,
   Check, CheckCheck, ShieldAlert,
 } from "lucide-react";
-import { PageHeader, StatCard, Badge, EmptyState, PageLoading } from "@/components/ui";
+import { PageHeader, StatCard, Badge, EmptyState , RowListSkeleton} from "@/components/ui";
 import { useFleetAlerts, acknowledgeAlert } from "@/lib/api-data";
 import type { AlertPriority } from "@/lib/types";
 import { useT, useTValue } from "@/i18n";
@@ -84,7 +84,7 @@ export default function AlertsPage() {
       </div>
 
       {!ready ? (
-        <PageLoading />
+        <RowListSkeleton count={5} />
       ) : filtered.length === 0 ? (
         <div className="card"><EmptyState icon={CheckCircle} title={tr("ui.you_re_all_caught_up")} description={tr("ui.no_alerts_match")} /></div>
       ) : (

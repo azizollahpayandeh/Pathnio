@@ -25,6 +25,7 @@ export default function InspectionScreen({ kind, tripId, onDone, onCancel }: Pro
   const [checklist, setChecklist] = useState<string[]>([]);
   const [state, setState] = useState<Record<string, { ok: boolean; note: string }>>({});
   const [odometer, setOdometer] = useState("");
+  const [fuel, setFuel] = useState("");
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -53,10 +54,17 @@ export default function InspectionScreen({ kind, tripId, onDone, onCancel }: Pro
       const items: InspectionItem[] = checklist.map((k) => ({
         key: k, ok: state[k]?.ok ?? true, note: state[k]?.note || "",
       }));
+      const fuelNum = fuel ? parseInt(fuel, 10) : null;
+      if (fuelNum !== null && (fuelNum < 0 || fuelNum > 100)) {
+        Alert.alert("Check the fuel level", "Enter a percentage between 0 and 100.");
+        setSaving(false);
+        return;
+      }
       const r = await submitInspection({
         kind,
         items,
         odometer: odometer ? parseInt(odometer, 10) : null,
+        fuel_percent: fuelNum,
         defect_notes: notes,
         trip_id: tripId ?? null,
       });
@@ -126,6 +134,16 @@ export default function InspectionScreen({ kind, tripId, onDone, onCancel }: Pro
           onChangeText={setOdometer}
           keyboardType="number-pad"
           placeholder="e.g. 128400"
+          placeholderTextColor="#94a3b8"
+        />
+
+        <Text style={styles.label}>Fuel level (%)</Text>
+        <TextInput
+          style={styles.input}
+          value={fuel}
+          onChangeText={(t) => setFuel(t.replace(/[^0-9]/g, "").slice(0, 3))}
+          keyboardType="number-pad"
+          placeholder="e.g. 75"
           placeholderTextColor="#94a3b8"
         />
 

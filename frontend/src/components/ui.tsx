@@ -250,3 +250,59 @@ export function Field({
     </label>
   );
 }
+
+/**
+ * Loading skeletons — shown while a list is still fetching, so pages never
+ * flash an empty state ("No drivers found") before the real data arrives.
+ */
+export function CardGridSkeleton({ count = 6, cols = "sm:grid-cols-2 xl:grid-cols-3" }: { count?: number; cols?: string }) {
+  return (
+    <div className={`grid grid-cols-1 ${cols} gap-4`}>
+      {Array.from({ length: count }).map((_, i) => (
+        <div key={i} className="card p-5 animate-pulse">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-slate-100" />
+            <div className="flex-1">
+              <div className="h-4 w-32 bg-slate-100 rounded mb-2" />
+              <div className="h-3 w-20 bg-slate-100 rounded" />
+            </div>
+          </div>
+          <div className="mt-4 space-y-2">
+            <div className="h-3 w-full bg-slate-100 rounded" />
+            <div className="h-3 w-2/3 bg-slate-100 rounded" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function RowListSkeleton({ count = 6 }: { count?: number }) {
+  return (
+    <div className="space-y-2">
+      {Array.from({ length: count }).map((_, i) => (
+        <div key={i} className="card p-4 animate-pulse flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-slate-100" />
+          <div className="flex-1">
+            <div className="h-4 w-40 bg-slate-100 rounded mb-2" />
+            <div className="h-3 w-56 bg-slate-100 rounded" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function StatCardsSkeleton({ count = 4 }: { count?: number }) {
+  return (
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {Array.from({ length: count }).map((_, i) => (
+        <div key={i} className="card p-5 animate-pulse">
+          <div className="w-10 h-10 rounded-xl bg-slate-100 mb-3" />
+          <div className="h-6 w-16 bg-slate-100 rounded mb-2" />
+          <div className="h-3 w-24 bg-slate-100 rounded" />
+        </div>
+      ))}
+    </div>
+  );
+}

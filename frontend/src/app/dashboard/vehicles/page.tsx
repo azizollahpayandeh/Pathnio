@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import AddVehicleModal, { VehicleInput } from "@/components/AddVehicleModal";
 import AssignVehicleModal from "@/components/AssignVehicleModal";
-import { PageHeader, StatCard, Badge, EmptyState, PageLoading } from "@/components/ui";
+import { PageHeader, StatCard, Badge, EmptyState , CardGridSkeleton} from "@/components/ui";
 import { useVehicles, useDrivers, createVehicle, deleteVehicle } from "@/lib/api-data";
 import { toast } from "@/components/Toast";
 import { useT, useTValue } from "@/i18n";
@@ -102,7 +102,7 @@ export default function VehiclesPage() {
       </div>
 
       {!ready ? (
-        <PageLoading />
+        <CardGridSkeleton count={4} cols="xl:grid-cols-2" />
       ) : filtered.length === 0 ? (
         <div className="card">
           <EmptyState

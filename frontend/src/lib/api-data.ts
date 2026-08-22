@@ -69,6 +69,7 @@ function mapVehicle(v: any): Vehicle {
     capacity: v.capacity || "",
     color: v.color || "",
     fuel_level: v.fuel_level ?? 0,
+    fuel_reported_at: (v.fuel_reported_at as string) ?? null,
     odometer: v.odometer ?? 0,
     efficiency: v.efficiency || "",
     last_maintenance: v.last_maintenance || "",
@@ -442,4 +443,70 @@ export async function approveExpense(id: string): Promise<void> {
 
 export async function rejectExpense(id: string): Promise<void> {
   await api.post(`accounts/expenses/${id}/reject/`);
+}
+
+// ---------------------------------------------------------------------------
+// Platform administration (is_staff). Cross-company oversight — these hooks
+// hit the /admin/* endpoints that a normal company owner is forbidden from.
+// ---------------------------------------------------------------------------
+
+export type AdminOverview = {
+  companies: number;
+  companies_new_30d: number;
+  users: number;
+  staff: number;
+  drivers: number;
+  vehicles: number;
+  trips: number;
+  open_alerts: number;
+  open_messages: number;
+  mrr: string;
+  subscriptions: { active: number; trial: number; cancelled: number };
+  plan_distribution: { code: string; name: string; count: number }[];
+};
+
+export type AdminCompany = {
+  id: number;
+  company_name: string;
+  manager_full_name: string;
+  email: string;
+  phone: string;
+  date_joined: string;
+  driver_count: number;
+  vehicle_count: number;
+  is_active: boolean;
+  plan: string | null;
+  plan_name: string | null;
+  subscription_status: string | null;
+};
+
+export type AdminMessage = {
+  id: number;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  reply: string;
+  status: string;
+  created_at: string;
+  answered_at: string | null;
+};
+
+export async function fetchAdminOverview(): Promise<AdminOverview> {
+  const { data } = await api.get("accounts/admin/overview/");
+  return data;
+}
+export async function fetchAdminCompanies(): Promise<AdminCompany[]> {
+  const { data } = await api.get("accounts/admin/companies/");
+  return data;
+}
+export async function setCompanyActive(id: number, active: boolean): Promise<void> {
+  await api.post(`accounts/admin/companies/${id}/${active ? "activate" : "suspend"}/`);
+}
+export async function fetchAdminMessages(openOnly = false): Promise<AdminMessage[]> {
+  const { data } = await api.get(`accounts/admin/contact-messages/${openOnly ? "?open=1" : ""}`);
+  return data;
+}
+export async function replyToMessage(id: number, reply: string): Promise<void> {
+  await api.post(`accounts/support/tickets/${id}/reply/`, { reply });
 }

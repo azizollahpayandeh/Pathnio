@@ -42,7 +42,7 @@ export default function AddVehicleModal({ isOpen, onClose, onAddVehicle, initial
     driver_id: initial?.assignedDriverId ?? "",
     capacity: initial?.capacity ?? "",
     color: initial?.color ?? "White",
-    status: initial?.status ?? tr("ui.active"),
+    status: initial?.status ?? "Active",
   });
 
   const set = (k: keyof VehicleInput, v: string) => setForm((p) => ({ ...p, [k]: v }));

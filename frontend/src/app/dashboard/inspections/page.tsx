@@ -1,7 +1,7 @@
 "use client";
 import { useState, useMemo } from "react";
 import { ClipboardCheck, Search, AlertTriangle, CheckCircle2 } from "lucide-react";
-import { PageHeader, StatCard, Badge, EmptyState, PageLoading } from "@/components/ui";
+import { PageHeader, StatCard, Badge, EmptyState, CardGridSkeleton } from "@/components/ui";
 import { useInspections } from "@/lib/api-data";
 import { useT } from "@/i18n";
 import { useUnits } from "@/lib/format";
@@ -68,7 +68,7 @@ export default function InspectionsPage() {
       </div>
 
       {!ready ? (
-        <PageLoading />
+        <CardGridSkeleton count={6} cols="xl:grid-cols-2" />
       ) : filtered.length === 0 ? (
         <div className="card">
           <EmptyState

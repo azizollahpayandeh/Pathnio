@@ -6,7 +6,7 @@ import {
   CheckCircle2, Clock, CalendarClock, XCircle, TrendingUp,
 } from "lucide-react";
 import AddTripModal, { NewTrip } from "@/components/AddTripModal";
-import { PageHeader, StatCard, Badge, EmptyState, PageLoading } from "@/components/ui";
+import { PageHeader, StatCard, Badge, EmptyState , RowListSkeleton} from "@/components/ui";
 import { useTrips, createTrip, deleteTrip, createCargo } from "@/lib/api-data";
 import type { TripStatus } from "@/lib/types";
 import { useT, useTValue } from "@/i18n";
@@ -105,7 +105,7 @@ export default function TripsPage() {
       </div>
 
       {!ready ? (
-        <PageLoading />
+        <RowListSkeleton count={6} />
       ) : filtered.length === 0 ? (
         <div className="card">
           <EmptyState icon={Route} title={tr("ui.no_trips_found")} description={tr("ui.schedule_a_new_trip_to_get_started")}

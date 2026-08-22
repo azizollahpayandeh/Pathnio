@@ -4,7 +4,7 @@ import {
   LifeBuoy, Send, CheckCircle, Clock, Plus, Mail, Phone,
   MessageCircle, BookOpen, Headphones,
 } from "lucide-react";
-import { PageHeader, Badge, EmptyState, Field, PageLoading } from "@/components/ui";
+import { PageHeader, Badge, EmptyState, Field, RowListSkeleton } from "@/components/ui";
 import FloatingAlert from "@/components/FloatingAlert";
 import { useSupportTickets, createSupportTicket } from "@/lib/api-data";
 import type { Ticket } from "@/lib/types";
@@ -75,7 +75,7 @@ export default function SupportPage() {
         <div className="card p-6">
           <h2 className="font-bold text-slate-800 flex items-center gap-2 mb-4"><MessageCircle className="w-5 h-5 text-violet-600" /> Your tickets ({tickets.length})</h2>
           {!ready ? (
-            <PageLoading />
+            <RowListSkeleton count={3} />
           ) : tickets.length === 0 ? (
             <EmptyState icon={BookOpen} title={tr("ui.no_tickets_yet")} description={tr("ui.submit_ticket_hint")} />
           ) : (

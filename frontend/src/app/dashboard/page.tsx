@@ -7,7 +7,7 @@ import {
   CheckCircle2, Clock, Maximize2,
 } from "lucide-react";
 import { useVehicles, useDrivers, useTrips, useExpenses, useFleetAlerts } from "@/lib/api-data";
-import { StatCard, Badge, PageLoading } from "@/components/ui";
+import { StatCard, Badge, StatCardsSkeleton } from "@/components/ui";
 import type { TripStatus } from "@/lib/types";
 import { useT } from "@/i18n";
 import { useUnits } from "@/lib/format";
@@ -25,13 +25,14 @@ const tripTone: Record<TripStatus, string> = {
 export default function Dashboard() {
   const tr = useT();
   const { currency, distance } = useUnits();
-  const { data: vehicles, ready: vehiclesReady } = useVehicles();
-  const { data: drivers, ready: driversReady } = useDrivers();
-  const { data: trips, ready: tripsReady } = useTrips();
-  const { data: expenses, ready: expensesReady } = useExpenses();
-  const { data: alerts, ready: alertsReady } = useFleetAlerts();
+  const { data: vehicles, ready: rv } = useVehicles();
+  const { data: drivers, ready: rd } = useDrivers();
+  const { data: trips, ready: rt } = useTrips();
+  const { data: expenses } = useExpenses();
+  const { data: alerts } = useFleetAlerts();
   const openAlerts = alerts.filter((a) => !a.read).slice(0, 4);
-  const allReady = vehiclesReady && driversReady && tripsReady && expensesReady && alertsReady;
+
+  const ready = rv && rd && rt;
 
   const stats = useMemo(() => {
     const now = Date.now();
@@ -76,11 +77,10 @@ export default function Dashboard() {
     .sort((a, b) => new Date(b.start_time).getTime() - new Date(a.start_time).getTime())
     .slice(0, 5);
 
-  if (!allReady) return <PageLoading />;
-
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Stat cards */}
+      {!ready ? <StatCardsSkeleton count={4} /> : (
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 stagger">
         <StatCard
           icon={Users}
@@ -110,6 +110,7 @@ export default function Dashboard() {
           gradient="from-emerald-500 to-teal-600"
         />
       </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Live map */}

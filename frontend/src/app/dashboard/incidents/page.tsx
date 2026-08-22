@@ -1,7 +1,7 @@
 "use client";
 import { useState, useMemo } from "react";
 import { ShieldAlert, Search, CheckCircle2, MapPin } from "lucide-react";
-import { PageHeader, StatCard, Badge, EmptyState, PageLoading } from "@/components/ui";
+import { PageHeader, StatCard, Badge, EmptyState, RowListSkeleton } from "@/components/ui";
 import { useIncidents, resolveIncident } from "@/lib/api-data";
 import { toast } from "@/components/Toast";
 import { useT, useTValue } from "@/i18n";
@@ -79,7 +79,7 @@ export default function IncidentsPage() {
       </div>
 
       {!ready ? (
-        <PageLoading />
+        <RowListSkeleton count={6} />
       ) : filtered.length === 0 ? (
         <div className="card">
           <EmptyState

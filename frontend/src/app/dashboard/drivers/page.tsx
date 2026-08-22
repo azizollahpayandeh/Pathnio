@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import AddDriverModal, { DriverInput } from "@/components/AddDriverModal";
 import InviteDriverModal from "@/components/InviteDriverModal";
-import { PageHeader, StatCard, Badge, EmptyState, PageLoading } from "@/components/ui";
+import { PageHeader, StatCard, Badge, EmptyState , CardGridSkeleton} from "@/components/ui";
 import { useDrivers, createDriver, deleteDriver, createInvitation } from "@/lib/api-data";
 import { toast } from "@/components/Toast";
 import { useT, useTValue } from "@/i18n";
@@ -105,7 +105,7 @@ export default function DriversPage() {
       </div>
 
       {!ready ? (
-        <PageLoading />
+        <CardGridSkeleton count={6} />
       ) : filtered.length === 0 ? (
         <div className="card">
           <EmptyState
